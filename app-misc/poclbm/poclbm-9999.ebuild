@@ -21,7 +21,7 @@ EAPI=2
 # inherit eutils, as a large amount of important functionality has been
 # moved there. For example, the epatch call mentioned below wont work
 # without the following line:
-inherit eutils git
+inherit git
 
 
 DESCRIPTION="An Python openCL bitcoin miner"
