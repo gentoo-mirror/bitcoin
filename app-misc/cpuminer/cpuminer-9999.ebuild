@@ -16,10 +16,9 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND=""
-RDEPEND="${DEPEND}
-	net-misc/curl
+DEPEND="net-misc/curl
 	dev-libs/jansson"
+RDEPEND="${DEPEND}"
 
 src_install() {
         emake DESTDIR="${D}" install || die
