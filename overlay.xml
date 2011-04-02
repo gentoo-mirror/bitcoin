@@ -3,14 +3,14 @@
 <repositories xmlns="" version="1.0">
   <repo quality="experimental" status="unofficial">
     <name>bitcoin</name>
-    <description>bitcoin ebuilds from mizeryderia and BioMike</description>
-    <homepage>http://github.com/mizerydearia/gentoo.overlay</homepage>
+    <description>bitcoin related ebuilds from bitcoin-gentoo dev team on freenode</description>
+    <homepage>https://github.com/bitcoin-gentoo/bitcoin_gentoo_ebuild</homepage>
     <owner>
       <email>mizerydearia@gmail.com</email>
-      <name>mizerydearia</name>
+      <name>bitcoin-gentoo dev team</name>
     </owner>
-    <source type="git">git://github.com/mizerydearia/bitcoin_gentoo_ebuild.git</source>
-    <source type="git">http://github.com/mizerydearia/bitcoin_gentoo_ebuild.git</source>
-    <feed>http://github.com/feeds/mizerydearia/commits/bitcoin_gentoo_ebuild/master</feed>
+    <source type="git">git://github.com/bitcoin-gentoo/bitcoin_gentoo_ebuild.git</source>
+    <source type="git">http://github.com/bitcoin-gentoo/bitcoin_gentoo_ebuild.git</source>
+    <feed>http://github.com/feeds/bitcoin-gentoo/commits/bitcoin_gentoo_ebuild/master</feed>
   </repo>
 </repositories>
