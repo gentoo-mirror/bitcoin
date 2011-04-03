@@ -17,7 +17,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="net-misc/curl
-	dev-libs/jansson"
+	<dev-libs/jansson-2"
 RDEPEND="${DEPEND}"
 
 src_install() {
