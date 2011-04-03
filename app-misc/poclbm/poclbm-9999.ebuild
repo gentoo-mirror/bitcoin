@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit git
+inherit git python
 
 DESCRIPTION="An Python openCL bitcoin miner"
 HOMEPAGE="https://github.com/m0mchil/poclbm"
@@ -19,7 +19,7 @@ DEPEND=""
 RDEPEND="${DEPEND}
 	dev-python/pyopencl"
 
-TARGETDIR=/opt/${PN}
+TARGETDIR=/usr/libexec/${PN}
 
 src_prepare() {
 	      rm LICENSE || die "license remove failed"
