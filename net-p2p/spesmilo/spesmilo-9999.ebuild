@@ -24,9 +24,12 @@ RDEPEND="${DEPEND}
 	dev-python/pyside"
 
 src_compile() {
-	      emake all || die
+	emake all || die
 }
 
 src_install() {
-	      emake DESTDIR="${D}" install || die
+	emake DESTDIR="${D}" \
+		PREFIX="/usr" \
+		KDESERVICEDIR="/usr/share/kde4/services" \
+		install || die
 }
