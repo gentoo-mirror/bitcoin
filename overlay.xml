@@ -4,13 +4,13 @@
   <repo quality="experimental" status="unofficial">
     <name>bitcoin</name>
     <description>bitcoin related ebuilds from bitcoin-gentoo dev team on freenode</description>
-    <homepage>https://github.com/bitcoin-gentoo/bitcoin_gentoo_ebuild</homepage>
+    <homepage>https://gitorious.org/bitcoin/gentoo</homepage>
     <owner>
       <email>mizerydearia@gmail.com</email>
       <name>bitcoin-gentoo dev team</name>
     </owner>
-    <source type="git">git://github.com/bitcoin-gentoo/bitcoin_gentoo_ebuild.git</source>
-    <source type="git">http://github.com/bitcoin-gentoo/bitcoin_gentoo_ebuild.git</source>
-    <feed>http://github.com/feeds/bitcoin-gentoo/commits/bitcoin_gentoo_ebuild/master</feed>
+    <source type="git">git://gitorious.org/bitcoin/gentoo.git</source>
+    <source type="git">http://git.gitorious.org/bitcoin/gentoo.git</source>
+    <feed>https://gitorious.org/bitcoin/gentoo.atom</feed>
   </repo>
 </repositories>

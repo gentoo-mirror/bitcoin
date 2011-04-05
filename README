@@ -1,3 +1,5 @@
-Using the ebuilds: https://github.com/mizerydearia/bitcoin_gentoo_ebuild/wiki/Using-the-ebuilds
+Using the ebuilds:
+	USE=git emerge layman
+	layman -o https://gitorious.org/bitcoin/gentoo/blobs/raw/master/overlay.xml -f -a bitcoin
 
-Come to Freenode #bitcoin-gentoo and indicate your github account name if you would like commit access.
+Come to Freenode #bitcoin-gentoo and indicate your gitorious account name if you would like commit access.
