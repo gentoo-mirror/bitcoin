@@ -16,9 +16,10 @@ KEYWORDS="~x86 ~amd64"
 IUSE="kde"
 
 DEPEND="
-	dev-python/pyside
 "
 RDEPEND="${DEPEND}
+	dev-python/pyside
+	dev-python/jsonrpc
 "
 DEPEND="${DEPEND}
 	media-gfx/imagemagick
