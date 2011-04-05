@@ -4,9 +4,6 @@
 
 EAPI=2
 
-EGIT_MASTER="install"
-EGIT_BRANCH="install"
-
 inherit git
 
 DESCRIPTION="PySide Bitcoin user interface"
