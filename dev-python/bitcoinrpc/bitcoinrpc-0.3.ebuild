@@ -8,7 +8,7 @@ SUPPORT_PYTHON_ABIS=1
 inherit python
 
 DESCRIPTION="Efficient JSON-RPC for Python"
-HOMEPAGE="http://yyz.us/bitcoin/"
+HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"
 MyPV="${PV}-g61334635"
 MyP="python-${PN}-${MyPV}"
 SRC_URI="http://yyz.us/bitcoin/${MyP}.tar.gz"

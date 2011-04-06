@@ -8,7 +8,7 @@ SUPPORT_PYTHON_ABIS=1
 inherit git python
 
 DESCRIPTION="Efficient JSON-RPC for Python"
-HOMEPAGE="http://yyz.us/bitcoin/"
+HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"
 EGIT_REPO_URI="git://github.com/jgarzik/python-${PN}.git"
 MyPy="jsonrpc/authproxy.py"
 
