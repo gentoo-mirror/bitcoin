@@ -19,7 +19,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}
 	dev-python/pyside
-	dev-python/jsonrpc
+	virtual/python-serviceproxy
 	dev-python/anynumber
 "
 DEPEND="${DEPEND}
