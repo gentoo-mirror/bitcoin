@@ -20,6 +20,7 @@ DEPEND="
 RDEPEND="${DEPEND}
 	dev-python/pyside
 	dev-python/jsonrpc
+	dev-python/anynumber
 "
 DEPEND="${DEPEND}
 	media-gfx/imagemagick
