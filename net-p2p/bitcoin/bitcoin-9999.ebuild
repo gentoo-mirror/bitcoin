@@ -4,19 +4,28 @@
 
 EAPI="2"
 
-inherit db-use distutils eutils subversion wxwidgets
+DB_VER="4.8"
+WX_GTK_VER="2.9"
+
+inherit db-use eutils git wxwidgets
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
-ESVN_REPO_URI="https://${PN}.svn.sourceforge.net/svnroot/${PN}/trunk"
+EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="daemon doc nls selinux sse2 wxwidgets"
+IUSE="daemon debug nls selinux sse2 ssl upnp wxwidgets"
+LANGS="de es fr it nl"
+
+for X in ${LANGS}; do
+	IUSE="$IUSE linguas_$X"
+done
 
 DEPEND="dev-libs/boost
 	dev-libs/crypto++
+	dev-libs/glib
 	dev-libs/openssl[-bindist]
 	nls? (
 		sys-devel/gettext
@@ -24,78 +33,64 @@ DEPEND="dev-libs/boost
 	selinux? (
 		sys-libs/libselinux
 	)
-	sys-libs/db:4.8
+	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	wxwidgets? (
-		app-admin/eselect-wxwidgets
+		>=app-admin/eselect-wxwidgets-0.7-r1
 		x11-libs/wxGTK:2.9[X]
 	)"
 RDEPEND="${DEPEND}
-        daemon? ( dev-util/pkgconfig )"
-
-S="${WORKDIR}/${P}/trunk"
+	daemon? ( dev-util/pkgconfig )
+"
+DEPEND="${DEPEND}
+	>=app-shells/bash-4.1
+"
 
 pkg_setup() {
-	if use daemon; then
-		ebegin "Creating bitcoin user and group"
+	if use daemon || ! use wxwidgets; then
+		ebegin "Creating ${PN} user and group"
 		enewgroup ${PN}
-		enewuser ${PN} -1 /bin/bash /var/lib/bitcoin ${PN}
+		enewuser ${PN} -1 -1 /var/lib/bitcoin ${PN}
 	fi;
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-Makefile.patch
-	# Replace the berkdb cflags with the ones on our system.
-	einfo "Berkeley DB: "
-	sed -i -e "s:@@GENTOO_DB_INCLUDEDIR@@:$(db_includedir):g" \
-		"${S}/makefile.unix"
-	# Set the sse2 code
-	if use sse2; then
-		einfo "Enabling SSE2 code"
-		sed -i -e "s:@@GENTOO_CFLAGS_SSE2@@:-DFOURWAYSSE2:g" \
-			"${S}/makefile.unix"
-		sed -i -e "s:@@GENTOO_SHA256_SSE2@@:-msse2 -O3 -march=amdfam10:g" \
-			"${S}/makefile.unix"
-	else
-		# No sse2 code.
-		sed -i -e "s:@@GENTOO_CFLAGS_SSE2@@::g" \
-			"${S}/makefile.unix"
-		sed -i -e "s:@@GENTOO_SHA256_SSE2@@::g" \
-			"${S}/makefile.unix"
-	fi
-
-	# http://www.bitcoin.org/smf/index.php?topic=1319.0
-	epatch "${FILESDIR}"/${PN}-monitor.patch
-	# http://www.bitcoin.org/smf/index.php?topic=984.msg13120#msg13120
-	#epatch "${FILESDIR}"/${PN}-bindaddr.patch
-	# http://www.bitcoin.org/smf/index.php?topic=1048.msg13022#msg13022
-	epatch "${FILESDIR}"/${PN}-disable_ip_transactions.patch
-	# http://www.bitcoin.org/smf/index.php?topic=611.msg11859#msg11859
-	epatch "${FILESDIR}"/${PN}-listgenerated.patch
-	# http://www.bitcoin.org/smf/index.php?topic=611.msg9123#msg9123
-	epatch "${FILESDIR}"/${PN}-listtransactions.patch
-	# http://www.bitcoin.org/smf/index.php?topic=611.msg11859#msg11859
-	epatch "${FILESDIR}"/${PN}-max_outbound.patch
+	cp "${FILESDIR}/${PN}-Makefile.gentoo" "Makefile"
 }
 
 src_compile() {
+	local OPTS=() dodaemon=false
+	
+	OPTS+=("CXXFLAGS=${CXXFLAGS}")
+	OPTS+=( "LDFLAGS=${LDFLAGS}")
+	
+	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
+	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
+	
+	use debug&& OPTS+=(USE_DEBUG=1)
+	use sse2 && OPTS+=(USE_SSE2=1)
+	use ssl  && OPTS+=(USE_SSL=1)
+	use upnp && OPTS+=(USE_UPNP=1)
+	
 	if use daemon; then
-		emake -f makefile.unix bitcoind || die "emake bitcoind failed";
+		dodaemon=true
+	elif ! use wxwidgets; then
+		ewarn "No daemon or wxwidgets USE flag selected, compiling daemon by default."
+		dodaemon=true
+	fi
+	
+	if $dodaemon; then
+		emake "${OPTS[@]}" bitcoind || die "emake bitcoind failed";
 	fi
 	if use wxwidgets; then
-		emake -f makefile.unix bitcoin || die "emake bitcoin failed";
-	fi
-	if ! use daemon && ! use wxwidgets; then
-		einfo "No daemon or wxwidgets USE flag selected, compiling daemon by default."
-		emake -f makefile.unix bitcoind || die "emake bitcoind failed"
+		emake "${OPTS[@]}" bitcoin || die "emake bitcoin failed";
 	fi
 }
 
 src_install() {
-	if use daemon || ( ! use wxwidgets && ! use daemon ); then
+	if use daemon || ! use wxwidgets; then
 		einfo "Installing daemon"
 		dobin bitcoind
 
-		einfo "Installing configuration file"
 		insinto /etc/bitcoin
 		newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
 		fowners bitcoin:bitcoin /etc/bitcoin/bitcoin.conf
@@ -104,38 +99,30 @@ src_install() {
 		newconfd "${FILESDIR}/bitcoin.confd" bitcoind
 		# Init script still nonfunctional.
 		newinitd "${FILESDIR}/bitcoin.initd" bitcoind
-		dodir /var/lib/bitcoin
 
-		einfo "Creating data program directory"
-		diropts -m700
-		keepdir /var/lib/bitcoin
+		keepdir /var/lib/bitcoin/.bitcoin
 		fperms 700 /var/lib/bitcoin
 		fowners bitcoin:bitcoin /var/lib/bitcoin/
-		dodir /var/lib/bitcoin/.bitcoin
 		fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 		dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 	fi
 	if use wxwidgets; then
 		einfo "Installing wxwidgets gui"
-		dobin bitcoin
+		newbin bitcoin wxbitcoin
+		dosym wxbitcoin bitcoin
 		insinto /usr/share/pixmaps
 		doins "${S}/rc/bitcoin.ico"
-		make_desktop_entry ${PN} "Bitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
+		make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
 	fi
 	if use nls; then
 		einfo "Installing language files"
-		cd locale
-		for val in ${LINGUAS}
+		for val in ${LANGS}
 		do
-			if [ -e "$val/LC_MESSAGES/bitcoin.mo" ]; then
-				domo "$val/LC_MESSAGES/bitcoin.mo" || die "domo $val/LC_MESSAGES/bitcoin.mo"
+			if use "linguas_$val"; then
+				domo "locale/$val/LC_MESSAGES/bitcoin.mo" || die "failed to install $val locale"
 			fi
 		done
 	fi
-
-	if use doc; then
-		einfo "Installing documentation"
-		edos2unix *.txt
-		dodoc *.txt
-	fi
+	
+	newdoc license.txt COPYING
 }

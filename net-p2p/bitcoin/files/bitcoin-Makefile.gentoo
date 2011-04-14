@@ -1,31 +1,59 @@
-# Copyright (c) 2009-2010 Satoshi Nakamoto
+# Copyright (c) 2009-2010 Satoshi Nakamoto, 2010 Myckel Habets, 2011 Luke Dashjr
 # Distributed under the MIT/X11 software license, see the accompanying
 # file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
-CXX=g++
+USE_SSE2 :=
+USE_SSL :=
+USE_UPNP :=
 
 WXINCLUDEPATHS=$(shell wx-config --cxxflags)
-
 WXLIBS=$(shell wx-config --libs)
 
-# for boost 1.37, add -mt to the boost libraries
-LIBS= \
- -Wl,-Bstatic \
+CXXFLAGS := -g -O2
+SHA256_CXXFLAGS :=
+LDFLAGS :=
+
+xLDFLAGS += \
+ -Wl,-Bdynamic \
    -l boost_system \
    -l boost_filesystem \
    -l boost_program_options \
    -l boost_thread \
-   -l db_cxx \
    -l ssl \
    -l crypto \
- -Wl,-Bdynamic \
+   -l crypto++ \
    -l gthread-2.0 \
    -l z \
    -l dl
 
-DEFS=-DNOPCH -DFOURWAYSSE2 -DUSE_SSL
-DEBUGFLAGS=-g -D__WXDEBUG__
-CXXFLAGS=-O2 -Wno-invalid-offsetof -Wformat $(DEBUGFLAGS) $(DEFS)
+xCXXFLAGS += $(DB_CXXFLAGS)
+xLDFLAGS += $(DB_LDFLAGS)
+
+ifneq ($(USE_SSE2),)
+	xCXXFLAGS += -DFOURWAYSSE2
+	xSHA256_CXXFLAGS += -msse2 -O3 -march=amdfam10
+endif
+
+ifneq ($(USE_SSL),)
+	xCXXFLAGS += -DUSE_SSL
+endif
+
+ifneq ($(USE_UPNP),)
+	xLDFLAGS += -l miniupnpc
+	xCXXFLAGS += -DUSE_UPNP=$(USE_UPNP)
+endif
+
+ifneq ($(USE_DEBUG),)
+	xCXXFLAGS += -D__WXDEBUG__
+endif
+
+xCXXFLAGS += -DNOPCH
+xCXXFLAGS += -Wno-invalid-offsetof -Wformat
+
+xCXXFLAGS += $(CXXFLAGS)
+xLDFLAGS += $(LDFLAGS)
+xSHA256_CXXFLAGS += $(SHA256_CXXFLAGS)
+
 HEADERS=headers.h strlcpy.h serialize.h uint256.h util.h key.h bignum.h base58.h \
     script.h db.h net.h irc.h main.h rpc.h uibase.h ui.h noui.h init.h
 
@@ -37,38 +65,32 @@ OBJS= \
     obj/irc.o \
     obj/main.o \
     obj/rpc.o \
-    obj/init.o \
-    cryptopp/obj/sha.o \
-    cryptopp/obj/cpu.o
+    obj/init.o
 
 
 all: bitcoin
 
 
 obj/%.o: %.cpp $(HEADERS)
-	$(CXX) -c $(CXXFLAGS) $(WXINCLUDEPATHS) -DGUI -o $@ $<
-
-cryptopp/obj/%.o: cryptopp/%.cpp
-	$(CXX) -c $(CXXFLAGS) -O3 -o $@ $<
+	$(CXX) -c $(xCXXFLAGS) $(WXINCLUDEPATHS) -DGUI -o $@ $<
 
 obj/sha256.o: sha256.cpp
-	$(CXX) -c $(CXXFLAGS) -msse2 -O3 -march=amdfam10 -o $@ $<
+	$(CXX) -c $(xCXXFLAGS) $(xSHA256_CXXFLAGS) -o $@ $<
 
 bitcoin: $(OBJS) obj/ui.o obj/uibase.o obj/sha256.o
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(WXLIBS) $(LIBS)
+	$(CXX) -o $@ $^ $(WXLIBS) $(xLDFLAGS)
 
 
 obj/nogui/%.o: %.cpp $(HEADERS)
-	$(CXX) -c $(CXXFLAGS) -o $@ $<
+	$(CXX) -c $(xCXXFLAGS) -o $@ $<
 
 bitcoind: $(OBJS:obj/%=obj/nogui/%) obj/sha256.o
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
+	$(CXX) -o $@ $^ $(xLDFLAGS)
 
 
 clean:
 	-rm -f obj/*.o
 	-rm -f obj/nogui/*.o
-	-rm -f cryptopp/obj/*.o
 	-rm -f headers.h.gch
 	-rm -f bitcoin
 	-rm -f bitcoind
