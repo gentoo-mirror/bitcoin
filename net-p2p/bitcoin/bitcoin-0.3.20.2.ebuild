@@ -41,7 +41,7 @@ pkg_setup() {
 
 
 src_prepare() {
-     	# Create missing directories
+	# Create missing directories
 	mkdir -p ${S}/src/obj/nogui || die "mkdir failed"
 
 	# Copy our Makefile
