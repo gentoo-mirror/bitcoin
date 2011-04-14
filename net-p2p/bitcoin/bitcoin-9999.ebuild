@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit db-use distutils eutils subversion wxwidgets
+inherit db-use eutils subversion wxwidgets
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"

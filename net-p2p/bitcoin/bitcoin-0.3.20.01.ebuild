@@ -6,7 +6,7 @@ EAPI="2"
 
 WX_GTK_VER="2.9"  # Should be fine like this.
 
-inherit distutils eutils wxwidgets db-use versionator
+inherit eutils wxwidgets db-use versionator
 
 DESCRIPTION="A peer-to-peer network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
