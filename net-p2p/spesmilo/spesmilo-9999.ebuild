@@ -14,6 +14,11 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="kde"
+LANGS="en_GB eo fr nl"
+
+for X in ${LANGS}; do
+    IUSE="$IUSE linguas_$X"
+done
 
 DEPEND="
 "
@@ -27,7 +32,9 @@ DEPEND="${DEPEND}
 "
 
 src_compile() {
-	emake all || die
+	emake \
+		LINGUAS="${LINGUAS}" \
+		all || die
 }
 
 src_install() {
@@ -38,5 +45,6 @@ src_install() {
 	emake DESTDIR="${D}" \
 		PREFIX="/usr" \
 		KDESERVICEDIR="${KDESERVICEDIR}" \
+		LINGUAS="${LINGUAS}" \
 		install || die
 }
