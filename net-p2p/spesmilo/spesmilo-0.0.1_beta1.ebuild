@@ -4,21 +4,17 @@
 
 EAPI=2
 
-inherit git
-
+myPN="${PN/s/S}"
+myPV="${PV/_/.}"
+myP="${myPN}-${myPV}"
 DESCRIPTION="PySide Bitcoin user interface"
 HOMEPAGE="https://gitorious.org/bitcoin/spesmilo"
-EGIT_REPO_URI="git://gitorious.org/bitcoin/spesmilo.git"
+SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${myPN}_${myPV}_source.tbz2"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="kde"
-LANGS="en_GB eo fr nl"
-
-for X in ${LANGS}; do
-    IUSE="$IUSE linguas_$X"
-done
 
 DEPEND="
 "
@@ -31,10 +27,10 @@ DEPEND="${DEPEND}
 	media-gfx/imagemagick
 "
 
+S="${WORKDIR}/${myP}"
+
 src_compile() {
-	emake \
-		LINGUAS="${LINGUAS}" \
-		all || die
+	emake all || die
 }
 
 src_install() {
@@ -45,6 +41,5 @@ src_install() {
 	emake DESTDIR="${D}" \
 		PREFIX="/usr" \
 		KDESERVICEDIR="${KDESERVICEDIR}" \
-		LINGUAS="${LINGUAS}" \
 		install || die
 }

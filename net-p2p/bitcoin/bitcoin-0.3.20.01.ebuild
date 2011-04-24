@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI=3
 
 WX_GTK_VER="2.9"  # Should be fine like this.
 
-inherit distutils eutils wxwidgets db-use versionator
+inherit eutils wxwidgets db-use versionator
 
 DESCRIPTION="A peer-to-peer network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
