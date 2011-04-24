@@ -109,7 +109,7 @@ src_install() {
 	if use wxwidgets; then
 		einfo "Installing wxwidgets gui"
 		newbin bitcoin wxbitcoin
-		dosym wxbitcoin bitcoin
+		dosym wxbitcoin /usr/bin/bitcoin
 		insinto /usr/share/pixmaps
 		doins "${S}/rc/bitcoin.ico"
 		make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
