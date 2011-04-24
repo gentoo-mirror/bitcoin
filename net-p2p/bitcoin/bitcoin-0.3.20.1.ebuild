@@ -11,7 +11,7 @@ inherit db-use eutils wxwidgets
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="mirror://sourceforge/bitcoin/${P}-linux.tar.gz"
+SRC_URI="mirror://sourceforge/bitcoin/${P/.1/.01}-linux.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -45,7 +45,7 @@ DEPEND="${DEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/${P}/src"
+S="${WORKDIR}/${P/.1/}/src"
 
 pkg_setup() {
 	if use daemon || ! use wxwidgets; then
