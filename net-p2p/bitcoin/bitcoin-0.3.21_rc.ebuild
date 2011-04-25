@@ -33,6 +33,9 @@ DEPEND="dev-libs/boost
 	selinux? (
 		sys-libs/libselinux
 	)
+	upnp? (
+		net-libs/miniupnpc
+	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	wxwidgets? (
 		>=app-admin/eselect-wxwidgets-0.7-r1
