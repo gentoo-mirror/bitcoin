@@ -16,6 +16,7 @@ IUSE="postgres sqlite"
 DEPEND="
 	=dev-libs/jansson-1*
 	dev-libs/libevent
+	dev-libs/libmemcached
 	dev-libs/openssl
 	net-misc/curl
 	sys-libs/zlib
