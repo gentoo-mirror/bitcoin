@@ -4,8 +4,6 @@
 
 EAPI=3
 
-inherit git
-
 DESCRIPTION="bitcoin push-mining pool server"
 HOMEPAGE="https://github.com/jgarzik/pushpool"
 SRC_URI='https://github.com/jgarzik/pushpool/tarball/f2856225b8c97023f675e6dd8b003dd0486598c1#.tar.gz'
