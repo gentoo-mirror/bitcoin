@@ -29,6 +29,12 @@ DEPEND="
 RDEPEND="${DEPEND}
 "
 
+S="${WORKDIR}/jgarzik-${PN}-f285622"
+
+src_prepare() {
+	./autogen.sh
+}
+
 src_compile() {
 	# MySQL is broken in this version
 	./configure \
