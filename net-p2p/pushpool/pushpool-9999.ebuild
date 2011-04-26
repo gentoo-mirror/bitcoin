@@ -37,11 +37,11 @@ RDEPEND="${DEPEND}
 "
 
 src_compile() {
-	./configure \
+	econf \
 		$(use_with mysql) \
 		$(use_with postgres postgresql) \
 		$(use_with sqlite sqlite3) \
-	|| die 'configure failed'
+	|| die 'econf failed'
 }
 
 src_install() {

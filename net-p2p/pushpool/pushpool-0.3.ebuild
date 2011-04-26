@@ -38,11 +38,11 @@ src_prepare() {
 
 src_compile() {
 	# MySQL is broken in this version
-	./configure \
+	econf \
 		--without-mysql \
 		$(use_with postgres postgresql) \
 		$(use_with sqlite sqlite3) \
-	|| die 'configure failed'
+	|| die 'econf failed'
 }
 
 src_install() {
