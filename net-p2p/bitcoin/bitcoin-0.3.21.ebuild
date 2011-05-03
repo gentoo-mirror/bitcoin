@@ -60,6 +60,7 @@ pkg_setup() {
 
 src_prepare() {
 	cp "${FILESDIR}/${PN}-Makefile.gentoo" "Makefile"
+	epatch "${FILESDIR}/fix_textrel.patch"
 }
 
 src_compile() {

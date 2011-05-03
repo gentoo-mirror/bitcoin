@@ -60,6 +60,7 @@ src_prepare() {
 	mkdir -p "${S}/obj/nogui" || die "mkdir failed"
 	
 	cp "${FILESDIR}/${PN}-Makefile.gentoo" "Makefile"
+	epatch "${FILESDIR}/fix_textrel.patch"
 }
 
 src_compile() {
