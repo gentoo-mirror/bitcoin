@@ -36,7 +36,7 @@ DEPEND="
 RDEPEND="${DEPEND}
 "
 
-src_compile() {
+src_configure() {
 	econf \
 		$(use_with mysql) \
 		$(use_with postgres postgresql) \

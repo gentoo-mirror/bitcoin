@@ -6,7 +6,7 @@ EAPI=3
 
 DESCRIPTION="bitcoin push-mining pool server"
 HOMEPAGE="https://github.com/jgarzik/pushpool"
-SRC_URI="https://download.github.com/jgarzik-${PN}-v${PV}-0-gf285622.zip"
+SRC_URI="https://download.github.com/jgarzik-${PN}-v${PV}-0-g495ec6c.zip"
 
 LICENSE="GPL-2 MIT"
 SLOT="0"
@@ -30,7 +30,7 @@ DEPEND="
 RDEPEND="${DEPEND}
 "
 
-S="${WORKDIR}/jgarzik-${PN}-52419b9"
+S="${WORKDIR}/jgarzik-${PN}-b1f6d80"
 
 src_prepare() {
 	./autogen.sh
