@@ -29,6 +29,9 @@ DEPEND="
 "
 RDEPEND="${DEPEND}
 "
+DEPEND="${DEPEND}
+	app-arch/unzip
+"
 
 S="${WORKDIR}/jgarzik-${PN}-52419b9"
 
