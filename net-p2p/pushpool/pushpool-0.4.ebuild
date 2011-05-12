@@ -11,7 +11,7 @@ SRC_URI="https://download.github.com/jgarzik-${PN}-v${PV}-0-g495ec6c.zip"
 LICENSE="GPL-2 MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="postgres sqlite"
+IUSE="+longpolling postgres sqlite"
 
 DEPEND="
 	=dev-libs/jansson-1*
@@ -20,6 +20,9 @@ DEPEND="
 	dev-libs/openssl
 	net-misc/curl
 	sys-libs/zlib
+	longpolling? (
+		dev-python/pycrypto
+	)
 	postgres? (
 		dev-db/postgresql-server
 	)

@@ -14,7 +14,7 @@ EGIT_BOOTSTRAP='autogen.sh'
 LICENSE="GPL-2 MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="mysql postgres sqlite"
+IUSE="+longpolling mysql postgres sqlite"
 
 DEPEND="
 	=dev-libs/jansson-1*
@@ -23,6 +23,9 @@ DEPEND="
 	dev-libs/openssl
 	net-misc/curl
 	sys-libs/zlib
+	longpolling? (
+		dev-python/pycrypto
+	)
 	mysql? (
 		dev-db/mysql
 	)
