@@ -6,7 +6,7 @@ EAPI=3
 
 DESCRIPTION="bitcoin push-mining pool server"
 HOMEPAGE="https://github.com/jgarzik/pushpool"
-SRC_URI="https://download.github.com/jgarzik-${PN}-v${PV}-0-g495ec6c.zip"
+SRC_URI="http://yyz.us/bitcoin/${P}.tar.gz"
 
 LICENSE="GPL-2 MIT"
 SLOT="0"
@@ -32,15 +32,6 @@ DEPEND="
 "
 RDEPEND="${DEPEND}
 "
-DEPEND="${DEPEND}
-	app-arch/unzip
-"
-
-S="${WORKDIR}/jgarzik-${PN}-b1f6d80"
-
-src_prepare() {
-	./autogen.sh
-}
 
 src_configure() {
 	# MySQL is broken in this version
