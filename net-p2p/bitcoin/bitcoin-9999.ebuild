@@ -17,7 +17,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="daemon debug nls selinux sse2 ssl upnp wxwidgets"
-LANGS="de es fr it nl"
+LANGS="de es fr it nl pt ru"
 
 for X in ${LANGS}; do
 	IUSE="$IUSE linguas_$X"
