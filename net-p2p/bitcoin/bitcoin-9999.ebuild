@@ -16,7 +16,7 @@ EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="daemon debug nls selinux sse2 ssl upnp wxwidgets"
+IUSE="daemon debug nls selinux ssl upnp wxwidgets"
 LANGS="de es fr it nl pt ru"
 
 for X in ${LANGS}; do
@@ -58,7 +58,6 @@ pkg_setup() {
 
 src_prepare() {
 	cp "${FILESDIR}/${PN}-Makefile.gentoo" "Makefile"
-	epatch "${FILESDIR}/fix_textrel.patch"
 }
 
 src_compile() {
@@ -71,7 +70,6 @@ src_compile() {
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
 	
 	use debug&& OPTS+=(USE_DEBUG=1)
-	use sse2 && OPTS+=(USE_SSE2=1)
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
 	
