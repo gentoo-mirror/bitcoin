@@ -57,7 +57,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	cp "${FILESDIR}/${PN}-Makefile.gentoo" "Makefile"
+	cd src
+	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
 }
 
 src_compile() {
@@ -80,6 +81,7 @@ src_compile() {
 		dodaemon=true
 	fi
 	
+	cd src
 	if $dodaemon; then
 		emake "${OPTS[@]}" bitcoind || die "emake bitcoind failed";
 	fi
@@ -91,7 +93,7 @@ src_compile() {
 src_install() {
 	if use daemon || ! use wxwidgets; then
 		einfo "Installing daemon"
-		dobin bitcoind
+		dobin src/bitcoind
 
 		insinto /etc/bitcoin
 		newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
@@ -110,10 +112,10 @@ src_install() {
 	fi
 	if use wxwidgets; then
 		einfo "Installing wxwidgets gui"
-		newbin bitcoin wxbitcoin
+		newbin src/bitcoin wxbitcoin
 		dosym wxbitcoin /usr/bin/bitcoin
 		insinto /usr/share/pixmaps
-		doins "${S}/rc/bitcoin.ico"
+		doins "share/pixmaps/bitcoin.ico"
 		make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
 	fi
 	if use nls; then
@@ -126,5 +128,5 @@ src_install() {
 		done
 	fi
 	
-	newdoc license.txt COPYING
+	dodoc COPYING doc/README
 }
