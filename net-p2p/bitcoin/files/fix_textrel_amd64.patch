@@ -1,0 +1,19 @@
+--- bitcoin/main.cpp	2011-05-03 03:06:52.706000279 +0400
++++ main.cpp	2011-05-03 03:11:39.178000279 +0400
+@@ -3150,12 +3150,14 @@
+ {
+     int a, c;
+     asm (
++        "push %%rbx;" // save ebx
+         "mov %2, %%eax; " // in into eax
+         "cpuid;"
+         "mov %%eax, %0;" // eax into a
+         "mov %%ecx, %1;" // ecx into c
++        "pop %%rbx;" // restore ebx
+         :"=r"(a),"=r"(c) /* output */
+         :"r"(in) /* input */
+-        :"%eax","%ebx","%ecx","%edx" /* clobbered register */
++        :"%eax","%ecx","%edx" /* clobbered register */
+     );
+     aret = a;
+     cret = c;
