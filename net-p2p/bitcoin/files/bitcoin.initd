@@ -64,7 +64,7 @@ start_openrc() {
 	--nicelevel "${NICELEVEL}" \
 	--background \
 	--wait 2000 \
-	-- "${BITCOIN_OPTS}"
+	-- ${BITCOIN_OPTS}
 	eend $?
 }
 
@@ -84,7 +84,7 @@ start_baselayout() {
 	--chuid "${BITCOIN_USER}" \
 	--nicelevel "${NICELEVEL}" \
 	--background \
-	-- "${BITCOIN_OPTS}"
+	-- ${BITCOIN_OPTS}
 	eend $?
 }
 
