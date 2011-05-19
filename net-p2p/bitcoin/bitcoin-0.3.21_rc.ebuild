@@ -60,7 +60,12 @@ pkg_setup() {
 
 src_prepare() {
 	cp "${FILESDIR}/${PN}-Makefile.gentoo" "Makefile"
-	epatch "${FILESDIR}/fix_textrel.patch"
+	if use x86 ; then
+		epatch "${FILESDIR}/fix_textrel_x86.patch"
+	else 
+		epatch "${FILESDIR}/fix_textrel_amd64.patch"
+	fi
+
 }
 
 src_compile() {
