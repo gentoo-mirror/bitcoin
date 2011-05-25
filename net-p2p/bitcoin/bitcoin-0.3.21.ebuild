@@ -129,7 +129,8 @@ src_install() {
 		for val in ${LANGS}
 		do
 			if use "linguas_$val"; then
-				domo "locale/$val/LC_MESSAGES/bitcoin.mo" || die "failed to install $val locale"
+				mv "../locale/$val/LC_MESSAGES/bitcoin.mo" "$val.mo" &&
+				domo "$val.mo" || die "failed to install $val locale"
 			fi
 		done
 	fi
