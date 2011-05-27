@@ -12,7 +12,7 @@ inherit db-use eutils wxwidgets
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
+SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -48,7 +48,7 @@ DEPEND="${DEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/bitcoin-${PV/_/-}/src"
+S="${WORKDIR}/${myP}"
 
 src_prepare() {
 	cd src
@@ -84,7 +84,7 @@ src_install() {
 		for val in ${LANGS}
 		do
 			if use "linguas_$val"; then
-				mv "../locale/$val/LC_MESSAGES/bitcoin.mo" "$val.mo" &&
+				mv "locale/$val/LC_MESSAGES/bitcoin.mo" "$val.mo" &&
 				domo "$val.mo" || die "failed to install $val locale"
 			fi
 		done

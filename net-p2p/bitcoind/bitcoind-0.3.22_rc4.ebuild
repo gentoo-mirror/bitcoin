@@ -11,7 +11,7 @@ inherit db-use eutils
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
+SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -38,13 +38,13 @@ DEPEND="${DEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/bitcoin-${PV/_/-}/src"
+S="${WORKDIR}/${myP}"
 
 pkg_setup() {
 	local UG='bitcoin'
 	ebegin "Creating ${UG} user and group"
-	enewgroup ${UG}
-	enewuser ${UG} -1 -1 /var/lib/bitcoin ${UG}
+	enewgroup "${UG}"
+	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
 }
 
 src_prepare() {

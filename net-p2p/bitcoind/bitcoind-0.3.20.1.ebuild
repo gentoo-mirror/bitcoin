@@ -40,8 +40,8 @@ S="${WORKDIR}/${myP/.01/}/src"
 pkg_setup() {
 	local UG='bitcoin'
 	ebegin "Creating ${UG} user and group"
-	enewgroup ${UG}
-	enewuser ${UG} -1 -1 /var/lib/bitcoin ${UG}
+	enewgroup "${UG}"
+	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
 }
 
 src_prepare() {
