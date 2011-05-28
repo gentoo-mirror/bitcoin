@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://gitorious.org/bitcoin/spesmilo.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="kde"
+IUSE="kde +local"
 LANGS="en_GB eo fr nl"
 
 for X in ${LANGS}; do
@@ -26,6 +26,9 @@ RDEPEND="${DEPEND}
 	dev-python/pyside
 	virtual/python-serviceproxy
 	dev-python/anynumber
+	local? (
+		net-p2p/bitcoind
+	)
 "
 DEPEND="${DEPEND}
 	media-gfx/imagemagick

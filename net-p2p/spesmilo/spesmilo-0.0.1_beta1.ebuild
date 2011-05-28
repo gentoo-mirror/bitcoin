@@ -14,7 +14,7 @@ SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${myPN}_${myPV}_source.tb
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="kde"
+IUSE="kde +local"
 
 DEPEND="
 "
@@ -22,6 +22,9 @@ RDEPEND="${DEPEND}
 	dev-python/pyside
 	virtual/python-serviceproxy
 	dev-python/anynumber
+	local? (
+		net-p2p/bitcoind
+	)
 "
 DEPEND="${DEPEND}
 	media-gfx/imagemagick
