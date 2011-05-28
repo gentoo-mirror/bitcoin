@@ -18,7 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug selinux ssl upnp"
 
-DEPEND="dev-libs/boost
+DEPEND="
+	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
 	dev-libs/glib
 	dev-libs/openssl[-bindist]

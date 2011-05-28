@@ -24,7 +24,9 @@ for X in ${LANGS}; do
 	IUSE="$IUSE linguas_$X"
 done
 
-DEPEND="dev-libs/boost
+DEPEND="
+	>=dev-libs/boost-1.41.0
+	<dev-libs/boost-1.46
 	dev-libs/crypto++
 	dev-libs/glib
 	dev-libs/openssl[-bindist]
