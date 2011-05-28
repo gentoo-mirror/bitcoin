@@ -6,7 +6,7 @@ EAPI=3
 
 DB_VER="4.8"
 
-inherit db-use eutils git
+inherit db-use eutils git versionator
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
@@ -59,6 +59,14 @@ src_compile() {
 	
 	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
+	
+	local BOOST_PKG BOOST_VER BOOST_INC
+	BOOST_PKG="$(best_version 'dev-libs/boost')"
+	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
+	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
+	BOOST_LIB="/usr/include/boost-${BOOST_VER}"
+	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_LIB}")
+	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 	
 	use debug&& OPTS+=(USE_DEBUG=1)
 	use ssl  && OPTS+=(USE_SSL=1)
