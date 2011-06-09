@@ -18,7 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug nls selinux ssl upnp"
-LANGS="de es fr it nl pt ru"
+LANGS="cs de eo es fr it lt nl pt ru zh_cn"
 
 for X in ${LANGS}; do
 	IUSE="$IUSE linguas_$X"
