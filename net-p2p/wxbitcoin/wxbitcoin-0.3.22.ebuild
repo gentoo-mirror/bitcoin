@@ -12,12 +12,14 @@ inherit db-use eutils versionator wxwidgets
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz"
+SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendonly.patch )
+"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug nls selinux ssl upnp"
+IUSE="debug +eligius nls selinux ssl upnp"
 LANGS="cs de eo es fr it lt nl pt ru zh_cn"
 
 for X in ${LANGS}; do
@@ -55,6 +57,7 @@ S="${WORKDIR}/${myP}"
 src_prepare() {
 	cd src
 	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
+	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendonly.patch"
 }
 
 src_compile() {

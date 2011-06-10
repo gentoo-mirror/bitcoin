@@ -13,11 +13,14 @@ DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
+SRC_URI="
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendonly.patch )
+"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug nls selinux ssl upnp"
+IUSE="debug +eligius nls selinux ssl upnp"
 LANGS="de es fr it nl pt ru"
 
 for X in ${LANGS}; do
@@ -53,6 +56,7 @@ DEPEND="${DEPEND}
 src_prepare() {
 	cd src
 	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
+	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendonly.patch"
 }
 
 src_compile() {
