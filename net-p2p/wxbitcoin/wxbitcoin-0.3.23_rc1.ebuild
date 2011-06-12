@@ -13,7 +13,7 @@ DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
 SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.23/test/${myP}-src.tar.gz
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendonly.patch )
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
 "
 
 LICENSE="MIT"
@@ -57,7 +57,7 @@ S="${WORKDIR}/${myP}"
 src_prepare() {
 	cd src
 	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
-	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendonly.patch"
+	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
 }
 
 src_compile() {
