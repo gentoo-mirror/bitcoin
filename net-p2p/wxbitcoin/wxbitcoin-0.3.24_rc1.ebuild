@@ -7,18 +7,19 @@ EAPI=3
 DB_VER="4.8"
 WX_GTK_VER="2.9"
 
-inherit db-use eutils git versionator wxwidgets
+inherit db-use eutils versionator wxwidgets
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
+myP="bitcoin-${PV/_/}"
+SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/test/${myP}-src.tar.gz
+"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug nls selinux ssl upnp"
-LANGS="de es fr it nl pt ru"
+LANGS="cs de eo es fr it lt nl pt ru zh_cn"
 
 for X in ${LANGS}; do
 	IUSE="$IUSE linguas_$X"
@@ -50,9 +51,11 @@ DEPEND="${DEPEND}
 	>=app-shells/bash-4.1
 "
 
+S="${WORKDIR}/${myP}"
+
 src_prepare() {
 	cd src
-	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
+	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile"
 }
 
 src_compile() {
