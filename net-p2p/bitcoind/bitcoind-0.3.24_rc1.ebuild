@@ -6,12 +6,13 @@ EAPI=3
 
 DB_VER="4.8"
 
-inherit db-use eutils git versionator
+inherit db-use eutils versionator
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
+myP="bitcoin-${PV/_/}"
+SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/test/${myP}-src.tar.gz
+"
 
 LICENSE="MIT"
 SLOT="0"
@@ -38,6 +39,8 @@ RDEPEND="${DEPEND}
 DEPEND="${DEPEND}
 	>=app-shells/bash-4.1
 "
+
+S="${WORKDIR}/${myP}"
 
 pkg_setup() {
 	local UG='bitcoin'
