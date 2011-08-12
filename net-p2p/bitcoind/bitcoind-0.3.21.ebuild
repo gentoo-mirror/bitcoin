@@ -16,7 +16,7 @@ SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug selinux sse2 ssl upnp"
+IUSE="debug selinux sse2 ssl upnp +volatile-fees"
 
 DEPEND="
 	>=dev-libs/boost-1.41.0
@@ -54,6 +54,17 @@ src_prepare() {
 		epatch "${FILESDIR}/fix_textrel_x86.patch"
 	else 
 		epatch "${FILESDIR}/fix_textrel_amd64.patch"
+	fi
+	
+	epatch "${FILESDIR}/0.3.19-Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+	
+	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
+	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
+	if use volatile-fees; then
+		einfo '    USE=volatile-fees enabled, adjusting...'
+		epatch "${FILESDIR}/0.3.19-Backport-reduced-base-fee-of-0.0005-BTC.patch"
+	else
+		ewarn '    Enable USE=volatile-fees to apply fee adjustments'
 	fi
 }
 

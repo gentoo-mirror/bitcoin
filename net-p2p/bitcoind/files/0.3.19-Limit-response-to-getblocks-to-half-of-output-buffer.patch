@@ -1,0 +1,84 @@
+From 5cc85666c074ff799988edd5b44e8f3ae2180c3e Mon Sep 17 00:00:00 2001
+From: Pieter Wuille <pieter.wuille@gmail.com>
+Date: Thu, 30 Jun 2011 23:29:44 +0200
+Subject: [PATCH] Limit response to getblocks to half of output buffer size
+
+Introduce SendBufferSize() and ReceiveBufferSize(), and limit
+the blocks sent as response to the "getblocks" message to
+half of the active send buffer size.
+---
+ main.cpp |   10 +++++++---
+ net.cpp  |    4 ++--
+ net.h    |    2 ++
+ 3 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/main.cpp b/main.cpp
+index 1d9b35b..3e22c0f 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -2440,20 +2440,24 @@ bool ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
+         if (pindex)
+             pindex = pindex->pnext;
+         int nLimit = 500 + locator.GetDistanceBack();
++        unsigned int nBytes = 0;
+         printf("getblocks %d to %s limit %d\n", (pindex ? pindex->nHeight : -1), hashStop.ToString().substr(0,20).c_str(), nLimit);
+         for (; pindex; pindex = pindex->pnext)
+         {
+             if (pindex->GetBlockHash() == hashStop)
+             {
+-                printf("  getblocks stopping at %d %s\n", pindex->nHeight, pindex->GetBlockHash().ToString().substr(0,20).c_str());
++                printf("  getblocks stopping at %d %s (%u bytes)\n", pindex->nHeight, pindex->GetBlockHash().ToString().substr(0,20).c_str(), nBytes);
+                 break;
+             }
+             pfrom->PushInventory(CInv(MSG_BLOCK, pindex->GetBlockHash()));
+-            if (--nLimit <= 0)
++            CBlock block;
++            block.ReadFromDisk(pindex, true);
++            nBytes += block.GetSerializeSize(SER_NETWORK);
++            if (--nLimit <= 0 || nBytes >= SendBufferSize()/2)
+             {
+                 // When this block is requested, we'll send an inv that'll make them
+                 // getblocks the next batch of inventory.
+-                printf("  getblocks stopping at limit %d %s\n", pindex->nHeight, pindex->GetBlockHash().ToString().substr(0,20).c_str());
++                printf("  getblocks stopping at limit %d %s (%u bytes)\n", pindex->nHeight, pindex->GetBlockHash().ToString().substr(0,20).c_str(), nBytes);
+                 pfrom->hashContinue = pindex->GetBlockHash();
+                 break;
+             }
+diff --git a/net.cpp b/net.cpp
+index 74907ce..27ac7a4 100644
+--- a/net.cpp
++++ b/net.cpp
+@@ -699,7 +699,7 @@ void ThreadSocketHandler2(void* parg)
+                     CDataStream& vRecv = pnode->vRecv;
+                     unsigned int nPos = vRecv.size();
+ 
+-                    if (nPos > 1000*GetArg("-maxreceivebuffer", 10*1000)) {
++                    if (nPos > ReceiveBufferSize()) {
+                         if (!pnode->fDisconnect)
+                             printf("socket recv flood control disconnect (%d bytes)\n", vRecv.size());
+                         pnode->CloseSocketDisconnect();
+@@ -764,7 +764,7 @@ void ThreadSocketHandler2(void* parg)
+                                 pnode->CloseSocketDisconnect();
+                             }
+                         }
+-                        if (vSend.size() > 1000*GetArg("-maxsendbuffer", 10*1000)) {
++                        if (vSend.size() > SendBufferSize()) {
+                             if (!pnode->fDisconnect)
+                                 printf("socket send flood control disconnect (%d bytes)\n", vSend.size());
+                             pnode->CloseSocketDisconnect();
+diff --git a/net.h b/net.h
+index f070816..09e9e34 100644
+--- a/net.h
++++ b/net.h
+@@ -12,6 +12,8 @@ extern int nBestHeight;
+ 
+ 
+ 
++inline unsigned int ReceiveBufferSize() { return 1000*GetArg("-maxreceivebuffer", 10*1000); }
++inline unsigned int SendBufferSize() { return 1000*GetArg("-maxsendbuffer", 10*1000); }
+ inline unsigned short GetDefaultPort() { return fTestNet ? htons(18333) : htons(8333); }
+ static const unsigned int PUBLISH_HOPS = 5;
+ enum
+-- 
+1.7.3.4
+

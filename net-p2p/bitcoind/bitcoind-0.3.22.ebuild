@@ -18,7 +18,7 @@ SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug +eligius selinux ssl upnp"
+IUSE="debug +eligius selinux ssl upnp +volatile-fees"
 
 DEPEND="
 	>=dev-libs/boost-1.41.0
@@ -53,7 +53,19 @@ pkg_setup() {
 src_prepare() {
 	cd src
 	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
+	
+	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+	
 	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
+	
+	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
+	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
+	if use volatile-fees; then
+		einfo '    USE=volatile-fees enabled, adjusting...'
+		epatch "${FILESDIR}/0.3.22-Backport-reduced-fees-of-0.0005-BTC-send-accept-and-.patch"
+	else
+		ewarn '    Enable USE=volatile-fees to apply fee adjustments'
+	fi
 }
 
 src_compile() {
