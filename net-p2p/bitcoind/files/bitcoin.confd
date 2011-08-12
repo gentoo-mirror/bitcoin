@@ -2,7 +2,7 @@
 
 BITCOIN_OPTS="-daemon"
 
-# owner of mlnet process (don't change, must be existing)
+# owner of bitcoind process (don't change, must be existing)
 BITCOIN_USER="bitcoin"
 
 # See http://www.bitcoin.org/smf/index.php?topic=1063
