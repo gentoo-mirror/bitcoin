@@ -6,7 +6,7 @@
     <description>bitcoin related ebuilds from bitcoin-gentoo dev team on freenode</description>
     <homepage>https://gitorious.org/bitcoin/gentoo</homepage>
     <owner>
-      <email>mizerydearia@gmail.com</email>
+      <email>luke+bitcoin+gentoo@dashjr.org</email>
       <name>bitcoin-gentoo dev team</name>
     </owner>
     <source type="git">git://gitorious.org/bitcoin/gentoo.git</source>
