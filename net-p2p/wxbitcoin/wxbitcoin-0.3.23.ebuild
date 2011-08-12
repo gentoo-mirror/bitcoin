@@ -57,6 +57,9 @@ S="${WORKDIR}/${myP}"
 src_prepare() {
 	cd src
 	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
+	
+	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+	
 	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
 }
 
