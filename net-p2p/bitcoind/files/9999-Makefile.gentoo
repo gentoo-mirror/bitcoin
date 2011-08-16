@@ -24,6 +24,9 @@ xLDFLAGS += \
    -l z \
    -l dl
 
+xCXXFLAGS += -pthread
+xLDFLAGS += -pthread
+
 xCXXFLAGS += $(BOOST_CXXFLAGS)
 xLDFLAGS += $(BOOST_LDFLAGS)
 

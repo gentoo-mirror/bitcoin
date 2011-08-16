@@ -26,6 +26,9 @@ xLDFLAGS += \
    -l z \
    -l dl
 
+xCXXFLAGS += -pthread
+xLDFLAGS += -pthread
+
 xCXXFLAGS += $(DB_CXXFLAGS)
 xLDFLAGS += $(DB_LDFLAGS)
 
