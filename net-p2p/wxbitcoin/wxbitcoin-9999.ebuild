@@ -55,7 +55,7 @@ DEPEND="${DEPEND}
 
 src_prepare() {
 	cd src
-	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
+	cp "${FILESDIR}/9999-Makefile.gentoo" "Makefile"
 	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
 
