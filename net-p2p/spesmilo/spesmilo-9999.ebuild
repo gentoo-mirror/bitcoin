@@ -23,7 +23,7 @@ done
 DEPEND="
 "
 RDEPEND="${DEPEND}
-	dev-python/pyside
+	>=dev-python/pyside-1.0.0
 	virtual/python-serviceproxy
 	dev-python/anynumber
 	local? (
