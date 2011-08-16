@@ -42,9 +42,6 @@ checkconfig() {
 start() {
 	checkconfig || return 1
 	ebegin "Starting Bitcoind daemon"
-	if test -z "${BITCOIN_OPTS}"; then
-	   BITCOIN_OPTS="-min"
-	fi
 
 	pkg-config openrc
 	if [ $? = 0 ]; then

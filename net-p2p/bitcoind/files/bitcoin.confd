@@ -1,7 +1,5 @@
 # Config file for /etc/init.d/bitcoin
 
-BITCOIN_OPTS="-daemon"
-
 # owner of bitcoind process (don't change, must be existing)
 BITCOIN_USER="bitcoin"
 
