@@ -22,8 +22,13 @@ IUSE="$IUSE selinux ssl upnp"
 # TODO: IUSE=eligius
 
 DEPEND="
-	>=dev-libs/boost-1.41.0
-	<dev-libs/boost-1.46
+	|| (
+		dev-libs/boost:1.45
+		dev-libs/boost:1.44
+		dev-libs/boost:1.43
+		dev-libs/boost:1.42
+		dev-libs/boost:1.41
+	)
 	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
 	selinux? (
