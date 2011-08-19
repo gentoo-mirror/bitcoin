@@ -25,13 +25,7 @@ for X in ${LANGS}; do
 done
 
 DEPEND="
-	|| (
-		dev-libs/boost:1.45
-		dev-libs/boost:1.44
-		dev-libs/boost:1.43
-		dev-libs/boost:1.42
-		dev-libs/boost:1.41
-	)
+	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
 	dev-libs/glib
 	dev-libs/openssl[-bindist]
@@ -66,6 +60,7 @@ src_prepare() {
 	fi
 	
 	epatch "${FILESDIR}/0.3.19-Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+	epatch "${FILESDIR}/Support-for-boost-filesystem-version-3.patch"
 	
 	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
 	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
@@ -87,7 +82,7 @@ src_compile() {
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
 	
 	local BOOST_PKG BOOST_VER BOOST_INC
-	BOOST_PKG="$(best_version '<dev-libs/boost-1.46')"
+	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
 	BOOST_LIB="/usr/include/boost-${BOOST_VER}"

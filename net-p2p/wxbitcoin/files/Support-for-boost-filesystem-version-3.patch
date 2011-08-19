@@ -1,0 +1,28 @@
+From 1012103c4e7c24177f4ee7e15a64e5be5fec35ff Mon Sep 17 00:00:00 2001
+From: Luke Dashjr <luke-jr+git@utopios.org>
+Date: Fri, 19 Aug 2011 12:45:27 -0400
+Subject: [PATCH] Support for boost filesystem version 3
+
+---
+ src/ui.cpp |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/src/ui.cpp b/src/ui.cpp
+index 372808f..a5252f8 100644
+--- a/src/ui.cpp
++++ b/src/ui.cpp
+@@ -1808,7 +1808,11 @@ void SetStartOnSystemStartup(bool fAutoStart)
+ {
+     if (!fAutoStart)
+     {
++#if defined(BOOST_FILESYSTEM_VERSION) && BOOST_FILESYSTEM_VERSION >= 3
++        unlink(GetAutostartFilePath().string().c_str());
++#else
+         unlink(GetAutostartFilePath().native_file_string().c_str());
++#endif
+     }
+     else
+     {
+-- 
+1.7.3.4
+
