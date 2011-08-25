@@ -77,7 +77,7 @@ start_openrc() {
 stop_openrc() {
 	start-stop-daemon --stop --user "${BITCOIN_USER}" \
 	--name bitcoind --pidfile /var/run/bitcoind.pid \
-	--wait 10000 \
+	--wait 30000 \
 	--progress
 	eend $?
 }
