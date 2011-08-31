@@ -24,7 +24,7 @@ TARGETDIR=/usr/libexec/${PN}
 src_prepare() {
 	      rm LICENSE || die "license remove failed"
 	      fperms 755 poclbm.py || die "fperms failed"
-	      sed -i "s:BitcoinMiner.cl:${TARGETDIR}\/BitcoinMiner.cl:" BitcoinMiner.py || die "sed failed"
+	      sed -i "s:phatk.cl:${TARGETDIR}\/phatk.cl:" BitcoinMiner.py || die "sed failed"
 }
 
 src_install() {
