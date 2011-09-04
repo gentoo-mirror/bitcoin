@@ -10,9 +10,8 @@ inherit db-use eutils versionator
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
-myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.23/${myP}-src.tar.gz
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
+SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v0.4.00rc1 -> bitcoin-v0.4.00rc1.tgz
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
 "
 
 LICENSE="MIT"
@@ -29,7 +28,7 @@ DEPEND="
 		sys-libs/libselinux
 	)
 	upnp? (
-		<net-libs/miniupnpc-1.6
+		>=net-libs/miniupnpc-1.6
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	!net-p2p/bitcoin
@@ -41,7 +40,7 @@ DEPEND="${DEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/${myP}"
+S="${WORKDIR}/bitcoin-bitcoin-c0b616b"
 
 pkg_setup() {
 	local UG='bitcoin'
@@ -52,11 +51,8 @@ pkg_setup() {
 
 src_prepare() {
 	cd src
-	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
-	
-	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
-	
-	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
+	cp "${FILESDIR}/0.4.0-Makefile.gentoo" "Makefile"
+	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
 
 src_compile() {

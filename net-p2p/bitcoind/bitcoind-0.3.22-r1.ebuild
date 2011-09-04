@@ -29,7 +29,7 @@ DEPEND="
 		sys-libs/libselinux
 	)
 	upnp? (
-		net-libs/miniupnpc
+		<net-libs/miniupnpc-1.6
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	!net-p2p/bitcoin

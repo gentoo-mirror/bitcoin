@@ -39,7 +39,7 @@ DEPEND="
 		sys-libs/libselinux
 	)
 	upnp? (
-		net-libs/miniupnpc
+		>=net-libs/miniupnpc-1.6
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	>=app-admin/eselect-wxwidgets-0.7-r1
@@ -54,7 +54,7 @@ DEPEND="${DEPEND}
 
 src_prepare() {
 	cd src
-	cp "${FILESDIR}/9999-Makefile.gentoo" "Makefile"
+	cp "${FILESDIR}/0.4.0-Makefile.gentoo" "Makefile"
 	epatch "${FILESDIR}/Support-for-boost-filesystem-version-3.patch"
 	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
@@ -86,7 +86,6 @@ src_compile() {
 
 src_install() {
 	newbin src/bitcoin wxbitcoin
-	dosym wxbitcoin /usr/bin/bitcoin
 	insinto /usr/share/pixmaps
 	doins "share/pixmaps/bitcoin.ico"
 	make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
@@ -103,4 +102,11 @@ src_install() {
 	fi
 	
 	dodoc COPYING doc/README
+}
+
+pkg_postinst() {
+	einfo "net-p2p/wxbitcoin no longer installs the 'bitcoin' symlink starting with 0.4."
+	einfo "To run it, you must use 'wxbitcoin'"
+	einfo "Please note that this is the last planned release of wxbitcoin, and future"
+	einfo "development is taking place on net-p2p/bitcoin-qt"
 }

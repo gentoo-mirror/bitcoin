@@ -53,7 +53,7 @@ xCXXFLAGS += $(CXXFLAGS)
 xLDFLAGS += $(LDFLAGS)
 
 HEADERS=headers.h strlcpy.h serialize.h uint256.h util.h key.h bignum.h base58.h \
-    keystore.h wallet.h \
+    crypter.h keystore.h wallet.h protocol.h \
     script.h db.h net.h irc.h main.h rpc.h uibase.h ui.h noui.h init.h
 
 OBJS= \
@@ -62,6 +62,7 @@ OBJS= \
     obj/script.o \
     obj/db.o \
     obj/net.o \
+    obj/protocol.o \
     obj/irc.o \
     obj/keystore.o \
     obj/main.o \
