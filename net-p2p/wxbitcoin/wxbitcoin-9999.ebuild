@@ -55,7 +55,6 @@ DEPEND="${DEPEND}
 src_prepare() {
 	cd src
 	cp "${FILESDIR}/0.4.0-Makefile.gentoo" "Makefile"
-	epatch "${FILESDIR}/Support-for-boost-filesystem-version-3.patch"
 	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
 
