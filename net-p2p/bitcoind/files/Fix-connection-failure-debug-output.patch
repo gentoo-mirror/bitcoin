@@ -1,0 +1,25 @@
+From ecd3e728b78255ec3af1c08de57d0abd27964780 Mon Sep 17 00:00:00 2001
+From: Joerie de Gram <j.de.gram@gmail.com>
+Date: Tue, 28 Jun 2011 22:16:12 +0200
+Subject: [PATCH] Fix connection failure debug output
+
+---
+ src/net.cpp |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/net.cpp b/src/net.cpp
+index 4b13726..8924ac2 100644
+--- a/src/net.cpp
++++ b/src/net.cpp
+@@ -159,7 +159,7 @@ bool ConnectSocket(const CAddress& addrConnect, SOCKET& hSocketRet, int nTimeout
+         else
+ #endif
+         {
+-            printf("connect() failed: %s\n",WSAGetLastError());
++            printf("connect() failed: %i\n",WSAGetLastError());
+             closesocket(hSocket);
+             return false;
+         }
+-- 
+1.7.3.4
+

@@ -58,6 +58,7 @@ src_prepare() {
 	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
 	
 	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+	epatch "${FILESDIR}/Fix-connection-failure-debug-output.patch"
 	epatch "${FILESDIR}/Support-for-boost-filesystem-version-3.patch"
 	
 	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
