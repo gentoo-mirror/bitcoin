@@ -43,7 +43,7 @@ DEPEND="
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	>=app-admin/eselect-wxwidgets-0.7-r1
-	x11-libs/wxGTK:2.9[X]
+	>=x11-libs/wxGTK-2.9.1:2.9[X]
 	!net-p2p/bitcoin
 "
 RDEPEND="${DEPEND}
