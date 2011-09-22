@@ -17,28 +17,25 @@ EGIT_REPO_URI="git://github.com/laanwj/bitcoin-qt.git"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="$IUSE selinux ssl upnp"
+IUSE="$IUSE dbus selinux ssl upnp"
 
 # TODO: IUSE=eligius
 
 DEPEND="
-	|| (
-		dev-libs/boost:1.45
-		dev-libs/boost:1.44
-		dev-libs/boost:1.43
-		dev-libs/boost:1.42
-		dev-libs/boost:1.41
-	)
+	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
 	selinux? (
 		sys-libs/libselinux
 	)
 	upnp? (
-		net-libs/miniupnpc
+		>=net-libs/miniupnpc-1.6
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	x11-libs/qt-gui
+	dbus? (
+		x11-libs/qt-dbus
+	)
 "
 RDEPEND="${DEPEND}
 "
@@ -53,6 +50,13 @@ src_prepare() {
 	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
 
+src_configure() {
+	local x=
+	use dbus && x="$x USE_DBUS=1"
+	use upnp && x="$x USE_UPNP=1"
+	eqmake4 "${PN}.pro" $x
+}
+
 src_compile() {
 	local OPTS=()
 	local myCXXFLAGS
@@ -62,7 +66,7 @@ src_compile() {
 	myLDFLAGS="$myLDFLAGS -ldb_cxx-${DB_VER}"
 	
 	local BOOST_PKG BOOST_VER BOOST_INC
-	BOOST_PKG="$(best_version '<dev-libs/boost-1.46')"
+	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
 	BOOST_LIB="/usr/include/boost-${BOOST_VER}"
@@ -70,10 +74,6 @@ src_compile() {
 	sed 's/\(boost_[a-z_]\+\)/\1'"-${BOOST_VER}"'/g' -i Makefile
 	
 	use ssl  && myCXXFLAGS="$myCXXFLAGS -DUSE_SSL"
-	if use upnp; then
-		myCXXFLAGS="$myCXXFLAGS -DUSE_UPNP=1"
-		myLDFLAGS="$myLDFLAGS -lminiupnpc"
-	fi
 	
 	OPTS+=("CXX=g++ ${CXXFLAGS} ${myCXXFLAGS}")
 	OPTS+=("SUBLIBS=${LDFLAGS} ${myLDFLAGS}")
