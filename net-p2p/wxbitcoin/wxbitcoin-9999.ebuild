@@ -19,7 +19,7 @@ SRC_URI="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="debug +eligius nls selinux ssl upnp"
 LANGS="cs de eo es fr it lt nl pl pt ru sv zh_cn"
 
