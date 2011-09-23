@@ -11,7 +11,8 @@ inherit db-use eutils versionator wxwidgets
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV} -> bitcoin-v${PV}.tgz
+myP="bitcoin-${PV/_/}"
+SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/${myP}-src.tar.gz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
 "
 
@@ -50,7 +51,7 @@ DEPEND="${DEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/bitcoin-bitcoin-72274ed"
+S="${WORKDIR}/${myP}"
 
 src_prepare() {
 	cd src
