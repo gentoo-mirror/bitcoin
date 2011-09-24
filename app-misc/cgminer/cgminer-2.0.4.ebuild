@@ -45,7 +45,6 @@ DEPEND='
 	)
 	adl? (
 		dev-util/amd-adl-sdk
-		dev-util/amd-adl-sdk-bin
 	)
 '
 RDEPEND="${DEPEND}"
@@ -56,6 +55,7 @@ DEPEND="${DEPEND}
 
 src_prepare() {
 	sed -i 's/\(^\#define WANT_.*\(SSE\|PADLOCK\)\)/\/\/ \1/' miner.h
+	ln -s /usr/include/ADL/* ADL_SDK/
 }
 
 src_configure() {
