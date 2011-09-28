@@ -43,14 +43,14 @@ DEPEND='
 			dev-util/intel-opencl-sdk
 		)
 	)
-	adl? (
-		dev-util/amd-adl-sdk
-	)
 '
 RDEPEND="${DEPEND}"
 DEPEND="${DEPEND}
 	dev-util/pkgconfig
 	sys-apps/sed
+	adl? (
+		dev-util/amd-adl-sdk
+	)
 "
 
 src_prepare() {
