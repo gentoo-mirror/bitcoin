@@ -53,32 +53,24 @@ src_prepare() {
 src_configure() {
 	local x=
 	use dbus && x="$x USE_DBUS=1"
+	use ssl  && x="$x DEFINES+=USE_SSL"
 	use upnp && x="$x USE_UPNP=1"
+	
+	x="$x BDB_INCLUDE_PATH='$(db_includedir "${DB_VER}")'"
+	x="$x BDB_LIB_SUFFIX='-${DB_VER}'"
+	
+	local BOOST_PKG BOOST_VER
+	BOOST_PKG="$(best_version 'dev-libs/boost')"
+	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
+	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
+	x="$x BOOST_INCLUDE_PATH='/usr/include/boost-${BOOST_VER}'"
+	x="$x BOOST_LIB_SUFFIX='-${BOOST_VER}'"
+	
 	eqmake4 "${PN}.pro" $x
 }
 
 src_compile() {
-	local OPTS=()
-	local myCXXFLAGS
-	local myLDFLAGS
-	
-	myCXXFLAGS="$myCXXFLAGS -I$(db_includedir "${DB_VER}")"
-	myLDFLAGS="$myLDFLAGS -ldb_cxx-${DB_VER}"
-	
-	local BOOST_PKG BOOST_VER BOOST_INC
-	BOOST_PKG="$(best_version 'dev-libs/boost')"
-	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
-	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
-	BOOST_LIB="/usr/include/boost-${BOOST_VER}"
-	myCXXFLAGS="$myCXXFLAGS -I${BOOST_LIB}"
-	sed 's/\(boost_[a-z_]\+\)/\1'"-${BOOST_VER}"'/g' -i Makefile
-	
-	use ssl  && myCXXFLAGS="$myCXXFLAGS -DUSE_SSL"
-	
-	OPTS+=("CXX=g++ ${CXXFLAGS} ${myCXXFLAGS}")
-	OPTS+=("SUBLIBS=${LDFLAGS} ${myLDFLAGS}")
-	
-	emake "${OPTS[@]}" || die "emake bitcoin failed";
+	emake || die "emake bitcoin failed";
 }
 
 src_install() {

@@ -57,7 +57,7 @@ src_configure() {
 	use upnp && x="$x USE_UPNP=1"
 	
 	x="$x BDB_INCLUDE_PATH='$(db_includedir "${DB_VER}")'"
-	sed -i 's/\(-ldb_cxx\)/\1-'"${DB_VER}"'/' bitcoin-qt.pro
+	x="$x BDB_LIB_SUFFIX='-${DB_VER}'"
 	
 	local BOOST_PKG BOOST_VER
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
