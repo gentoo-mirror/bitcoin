@@ -29,7 +29,6 @@ done
 DEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
-	dev-libs/glib
 	dev-libs/openssl[-bindist]
 	nls? (
 		sys-devel/gettext

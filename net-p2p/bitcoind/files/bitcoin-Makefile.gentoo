@@ -22,7 +22,6 @@ xLDFLAGS += \
    -l ssl \
    -l crypto \
    -l crypto++ \
-   -l gthread-2.0 \
    -l z \
    -l dl
 

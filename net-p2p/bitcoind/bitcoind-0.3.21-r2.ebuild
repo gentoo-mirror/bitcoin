@@ -21,7 +21,6 @@ IUSE="debug selinux sse2 ssl upnp +volatile-fees"
 DEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
-	dev-libs/glib
 	dev-libs/openssl[-bindist]
 	selinux? (
 		sys-libs/libselinux
