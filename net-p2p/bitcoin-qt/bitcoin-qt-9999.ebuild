@@ -13,17 +13,17 @@ DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
+SRC_URI="
+       eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
+"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="$IUSE dbus selinux ssl upnp"
-
-# TODO: IUSE=eligius
+IUSE="$IUSE dbus +eligius selinux ssl upnp"
 
 DEPEND="
 	>=dev-libs/boost-1.41.0
-	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
 	selinux? (
 		sys-libs/libselinux
@@ -47,7 +47,7 @@ DOCS="COPYING doc/README"
 
 src_prepare() {
 	cd src
-	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
+	use eligius && epatch "${DISTDIR}/0.5-eligius_sendfee.patch"
 }
 
 src_configure() {
