@@ -73,8 +73,8 @@ src_compile() {
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
-	BOOST_LIB="/usr/include/boost-${BOOST_VER}"
-	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_LIB}")
+	BOOST_INC="/usr/include/boost-${BOOST_VER}"
+	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_INC}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 	
 	use debug&& OPTS+=(USE_DEBUG=1)
