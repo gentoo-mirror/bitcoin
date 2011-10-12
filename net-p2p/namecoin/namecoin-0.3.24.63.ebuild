@@ -91,7 +91,7 @@ src_install() {
 	fperms 700 /var/lib/namecoin
 	fowners namecoin:namecoin /var/lib/namecoin/
 	fowners namecoin:namecoin /var/lib/namecoin/.namecoin
-	dosym /etc/namecoin/namecoin.conf /var/lib/namecoin/.namecoin/namecoin.conf
+	dosym /etc/namecoin/namecoin.conf /var/lib/namecoin/.namecoin/bitcoin.conf
 	
 	dodoc COPYING doc/README
 	dodoc DESIGN-namecoin.md FAQ.md doc/README_merged-mining.md
