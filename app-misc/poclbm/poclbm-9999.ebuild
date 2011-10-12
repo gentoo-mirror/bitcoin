@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit git python
+inherit git-2 python
 
 DESCRIPTION="An Python openCL bitcoin miner"
 HOMEPAGE="https://github.com/m0mchil/poclbm"

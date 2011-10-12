@@ -5,7 +5,7 @@
 EAPI=3
 SUPPORT_PYTHON_ABIS=1
 
-inherit git python
+inherit git-2 python
 
 DESCRIPTION="Python module for working with arbitrary rational numbers, in any radix"
 HOMEPAGE="https://gitorious.org/anynumber"

@@ -6,7 +6,7 @@ EAPI=3
 
 DB_VER="4.8"
 
-inherit db-use eutils git versionator
+inherit db-use eutils git-2 versionator
 
 DESCRIPTION="A P2P network based domain name system."
 HOMEPAGE="https://dot-bit.org/"

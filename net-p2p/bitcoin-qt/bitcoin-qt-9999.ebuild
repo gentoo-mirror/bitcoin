@@ -7,7 +7,7 @@ EAPI=3
 DB_VER="4.8"
 
 # TODO: LANGS="de es fr it nl pt ru"
-inherit db-use eutils qt4-r2 git versionator
+inherit db-use eutils qt4-r2 git-2 versionator
 
 DESCRIPTION="A P2P network based digital currency."
 HOMEPAGE="http://bitcoin.org/"

@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit git
+inherit git-2
 
 DESCRIPTION="PySide Bitcoin user interface"
 HOMEPAGE="https://gitorious.org/bitcoin/spesmilo"

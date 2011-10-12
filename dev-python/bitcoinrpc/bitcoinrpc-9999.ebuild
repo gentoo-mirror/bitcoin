@@ -5,7 +5,7 @@
 EAPI=3
 SUPPORT_PYTHON_ABIS=1
 
-inherit git python
+inherit git-2 python
 
 DESCRIPTION="Efficient JSON-RPC for Python"
 HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"

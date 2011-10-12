@@ -4,7 +4,7 @@
 
 EAPI=3
 
-inherit git
+inherit git-2
 
 DESCRIPTION="bitcoin push-mining pool server"
 HOMEPAGE="https://github.com/jgarzik/pushpool"
