@@ -54,7 +54,11 @@ src_configure() {
 	local x=
 	use dbus && x="$x USE_DBUS=1"
 	use ssl  && x="$x DEFINES+=USE_SSL"
-	use upnp && x="$x USE_UPNP=1"
+	if use upnp; then
+		x="$x USE_UPNP=1"
+	else
+		x="$x USE_UPNP=-"
+	fi
 	
 	x="$x BDB_INCLUDE_PATH='$(db_includedir "${DB_VER}")'"
 	x="$x BDB_LIB_SUFFIX='-${DB_VER}'"
