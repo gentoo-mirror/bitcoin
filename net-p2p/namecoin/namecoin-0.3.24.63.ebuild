@@ -6,12 +6,11 @@ EAPI=3
 
 DB_VER="4.8"
 
-inherit db-use eutils git versionator
+inherit db-use eutils versionator
 
 DESCRIPTION="A P2P network based domain name system."
 HOMEPAGE="https://dot-bit.org/"
-EGIT_PROJECT='namecoin'
-EGIT_REPO_URI="https://github.com/namecoin/namecoin.git"
+SRC_URI="https://github.com/namecoin/namecoin/tarball/nc0.3.24.63 -> ${P}.tgz"
 
 LICENSE="MIT"
 SLOT="0"

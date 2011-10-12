@@ -1,8 +1,10 @@
-# Config file for /etc/init.d/bitcoin
+# Config file for /etc/init.d/namecoin
 
-# owner of mlnet process (don't change, must be existing)
-BITCOIN_USER="bitcoin"
+# owner of namecoind process (don't change, must be existing)
+NAMECOIN_USER="namecoin"
 
 # See http://www.bitcoin.org/smf/index.php?topic=1063
-BITCOIN_OPTS=""
+NAMECOIN_OPTS="${NAMECOIN_OPTS}"
 
+# nice level
+NICELEVEL="19"
