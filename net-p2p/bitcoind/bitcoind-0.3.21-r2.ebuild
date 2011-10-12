@@ -16,7 +16,7 @@ SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug selinux sse2 ssl upnp +volatile-fees"
+IUSE="selinux sse2 ssl upnp +volatile-fees"
 
 DEPEND="
 	>=dev-libs/boost-1.41.0
@@ -84,7 +84,6 @@ src_compile() {
 	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_INC}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 	
-	use debug&& OPTS+=(USE_DEBUG=1)
 	use sse2 && OPTS+=(USE_SSE2=1)
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)

@@ -18,7 +18,7 @@ SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/${myP}-src.tar.gz
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug +eligius selinux ssl upnp"
+IUSE="+eligius selinux ssl upnp"
 
 DEPEND="
 	>=dev-libs/boost-1.41.0
@@ -72,7 +72,6 @@ src_compile() {
 	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_INC}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 	
-	use debug&& OPTS+=(USE_DEBUG=1)
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
 	

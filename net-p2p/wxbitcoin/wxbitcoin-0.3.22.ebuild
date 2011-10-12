@@ -19,7 +19,7 @@ SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug +eligius nls selinux ssl upnp +volatile-fees"
+IUSE="+eligius nls selinux ssl upnp +volatile-fees"
 LANGS="cs de eo es fr it lt nl pt ru zh_cn"
 
 for X in ${LANGS}; do
@@ -88,7 +88,6 @@ src_compile() {
 	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_LIB}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 	
-	use debug&& OPTS+=(USE_DEBUG=1)
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
 	

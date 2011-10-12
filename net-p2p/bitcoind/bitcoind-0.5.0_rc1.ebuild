@@ -18,7 +18,7 @@ SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="debug +eligius examples selinux ssl upnp"
+IUSE="+eligius examples selinux ssl upnp"
 
 DEPEND="
 	>=dev-libs/boost-1.41.0
@@ -71,7 +71,6 @@ src_compile() {
 	OPTS+=("BOOST_INCLUDE_PATH=${BOOST_INC}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 	
-	use debug&& OPTS+=(USE_DEBUG=1)
 	use ssl  && OPTS+=(USE_SSL=1)
 	if use upnp; then
 		OPTS+=(USE_UPNP=1)

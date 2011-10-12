@@ -41,10 +41,7 @@ ifneq ($(USE_UPNP),)
 	xCXXFLAGS += -DUSE_UPNP=$(USE_UPNP)
 endif
 
-ifneq ($(USE_DEBUG),)
-	xCXXFLAGS += -D__WXDEBUG__
-endif
-
+xCXXFLAGS += -D__WXDEBUG__
 xCXXFLAGS += -DNOPCH
 xCXXFLAGS += -Wno-invalid-offsetof -Wformat
 
