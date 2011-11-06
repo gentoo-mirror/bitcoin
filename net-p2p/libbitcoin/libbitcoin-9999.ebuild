@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="doc"
 
-RDEPEND=">=dev-libs/boost-1.41.0 >=dev-db/cppdb-0.0.3"
+RDEPEND=">=dev-libs/boost-1.41.0 >=dev-db/cppdb-0.0.3[postgres]"
 DEPEND=">=sys-devel/gcc-4.6 ${RDEPEND}"
 
 src_prepare() {
