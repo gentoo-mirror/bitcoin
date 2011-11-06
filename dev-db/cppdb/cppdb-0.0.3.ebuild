@@ -23,15 +23,19 @@ odbc? ( dev-db/unixODBC )
 
 RDEPEND="${DEPEND}"
 
-mycmakeargs="$(cmake-utils_use_disable sqlite SQLITE)
-$(cmake-utils_use_disable mysql MYSQL)
-$(cmake-utils_use_disable postgres PQ)
-$(cmake-utils_use_disable odbc ODBC)
-$(cmake-utils_use internal SQLITE_BACKEND_INTERNAL)
-$(cmake-utils_use internal MYSQL_BACKEND_INTERNAL)
-$(cmake-utils_use internal PQ_BACKEND_INTERNAL)
-$(cmake-utils_use internal ODBC_BACKEND_INTERNAL)
-"
+src_configure() {
+	local mycmakeargs=(
+		$(cmake-utils_use_disable sqlite SQLITE)
+		$(cmake-utils_use_disable mysql MYSQL)
+		$(cmake-utils_use_disable postgres PQ)
+		$(cmake-utils_use_disable odbc ODBC)
+		$(cmake-utils_use internal SQLITE_BACKEND_INTERNAL)
+		$(cmake-utils_use internal MYSQL_BACKEND_INTERNAL)
+		$(cmake-utils_use internal PQ_BACKEND_INTERNAL)
+		$(cmake-utils_use internal ODBC_BACKEND_INTERNAL) )
+
+	cmake-utils_src_configure
+}
 
 src_install() {
 	cmake-utils_src_install
