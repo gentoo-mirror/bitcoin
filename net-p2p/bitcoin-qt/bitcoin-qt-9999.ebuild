@@ -6,7 +6,7 @@ EAPI=3
 
 DB_VER="4.8"
 
-# TODO: LANGS="de es fr it nl pt ru"
+LANGS="de en es es_CL nb nl ru zh_TW"
 inherit db-use eutils qt4-r2 git-2 versionator
 
 DESCRIPTION="A P2P network based digital currency."
@@ -48,6 +48,24 @@ DOCS="COPYING doc/README"
 src_prepare() {
 	cd src
 	use eligius && epatch "${DISTDIR}/0.5-eligius_sendfee.patch"
+	
+	local filt= yeslang= nolang=
+	for ts in $(ls qt/locale/*.ts)
+	do
+		x="${ts/*bitcoin_/}"
+		x="${x/.ts/}"
+		if ! use "linguas_$x"; then
+			nolang="$nolang $x"
+			rm "$ts" ||
+				ewarn "Failed to remove $ts -- language no longer supported?"
+			filt="$filt\\|$x"
+		else
+			yeslang="$yeslang $x"
+		fi
+	done
+	filt="bitcoin_\\(${filt:2}\\)\\.qm"
+	sed "/${filt}/d" -i 'qt/bitcoin.qrc'
+	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 }
 
 src_configure() {
