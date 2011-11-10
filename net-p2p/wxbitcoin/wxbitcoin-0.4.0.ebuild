@@ -16,7 +16,7 @@ SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/${myP}-src.tar.gz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
 "
 
-LICENSE="MIT"
+LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+eligius nls selinux ssl upnp"

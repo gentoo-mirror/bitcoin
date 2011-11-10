@@ -15,7 +15,7 @@ SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.
        eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
 "
 
-LICENSE="MIT"
+LICENSE="MIT ISC CCPL-Attribution-3.0 free-noncomm GPL-3 md2k7-asyouwish LGPL-2.1 CCPL-Attribution-ShareAlike-3.0 public-domain CCPL-Attribution-NoDerivs-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="$IUSE dbus +eligius selinux ssl upnp"

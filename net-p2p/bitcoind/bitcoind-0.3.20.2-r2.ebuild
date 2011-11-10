@@ -13,7 +13,7 @@ HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV}"
 SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
 
-LICENSE="MIT"
+LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="amd64 x86"
 IUSE="selinux sse2 ssl +volatile-fees"

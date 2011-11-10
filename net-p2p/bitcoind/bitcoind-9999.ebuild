@@ -17,7 +17,7 @@ SRC_URI="
 "
 # FIXME: eligius
 
-LICENSE="MIT"
+LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS=""
 IUSE="+eligius examples selinux ssl upnp"

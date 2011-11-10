@@ -15,7 +15,7 @@ SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.
 "
 # FIXME: eligius
 
-LICENSE="MIT"
+LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS=""
 IUSE="+eligius examples selinux ssl upnp"
