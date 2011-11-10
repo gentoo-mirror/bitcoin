@@ -15,7 +15,6 @@ EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
 SRC_URI="
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
 "
-# FIXME: eligius
 
 LICENSE="MIT ISC"
 SLOT="0"
