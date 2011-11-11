@@ -48,8 +48,15 @@ DOCS="COPYING doc/README"
 src_prepare() {
 	cd src
 	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
-	
+
 	local filt= yeslang= nolang=
+
+	for lan in $LANGS; do
+		if [ ! -e qt/locale/bitcoin_$lan.ts ]; then
+			ewarn "Language '$lan' no longer supported. Ebuild needs update."
+		fi
+	done
+
 	for ts in $(ls qt/locale/*.ts)
 	do
 		x="${ts/*bitcoin_/}"
@@ -77,17 +84,17 @@ src_configure() {
 	else
 		x="$x USE_UPNP=-"
 	fi
-	
+
 	x="$x BDB_INCLUDE_PATH='$(db_includedir "${DB_VER}")'"
 	x="$x BDB_LIB_SUFFIX='-${DB_VER}'"
-	
+
 	local BOOST_PKG BOOST_VER
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
 	x="$x BOOST_INCLUDE_PATH='/usr/include/boost-${BOOST_VER}'"
 	x="$x BOOST_LIB_SUFFIX='-${BOOST_VER}'"
-	
+
 	eqmake4 "${PN}.pro" $x
 }
 
