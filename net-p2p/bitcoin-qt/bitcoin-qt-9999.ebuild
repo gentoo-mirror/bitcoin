@@ -63,8 +63,7 @@ src_prepare() {
 		x="${x/.ts/}"
 		if ! use "linguas_$x"; then
 			nolang="$nolang $x"
-			rm "$ts" ||
-				ewarn "Failed to remove $ts -- language no longer supported?"
+			rm "$ts"
 			filt="$filt\\|$x"
 		else
 			yeslang="$yeslang $x"
