@@ -17,24 +17,17 @@ SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS=""
-IUSE="+eligius examples selinux ssl upnp"
+IUSE="+eligius examples ssl upnp"
 
-DEPEND="
+RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/openssl[-bindist]
-	selinux? (
-		sys-libs/libselinux
-	)
 	upnp? (
 		>=net-libs/miniupnpc-1.6
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
-	!net-p2p/bitcoin
 "
-RDEPEND="${DEPEND}
-	dev-util/pkgconfig
-"
-DEPEND="${DEPEND}
+DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
@@ -55,13 +48,13 @@ src_prepare() {
 
 src_compile() {
 	local OPTS=()
-	
+
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
 	OPTS+=("LDFLAGS=${LDFLAGS}")
-	
+
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
-	
+
 	local BOOST_PKG BOOST_VER BOOST_INC
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
@@ -69,38 +62,37 @@ src_compile() {
 	BOOST_INC="/usr/include/boost-${BOOST_VER}"
 	OPTS+=("BOOST_INCLUDE_PATH=${BOOST_INC}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
-	
+
 	use ssl  && OPTS+=(USE_SSL=1)
 	if use upnp; then
 		OPTS+=(USE_UPNP=1)
 	else
 		OPTS+=(USE_UPNP=)
 	fi
-	
+
 	cd src
 	emake -f makefile.unix "${OPTS[@]}" bitcoind || die "emake bitcoind failed";
 }
 
 src_install() {
 	dobin src/bitcoind
-	
+
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
 	fowners bitcoin:bitcoin /etc/bitcoin/bitcoin.conf
 	fperms 600 /etc/bitcoin/bitcoin.conf
-	
+
 	newconfd "${FILESDIR}/bitcoin.confd" bitcoind
-	# Init script still nonfunctional.
 	newinitd "${FILESDIR}/bitcoin.initd" bitcoind
-	
+
 	keepdir /var/lib/bitcoin/.bitcoin
 	fperms 700 /var/lib/bitcoin
 	fowners bitcoin:bitcoin /var/lib/bitcoin/
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
-	
-	dodoc COPYING doc/README
-	
+
+	dodoc doc/README
+
 	if use examples; then
 		docinto examples
 		dodoc -r contrib/{bitrpc,pyminer,wallettools}

@@ -17,22 +17,19 @@ SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="nls selinux sse2 ssl upnp +volatile-fees"
+IUSE="nls sse2 ssl upnp +volatile-fees"
 LANGS="de es fr it nl pt ru"
 
 for X in ${LANGS}; do
 	IUSE="$IUSE linguas_$X"
 done
 
-DEPEND="
+RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
 	nls? (
 		sys-devel/gettext
-	)
-	selinux? (
-		sys-libs/libselinux
 	)
 	upnp? (
 		<net-libs/miniupnpc-1.6
@@ -40,11 +37,8 @@ DEPEND="
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	>=app-admin/eselect-wxwidgets-0.7-r1
 	x11-libs/wxGTK:2.9[X]
-	!net-p2p/bitcoin
 "
-RDEPEND="${DEPEND}
-"
-DEPEND="${DEPEND}
+DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
@@ -54,13 +48,13 @@ src_prepare() {
 	cp "${FILESDIR}/bitcoin-Makefile.gentoo" "Makefile"
 	if use x86 ; then
 		epatch "${FILESDIR}/fix_textrel_x86.patch"
-	else 
+	else
 		epatch "${FILESDIR}/fix_textrel_amd64.patch"
 	fi
-	
+
 	epatch "${FILESDIR}/0.3.19-Limit-response-to-getblocks-to-half-of-output-buffer.patch"
 	epatch "${FILESDIR}/Support-for-boost-filesystem-version-3.patch"
-	
+
 	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
 	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
 	if use volatile-fees; then
@@ -73,13 +67,13 @@ src_prepare() {
 
 src_compile() {
 	local OPTS=()
-	
+
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
 	OPTS+=( "LDFLAGS=${LDFLAGS}")
-	
+
 	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
-	
+
 	local BOOST_PKG BOOST_VER BOOST_INC
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
@@ -87,11 +81,11 @@ src_compile() {
 	BOOST_LIB="/usr/include/boost-${BOOST_VER}"
 	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_LIB}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
-	
+
 	use sse2 && OPTS+=(USE_SSE2=1)
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
-	
+
 	emake "${OPTS[@]}" bitcoin || die "emake bitcoin failed";
 }
 
@@ -101,7 +95,7 @@ src_install() {
 	insinto /usr/share/pixmaps
 	doins "${S}/rc/bitcoin.ico"
 	make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
-	
+
 	if use nls; then
 		einfo "Installing language files"
 		for val in ${LANGS}
@@ -112,6 +106,4 @@ src_install() {
 			fi
 		done
 	fi
-	
-	newdoc license.txt COPYING
 }

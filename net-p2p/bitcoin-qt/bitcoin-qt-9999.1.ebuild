@@ -17,17 +17,12 @@ EGIT_REPO_URI="git://github.com/laanwj/bitcoin-qt.git"
 LICENSE="MIT ISC CCPL-Attribution-3.0 free-noncomm GPL-3 md2k7-asyouwish LGPL-2.1 CCPL-Attribution-ShareAlike-3.0 public-domain CCPL-Attribution-NoDerivs-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="$IUSE dbus selinux ssl upnp"
+IUSE="$IUSE dbus ssl upnp"
 
-# TODO: IUSE=eligius
-
-DEPEND="
+RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
-	selinux? (
-		sys-libs/libselinux
-	)
 	upnp? (
 		>=net-libs/miniupnpc-1.6
 	)
@@ -37,13 +32,11 @@ DEPEND="
 		x11-libs/qt-dbus
 	)
 "
-RDEPEND="${DEPEND}
-"
-DEPEND="${DEPEND}
+DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-DOCS="COPYING doc/README"
+DOCS="doc/README"
 
 src_prepare() {
 	cd src
