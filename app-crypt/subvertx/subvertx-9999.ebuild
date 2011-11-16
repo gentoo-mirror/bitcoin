@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="doc"
 
-RDEPEND="net-p2p/libbitcoin"
+RDEPEND="net-p2p/libbitcoin[postgres]"
 DEPEND=">=sys-devel/gcc-4.6 ${RDEPEND}"
 
 src_prepare() {
