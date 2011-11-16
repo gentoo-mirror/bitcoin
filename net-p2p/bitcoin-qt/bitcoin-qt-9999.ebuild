@@ -6,7 +6,7 @@ EAPI=3
 
 DB_VER="4.8"
 
-LANGS="de en es es_CL nb nl ru zh_TW"
+LANGS="da de en es es_CL nb nl ru zh_TW"
 inherit db-use eutils qt4-r2 git-2 versionator
 
 DESCRIPTION="A P2P network based digital currency."
@@ -17,7 +17,7 @@ SRC_URI="
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
 "
 
-LICENSE="MIT ISC CCPL-Attribution-3.0 free-noncomm GPL-3 md2k7-asyouwish LGPL-2.1 CCPL-Attribution-ShareAlike-3.0 public-domain CCPL-Attribution-NoDerivs-3.0"
+LICENSE="MIT ISC CCPL-Attribution-3.0 GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="$IUSE dbus +eligius ssl upnp"
@@ -73,7 +73,11 @@ src_configure() {
 	local x=
 	use dbus && x="$x USE_DBUS=1"
 	use ssl  && x="$x DEFINES+=USE_SSL"
-	use upnp && x="$x USE_UPNP=1"
+	if use upnp; then
+		x="$x USE_UPNP=1"
+	else
+		x="$x USE_UPNP=-"
+	fi
 
 	x="$x BDB_INCLUDE_PATH='$(db_includedir "${DB_VER}")'"
 	x="$x BDB_LIB_SUFFIX='-${DB_VER}'"
