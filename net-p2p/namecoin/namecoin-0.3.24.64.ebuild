@@ -10,7 +10,7 @@ inherit db-use eutils versionator
 
 DESCRIPTION="A P2P network based domain name system."
 HOMEPAGE="https://dot-bit.org/"
-SRC_URI="https://github.com/namecoin/namecoin/tarball/nc0.3.24.63 -> ${P}.tgz"
+SRC_URI="https://github.com/namecoin/namecoin/tarball/nc0.3.24.64 -> ${P}.tgz"
 
 LICENSE="MIT ISC"
 SLOT="0"
@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/namecoin-namecoin-b7d3a08"
+S="${WORKDIR}/namecoin-namecoin-a1191cd"
 
 pkg_setup() {
 	local UG='namecoin'
