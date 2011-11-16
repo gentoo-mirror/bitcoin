@@ -10,7 +10,7 @@ SRC_URI="http://yyz.us/bitcoin/${P}.tar.gz"
 
 LICENSE="GPL-2 MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="+longpolling mysql postgres sqlite"
 
 DEPEND="
