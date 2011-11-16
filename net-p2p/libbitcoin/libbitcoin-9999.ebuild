@@ -14,17 +14,25 @@ SRC_URI=""
 LICENSE="AGPL"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc"
+IUSE="berkdb postgres doc"
 
-RDEPEND=">=dev-libs/boost-1.41.0 >=dev-db/cppdb-0.0.3[postgres]"
-DEPEND=">=sys-devel/gcc-4.6 ${RDEPEND}"
+RDEPEND="	>=dev-libs/boost-1.41.0
+			postgres? ( >=dev-db/cppdb-0.0.3[postgres] )
+			berkdb? ( sys-libs/db:5.1 >=dev-libs/protobuf-2.3 )
+			>=dev-libs/openssl-0.9"
+
+DEPEND="	${RDEPEND}
+			sys-devel/gcc:4.6"
 
 src_prepare() {
-	eautoreconf || die "Prepare failed"
+	eaclocal
+	_elibtoolize
+	eautoconf
+	eautomake
 }
 
 src_configure() {
-	econf || die "Configure failed"
+	econf $(use_enable berkdb) $(use_enable postgres) || die "Configure failed"
 }
 
 src_compile() {
