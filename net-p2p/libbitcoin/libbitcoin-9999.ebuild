@@ -7,11 +7,11 @@ EAPI=4
 EGIT_REPO_URI="git://gitorious.org/libbitcoin/libbitcoin.git"
 inherit git-2 autotools
 
-DESCRIPTION="Rewrite bitcoin, make it super-pluggable, very easy to do and hack everything at every level, and very configurable."
+DESCRIPTION="Rewrite bitcoin, make it super-pluggable, easy to use, hack, and very configurable."
 HOMEPAGE="http://libbitcoin.org/"
 SRC_URI=""
 
-LICENSE="AGPL"
+LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS=""
 IUSE="berkdb postgres doc"
@@ -41,10 +41,9 @@ src_compile() {
 
 src_install() {
 	if use doc; then
-		dodoc  AUTHORS COPYING ChangeLog INSTALL LICENSE NEWS README doc/style || die
+		dodoc  AUTHORS ChangeLog INSTALL NEWS README doc/style || die
 		dohtml doc/libbitcoin/* || die
 	fi
 
 	emake DESTDIR="${D}" install || die "Install failed"
 }
-
