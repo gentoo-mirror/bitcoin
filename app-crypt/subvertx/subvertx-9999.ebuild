@@ -11,7 +11,7 @@ DESCRIPTION="Proof of concept command line utilities using libbitcoin."
 HOMEPAGE="http://libbitcoin.org/"
 SRC_URI=""
 
-LICENSE="AGPL"
+LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS=""
 IUSE="doc"
@@ -33,9 +33,8 @@ src_compile() {
 
 src_install() {
 	if use doc; then
-		dodoc  AUTHORS COPYING ChangeLog INSTALL NEWS README || die
+		dodoc AUTHORS ChangeLog INSTALL NEWS README || die
 	fi
 
 	emake DESTDIR="${D}" install || die "Install failed"
 }
-
