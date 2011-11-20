@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 DB_VER="4.8"
 WX_GTK_VER="2.9"
@@ -47,8 +47,8 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${myP}"
 
 src_prepare() {
-	cd src
-	cp "${FILESDIR}/Makefile.gentoo" "Makefile"
+	cd src || die
+	cp "${FILESDIR}/Makefile.gentoo" "Makefile" || die
 
 	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
 	epatch "${FILESDIR}/Fix-connection-failure-debug-output.patch"
@@ -77,8 +77,8 @@ src_compile() {
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
 
-	cd src
-	emake "${OPTS[@]}" bitcoin || die "emake bitcoin failed";
+	cd src || die
+	emake "${OPTS[@]}" bitcoin
 }
 
 src_install() {

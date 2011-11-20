@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 DB_VER="4.8"
 WX_GTK_VER="2.9"
@@ -47,8 +47,8 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/bitcoin-bitcoind-stable"
 
 src_prepare() {
-	cd src
-	cp "${FILESDIR}/0.4.0-Makefile.gentoo" "Makefile"
+	cd src || die
+	cp "${FILESDIR}/0.4.0-Makefile.gentoo" "Makefile" || die
 	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
 
@@ -73,7 +73,7 @@ src_compile() {
 	use upnp && OPTS+=(USE_UPNP=1)
 
 	cd src
-	emake "${OPTS[@]}" bitcoin || die "emake bitcoin failed";
+	emake "${OPTS[@]}" bitcoin
 }
 
 src_install() {
