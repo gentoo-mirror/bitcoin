@@ -7,7 +7,7 @@ EAPI=4
 EGIT_REPO_URI="git://gitorious.org/libbitcoin/libbitcoin.git"
 inherit git-2 autotools
 
-DESCRIPTION="Rewrite bitcoin, make it super-pluggable, easy to use, hack, and very configurable."
+DESCRIPTION="Super-pluggable, easy to use, and very configurable library for implementing Bitcoin (crypto-currency) tools and clients"
 HOMEPAGE="http://libbitcoin.org/"
 SRC_URI=""
 
