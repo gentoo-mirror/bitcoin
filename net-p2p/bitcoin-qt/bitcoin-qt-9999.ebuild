@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 DB_VER="4.8"
 
@@ -41,7 +41,7 @@ DEPEND="${RDEPEND}
 DOCS="doc/README"
 
 src_prepare() {
-	cd src
+	cd src || die
 	use eligius && epatch "${DISTDIR}/0.5-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=
@@ -93,7 +93,7 @@ src_configure() {
 }
 
 src_compile() {
-	emake || die "emake bitcoin failed";
+	emake
 }
 
 src_install() {
