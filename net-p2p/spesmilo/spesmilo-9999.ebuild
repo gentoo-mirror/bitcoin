@@ -6,7 +6,7 @@ EAPI=2
 
 inherit git-2
 
-DESCRIPTION="PySide Bitcoin user interface"
+DESCRIPTION="An end-user Python/Qt4 (PySide) GUI for the Bitcoin crypto-currency"
 HOMEPAGE="https://gitorious.org/bitcoin/spesmilo"
 EGIT_REPO_URI="git://gitorious.org/bitcoin/spesmilo.git"
 

@@ -7,7 +7,7 @@ EAPI=2
 myPN="${PN/s/S}"
 myPV="${PV/_/.}"
 myP="${myPN}-${myPV}"
-DESCRIPTION="PySide Bitcoin user interface"
+DESCRIPTION="An end-user Python/Qt4 (PySide) GUI for the Bitcoin crypto-currency"
 HOMEPAGE="https://gitorious.org/bitcoin/spesmilo"
 SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${myPN}_${myPV}_source.tbz2"
 
