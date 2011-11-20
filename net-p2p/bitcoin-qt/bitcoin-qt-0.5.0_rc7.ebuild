@@ -70,27 +70,27 @@ src_prepare() {
 }
 
 src_configure() {
-	local x=
+	local OPTS=()
 	local BOOST_PKG BOOST_VER
 
-	use dbus && x="$x USE_DBUS=1"
-	use ssl  && x="$x DEFINES+=USE_SSL"
+	use dbus && OPTS+=("USE_DBUS=1")
+	use ssl  && OPTS+=("DEFINES+=USE_SSL")
 	if use upnp; then
-		x="$x USE_UPNP=1"
+		OPTS+=("USE_UPNP=1")
 	else
-		x="$x USE_UPNP=-"
+		OPTS+=("USE_UPNP=-")
 	fi
 
-	x="$x BDB_INCLUDE_PATH='$(db_includedir "${DB_VER}")'"
-	x="$x BDB_LIB_SUFFIX='-${DB_VER}'"
+	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
+	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
 
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
-	x="$x BOOST_INCLUDE_PATH='/usr/include/boost-${BOOST_VER}'"
-	x="$x BOOST_LIB_SUFFIX='-${BOOST_VER}'"
+	OPTS+=("BOOST_INCLUDE_PATH=/usr/include/boost-${BOOST_VER}")
+	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 
-	eqmake4 "${PN}.pro" $x
+	eqmake4 "${PN}.pro" "${OPTS[@]}"
 }
 
 src_compile() {
