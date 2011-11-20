@@ -9,7 +9,7 @@ DB_VER="4.8"
 LANGS="da de en es es_CL nb nl ru zh_TW"
 inherit db-use eutils qt4-r2 git-2 versionator
 
-DESCRIPTION="A P2P network based digital currency."
+DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
