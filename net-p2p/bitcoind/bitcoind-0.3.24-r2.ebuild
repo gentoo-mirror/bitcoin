@@ -37,7 +37,6 @@ S="${WORKDIR}/${myP}"
 
 pkg_setup() {
 	local UG='bitcoin'
-	ebegin "Creating ${UG} user and group"
 	enewgroup "${UG}"
 	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
 }
@@ -50,6 +49,7 @@ src_prepare() {
 
 src_compile() {
 	local OPTS=()
+	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
 	OPTS+=( "LDFLAGS=${LDFLAGS}")
@@ -57,7 +57,6 @@ src_compile() {
 	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
 
-	local BOOST_PKG BOOST_VER BOOST_INC
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
@@ -69,19 +68,19 @@ src_compile() {
 	use upnp && OPTS+=(USE_UPNP=1)
 
 	cd src || die
-	emake "${OPTS[@]}" bitcoind
+	emake "${OPTS[@]}" ${PN}
 }
 
 src_install() {
-	dobin src/bitcoind
+	dobin src/${PN}
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
 	fowners bitcoin:bitcoin /etc/bitcoin/bitcoin.conf
 	fperms 600 /etc/bitcoin/bitcoin.conf
 
-	newconfd "${FILESDIR}/bitcoin.confd" bitcoind
-	newinitd "${FILESDIR}/bitcoin.initd" bitcoind
+	newconfd "${FILESDIR}/bitcoin.confd" ${PN}
+	newinitd "${FILESDIR}/bitcoin.initd" ${PN}
 
 	keepdir /var/lib/bitcoin/.bitcoin
 	fperms 700 /var/lib/bitcoin

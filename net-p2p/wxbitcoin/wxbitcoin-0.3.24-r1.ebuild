@@ -55,6 +55,7 @@ src_prepare() {
 
 src_compile() {
 	local OPTS=()
+	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
 	OPTS+=( "LDFLAGS=${LDFLAGS}")
@@ -62,7 +63,6 @@ src_compile() {
 	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
 
-	local BOOST_PKG BOOST_VER BOOST_INC
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
@@ -78,13 +78,12 @@ src_compile() {
 }
 
 src_install() {
-	newbin src/bitcoin wxbitcoin
+	newbin src/bitcoin ${PN}
 	insinto /usr/share/pixmaps
 	doins "share/pixmaps/bitcoin.ico"
 	make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
 
 	if use nls; then
-		einfo "Installing language files"
 		for val in ${LANGS}
 		do
 			if use "linguas_$val"; then
@@ -99,8 +98,8 @@ src_install() {
 }
 
 pkg_postinst() {
-	einfo "net-p2p/wxbitcoin no longer installs the 'bitcoin' symlink."
-	einfo "To run it, you must use 'wxbitcoin'"
-	einfo "Please note that wxbitcoin is no longer maintained upstream,"
+	einfo "${CATEGORY}/${PN} no longer installs the 'bitcoin' symlink."
+	einfo "To run it, you must use '${PN}'"
+	einfo "Please note that ${PN} is no longer maintained upstream,"
 	einfo "and future development is taking place on net-p2p/bitcoin-qt"
 }

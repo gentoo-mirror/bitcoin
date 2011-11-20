@@ -71,6 +71,8 @@ src_prepare() {
 
 src_configure() {
 	local x=
+	local BOOST_PKG BOOST_VER
+
 	use dbus && x="$x USE_DBUS=1"
 	use ssl  && x="$x DEFINES+=USE_SSL"
 	if use upnp; then
@@ -82,7 +84,6 @@ src_configure() {
 	x="$x BDB_INCLUDE_PATH='$(db_includedir "${DB_VER}")'"
 	x="$x BDB_LIB_SUFFIX='-${DB_VER}'"
 
-	local BOOST_PKG BOOST_VER
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
@@ -98,8 +99,8 @@ src_compile() {
 
 src_install() {
 	qt4-r2_src_install
-	dobin bitcoin-qt
+	dobin ${PN}
 	insinto /usr/share/pixmaps
-	newins "share/pixmaps/bitcoin.ico" 'bitcoin-qt.ico'
-	make_desktop_entry ${PN} "Bitcoin-Qt" "/usr/share/pixmaps/bitcoin-qt.ico" "Network;P2P"
+	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
+	make_desktop_entry ${PN} "Bitcoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Network;P2P"
 }
