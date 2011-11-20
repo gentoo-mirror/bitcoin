@@ -8,7 +8,7 @@ DB_VER="4.8"
 
 inherit db-use eutils versionator
 
-DESCRIPTION="A P2P network based digital currency."
+DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )

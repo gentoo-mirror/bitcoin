@@ -8,7 +8,7 @@ DB_VER="4.8"
 
 inherit db-use eutils versionator
 
-DESCRIPTION="A P2P network based digital currency."
+DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
 SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.23/${myP}-src.tar.gz

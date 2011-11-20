@@ -8,7 +8,7 @@ DB_VER="4.8"
 
 inherit db-use eutils git-2 versionator
 
-DESCRIPTION="A P2P network based digital currency."
+DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
