@@ -41,7 +41,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	cd src
+	cd src || die
 	epatch "${FILESDIR}/Allow-users-to-customize-CXX-CXXFLAGS-and-LDFLAGS-no.patch"
 	use eligius && epatch "${DISTDIR}/0.5-eligius_sendfee.patch"
 }
@@ -70,8 +70,8 @@ src_compile() {
 		OPTS+=(USE_UPNP=)
 	fi
 
-	cd src
-	emake -f makefile.unix "${OPTS[@]}" bitcoind || die "emake bitcoind failed";
+	cd src || die
+	emake -f makefile.unix "${OPTS[@]}" bitcoind
 }
 
 src_install() {
