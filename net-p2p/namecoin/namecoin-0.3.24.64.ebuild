@@ -8,7 +8,7 @@ DB_VER="4.8"
 
 inherit db-use eutils versionator
 
-DESCRIPTION="A P2P network based domain name system."
+DESCRIPTION="A P2P network based domain name system"
 HOMEPAGE="https://dot-bit.org/"
 SRC_URI="https://github.com/namecoin/namecoin/tarball/nc0.3.24.64 -> ${P}.tgz"
 

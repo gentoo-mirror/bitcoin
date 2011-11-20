@@ -8,7 +8,7 @@ DB_VER="4.8"
 
 inherit db-use eutils git-2 versionator
 
-DESCRIPTION="A P2P network based domain name system."
+DESCRIPTION="A P2P network based domain name system"
 HOMEPAGE="https://dot-bit.org/"
 EGIT_PROJECT='namecoin'
 EGIT_REPO_URI="https://github.com/namecoin/namecoin.git"
