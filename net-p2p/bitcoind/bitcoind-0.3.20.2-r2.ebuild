@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 DB_VER="4.8"
 
@@ -41,7 +41,7 @@ src_prepare() {
 	# Create missing directories
 	mkdir -p "${S}/obj/nogui" || die "mkdir failed"
 
-	cp "${FILESDIR}/bitcoin-Makefile.gentoo" "Makefile"
+	cp "${FILESDIR}/bitcoin-Makefile.gentoo" "Makefile" || die
 	if use x86 ; then
 		epatch "${FILESDIR}/fix_textrel_x86.patch"
 	else
@@ -81,7 +81,7 @@ src_compile() {
 	use ssl  && OPTS+=(USE_SSL=1)
 	OPTS+=(USE_UPNP=)
 
-	emake "${OPTS[@]}" bitcoind || die "emake bitcoind failed";
+	emake "${OPTS[@]}" bitcoind
 }
 
 src_install() {
