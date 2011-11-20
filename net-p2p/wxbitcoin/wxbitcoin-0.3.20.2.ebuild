@@ -9,7 +9,7 @@ WX_GTK_VER="2.9"
 
 inherit db-use eutils versionator wxwidgets
 
-DESCRIPTION="A P2P network based digital currency."
+DESCRIPTION="An end-user wxWidgets GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV}"
 SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
