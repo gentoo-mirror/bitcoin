@@ -12,15 +12,15 @@ inherit db-use eutils versionator wxwidgets
 DESCRIPTION="An end-user wxWidgets GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz
+SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.23/${myP}-src.tar.gz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+eligius nls ssl upnp +volatile-fees"
-LANGS="cs de eo es fr it lt nl pt ru zh_CN"
+IUSE="+eligius nls ssl upnp"
+LANGS="cs de eo es fr it lt nl pt ru sv zh_CN"
 
 for X in ${LANGS}; do
 	IUSE="$IUSE linguas_$X"
@@ -51,18 +51,10 @@ src_prepare() {
 	cp "${FILESDIR}/Makefile.gentoo" "Makefile" || die
 
 	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+	epatch "${FILESDIR}/Fix-connection-failure-debug-output.patch"
 	epatch "${FILESDIR}/Support-for-boost-filesystem-version-3.patch"
 
 	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
-
-	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
-	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
-	if use volatile-fees; then
-		einfo '    USE=volatile-fees enabled, adjusting...'
-		epatch "${FILESDIR}/0.3.22-Backport-reduced-fees-of-0.0005-BTC-send-accept-and-.patch"
-	else
-		ewarn '    Enable USE=volatile-fees to apply fee adjustments'
-	fi
 }
 
 src_compile() {
@@ -91,7 +83,6 @@ src_compile() {
 
 src_install() {
 	newbin src/bitcoin wxbitcoin
-	dosym wxbitcoin /usr/bin/bitcoin
 	insinto /usr/share/pixmaps
 	doins "share/pixmaps/bitcoin.ico"
 	make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
@@ -107,4 +98,13 @@ src_install() {
 			fi
 		done
 	fi
+
+	dodoc doc/README
+}
+
+pkg_postinst() {
+	einfo "net-p2p/wxbitcoin no longer installs the 'bitcoin' symlink."
+	einfo "To run it, you must use 'wxbitcoin'"
+	einfo "Please note that wxbitcoin is no longer maintained upstream,"
+	einfo "and future development is taking place on net-p2p/bitcoin-qt"
 }

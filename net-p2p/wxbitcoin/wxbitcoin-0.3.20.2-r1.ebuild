@@ -11,16 +11,14 @@ inherit db-use eutils versionator wxwidgets
 
 DESCRIPTION="An end-user wxWidgets GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/${myP}-src.tar.gz
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
-"
+myP="bitcoin-${PV}"
+SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="+eligius nls ssl upnp"
-LANGS="cs de eo es fr it lt nl pl pt ru sv zh_CN"
+KEYWORDS="amd64 x86"
+IUSE="nls sse2 ssl +volatile-fees"
+LANGS="de es fr it nl pt ru"
 
 for X in ${LANGS}; do
 	IUSE="$IUSE linguas_$X"
@@ -33,9 +31,6 @@ RDEPEND="
 	nls? (
 		sys-devel/gettext
 	)
-	upnp? (
-		<net-libs/miniupnpc-1.6
-	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
 	>=app-admin/eselect-wxwidgets-0.7-r1
 	x11-libs/wxGTK:2.9[X]
@@ -44,13 +39,30 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/${myP}"
+S="${WORKDIR}/${myP}/src"
 
 src_prepare() {
-	cd src || die
-	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile" || die
+	# Create missing directories
+	mkdir -p "${S}/obj" || die "mkdir failed"
+
+	cp "${FILESDIR}/bitcoin-Makefile.gentoo" "Makefile" || die
+	if use x86 ; then
+		epatch "${FILESDIR}/fix_textrel_x86.patch"
+	else
+		epatch "${FILESDIR}/fix_textrel_amd64.patch"
+	fi
+
+	epatch "${FILESDIR}/0.3.19-Limit-response-to-getblocks-to-half-of-output-buffer.patch"
 	epatch "${FILESDIR}/Support-for-boost-filesystem-version-3.patch"
-	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
+
+	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
+	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
+	if use volatile-fees; then
+		einfo '    USE=volatile-fees enabled, adjusting...'
+		epatch "${FILESDIR}/0.3.19-Backport-reduced-base-fee-of-0.0005-BTC.patch"
+	else
+		ewarn '    Enable USE=volatile-fees to apply fee adjustments'
+	fi
 }
 
 src_compile() {
@@ -70,18 +82,17 @@ src_compile() {
 	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_LIB}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 
+	use sse2 && OPTS+=(USE_SSE2=1)
 	use ssl  && OPTS+=(USE_SSL=1)
-	use upnp && OPTS+=(USE_UPNP=1)
+	OPTS+=(USE_UPNP=)
 
-	cd src || die
 	emake "${OPTS[@]}" bitcoin
 }
 
 src_install() {
-	newbin src/bitcoin wxbitcoin
-	dosym wxbitcoin /usr/bin/bitcoin
+	newbin bitcoin wxbitcoin
 	insinto /usr/share/pixmaps
-	doins "share/pixmaps/bitcoin.ico"
+	doins "${S}/rc/bitcoin.ico"
 	make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
 
 	if use nls; then
@@ -89,12 +100,16 @@ src_install() {
 		for val in ${LANGS}
 		do
 			if use "linguas_$val"; then
-				vall="$(tr 'A-Z' 'a-z' <<<"$val")"
-				mv "locale/$vall/LC_MESSAGES/bitcoin.mo" "$val.mo" &&
+				mv "../locale/$val/LC_MESSAGES/bitcoin.mo" "$val.mo" &&
 				domo "$val.mo" || die "failed to install $val locale"
 			fi
 		done
 	fi
+}
 
-	dodoc doc/README
+pkg_postinst() {
+	einfo "net-p2p/wxbitcoin no longer installs the 'bitcoin' symlink."
+	einfo "To run it, you must use 'wxbitcoin'"
+	einfo "Please note that wxbitcoin is no longer maintained upstream,"
+	einfo "and future development is taking place on net-p2p/bitcoin-qt"
 }

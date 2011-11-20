@@ -91,7 +91,6 @@ src_compile() {
 
 src_install() {
 	newbin bitcoin wxbitcoin
-	dosym wxbitcoin /usr/bin/bitcoin
 	insinto /usr/share/pixmaps
 	doins "${S}/rc/bitcoin.ico"
 	make_desktop_entry ${PN} "wxBitcoin" "/usr/share/pixmaps/bitcoin.ico" "Network;P2P"
@@ -106,4 +105,11 @@ src_install() {
 			fi
 		done
 	fi
+}
+
+pkg_postinst() {
+	einfo "net-p2p/wxbitcoin no longer installs the 'bitcoin' symlink."
+	einfo "To run it, you must use 'wxbitcoin'"
+	einfo "Please note that wxbitcoin is no longer maintained upstream,"
+	einfo "and future development is taking place on net-p2p/bitcoin-qt"
 }

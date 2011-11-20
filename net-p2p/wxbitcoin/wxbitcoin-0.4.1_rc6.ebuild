@@ -98,8 +98,8 @@ src_install() {
 }
 
 pkg_postinst() {
-	einfo "net-p2p/wxbitcoin no longer installs the 'bitcoin' symlink starting with 0.4."
+	einfo "net-p2p/wxbitcoin no longer installs the 'bitcoin' symlink."
 	einfo "To run it, you must use 'wxbitcoin'"
-	einfo "Please note that this is the last planned release of wxbitcoin, and future"
-	einfo "development is taking place on net-p2p/bitcoin-qt"
+	einfo "Please note that wxbitcoin is no longer maintained upstream,"
+	einfo "and future development is taking place on net-p2p/bitcoin-qt"
 }
