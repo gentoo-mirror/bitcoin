@@ -6,7 +6,7 @@ EAPI=3
 
 inherit git-2
 
-DESCRIPTION="bitcoin push-mining pool server"
+DESCRIPTION="Bitcoin crypto-currency pooled mining proxy"
 HOMEPAGE="https://github.com/jgarzik/pushpool"
 EGIT_REPO_URI="git://github.com/jgarzik/pushpool.git"
 EGIT_BOOTSTRAP='autogen.sh'

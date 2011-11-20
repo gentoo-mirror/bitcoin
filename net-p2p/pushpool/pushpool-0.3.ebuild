@@ -4,7 +4,7 @@
 
 EAPI=3
 
-DESCRIPTION="bitcoin push-mining pool server"
+DESCRIPTION="Bitcoin crypto-currency pooled mining proxy"
 HOMEPAGE="https://github.com/jgarzik/pushpool"
 SRC_URI="https://download.github.com/jgarzik-${PN}-v${PV}-0-gf285622.zip"
 
