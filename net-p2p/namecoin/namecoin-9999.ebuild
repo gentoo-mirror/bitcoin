@@ -20,6 +20,7 @@ IUSE="ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
+	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
 	upnp? (
 		<net-libs/miniupnpc-1.6
