@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://github.com/namecoin/namecoin.git"
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="ssl upnp"
 
 RDEPEND="

@@ -19,7 +19,7 @@ SRC_URI="
 
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="$IUSE dbus +eligius ssl upnp"
 
 RDEPEND="

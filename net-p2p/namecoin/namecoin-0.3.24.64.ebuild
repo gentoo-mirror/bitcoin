@@ -14,7 +14,7 @@ SRC_URI="https://github.com/namecoin/namecoin/tarball/nc0.3.24.64 -> ${P}.tgz"
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="ssl upnp"
 
 RDEPEND="
