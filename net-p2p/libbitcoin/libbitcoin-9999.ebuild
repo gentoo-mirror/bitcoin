@@ -16,13 +16,16 @@ SLOT="0"
 KEYWORDS=""
 IUSE="berkdb postgres doc"
 
-RDEPEND="	>=dev-libs/boost-1.41.0
-			postgres? ( >=dev-db/cppdb-0.0.3[postgres] )
-			berkdb? ( sys-libs/db:5.1[cxx] >=dev-libs/protobuf-2.3 )
-			>=dev-libs/openssl-0.9"
+RDEPEND="
+	>=dev-libs/boost-1.41.0
+	postgres? ( >=dev-db/cppdb-0.0.3[postgres] )
+	berkdb? ( sys-libs/db:5.1[cxx] >=dev-libs/protobuf-2.3 )
+	>=dev-libs/openssl-0.9
+"
 
-DEPEND="	${RDEPEND}
-			sys-devel/gcc:4.6"
+DEPEND="${RDEPEND}
+	>=sys-devel/gcc-4.6
+"
 
 src_prepare() {
 	eaclocal
