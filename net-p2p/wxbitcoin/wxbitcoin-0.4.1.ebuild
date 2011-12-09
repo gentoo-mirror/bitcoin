@@ -72,7 +72,7 @@ src_compile() {
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
 
-	cd src
+	cd src || die
 	emake "${OPTS[@]}" bitcoin
 }
 
