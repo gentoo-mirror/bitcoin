@@ -36,7 +36,7 @@ RDEPEND="
 	upnp? (
 		<net-libs/miniupnpc-1.6
 	)
-	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
+	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 	>=app-admin/eselect-wxwidgets-0.7-r1
 	x11-libs/wxGTK:2.9[X]
 "

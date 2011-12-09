@@ -26,7 +26,7 @@ RDEPEND="
 	upnp? (
 		>=net-libs/miniupnpc-1.6
 	)
-	sys-libs/db:$(db_ver_to_slot "${DB_VER}")
+	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 	x11-libs/qt-gui
 	dbus? (
 		x11-libs/qt-dbus
