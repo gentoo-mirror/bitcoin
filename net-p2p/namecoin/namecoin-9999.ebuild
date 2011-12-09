@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 DB_VER="4.8"
 
@@ -35,18 +35,18 @@ S="${WORKDIR}/namecoin-namecoin-b7d3a08"
 
 pkg_setup() {
 	local UG='namecoin'
-	ebegin "Creating ${UG} user and group"
 	enewgroup "${UG}"
 	enewuser "${UG}" -1 -1 /var/lib/namecoin "${UG}"
 }
 
 src_prepare() {
-	cd src
-	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile"
+	cd src || die
+	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile" || die
 }
 
 src_compile() {
 	local OPTS=()
+	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
 	OPTS+=( "LDFLAGS=${LDFLAGS}")
@@ -54,7 +54,6 @@ src_compile() {
 	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
 
-	local BOOST_PKG BOOST_VER BOOST_INC
 	BOOST_PKG="$(best_version 'dev-libs/boost')"
 	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
 	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
@@ -65,20 +64,20 @@ src_compile() {
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
 
-	cd src
-	emake "${OPTS[@]}" namecoind || die "emake namecoind failed"
+	cd src || die
+	emake "${OPTS[@]}" ${PN}d
 }
 
 src_install() {
-	dobin src/namecoind
+	dobin src/${PN}d
 
 	insinto /etc/namecoin
 	newins "${FILESDIR}/namecoin.conf" namecoin.conf
 	fowners namecoin:namecoin /etc/namecoin/namecoin.conf
 	fperms 600 /etc/namecoin/namecoin.conf
 
-	newconfd "${FILESDIR}/namecoin.confd" namecoind
-	newinitd "${FILESDIR}/namecoin.initd" namecoind
+	newconfd "${FILESDIR}/${PN}.confd" ${PN}d
+	newinitd "${FILESDIR}/${PN}.initd" ${PN}d
 
 	keepdir /var/lib/namecoin/.namecoin
 	fperms 700 /var/lib/namecoin
