@@ -25,7 +25,7 @@ RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/openssl[-bindist]
 	upnp? (
-		>=net-libs/miniupnpc-1.6
+		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 "
