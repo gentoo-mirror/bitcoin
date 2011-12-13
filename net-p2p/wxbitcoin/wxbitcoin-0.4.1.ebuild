@@ -11,7 +11,6 @@ inherit db-use eutils versionator wxwidgets
 
 DESCRIPTION="An end-user wxWidgets GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-myP="bitcoin-${PV/_/}"
 SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
 "

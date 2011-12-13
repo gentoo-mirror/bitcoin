@@ -10,7 +10,6 @@ inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-myP="bitcoin-${PV/_/}"
 SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
 "
