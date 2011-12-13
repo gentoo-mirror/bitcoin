@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-LANGS="da de en es es_CL nb nl ru zh_TW"
+LANGS="da de en es es_CL hu it nb nl pt_BR ru uk zh_CN zh_TW"
 inherit db-use eutils qt4-r2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
@@ -15,7 +15,7 @@ SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
 "
 
-LICENSE="MIT ISC CCPL-Attribution-3.0 GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
+LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="$IUSE dbus +eligius ssl upnp"
