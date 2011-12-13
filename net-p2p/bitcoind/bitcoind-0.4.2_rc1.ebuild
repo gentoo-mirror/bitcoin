@@ -11,7 +11,7 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
@@ -42,8 +42,8 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	cp "${FILESDIR}/0.4.0-Makefile.gentoo" "Makefile" || die
-	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
+	cp "${FILESDIR}/0.4.2-Makefile.gentoo" "Makefile" || die
+	use eligius && epatch "${DISTDIR}/0.5-eligius_sendfee.patch"
 }
 
 src_compile() {
