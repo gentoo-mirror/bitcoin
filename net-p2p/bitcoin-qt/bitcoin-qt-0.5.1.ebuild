@@ -38,7 +38,7 @@ DEPEND="${RDEPEND}
 
 DOCS="doc/README"
 
-S="${WORKDIR}/bitcoin-bitcoin-bc0130a"
+S="${WORKDIR}/bitcoin-bitcoin-5623ee7"
 
 src_prepare() {
 	cd src || die

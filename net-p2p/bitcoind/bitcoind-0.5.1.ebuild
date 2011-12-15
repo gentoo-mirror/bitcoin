@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/bitcoin-bitcoin-10d1537"
+S="${WORKDIR}/bitcoin-bitcoin-5623ee7"
 
 pkg_setup() {
 	local UG='bitcoin'
