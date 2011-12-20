@@ -35,7 +35,7 @@ src_prepare() {
 }
 
 src_configure() {
-	econf $(use_enable berkdb) $(use_enable postgres) || die "Configure failed"
+	econf $(use_enable berkdb bdb) $(use_enable postgres) || die "Configure failed"
 }
 
 src_compile() {
