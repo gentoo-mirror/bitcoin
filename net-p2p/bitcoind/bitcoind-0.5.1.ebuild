@@ -16,7 +16,7 @@ SRC_URI="https://github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="~arm"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="+eligius examples ssl upnp"
 
 RDEPEND="

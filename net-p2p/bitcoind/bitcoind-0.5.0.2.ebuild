@@ -16,7 +16,7 @@ SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> 
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="~arm"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="+eligius examples ssl upnp"
 
 RDEPEND="
