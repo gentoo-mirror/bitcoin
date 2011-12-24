@@ -19,11 +19,14 @@ SRC_URI="
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS=""
-IUSE="$IUSE dbus +eligius ssl upnp"
+IUSE="$IUSE dbus +eligius +qrcode ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/openssl[-bindist]
+	qrcode? (
+		media-gfx/qrencode
+	)
 	upnp? (
 		net-libs/miniupnpc
 	)
@@ -79,6 +82,7 @@ src_configure() {
 	else
 		OPTS+=("USE_UPNP=-")
 	fi
+	use qrcode && OPTS+=("USE_QRCODE=1")
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
