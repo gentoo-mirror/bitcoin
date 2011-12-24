@@ -13,7 +13,6 @@ HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
 SRC_URI="
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
@@ -41,7 +40,7 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${DISTDIR}/0.5-eligius_sendfee.patch"
+	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
 }
 
 src_compile() {
