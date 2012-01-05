@@ -19,8 +19,6 @@ IUSE="+jsonrpc-compat"
 DEPEND="jsonrpc-compat? ( !dev-python/jsonrpc )"
 RDEPEND="${DEPEND}"
 
-RESTRICT_PYTHON_ABIS="3.*"
-
 MyPy() {
 	if use jsonrpc-compat; then
 		echo jsonrpc
