@@ -28,10 +28,7 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	eaclocal
-	_elibtoolize
-	eautoconf
-	eautomake
+	eautoreconf
 }
 
 src_configure() {
