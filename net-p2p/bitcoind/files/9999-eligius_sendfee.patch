@@ -1,8 +1,8 @@
 diff --git a/src/main.cpp b/src/main.cpp
-index bef76f7..b30bf6e 100644
+index 3c3f066..b754b7a 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
-@@ -430,8 +430,10 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
+@@ -447,8 +447,10 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
      if ((int64)nLockTime > std::numeric_limits<int>::max())
          return error("AcceptToMemoryPool() : not accepting nLockTime beyond 2038 yet");
  
@@ -14,36 +14,34 @@ index bef76f7..b30bf6e 100644
          return error("AcceptToMemoryPool() : nonstandard transaction type");
  
      // Do we already have it?
-@@ -483,7 +485,7 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
+@@ -500,13 +502,16 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
          }
  
-         // Check for non-standard OP_EVALs in inputs
+         // Check for non-standard pay-to-script-hash in inputs
 -        if (!AreInputsStandard(mapInputs))
 +        if (!AreInputsStandard(mapInputs) && !fIsMine)
              return error("AcceptToMemoryPool() : nonstandard transaction input");
  
-         // Check against previous transactions
-@@ -495,6 +497,10 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
-                 *pfMissingInputs = true;
-             return error("AcceptToMemoryPool() : ConnectInputs failed %s", hash.ToString().substr(0,10).c_str());
-         }
-+
+         int64 nFees = GetValueIn(mapInputs)-GetValueOut();
+         int nSigOps = GetSigOpCount(mapInputs);
+         unsigned int nSize = ::GetSerializeSize(*this, SER_NETWORK);
+ 
 +        if (!fIsMine)
 +        {
 +
-         // Checking ECDSA signatures is a CPU bottleneck, so to avoid denial-of-service
-         // attacks disallow transactions with more than one SigOp per 65 bytes.
-         // 65 bytes because that is the minimum size of an ECDSA signature
-@@ -530,6 +536,8 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
-                 dFreeCount += nSize;
+         // Don't accept it if it can't get into a block
+         if (nFees < GetMinFee(1000, true, GMF_RELAY))
+             return error("AcceptToMemoryPool() : not enough fees");
+@@ -542,6 +547,8 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
              }
          }
-+
-+        }
-     }
  
-     // Store transaction in memory
-@@ -2927,6 +2935,9 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
++        }
++
+         // Check against previous transactions
+         // This is done last to help prevent CPU exhaustion denial-of-service attacks.
+         if (!ConnectInputs(mapInputs, mapUnused, CDiskTxPos(1,1,1), pindexBest, false, false))
+@@ -3018,6 +3025,9 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
              // Priority is sum(valuein * age) / txsize
              dPriority /= ::GetSerializeSize(tx, SER_NETWORK);
  
@@ -53,7 +51,7 @@ index bef76f7..b30bf6e 100644
              if (porphan)
                  porphan->dPriority = dPriority;
              else
-@@ -2959,7 +2970,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
+@@ -3057,7 +3067,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
  
              // Transaction fee required depends on block size
              bool fAllowFree = (nBlockSize + nTxSize < 4000 || CTransaction::AllowFree(dPriority));
@@ -63,10 +61,10 @@ index bef76f7..b30bf6e 100644
              // Connecting shouldn't fail due to dependency on other memory pool transactions
              // because we're already processing them in order of dependency
 diff --git a/src/main.h b/src/main.h
-index d613d28..cbc3f72 100644
+index 678c14c..56eb865 100644
 --- a/src/main.h
 +++ b/src/main.h
-@@ -529,6 +529,42 @@ public:
+@@ -570,6 +570,42 @@ public:
  
          unsigned int nBytes = ::GetSerializeSize(*this, SER_NETWORK);
          unsigned int nNewBlockSize = nBlockSize + nBytes;
@@ -109,7 +107,7 @@ index d613d28..cbc3f72 100644
          int64 nMinFee = (1 + (int64)nBytes / 1000) * nBaseFee;
  
          if (fAllowFree)
-@@ -554,6 +590,8 @@ public:
+@@ -595,6 +631,8 @@ public:
                  if (txout.nValue < CENT)
                      nMinFee = nBaseFee;
  
@@ -119,10 +117,10 @@ index d613d28..cbc3f72 100644
          if (nBlockSize != 1 && nNewBlockSize >= MAX_BLOCK_SIZE_GEN/2)
          {
 diff --git a/src/net.cpp b/src/net.cpp
-index 9b8dbe1..471f781 100644
+index 817203b..449b694 100644
 --- a/src/net.cpp
 +++ b/src/net.cpp
-@@ -1238,6 +1238,7 @@ void MapPort(bool /* unused fMapPort */)
+@@ -1029,6 +1029,7 @@ void MapPort(bool /* unused fMapPort */)
  
  
  static const char *strDNSSeed[] = {
