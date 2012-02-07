@@ -11,13 +11,14 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.5.0.patch )
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="+eligius examples ssl upnp"
+IUSE="+bip17 +eligius examples ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -41,6 +42,7 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
+	use bip17 && epatch "${DISTDIR}/bip17_v0.5.0.patch"
 	use eligius && epatch "${DISTDIR}/0.5-eligius_sendfee.patch"
 }
 

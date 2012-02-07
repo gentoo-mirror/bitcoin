@@ -11,12 +11,14 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV}"
-SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz"
+SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch )
+"
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="sse2 ssl upnp +volatile-fees"
+IUSE="+bip17 sse2 ssl upnp +volatile-fees"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -48,6 +50,8 @@ src_prepare() {
 	fi
 
 	epatch "${FILESDIR}/0.3.19-Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+
+	use bip17 && epatch "${DISTDIR}/bip17_v${PV}.patch"
 
 	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
 	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'

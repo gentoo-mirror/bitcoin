@@ -12,13 +12,14 @@ inherit db-use eutils qt4-r2 versionator
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch )
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5.2-eligius_sendfee.patch.xz )
 "
 
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="$IUSE dbus +eligius ssl upnp"
+IUSE="$IUSE +bip17 dbus +eligius ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -42,6 +43,7 @@ S="${WORKDIR}/bitcoin-bitcoind-stable"
 
 src_prepare() {
 	cd src || die
+	use bip17 && epatch "${DISTDIR}/bip17_v${PV}.patch"
 	use eligius && epatch "${WORKDIR}/0.5.2-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=

@@ -12,13 +12,14 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
 SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/${myP}-src.tar.gz
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch )
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+eligius ssl upnp"
+IUSE="+bip17 +eligius ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -44,6 +45,7 @@ pkg_setup() {
 src_prepare() {
 	cd src || die
 	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile" || die
+	use bip17 && epatch "${DISTDIR}/bip17_v${PV}.patch"
 	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
 

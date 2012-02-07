@@ -14,12 +14,13 @@ HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
 SRC_URI="
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.6.0rc1.patch )
 "
 
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS=""
-IUSE="$IUSE dbus +eligius +qrcode ssl upnp"
+IUSE="$IUSE +bip17 dbus +eligius +qrcode ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -44,6 +45,7 @@ DOCS="doc/README"
 
 src_prepare() {
 	cd src || die
+	use bip17 && epatch "${DISTDIR}/bip17_v0.6.0rc1.patch"
 	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=

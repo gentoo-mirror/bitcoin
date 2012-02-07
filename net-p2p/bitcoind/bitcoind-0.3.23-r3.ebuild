@@ -12,13 +12,14 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
 SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.23/${myP}-src.tar.gz
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch )
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+eligius ssl upnp"
+IUSE="+bip17 +eligius ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -47,6 +48,8 @@ src_prepare() {
 
 	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
 	epatch "${FILESDIR}/Fix-connection-failure-debug-output.patch"
+
+	use bip17 && epatch "${DISTDIR}/bip17_v${PV}.patch"
 
 	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
 }
