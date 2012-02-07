@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-LANGS="da de en es es_CL hu it nb nl pt_BR ru uk zh_CN zh_TW"
+LANGS="cs_CZ da de en es es_CL fa fi fr_FR hr hu it nb nl pl pt_BR ro_RO ru sv tr uk zh_CN zh_TW"
 inherit db-use eutils qt4-r2 git-2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
