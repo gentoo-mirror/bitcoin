@@ -14,6 +14,7 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE="adl altivec bitforce cpumining examples opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
+	|| ( bitforce cpumining opencl )
 	adl? ( opencl )
 	altivec? ( cpumining ppc ppc64 )
 	padlock? ( cpumining || ( amd64 x86 ) )
