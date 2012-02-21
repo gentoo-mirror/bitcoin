@@ -11,7 +11,7 @@ inherit db-use eutils git-2 versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="https://github.com/bitcoin/bitcoin.git"
+EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 SRC_URI="
 	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.6.0rc1.patch )
 "
