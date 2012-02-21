@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>blueness@gentoo.org</email>
+		<name>Anthony G. Basile</name>
+	</maintainer>
+	<maintainer>
+		<email>luke_gentoo_bitcoin@dashjr.org</email>
+		<name>Luke Dashjr</name>
+	</maintainer>
+	<use>
+		<flag name='adl'></flag>
+		<flag name='bitforce'></flag>
+		<flag name='cpumining'></flag>
+		<flag name='opencl'></flag>
+		<flag name='padlock'></flag>
+		<flag name='sse2_4way'></flag>
+		<flag name='sse4'></flag>
+	</use>
+</pkgmetadata>

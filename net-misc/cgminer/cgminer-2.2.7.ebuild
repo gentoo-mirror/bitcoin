@@ -26,12 +26,6 @@ DEPEND='
 	net-misc/curl
 	sys-libs/ncurses
 	dev-libs/jansson
-	sse2? (
-		>=dev-lang/yasm-1.0.1
-	)
-	sse4? (
-		>=dev-lang/yasm-1.0.1
-	)
 	opencl? (
 		|| (
 			virtual/opencl-sdk
@@ -52,6 +46,12 @@ DEPEND="${DEPEND}
 	sys-apps/sed
 	adl? (
 		dev-util/amd-adl-sdk
+	)
+	sse2? (
+		>=dev-lang/yasm-1.0.1
+	)
+	sse4? (
+		>=dev-lang/yasm-1.0.1
 	)
 "
 
