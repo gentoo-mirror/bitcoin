@@ -12,7 +12,7 @@ inherit db-use eutils qt4-r2 versionator
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
-	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.5.0.3.patch )
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.5.0.3.patch -> bip17_v0.5.0.3_r2.patch )
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5.2-eligius_sendfee.patch.xz )
 "
 
@@ -43,7 +43,7 @@ S="${WORKDIR}/bitcoin-bitcoind-stable"
 
 src_prepare() {
 	cd src || die
-	use bip17 && epatch "${DISTDIR}/bip17_v0.5.0.3.patch"
+	use bip17 && epatch "${DISTDIR}/bip17_v0.5.0.3_r2.patch"
 	use eligius && epatch "${WORKDIR}/0.5.2-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=
