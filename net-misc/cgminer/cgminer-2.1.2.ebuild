@@ -27,6 +27,7 @@ DEPEND='
 	>=dev-libs/jansson-2
 	opencl? (
 		|| (
+			virtual/opencl
 			virtual/opencl-sdk
 			app-admin/eselect-opencl
 			dev-util/ati-stream-sdk
