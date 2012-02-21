@@ -12,21 +12,18 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV}"
 SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz
-	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch )
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.3.20.patch -> bip17_v0.3.20_r2.patch )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="+bip17 sse2 ssl upnp +volatile-fees"
+KEYWORDS="amd64 x86"
+IUSE="+bip17 sse2 ssl +volatile-fees"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
-	upnp? (
-		<net-libs/miniupnpc-1.6
-	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 "
 DEPEND="${RDEPEND}
@@ -42,6 +39,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Create missing directories
+	mkdir -p "${S}/obj/nogui" || die "mkdir failed"
+
 	cp "${FILESDIR}/bitcoin-Makefile.gentoo" "Makefile" || die
 	if use x86 ; then
 		epatch "${FILESDIR}/fix_textrel_x86.patch"
@@ -51,7 +51,7 @@ src_prepare() {
 
 	epatch "${FILESDIR}/0.3.19-Limit-response-to-getblocks-to-half-of-output-buffer.patch"
 
-	use bip17 && epatch "${DISTDIR}/bip17_v${PV}.patch"
+	use bip17 && epatch "${DISTDIR}/bip17_v0.3.20_r2.patch"
 
 	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
 	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
@@ -82,7 +82,7 @@ src_compile() {
 
 	use sse2 && OPTS+=(USE_SSE2=1)
 	use ssl  && OPTS+=(USE_SSL=1)
-	use upnp && OPTS+=(USE_UPNP=1)
+	OPTS+=(USE_UPNP=)
 
 	emake "${OPTS[@]}" ${PN}
 }

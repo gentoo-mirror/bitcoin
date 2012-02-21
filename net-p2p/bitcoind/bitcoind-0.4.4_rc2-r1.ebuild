@@ -10,10 +10,9 @@ inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.23/${myP}-src.tar.gz
-	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch )
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
+SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.4.0.patch -> bip17_v0.4.0_r2.patch )
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5.2-eligius_sendfee.patch.xz )
 "
 
 LICENSE="MIT ISC"
@@ -26,7 +25,7 @@ RDEPEND="
 	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
 	upnp? (
-		<net-libs/miniupnpc-1.6
+		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 "
@@ -34,7 +33,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/${myP}"
+S="${WORKDIR}/bitcoin-${PN}-stable"
 
 pkg_setup() {
 	local UG='bitcoin'
@@ -44,14 +43,9 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	cp "${FILESDIR}/Makefile.gentoo" "Makefile" || die
-
-	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
-	epatch "${FILESDIR}/Fix-connection-failure-debug-output.patch"
-
-	use bip17 && epatch "${DISTDIR}/bip17_v${PV}.patch"
-
-	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
+	cp "${FILESDIR}/0.4.2-Makefile.gentoo" "Makefile" || die
+	use bip17 && epatch "${DISTDIR}/bip17_v0.4.0_r2.patch"
+	use eligius && epatch "${WORKDIR}/0.5.2-eligius_sendfee.patch"
 }
 
 src_compile() {

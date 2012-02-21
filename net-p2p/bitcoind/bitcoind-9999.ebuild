@@ -13,7 +13,7 @@ HOMEPAGE="http://bitcoin.org/"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 SRC_URI="
-	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.6.0rc1.patch )
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_z_0d56f11.patch )
 "
 
 LICENSE="MIT ISC"
@@ -41,7 +41,7 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use bip17 && epatch "${DISTDIR}/bip17_v0.6.0rc1.patch"
+	use bip17 && epatch "${DISTDIR}/bip17_z_0d56f11.patch"
 	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
 }
 

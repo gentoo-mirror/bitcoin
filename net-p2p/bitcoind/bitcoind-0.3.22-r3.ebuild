@@ -12,7 +12,7 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
 SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz
-	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch )
+	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch -> bip17_v${PV}_r2.patch )
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
 "
 
@@ -48,7 +48,7 @@ src_prepare() {
 
 	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
 
-	use bip17 && epatch "${DISTDIR}/bip17_v${PV}.patch"
+	use bip17 && epatch "${DISTDIR}/bip17_v${PV}_r2.patch"
 
 	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
 
