@@ -20,7 +20,7 @@ SRC_URI="
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS=""
-IUSE="$IUSE +bip17 dbus +eligius +qrcode ssl upnp"
+IUSE="$IUSE 1stclassmsg +bip17 dbus +eligius +qrcode ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -85,6 +85,7 @@ src_configure() {
 		OPTS+=("USE_UPNP=-")
 	fi
 	use qrcode && OPTS+=("USE_QRCODE=1")
+	use 1stclassmsg && OPTS+=("FIRST_CLASS_MESSAGING=1")
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
