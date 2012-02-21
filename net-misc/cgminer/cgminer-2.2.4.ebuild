@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="adl altivec bitforce cpumining examples opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec bitforce +cpumining examples +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
 	|| ( bitforce cpumining opencl )
 	adl? ( opencl )

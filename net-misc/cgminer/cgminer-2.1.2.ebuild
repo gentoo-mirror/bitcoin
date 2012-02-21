@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="adl altivec examples opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec examples +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
 	adl? ( opencl )
 	altivec? ( ppc ppc64 )
