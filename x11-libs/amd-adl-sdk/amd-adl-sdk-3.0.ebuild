@@ -24,7 +24,7 @@ S="${WORKDIR}"
 src_install() {
 	use doc && dodoc -r 'Public-Documents'/* 'adlutil/ADLUTIL User Guide.doc'
 	use examples && dodoc -r 'Sample' 'Sample-Managed'
-	
+
 	insinto '/usr/include/ADL'
 	doins include/*
 }
