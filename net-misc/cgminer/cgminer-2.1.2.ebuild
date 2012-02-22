@@ -4,6 +4,8 @@
 
 EAPI=4
 
+inherit eutils
+
 DESCRIPTION="Bitcoin CPU/GPU miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
 SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.1/${P}.tar.bz2"
@@ -56,6 +58,7 @@ DEPEND="${DEPEND}
 "
 
 src_prepare() {
+	epatch "${FILESDIR}/2.0-Bugfix-allow-no-exec-NX-stack.patch"
 	sed -i 's/\(^\#define WANT_.*\(SSE\|PADLOCK\|ALTIVEC\)\)/\/\/ \1/' miner.h
 	ln -s /usr/include/ADL/* ADL_SDK/
 }

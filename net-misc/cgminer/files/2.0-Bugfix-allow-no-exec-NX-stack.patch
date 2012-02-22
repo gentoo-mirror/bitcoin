@@ -1,0 +1,59 @@
+From a46734d5f32a460402bce7e6398faffeec1ae58b Mon Sep 17 00:00:00 2001
+From: Luke Dashjr <luke-jr+git@utopios.org>
+Date: Tue, 21 Feb 2012 18:58:19 -0500
+Subject: [PATCH] Bugfix: allow no-exec (NX) stack
+
+---
+ x86_32/sha256_xmm.asm        |    7 +++++++
+ x86_64/sha256_sse4_amd64.asm |    7 +++++++
+ x86_64/sha256_xmm_amd64.asm  |    7 +++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+
+diff --git a/x86_32/sha256_xmm.asm b/x86_32/sha256_xmm.asm
+index b2a8fbb..cf8f5ea 100644
+--- a/x86_32/sha256_xmm.asm
++++ b/x86_32/sha256_xmm.asm
+@@ -282,3 +282,10 @@ LAB_RET:
+                 pop	edi
+                 pop	esi
+                 retn	4
++
++%ifidn __OUTPUT_FORMAT__,elf
++section .note.GNU-stack noalloc noexec nowrite progbits
++%endif
++%ifidn __OUTPUT_FORMAT__,elf32
++section .note.GNU-stack noalloc noexec nowrite progbits
++%endif
+diff --git a/x86_64/sha256_sse4_amd64.asm b/x86_64/sha256_sse4_amd64.asm
+index f988019..8bedc20 100644
+--- a/x86_64/sha256_sse4_amd64.asm
++++ b/x86_64/sha256_sse4_amd64.asm
+@@ -256,3 +256,10 @@ LAB_LOOP:
+ LAB_RET:
+ 	pop	rbx
+ 	ret
++
++%ifidn __OUTPUT_FORMAT__,elf
++section .note.GNU-stack noalloc noexec nowrite progbits
++%endif
++%ifidn __OUTPUT_FORMAT__,elf64
++section .note.GNU-stack noalloc noexec nowrite progbits
++%endif
+diff --git a/x86_64/sha256_xmm_amd64.asm b/x86_64/sha256_xmm_amd64.asm
+index 15ee855..e8c9778 100644
+--- a/x86_64/sha256_xmm_amd64.asm
++++ b/x86_64/sha256_xmm_amd64.asm
+@@ -320,3 +320,10 @@ sha256_sse2_64_new:
+ LAB_RET:
+     pop       rbx
+     ret
++
++%ifidn __OUTPUT_FORMAT__,elf
++section .note.GNU-stack noalloc noexec nowrite progbits
++%endif
++%ifidn __OUTPUT_FORMAT__,elf64
++section .note.GNU-stack noalloc noexec nowrite progbits
++%endif
+-- 
+1.7.3.4
+
