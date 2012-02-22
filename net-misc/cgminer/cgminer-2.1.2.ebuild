@@ -47,7 +47,7 @@ DEPEND="${DEPEND}
 	dev-util/pkgconfig
 	sys-apps/sed
 	adl? (
-		dev-util/amd-adl-sdk
+		x11-libs/amd-adl-sdk
 	)
 	sse2? (
 		>=dev-lang/yasm-1.0.1
