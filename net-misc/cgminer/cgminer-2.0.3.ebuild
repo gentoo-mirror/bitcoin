@@ -4,7 +4,7 @@
 
 EAPI=4
 
-DESCRIPTION="CPU/GPU miner in c for bitcoin"
+DESCRIPTION="Bitcoin CPU/GPU miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
 SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.0/${P}.tar.bz2"
 
