@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec +opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec hardened +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
 	adl? ( opencl )
 	altivec? ( ppc ppc64 )
@@ -80,6 +80,8 @@ src_configure() {
 	fi
 	use sse2_4way && CFLAGS="${CFLAGS} -DWANT_SSE2_4WAY=1"
 	use sse4 && CFLAGS="${CFLAGS} -DWANT_X8664_SSE4=1"
+	use hardened && CFLAGS="${CFLAGS} -nopie"
+
 	CFLAGS="${CFLAGS}" \
 	econf \
 		$(use_enable adl) \

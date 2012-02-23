@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec bitforce +cpumining examples +opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec bitforce +cpumining examples hardened +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
 	|| ( bitforce cpumining opencl )
 	adl? ( opencl )
@@ -81,6 +81,8 @@ src_configure() {
 	fi
 	use sse2_4way && CFLAGS="${CFLAGS} -DWANT_SSE2_4WAY=1"
 	use sse4 && CFLAGS="${CFLAGS} -DWANT_X8664_SSE4=1"
+	use hardened && CFLAGS="${CFLAGS} -nopie"
+
 	CFLAGS="${CFLAGS}" \
 	econf \
 		$(use_enable adl) \
