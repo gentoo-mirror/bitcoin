@@ -4,9 +4,13 @@
 
 EAPI=4
 
+inherit versionator
+MY_PV="$(replace_version_separator 3 -)"
+S="${WORKDIR}/${PN}-${MY_PV}"
+
 DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${P}-1.tar.bz2"
+SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-${MY_PV}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
