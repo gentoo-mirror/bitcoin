@@ -11,9 +11,9 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.23/${myP}-src.tar.gz
+SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/${myP}-src.tar.gz
 	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch -> bip17_v${PV}_r2.patch )
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
@@ -44,14 +44,10 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	cp "${FILESDIR}/Makefile.gentoo" "Makefile" || die
-
-	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
-	epatch "${FILESDIR}/Fix-connection-failure-debug-output.patch"
-
+	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile" || die
+	epatch "${FILESDIR}/0.4.0-Do-not-allow-overwriting-unspent-transactions-BIP-30.patch"
 	use bip17 && epatch "${DISTDIR}/bip17_v${PV}_r2.patch"
-
-	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
+	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
 }
 
 src_compile() {

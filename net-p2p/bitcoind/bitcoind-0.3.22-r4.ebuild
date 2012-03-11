@@ -11,15 +11,15 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV/_/}"
-SRC_URI="mirror://sourceforge/bitcoin/Bitcoin/bitcoin-0.3.24/${myP}-src.tar.gz
+SRC_URI="mirror://sourceforge/bitcoin/test/${myP}-src.tar.gz
 	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v${PV}.patch -> bip17_v${PV}_r2.patch )
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.24-eligius_sendfee.patch )
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.3.22-eligius_sendfee.patch )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+bip17 +eligius ssl upnp"
+IUSE="+bip17 +eligius ssl upnp +volatile-fees"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -44,9 +44,23 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile" || die
+	cp "${FILESDIR}/Makefile.gentoo" "Makefile" || die
+
+	epatch "${FILESDIR}/Limit-response-to-getblocks-to-half-of-output-buffer.patch"
+	epatch "${FILESDIR}/0.4.0-Do-not-allow-overwriting-unspent-transactions-BIP-30.patch"
+
 	use bip17 && epatch "${DISTDIR}/bip17_v${PV}_r2.patch"
-	use eligius && epatch "${DISTDIR}/0.3.24-eligius_sendfee.patch"
+
+	use eligius && epatch "${DISTDIR}/0.3.22-eligius_sendfee.patch"
+
+	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
+	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
+	if use volatile-fees; then
+		einfo '    USE=volatile-fees enabled, adjusting...'
+		epatch "${FILESDIR}/0.3.22-Backport-reduced-fees-of-0.0005-BTC-send-accept-and-.patch"
+	else
+		ewarn '    Enable USE=volatile-fees to apply fee adjustments'
+	fi
 }
 
 src_compile() {
