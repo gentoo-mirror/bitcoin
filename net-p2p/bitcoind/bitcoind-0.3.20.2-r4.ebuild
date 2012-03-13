@@ -12,13 +12,12 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 myP="bitcoin-${PV}"
 SRC_URI="mirror://sourceforge/bitcoin/${myP}-linux.tar.gz
-	bip17? ( http://luke.dashjr.org/programs/bitcoin/files/bip17/bip17_v0.3.20.patch -> bip17_v0.3.20_r2.patch )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="amd64 x86"
-IUSE="+bip17 sse2 ssl +volatile-fees"
+IUSE="sse2 ssl +volatile-fees"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -51,8 +50,6 @@ src_prepare() {
 
 	epatch "${FILESDIR}/0.3.19-Limit-response-to-getblocks-to-half-of-output-buffer.patch"
 	epatch "${FILESDIR}/0.4.0-Do-not-allow-overwriting-unspent-transactions-BIP-30.patch"
-
-	use bip17 && epatch "${DISTDIR}/bip17_v0.3.20_r2.patch"
 
 	einfo 'Since 0.3.20.2 was released, suggested fees have been reduced from'
 	einfo ' 0.01 BTC to 0.0005 BTC (per KB)'
