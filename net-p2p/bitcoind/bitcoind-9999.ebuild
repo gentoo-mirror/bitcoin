@@ -45,6 +45,7 @@ src_compile() {
 	local OPTS=()
 	local BOOST_PKG BOOST_VER BOOST_INC
 
+	OPTS+=("DEBUGFLAGS=")
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
 	OPTS+=("LDFLAGS=${LDFLAGS}")
 
