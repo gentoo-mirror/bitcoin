@@ -72,7 +72,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local OPTS=()
+	OPTS=()
 	local BOOST_PKG BOOST_VER
 
 	use dbus && OPTS+=("USE_DBUS=1")
@@ -99,6 +99,12 @@ src_configure() {
 
 src_compile() {
 	emake
+}
+
+src_test() {
+	cd src || die
+	emake -f makefile.unix "${OPTS[@]}" test_bitcoin
+	./test_bitcoin || die 'Tests failed'
 }
 
 src_install() {
