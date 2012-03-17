@@ -42,7 +42,7 @@ src_prepare() {
 }
 
 src_compile() {
-	local OPTS=()
+	OPTS=()
 	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("DEBUGFLAGS=")
@@ -68,6 +68,12 @@ src_compile() {
 
 	cd src || die
 	emake -f makefile.unix "${OPTS[@]}" ${PN}
+}
+
+src_test() {
+	cd src || die
+	emake -f makefile.unix "${OPTS[@]}" test_bitcoin
+	./test_bitcoin || die 'Tests failed'
 }
 
 src_install() {

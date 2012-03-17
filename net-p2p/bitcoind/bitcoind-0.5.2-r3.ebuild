@@ -42,11 +42,12 @@ pkg_setup() {
 src_prepare() {
 	cd src || die
 	epatch "${FILESDIR}/0.4.0-Do-not-allow-overwriting-unspent-transactions-BIP-30.patch"
+	epatch "${FILESDIR}/Bugfix-Support-building-test_bitcoin-with-shared-obj.patch"
 	use eligius && epatch "${WORKDIR}/0.5.2-eligius_sendfee.patch"
 }
 
 src_compile() {
-	local OPTS=()
+	OPTS=()
 	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("DEBUGFLAGS=")
@@ -72,6 +73,12 @@ src_compile() {
 
 	cd src || die
 	emake -f makefile.unix "${OPTS[@]}" ${PN}
+}
+
+src_test() {
+	cd src || die
+	emake -f makefile.unix "${OPTS[@]}" test_bitcoin
+	./test_bitcoin || die 'Tests failed'
 }
 
 src_install() {

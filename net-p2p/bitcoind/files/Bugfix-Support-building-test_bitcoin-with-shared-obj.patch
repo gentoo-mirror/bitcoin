@@ -1,0 +1,45 @@
+From d1e56838dc067568cfce7bc85bdc228da58f2597 Mon Sep 17 00:00:00 2001
+From: Luke Dashjr <luke-jr+git@utopios.org>
+Date: Thu, 2 Feb 2012 17:27:44 -0500
+Subject: [PATCH] Bugfix: Support building test_bitcoin with shared-object boost test framework
+
+Conflicts:
+
+	src/makefile.unix
+---
+ src/makefile.unix |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/makefile.unix b/src/makefile.unix
+index 6c48199..9d97ae5 100644
+--- a/src/makefile.unix
++++ b/src/makefile.unix
+@@ -16,6 +16,8 @@ ifdef STATIC
+ 	ifeq (${STATIC}, all)
+ 		LMODE2 = static
+ 	endif
++else
++	TESTDEFS += -DBOOST_TEST_DYN_LINK
+ endif
+ 
+ # for boost 1.37, add -mt to the boost libraries
+@@ -140,14 +142,14 @@ bitcoind: $(OBJS:obj/%=obj/nogui/%)
+ 	$(CXX) $(xCXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
+ 
+ obj/test/%.o: test/%.cpp
+-	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
++	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -o $@ $<
+ 	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+ 	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+ 	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+ 	  rm -f $(@:%.o=%.d)
+ 
+ test_bitcoin: obj/test/test_bitcoin.o $(filter-out obj/nogui/init.o,$(OBJS:obj/%=obj/nogui/%))
+-	$(CXX) $(xCXXFLAGS) -o $@ $(LIBPATHS) $^ -Wl,-Bstatic -lboost_unit_test_framework $(LDFLAGS) $(LIBS)
++	$(CXX) $(xCXXFLAGS) -o $@ $(LIBPATHS) $^ -Wl,-B$(LMODE) -lboost_unit_test_framework $(LDFLAGS) $(LIBS)
+ 
+ clean:
+ 	-rm -f bitcoind test_bitcoin
+-- 
+1.7.3.4
+
