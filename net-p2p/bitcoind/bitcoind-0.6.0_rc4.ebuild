@@ -15,7 +15,7 @@ SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v0.6.0rc4 -> bitcoi
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="+eligius examples ssl upnp"
 
 RDEPEND="
