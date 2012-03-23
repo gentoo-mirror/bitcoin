@@ -14,8 +14,6 @@ EGIT_REPO_URI="git://gitorious.org/anynumber/python.git"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-RESTRICT_PYTHON_ABIS="3.*"
-
 src_install() {
 	myinstall() {
 		insinto $(python_get_sitedir)
