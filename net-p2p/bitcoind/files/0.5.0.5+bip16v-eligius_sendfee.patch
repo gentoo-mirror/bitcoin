@@ -1,0 +1,176 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 54a039f..e3cdeb9 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -381,8 +381,10 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
+     if ((int64)nLockTime > INT_MAX)
+         return error("AcceptToMemoryPool() : not accepting nLockTime beyond 2038 yet");
+ 
++    bool fIsMine = pwalletMain->IsMine(*this);
++
+     // Rather not work on nonstandard transactions (unless -testnet)
+-    if (!fTestNet && !IsStandard())
++    if (!fTestNet && !IsStandard() && !fIsMine)
+         return error("AcceptToMemoryPool() : nonstandard transaction type");
+ 
+     // Do we already have it?
+@@ -438,6 +440,10 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
+ 
+         // Safety limits
+         unsigned int nSize = ::GetSerializeSize(*this, SER_NETWORK);
++
++        if (!fIsMine)
++        {
++
+         // Checking ECDSA signatures is a CPU bottleneck, so to avoid denial-of-service
+         // attacks disallow transactions with more than one SigOp per 34 bytes.
+         // 34 bytes because a TxOut is:
+@@ -448,7 +454,7 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
+         int64 nFees = GetValueIn(mapInputs)-GetValueOut();
+ 
+         // Don't accept it if it can't get into a block
+-        if (nFees < GetMinFee(1000, true, true))
++        if (nFees < GetMinFee(1000, true, GMF_RELAY))
+             return error("AcceptToMemoryPool() : not enough fees");
+ 
+         // Continuously rate-limit free transactions
+@@ -476,6 +482,8 @@ bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs, bool* pfMi
+             }
+         }
+ 
++        }
++
+         // Check against previous transactions
+         // This is done last to help prevent CPU exhaustion denial-of-service attacks.
+         if (!ConnectInputs(mapInputs, mapUnused, CDiskTxPos(1,1,1), pindexBest, false, false))
+@@ -2997,6 +3005,9 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
+             // Priority is sum(valuein * age) / txsize
+             dPriority /= ::GetSerializeSize(tx, SER_NETWORK);
+ 
++            if (pwalletMain->IsMine(tx))
++                dPriority += 100.;
++
+             if (porphan)
+                 porphan->dPriority = dPriority;
+             else
+@@ -3034,7 +3045,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
+ 
+             // Transaction fee required depends on block size
+             bool fAllowFree = (nBlockSize + nTxSize < 4000 || CTransaction::AllowFree(dPriority));
+-            int64 nMinFee = tx.GetMinFee(nBlockSize, fAllowFree);
++            int64 nMinFee = pwalletMain->IsMine(tx) ? 0 : tx.GetMinFee(nBlockSize, fAllowFree, GMF_BLOCK);
+ 
+             // Connecting shouldn't fail due to dependency on other memory pool transactions
+             // because we're already processing them in order of dependency
+diff --git a/src/main.h b/src/main.h
+index e400bd9..1cf8a1e 100644
+--- a/src/main.h
++++ b/src/main.h
+@@ -391,6 +391,13 @@ public:
+ typedef std::map<uint256, std::pair<CTxIndex, CTransaction> > MapPrevTx;
+ 
+ 
++enum GetMinFee_mode
++{
++    GMF_BLOCK,
++    GMF_RELAY,
++    GMF_SEND,
++};
++
+ //
+ // The basic transaction that is broadcasted on the network and contained in
+ // blocks.  A transaction can contain multiple inputs and outputs.
+@@ -550,13 +557,49 @@ public:
+         return dPriority > COIN * 144 / 250;
+     }
+ 
+-    int64 GetMinFee(unsigned int nBlockSize=1, bool fAllowFree=true, bool fForRelay=false) const
++    int64 GetMinFee(unsigned int nBlockSize=1, bool fAllowFree=true, enum GetMinFee_mode mode=GMF_BLOCK) const
+     {
+         // Base fee is either MIN_TX_FEE or MIN_RELAY_TX_FEE
+-        int64 nBaseFee = fForRelay ? MIN_RELAY_TX_FEE : MIN_TX_FEE;
++        int64 nBaseFee = (mode == GMF_RELAY) ? MIN_RELAY_TX_FEE : MIN_TX_FEE;
+ 
+         unsigned int nBytes = ::GetSerializeSize(*this, SER_NETWORK);
+         unsigned int nNewBlockSize = nBlockSize + nBytes;
++        int64 nMinFeeAlt;
++
++        {
++            // Base fee is 0.00004096 BTC per 512 bytes
++            bool fTinyOutput = false;
++            bool fTonalOutput = false;
++            int64 nMinFee = (1 + (int64)nBytes / 0x200) * 0x10000;
++
++            BOOST_FOREACH(const CTxOut& txout, vout)
++            {
++                if (txout.nValue < 0x100)
++                {
++                    fTinyOutput = true;
++                    break;
++                }
++                if (0 == txout.nValue % 0x10000)
++                    fTonalOutput = true;
++            }
++
++            // Charge extra for ridiculously tiny outputs
++            if (fTinyOutput)
++                nMinFee *= 0x10;
++            else
++            // Waive the fee in a tonal-sized "free tranaction area" if at least one output is TBC (and under 512 bytes) ;)
++            if (fTonalOutput && nNewBlockSize < 0x8000 && nBytes < 0x200)
++                nMinFee = 0;
++            else
++            if (fAllowFree)
++            {
++                // Give a discount to the first so many tx
++                nMinFee /= 0x10;
++            }
++
++            nMinFeeAlt = nMinFee;
++        }
++
+         int64 nMinFee = (1 + (int64)nBytes / 1000) * nBaseFee;
+ 
+         if (fAllowFree)
+@@ -582,6 +625,8 @@ public:
+                 if (txout.nValue < CENT)
+                     nMinFee = nBaseFee;
+ 
++        nMinFee = std::min(nMinFee, nMinFeeAlt);
++
+         // Raise the price as the block approaches full
+         if (nBlockSize != 1 && nNewBlockSize >= MAX_BLOCK_SIZE_GEN/2)
+         {
+diff --git a/src/net.cpp b/src/net.cpp
+index f37c675..5cb448d 100644
+--- a/src/net.cpp
++++ b/src/net.cpp
+@@ -1268,6 +1268,7 @@ void MapPort(bool /* unused fMapPort */)
+ 
+ 
+ static const char *strDNSSeed[] = {
++    "relay.eligius.st",
+     "bitseed.xf2.org",
+     "dnsseed.bluematt.me",
+     "seed.bitcoin.sipa.be",
+diff --git a/src/wallet.cpp b/src/wallet.cpp
+index 20c3eab..e71994b 100644
+--- a/src/wallet.cpp
++++ b/src/wallet.cpp
+@@ -959,6 +959,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64> >& vecSend, CW
+                 int64 nChange = nValueIn - nValue - nFeeRet;
+                 // if sub-cent change is required, the fee must be raised to at least MIN_TX_FEE
+                 // or until nChange becomes zero
++                // NOTE: this depends on the exact behaviour of GetMinFee
+                 if (nFeeRet < MIN_TX_FEE && nChange > 0 && nChange < CENT)
+                 {
+                     int64 nMoveToFee = min(nChange, MIN_TX_FEE - nFeeRet);
+@@ -1012,7 +1013,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64> >& vecSend, CW
+                 // Check that enough fee is included
+                 int64 nPayFee = nTransactionFee * (1 + (int64)nBytes / 1000);
+                 bool fAllowFree = CTransaction::AllowFree(dPriority);
+-                int64 nMinFee = wtxNew.GetMinFee(1, fAllowFree);
++                int64 nMinFee = wtxNew.GetMinFee(1, fAllowFree, GMF_SEND);
+                 if (nFeeRet < max(nPayFee, nMinFee))
+                 {
+                     nFeeRet = max(nPayFee, nMinFee);

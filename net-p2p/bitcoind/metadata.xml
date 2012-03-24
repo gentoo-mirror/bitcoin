@@ -6,6 +6,7 @@
 		<name>Luke Dashjr</name>
 	</maintainer>
 	<use>
+		<flag name='bip16'>Enable backported support for mining new BIP16 pay-to-script-hash transactions</flag>
 		<flag name='eligius'>Enable using lower fees accepted by Eligius</flag>
 		<flag name='upnp'>Enable Universal Plug and Play</flag>
 		<flag name='volatile-fees'>Enable updated fee recommendations from latest version</flag>

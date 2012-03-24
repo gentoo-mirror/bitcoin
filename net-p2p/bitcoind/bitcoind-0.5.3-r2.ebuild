@@ -10,14 +10,15 @@ inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5.2-eligius_sendfee.patch.xz )
+SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	http://luke.dashjr.org/programs/bitcoin/files/bip16/0.5.0.5-Minimal-support-for-validating-BIP16-pay-to-script-h.patch.xz
+	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.5.0.5-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
-IUSE="+eligius examples ssl upnp"
+KEYWORDS="amd64 ~arm ~x86"
+IUSE="+bip16 +eligius examples ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -31,7 +32,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/bitcoin-${PN}-stable"
+S="${WORKDIR}/bitcoin-bitcoind-stable"
 
 pkg_setup() {
 	local UG='bitcoin'
@@ -41,7 +42,13 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${WORKDIR}/0.5.2-eligius_sendfee.patch"
+	epatch "${WORKDIR}/0.5.0.5-Minimal-support-for-validating-BIP16-pay-to-script-h.patch"
+	if use bip16; then
+		epatch "${WORKDIR}/0.5.0.5-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch"
+		use eligius && epatch "${FILESDIR}/0.5.0.5+bip16-eligius_sendfee.patch"
+	else
+		use eligius && epatch "${FILESDIR}/0.5.0.5+bip16v-eligius_sendfee.patch"
+	fi
 }
 
 src_compile() {

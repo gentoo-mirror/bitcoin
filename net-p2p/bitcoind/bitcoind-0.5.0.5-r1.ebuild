@@ -11,13 +11,14 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/0.5.2-eligius_sendfee.patch.xz )
+	http://luke.dashjr.org/programs/bitcoin/files/bip16/${PV}-Minimal-support-for-validating-BIP16-pay-to-script-h.patch.xz
+	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/${PV}-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
 "
 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="+eligius examples ssl upnp"
+IUSE="+bip16 +eligius examples ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -41,7 +42,13 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${WORKDIR}/0.5.2-eligius_sendfee.patch"
+	epatch "${WORKDIR}/${PV}-Minimal-support-for-validating-BIP16-pay-to-script-h.patch"
+	if use bip16; then
+		epatch "${WORKDIR}/${PV}-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch"
+		use eligius && epatch "${FILESDIR}/${PV}+bip16-eligius_sendfee.patch"
+	else
+		use eligius && epatch "${FILESDIR}/${PV}+bip16v-eligius_sendfee.patch"
+	fi
 }
 
 src_compile() {
