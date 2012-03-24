@@ -13,6 +13,9 @@ DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
 	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.5.0.5-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
+	eligius? (
+		!bip16? ( http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/0.5.0.6rc1-eligius_sendfee.patch.xz )
+	)
 "
 
 LICENSE="MIT ISC CCPL-Attribution-3.0 GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
@@ -46,7 +49,7 @@ src_prepare() {
 		epatch "${WORKDIR}/0.5.0.5-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch"
 		use eligius && epatch "${FILESDIR}/0.5.0.5+bip16-eligius_sendfee.patch"
 	else
-		use eligius && epatch "${FILESDIR}/0.5.0.5+bip16v-eligius_sendfee.patch"
+		use eligius && epatch "${WORKDIR}/0.5.0.6rc1-eligius_sendfee.patch"
 	fi
 
 	local filt= yeslang= nolang=

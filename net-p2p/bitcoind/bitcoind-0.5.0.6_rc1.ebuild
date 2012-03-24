@@ -12,6 +12,9 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
 	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.5.0.5-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
+	eligius? (
+		!bip16? ( http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/0.5.0.6rc1-eligius_sendfee.patch.xz )
+	)
 "
 
 LICENSE="MIT ISC"
@@ -45,7 +48,7 @@ src_prepare() {
 		epatch "${WORKDIR}/0.5.0.5-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch"
 		use eligius && epatch "${FILESDIR}/0.5.0.5+bip16-eligius_sendfee.patch"
 	else
-		use eligius && epatch "${FILESDIR}/0.5.0.5+bip16v-eligius_sendfee.patch"
+		use eligius && epatch "${WORKDIR}/0.5.0.6rc1-eligius_sendfee.patch"
 	fi
 }
 
