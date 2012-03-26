@@ -10,7 +10,7 @@ inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v0.6.0rc4 -> bitcoin-v${PV}.tgz
+SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
 "
 
 LICENSE="MIT ISC"
@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/bitcoin-bitcoin-e52182e"
+S="${WORKDIR}/bitcoin-bitcoin-5b22438"
 
 pkg_setup() {
 	local UG='bitcoin'
