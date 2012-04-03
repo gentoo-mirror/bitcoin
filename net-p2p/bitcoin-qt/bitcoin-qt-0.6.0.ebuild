@@ -7,16 +7,16 @@ EAPI=4
 DB_VER="4.8"
 
 LANGS="ca_ES cs da de en es es_CL et eu_ES fa fa_IR fi fr_CA fr_FR he hr hu it lt nb nl pl pt_BR ro_RO ru sk sr sv tr uk zh_CN zh_TW"
-inherit db-use eutils qt4-r2 git-2 versionator
+inherit db-use eutils qt4-r2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
+SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+"
 
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode ssl upnp"
 
 RDEPEND="
@@ -39,6 +39,8 @@ DEPEND="${RDEPEND}
 "
 
 DOCS="doc/README"
+
+S="${WORKDIR}/bitcoin-bitcoin-b3b5ab1"
 
 src_prepare() {
 	cd src || die
