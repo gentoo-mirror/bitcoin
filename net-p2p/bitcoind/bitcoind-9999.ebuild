@@ -10,6 +10,7 @@ inherit db-use eutils git-2 versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
+SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/0.6.0-eligius_sendfee.patch.xz"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
@@ -38,7 +39,7 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
+	use eligius && epatch "${WORKDIR}/0.6.0-eligius_sendfee.patch"
 }
 
 src_compile() {

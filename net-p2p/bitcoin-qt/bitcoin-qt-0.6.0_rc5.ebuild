@@ -12,6 +12,7 @@ inherit db-use eutils qt4-r2 versionator
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/0.6.0-eligius_sendfee.patch.xz
 "
 
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
@@ -44,7 +45,7 @@ S="${WORKDIR}/bitcoin-bitcoin-5b22438"
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
+	use eligius && epatch "${WORKDIR}/0.6.0-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=
 

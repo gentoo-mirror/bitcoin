@@ -11,6 +11,7 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/${PV}-eligius_sendfee.patch.xz
 "
 
 LICENSE="MIT ISC"
@@ -40,7 +41,7 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
+	use eligius && epatch "${WORKDIR}/${PV}-eligius_sendfee.patch"
 }
 
 src_compile() {
