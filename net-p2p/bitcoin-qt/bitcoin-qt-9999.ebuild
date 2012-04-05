@@ -18,7 +18,7 @@ EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/b
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS=""
-IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode ssl upnp"
+IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -75,7 +75,6 @@ src_configure() {
 	local BOOST_PKG BOOST_VER
 
 	use dbus && OPTS+=("USE_DBUS=1")
-	use ssl  && OPTS+=("DEFINES+=USE_SSL")
 	if use upnp; then
 		OPTS+=("USE_UPNP=1")
 	else

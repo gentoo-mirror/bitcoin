@@ -17,7 +17,7 @@ EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/b
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS=""
-IUSE="+eligius examples ssl upnp"
+IUSE="+eligius examples upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -60,7 +60,6 @@ src_compile() {
 	OPTS+=("BOOST_INCLUDE_PATH=${BOOST_INC}")
 	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 
-	use ssl  && OPTS+=(USE_SSL=1)
 	if use upnp; then
 		OPTS+=(USE_UPNP=1)
 	else
