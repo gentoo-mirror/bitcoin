@@ -20,11 +20,14 @@ SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} 
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="+bip16 +eligius examples ssl upnp"
+IUSE="+bip16 +eligius examples logrotate ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/openssl[-bindist]
+	logrotate? (
+		app-admin/logrotate
+	)
 	upnp? (
 		net-libs/miniupnpc
 	)
@@ -50,6 +53,7 @@ src_prepare() {
 	else
 		use eligius && epatch "${WORKDIR}/0.5.0.6rc1-eligius_sendfee.patch"
 	fi
+	use logrotate && epatch "${FILESDIR}/0.4.5-reopen_log_file.patch"
 }
 
 src_compile() {
@@ -109,5 +113,10 @@ src_install() {
 	if use examples; then
 		docinto examples
 		dodoc -r contrib/{bitrpc,pyminer,wallettools}
+	fi
+
+	if use logrotate; then
+		insinto /etc/logrotate.d
+		newins "${FILESDIR}/bitcoind.logrotate" bitcoind
 	fi
 }

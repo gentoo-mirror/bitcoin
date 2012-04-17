@@ -17,11 +17,14 @@ EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/b
 LICENSE="MIT ISC"
 SLOT="0"
 KEYWORDS=""
-IUSE="+eligius examples upnp"
+IUSE="+eligius examples logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
 	dev-libs/openssl[-bindist]
+	logrotate? (
+		app-admin/logrotate
+	)
 	upnp? (
 		net-libs/miniupnpc
 	)
@@ -40,6 +43,7 @@ pkg_setup() {
 src_prepare() {
 	cd src || die
 	use eligius && epatch "${WORKDIR}/0.6.0-eligius_sendfee.patch"
+	use logrotate && epatch "${FILESDIR}/${PV}-reopen_log_file.patch"
 }
 
 src_compile() {
@@ -98,5 +102,10 @@ src_install() {
 	if use examples; then
 		docinto examples
 		dodoc -r contrib/{bitrpc,pyminer,wallettools}
+	fi
+
+	if use logrotate; then
+		insinto /etc/logrotate.d
+		newins "${FILESDIR}/bitcoind.logrotate" bitcoind
 	fi
 }
