@@ -4,29 +4,32 @@
 
 EAPI=4
 
-inherit eutils
+inherit versionator
+MY_PV="$(replace_version_separator 3 -)"
+S="${WORKDIR}/${PN}-${MY_PV}"
 
-DESCRIPTION="Bitcoin CPU/GPU miner in C"
+DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.1/${P}.tar.bz2"
+SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.3/${PN}-${MY_PV}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec examples hardened +opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec bitforce +cpumining examples hardened icarus +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
+	|| ( bitforce cpumining icarus opencl )
 	adl? ( opencl )
-	altivec? ( ppc ppc64 )
-	padlock? ( || ( amd64 x86 ) )
-	sse2? ( || ( amd64 x86 ) )
-	sse4? ( amd64 )
+	altivec? ( cpumining ppc ppc64 )
+	padlock? ( cpumining || ( amd64 x86 ) )
+	sse2? ( cpumining || ( amd64 x86 ) )
+	sse4? ( cpumining amd64 )
 '
 
 DEPEND='
 	net-misc/curl
 	sys-libs/ncurses
-	>=dev-libs/jansson-2
+	dev-libs/jansson
 	opencl? (
 		|| (
 			virtual/opencl
@@ -58,7 +61,6 @@ DEPEND="${DEPEND}
 "
 
 src_prepare() {
-	epatch "${FILESDIR}/2.0-Bugfix-allow-no-exec-NX-stack.patch"
 	sed -i 's/\(^\#define WANT_.*\(SSE\|PADLOCK\|ALTIVEC\)\)/\/\/ \1/' miner.h
 	ln -s /usr/include/ADL/* ADL_SDK/
 }
@@ -85,10 +87,13 @@ src_configure() {
 	CFLAGS="${CFLAGS}" \
 	econf \
 		$(use_enable adl) \
+		$(use_enable bitforce) \
+		$(use_enable cpumining) \
+		$(use_enable icarus) \
 		$(use_enable opencl)
 	if use opencl; then
 		# sanitize directories
-		sed -i 's/^(\#define CGMINER_PREFIX ).*$/\1"'"${EPREFIX}/usr/share/cgminer"'"/' config.h
+		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/share/cgminer"'"~' config.h
 	fi
 }
 

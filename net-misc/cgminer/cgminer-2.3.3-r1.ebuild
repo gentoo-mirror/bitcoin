@@ -5,18 +5,19 @@
 EAPI=4
 
 inherit versionator
+
 MY_PV="$(replace_version_separator 3 -)"
 S="${WORKDIR}/${PN}-${MY_PV}"
 
 DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.3/${PN}-${MY_PV}.tar.bz2"
+SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-${MY_PV}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec bitforce +cpumining examples hardened icarus +opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec bitforce +cpumining examples hardened icarus ncurses +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
 	|| ( bitforce cpumining icarus opencl )
 	adl? ( opencl )
@@ -28,7 +29,9 @@ REQUIRED_USE='
 
 DEPEND='
 	net-misc/curl
-	sys-libs/ncurses
+	ncurses? (
+		sys-libs/ncurses
+	)
 	dev-libs/jansson
 	opencl? (
 		|| (
@@ -90,10 +93,11 @@ src_configure() {
 		$(use_enable bitforce) \
 		$(use_enable cpumining) \
 		$(use_enable icarus) \
+		$(use_with ncurses curses) \
 		$(use_enable opencl)
 	if use opencl; then
 		# sanitize directories
-		sed -i 's/^(\#define CGMINER_PREFIX ).*$/\1"'"${EPREFIX}/usr/share/cgminer"'"/' config.h
+		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/share/cgminer"'"~' config.h
 	fi
 }
 

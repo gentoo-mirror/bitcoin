@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,22 +6,21 @@ EAPI=4
 
 inherit eutils
 
-DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
+DESCRIPTION="Bitcoin CPU/GPU miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.2/${P}.tar.bz2"
+SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.0/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec bitforce +cpumining examples hardened +opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec hardened +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
-	|| ( bitforce cpumining opencl )
 	adl? ( opencl )
-	altivec? ( cpumining ppc ppc64 )
-	padlock? ( cpumining || ( amd64 x86 ) )
-	sse2? ( cpumining || ( amd64 x86 ) )
-	sse4? ( cpumining amd64 )
+	altivec? ( ppc ppc64 )
+	padlock? ( || ( amd64 x86 ) )
+	sse2? ( || ( amd64 x86 ) )
+	sse4? ( amd64 )
 '
 
 DEPEND='
@@ -59,7 +58,7 @@ DEPEND="${DEPEND}
 "
 
 src_prepare() {
-	epatch "${FILESDIR}/2.2-Bugfix-allow-no-exec-NX-stack.patch"
+	epatch "${FILESDIR}/2.0-Bugfix-allow-no-exec-NX-stack.patch"
 	sed -i 's/\(^\#define WANT_.*\(SSE\|PADLOCK\|ALTIVEC\)\)/\/\/ \1/' miner.h
 	ln -s /usr/include/ADL/* ADL_SDK/
 }
@@ -86,12 +85,10 @@ src_configure() {
 	CFLAGS="${CFLAGS}" \
 	econf \
 		$(use_enable adl) \
-		$(use_enable bitforce) \
-		$(use_enable cpumining) \
 		$(use_enable opencl)
 	if use opencl; then
 		# sanitize directories
-		sed -i 's/^(\#define CGMINER_PREFIX ).*$/\1"'"${EPREFIX}/usr/share/cgminer"'"/' config.h
+		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/share/cgminer"'"~' config.h
 	fi
 }
 
@@ -101,9 +98,5 @@ src_install() {
 	if use opencl; then
 		insinto /usr/share/cgminer
 		doins *.cl
-	fi
-	if use examples; then
-		docinto examples
-		dodoc api-example.php miner.php API.java api-example.c
 	fi
 }

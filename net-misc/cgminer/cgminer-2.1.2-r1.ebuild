@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -8,13 +8,13 @@ inherit eutils
 
 DESCRIPTION="Bitcoin CPU/GPU miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.0/${P}.tar.bz2"
+SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.1/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec hardened +opencl padlock sse2 sse2_4way sse4"
+IUSE="+adl altivec examples hardened +opencl padlock sse2 sse2_4way sse4"
 REQUIRED_USE='
 	adl? ( opencl )
 	altivec? ( ppc ppc64 )
@@ -88,7 +88,7 @@ src_configure() {
 		$(use_enable opencl)
 	if use opencl; then
 		# sanitize directories
-		sed -i 's/^(\#define CGMINER_PREFIX ).*$/\1"'"${EPREFIX}/usr/share/cgminer"'"/' config.h
+		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/share/cgminer"'"~' config.h
 	fi
 }
 
@@ -98,5 +98,9 @@ src_install() {
 	if use opencl; then
 		insinto /usr/share/cgminer
 		doins *.cl
+	fi
+	if use examples; then
+		docinto examples
+		dodoc api-example.php miner.php API.java api-example.c
 	fi
 }

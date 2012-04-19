@@ -5,7 +5,6 @@
 EAPI=4
 
 inherit versionator
-
 MY_PV="$(replace_version_separator 3 -)"
 S="${WORKDIR}/${PN}-${MY_PV}"
 
@@ -97,7 +96,7 @@ src_configure() {
 		$(use_enable opencl)
 	if use opencl; then
 		# sanitize directories
-		sed -i 's/^(\#define CGMINER_PREFIX ).*$/\1"'"${EPREFIX}/usr/share/cgminer"'"/' config.h
+		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/share/cgminer"'"~' config.h
 	fi
 }
 
