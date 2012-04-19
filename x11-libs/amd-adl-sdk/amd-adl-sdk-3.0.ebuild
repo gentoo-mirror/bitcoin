@@ -16,6 +16,9 @@ DEPEND=""
 RDEPEND="${DEPEND}
 	x11-drivers/ati-drivers
 "
+DEPEND="${DEPEND}
+	app-arch/unzip
+"
 
 RESTRICT='mirror'
 
