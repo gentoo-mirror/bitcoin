@@ -5,20 +5,21 @@
 EAPI=4
 
 inherit versionator
+
 MY_PV="$(replace_version_separator 3 -)"
 S="${WORKDIR}/${PN}-${MY_PV}"
 
 DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.3/${PN}-${MY_PV}.tar.bz2"
+SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-${MY_PV}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec bitforce +cpumining examples hardened icarus ncurses +opencl padlock sse2 sse2_4way sse4 +udev"
+IUSE="+adl altivec bitforce +cpumining examples hardened icarus ncurses +opencl padlock sse2 sse2_4way sse4 +udev ztex"
 REQUIRED_USE='
-	|| ( bitforce cpumining icarus opencl )
+	|| ( bitforce cpumining icarus opencl ztex )
 	adl? ( opencl )
 	altivec? ( cpumining ppc ppc64 )
 	padlock? ( cpumining || ( amd64 x86 ) )
@@ -48,6 +49,9 @@ DEPEND='
 	)
 	udev? (
 		sys-fs/udev
+	)
+	ztex? (
+		dev-libs/libusb:1
 	)
 '
 RDEPEND="${DEPEND}"
@@ -97,10 +101,14 @@ src_configure() {
 		$(use_enable icarus) \
 		$(use_with ncurses curses) \
 		$(use_enable opencl) \
-		$(use_with udev libudev)
+		$(use_with udev libudev) \
+		$(use_enable ztex)
 	if use opencl; then
 		# sanitize directories
-		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/share/cgminer"'"~' config.h
+		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/lib/cgminer/opencl"'"~' config.h
+	fi
+	if use ztex; then
+		sed -i 's~bitstreams/~'"${EPREFIX}"'/usr/lib/cgminer/ztex/~' libztex.c
 	fi
 }
 
@@ -108,8 +116,12 @@ src_install() {
 	dobin cgminer
 	dodoc AUTHORS NEWS README
 	if use opencl; then
-		insinto /usr/share/cgminer
+		insinto /usr/lib/cgminer/opencl
 		doins *.cl
+	fi
+	if use ztex; then
+		insinto /usr/lib/cgminer/ztex
+		doins bitstreams/*.bit
 	fi
 	if use examples; then
 		docinto examples
