@@ -4,14 +4,11 @@
 
 EAPI=4
 
-inherit versionator
+inherit eutils
 
-MY_PV="$(replace_version_separator 3 -)"
-S="${WORKDIR}/${PN}-${MY_PV}"
-
-DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
-HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.3/${PN}-${MY_PV}.tar.bz2"
+DESCRIPTION="Modular Bitcoin CPU/GPU/FPGA miner in C"
+HOMEPAGE="https://bitcointalk.org/index.php?topic=78192.0"
+SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${PN}/${PV}/${P}.tbz2"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -33,20 +30,6 @@ DEPEND='
 		sys-libs/ncurses
 	)
 	dev-libs/jansson
-	opencl? (
-		|| (
-			virtual/opencl
-			virtual/opencl-sdk
-			app-admin/eselect-opencl
-			dev-util/ati-stream-sdk
-			dev-util/ati-stream-sdk-bin
-			dev-util/amdstream
-			dev-util/amd-app-sdk
-			dev-util/amd-app-sdk-bin
-			dev-util/nvidia-cuda-sdk[opencl]
-			dev-util/intel-opencl-sdk
-		)
-	)
 	udev? (
 		sys-fs/udev
 	)
@@ -60,6 +43,20 @@ DEPEND="${DEPEND}
 	sys-apps/sed
 	adl? (
 		x11-libs/amd-adl-sdk
+	)
+	opencl? (
+		|| (
+			virtual/opencl
+			virtual/opencl-sdk
+			app-admin/eselect-opencl
+			dev-util/ati-stream-sdk
+			dev-util/ati-stream-sdk-bin
+			dev-util/amdstream
+			dev-util/amd-app-sdk
+			dev-util/amd-app-sdk-bin
+			dev-util/nvidia-cuda-sdk[opencl]
+			dev-util/intel-opencl-sdk
+		)
 	)
 	sse2? (
 		>=dev-lang/yasm-1.0.1
@@ -105,22 +102,22 @@ src_configure() {
 		$(use_enable ztex)
 	if use opencl; then
 		# sanitize directories
-		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/lib/cgminer/opencl"'"~' config.h
+		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/lib/bfgminer/opencl"'"~' config.h
 	fi
 	if use ztex; then
-		sed -i 's~bitstreams/~'"${EPREFIX}"'/usr/lib/cgminer/ztex/~' libztex.c
+		sed -i 's~bitstreams/~'"${EPREFIX}"'/usr/lib/bfgminer/ztex/~' libztex.c
 	fi
 }
 
 src_install() {
-	dobin cgminer
+	dobin bfgminer
 	dodoc AUTHORS NEWS README
 	if use opencl; then
-		insinto /usr/lib/cgminer/opencl
+		insinto /usr/lib/bfgminer/opencl
 		doins *.cl
 	fi
 	if use ztex; then
-		insinto /usr/lib/cgminer/ztex
+		insinto /usr/lib/bfgminer/ztex
 		doins bitstreams/*.bit
 	fi
 	if use examples; then
