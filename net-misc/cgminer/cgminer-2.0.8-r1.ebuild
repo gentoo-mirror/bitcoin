@@ -44,7 +44,7 @@ DEPEND='
 '
 RDEPEND="${DEPEND}"
 DEPEND="${DEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	sys-apps/sed
 	adl? (
 		x11-libs/amd-adl-sdk
