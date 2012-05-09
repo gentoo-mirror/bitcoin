@@ -64,10 +64,10 @@ stop() {
 
 start_openrc() {
 	start-stop-daemon \
-	--start --user ${BITCOIN_USER} --name bitcoind \
+	--start --user "${BITCOIN_USER}" --name bitcoind \
 	--pidfile /var/run/bitcoind.pid --make-pidfile \
 	--env HOME="${VARDIR}" --exec /usr/bin/bitcoind \
-	--nicelevel ${NICELEVEL} \
+	--nicelevel "${NICELEVEL}" \
 	--background \
 	--wait 2000 \
 	-- ${BITCOIN_OPTS}
@@ -75,9 +75,9 @@ start_openrc() {
 }
 
 stop_openrc() {
-	start-stop-daemon --stop --user ${BITCOIN_USER} \
+	start-stop-daemon --stop --user "${BITCOIN_USER}" \
 	--name bitcoind --pidfile /var/run/bitcoind.pid \
-	--wait ${BITCOIN_SHUTDOWN_TIMEOUT} \
+	--wait 30000 \
 	--progress
 	eend $?
 }

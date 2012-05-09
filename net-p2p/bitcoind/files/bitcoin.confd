@@ -6,8 +6,5 @@ BITCOIN_USER="bitcoin"
 # See http://www.bitcoin.org/smf/index.php?topic=1063
 BITCOIN_OPTS="${BITCOIN_OPTS}"
 
-# Shutdown timeout (in milliseconds)
-BITCOIN_SHUTDOWN_TIMEOUT=120000
-
 # nice level
 NICELEVEL="19"
