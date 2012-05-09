@@ -1,5 +1,5 @@
 diff --git a/src/init.cpp b/src/init.cpp
-index 0eb37fe..221e1fd 100644
+index 3fe6d1b..71379c1 100644
 --- a/src/init.cpp
 +++ b/src/init.cpp
 @@ -80,6 +80,10 @@ void HandleSIGTERM(int)
@@ -29,7 +29,7 @@ index 0eb37fe..221e1fd 100644
  
      //
 diff --git a/src/util.cpp b/src/util.cpp
-index ac65d41..01f258c 100644
+index 3569f22..3b2e330 100644
 --- a/src/util.cpp
 +++ b/src/util.cpp
 @@ -70,6 +70,8 @@ bool fTestNet = false;
@@ -78,7 +78,7 @@ index ac65d41..01f258c 100644
      }
  
 diff --git a/src/util.h b/src/util.h
-index d9ec68c..0377d7e 100644
+index 5f8d037..796b74a 100644
 --- a/src/util.h
 +++ b/src/util.h
 @@ -125,6 +125,7 @@ extern std::string strMiscWarning;

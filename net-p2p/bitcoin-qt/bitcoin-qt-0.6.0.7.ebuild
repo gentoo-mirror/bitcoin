@@ -7,20 +7,18 @@ EAPI=4
 DB_VER="4.8"
 
 LANGS="ca_ES cs da de en es es_CL et eu_ES fa fa_IR fi fr_CA fr_FR he hr hu it lt nb nl pl pt_BR ro_RO ru sk sr sv tr uk zh_CN zh_TW"
-inherit db-use eutils qt4-r2 git-2 versionator
+inherit db-use eutils qt4-r2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="
-	http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.6.1-eligius_sendfee.patch.xz
+SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/0.6.0-eligius_sendfee.patch.xz
 "
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
 SLOT="0"
-KEYWORDS=""
-IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
+KEYWORDS="~amd64 ~arm ~x86"
+IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -43,9 +41,11 @@ DEPEND="${RDEPEND}
 
 DOCS="doc/README"
 
+S="${WORKDIR}/bitcoin-bitcoind-stable"
+
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${WORKDIR}/0.6.1-eligius_sendfee.patch"
+	use eligius && epatch "${WORKDIR}/0.6.0-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=
 
@@ -77,6 +77,7 @@ src_configure() {
 	local BOOST_PKG BOOST_VER
 
 	use dbus && OPTS+=("USE_DBUS=1")
+	use ssl  && OPTS+=("DEFINES+=USE_SSL")
 	if use upnp; then
 		OPTS+=("USE_UPNP=1")
 	else

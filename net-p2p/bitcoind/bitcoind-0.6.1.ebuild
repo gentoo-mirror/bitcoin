@@ -6,19 +6,17 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit db-use eutils git-2 versionator
+inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="
-	http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.6.1-eligius_sendfee.patch.xz
+SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/${PV}-eligius_sendfee.patch.xz
 "
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="+eligius examples logrotate upnp"
 
 RDEPEND="
@@ -36,6 +34,8 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
+S="${WORKDIR}/bitcoin-bitcoin-dbb656f"
+
 pkg_setup() {
 	local UG='bitcoin'
 	enewgroup "${UG}"
@@ -44,8 +44,8 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${WORKDIR}/0.6.1-eligius_sendfee.patch"
-	use logrotate && epatch "${FILESDIR}/0.6.1-reopen_log_file.patch"
+	use eligius && epatch "${WORKDIR}/${PV}-eligius_sendfee.patch"
+	use logrotate && epatch "${FILESDIR}/${PV}-reopen_log_file.patch"
 }
 
 src_compile() {
