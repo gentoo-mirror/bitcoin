@@ -1,8 +1,10 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=2
+
+PYTHON_DEPEND="2"
 
 inherit git-2 python
 
@@ -18,18 +20,19 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}
 	dev-python/pyopencl"
+RESTRICT_PYTHON_ABIS="3.*"
 
 TARGETDIR=/usr/libexec/${PN}
 
 src_prepare() {
-	      rm LICENSE || die "license remove failed"
-	      fperms 755 poclbm.py || die "fperms failed"
-	      sed -i "s:phatk.cl:${TARGETDIR}\/phatk.cl:" BitcoinMiner.py || die "sed failed"
+	rm LICENSE || die "license remove failed"
+	fperms 755 poclbm.py || die "fperms failed"
+	sed -i "s:phatk.cl:${TARGETDIR}\/phatk.cl:" BitcoinMiner.py || die "sed failed"
 }
 
 src_install() {
-	      insinto ${TARGETDIR} 
-	      insopts -m0755
-	      doins * || die "doins failed"
-	      dosym ${TARGETDIR}/poclbm.py /bin/poclbm || die "dosym failed"
+	insinto ${TARGETDIR}
+	insopts -m0755
+	doins * || die "doins failed"
+	dosym ${TARGETDIR}/poclbm.py /bin/poclbm || die "dosym failed"
 }
