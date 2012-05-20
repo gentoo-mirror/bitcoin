@@ -17,7 +17,7 @@ SRC_URI="
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
-LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain CCPL-Attribution-3.0"
+LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain || ( CCPL-Attribution-ShareAlike-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS=""
 IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
