@@ -45,7 +45,6 @@ pkg_setup() {
 src_prepare() {
 	cd src || die
 	use eligius && epatch "${WORKDIR}/0.6.1-eligius_sendfee.patch"
-	use logrotate && epatch "${FILESDIR}/0.6.1-reopen_log_file.patch"
 }
 
 src_compile() {
