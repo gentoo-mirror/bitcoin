@@ -51,7 +51,7 @@ DEPEND='
 		sys-fs/udev
 	)
 	ztex? (
-		dev-libs/libusb:1
+		virtual/libusb:1
 	)
 '
 RDEPEND="${DEPEND}"
