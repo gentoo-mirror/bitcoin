@@ -22,6 +22,7 @@ REQUIRED_USE='
 	|| ( bitforce cpumining icarus opencl ztex )
 	adl? ( opencl )
 	altivec? ( cpumining ppc ppc64 )
+	opencl? ( ncurses )
 	padlock? ( cpumining || ( amd64 x86 ) )
 	sse2? ( cpumining || ( amd64 x86 ) )
 	sse4? ( cpumining amd64 )
