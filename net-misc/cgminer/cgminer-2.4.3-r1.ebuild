@@ -11,15 +11,15 @@ S="${WORKDIR}/${PN}-${MY_PV}"
 
 DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
 HOMEPAGE="https://bitcointalk.org/index.php?topic=28402.0"
-SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-2.4/${PN}-${MY_PV}-1.tar.bz2"
+SRC_URI="http://ck.kolivas.org/apps/${PN}/${PN}-${MY_PV}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="+adl altivec bitforce +cpumining examples hardened icarus ncurses +opencl padlock sse2 sse2_4way sse4 +udev ztex"
+IUSE="+adl altivec bitforce +cpumining examples hardened icarus modminer ncurses +opencl padlock sse2 sse2_4way sse4 +udev ztex"
 REQUIRED_USE='
-	|| ( bitforce cpumining icarus opencl ztex )
+	|| ( bitforce cpumining icarus modminer opencl ztex )
 	adl? ( opencl )
 	altivec? ( cpumining ppc ppc64 )
 	opencl? ( ncurses )
@@ -100,17 +100,13 @@ src_configure() {
 		$(use_enable bitforce) \
 		$(use_enable cpumining) \
 		$(use_enable icarus) \
+		$(use_enable modminer) \
 		$(use_with ncurses curses) \
 		$(use_enable opencl) \
 		$(use_with udev libudev) \
 		$(use_enable ztex)
-	if use opencl; then
-		# sanitize directories
-		sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/lib/cgminer/opencl"'"~' config.h
-	fi
-	if use ztex; then
-		sed -i 's~bitstreams/~'"${EPREFIX}"'/usr/lib/cgminer/ztex/~' libztex.c
-	fi
+	# sanitize directories
+	sed -i 's~^\(\#define CGMINER_PREFIX \).*$~\1"'"${EPREFIX}/usr/lib/cgminer"'"~' config.h
 }
 
 src_install() {
@@ -119,13 +115,19 @@ src_install() {
 	if use icarus; then
 		dodoc FPGA-README
 	fi
+	if use modminer; then
+		insinto /usr/lib/cgminer/modminer
+		doins bitstreams/*.ncd
+		dodoc bitstreams/COPYING_fpgaminer
+	fi
 	if use opencl; then
-		insinto /usr/lib/cgminer/opencl
+		insinto /usr/lib/cgminer
 		doins *.cl
 	fi
 	if use ztex; then
 		insinto /usr/lib/cgminer/ztex
 		doins bitstreams/*.bit
+		dodoc bitstreams/COPYING_ztex
 	fi
 	if use examples; then
 		docinto examples
