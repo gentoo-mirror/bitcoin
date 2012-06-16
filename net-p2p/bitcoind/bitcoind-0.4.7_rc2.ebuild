@@ -11,7 +11,7 @@ inherit db-use eutils versionator
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/${PN}-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
-	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.4.4-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
+	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.4.7-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
 	eligius? (
 		!bip16? ( http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/0.4.5rc1-eligius_sendfee.patch.xz )
 	)
@@ -50,12 +50,12 @@ src_prepare() {
 	cd src || die
 	cp "${FILESDIR}/0.4.2-Makefile.gentoo" "Makefile" || die
 	if use bip16; then
-		epatch "${WORKDIR}/0.4.4-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch"
+		epatch "${WORKDIR}/0.4.7-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch"
 		use eligius && epatch "${FILESDIR}/0.4.4+bip16-eligius_sendfee.patch"
 	else
 		use eligius && epatch "${WORKDIR}/0.4.5rc1-eligius_sendfee.patch"
 	fi
-	use logrotate && epatch "${FILESDIR}/0.4.5-reopen_log_file.patch"
+	use logrotate && epatch "${FILESDIR}/0.4.7-reopen_log_file.patch"
 }
 
 src_compile() {
