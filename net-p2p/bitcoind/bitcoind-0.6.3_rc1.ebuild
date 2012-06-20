@@ -12,6 +12,7 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
 	http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.6.1-eligius_sendfee.patch.xz
+	logrotate? ( https://github.com/bitcoin/bitcoin/commit/9af080c351c40a4f56d37174253d33a9f4ffdb69.diff -> 0.6.3-reopen_log_file.patch )
 "
 
 LICENSE="MIT ISC"
@@ -45,7 +46,7 @@ pkg_setup() {
 src_prepare() {
 	cd src || die
 	use eligius && epatch "${WORKDIR}/0.6.1-eligius_sendfee.patch"
-	use logrotate && epatch "${FILESDIR}/0.6.3-reopen_log_file.patch"
+	use logrotate && epatch "${DISTDIR}/0.6.3-reopen_log_file.patch"
 }
 
 src_compile() {
