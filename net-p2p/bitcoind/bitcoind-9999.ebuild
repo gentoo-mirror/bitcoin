@@ -16,7 +16,7 @@ SRC_URI="
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
-LICENSE="MIT ISC"
+LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
 IUSE="+eligius examples logrotate upnp"
