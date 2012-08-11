@@ -24,7 +24,7 @@ REQUIRED_USE='
 	altivec? ( cpumining ppc ppc64 )
 	opencl? ( ncurses )
 	padlock? ( cpumining || ( amd64 x86 ) )
-	scrypt? ( || ( cpumining opencl ) )
+	scrypt? ( opencl )
 	sse2? ( cpumining || ( amd64 x86 ) )
 	sse4? ( cpumining amd64 )
 '
