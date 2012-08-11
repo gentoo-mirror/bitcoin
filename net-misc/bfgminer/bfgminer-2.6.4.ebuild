@@ -38,15 +38,11 @@ DEPEND='
 		virtual/libusb:1
 	)
 '
-RDEPEND="${DEPEND}"
-DEPEND="${DEPEND}
-	virtual/pkgconfig
-	sys-apps/sed
+RDEPEND="${DEPEND}
 	opencl? (
 		|| (
 			virtual/opencl
 			virtual/opencl-sdk
-			app-admin/eselect-opencl
 			dev-util/ati-stream-sdk
 			dev-util/ati-stream-sdk-bin
 			dev-util/amdstream
@@ -56,6 +52,10 @@ DEPEND="${DEPEND}
 			dev-util/intel-opencl-sdk
 		)
 	)
+"
+DEPEND="${DEPEND}
+	virtual/pkgconfig
+	sys-apps/sed
 	sse2? (
 		>=dev-lang/yasm-1.0.1
 	)
