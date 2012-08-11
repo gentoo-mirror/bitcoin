@@ -37,7 +37,6 @@ DEPEND='
 		|| (
 			virtual/opencl
 			virtual/opencl-sdk
-			app-admin/eselect-opencl
 			dev-util/ati-stream-sdk
 			dev-util/ati-stream-sdk-bin
 			dev-util/amdstream
