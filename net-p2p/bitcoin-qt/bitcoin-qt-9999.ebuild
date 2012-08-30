@@ -6,19 +6,21 @@ EAPI=4
 
 DB_VER="4.8"
 
-LANGS="bg ca_ES cs da de el_GR en es es_CL et eu_ES fa fa_IR fi fr fr_CA fr_FR he hr hu it lt nb nl pl pt_BR pt_PT ro_RO ru sk sr sv tr uk zh_CN zh_TW"
+LANGS="bg ca_ES cs da de el_GR en es es_CL et eu_ES fa fa_IR fi fr fr_CA he hr hu it lt nb nl pl pt_BR pt_PT ro_RO ru sk sr sv tr uk zh_CN zh_TW"
 inherit db-use eutils qt4-r2 git-2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI=""
+SRC_URI="
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.7.0-eligius_sendfee.patch.xz )
+"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain || ( CCPL-Attribution-ShareAlike-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS=""
-IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
+IUSE="$IUSE 1stclassmsg dbus +eligius ipv6 +qrcode upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -43,7 +45,7 @@ DOCS="doc/README"
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
+	use eligius && epatch "${WORKDIR}/0.7.0-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=
 
@@ -82,6 +84,7 @@ src_configure() {
 	fi
 	use qrcode && OPTS+=("USE_QRCODE=1")
 	use 1stclassmsg && OPTS+=("FIRST_CLASS_MESSAGING=1")
+	use ipv6 || OPTS+=("USE_IPV6=-")
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")

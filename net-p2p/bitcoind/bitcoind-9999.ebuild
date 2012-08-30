@@ -10,14 +10,16 @@ inherit db-use eutils git-2 versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI=""
+SRC_URI="
+	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.7.0-eligius_sendfee.patch.xz )
+"
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="+eligius examples logrotate upnp"
+IUSE="+eligius examples ipv6 logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -42,7 +44,7 @@ pkg_setup() {
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
+	use eligius && epatch "${WORKDIR}/0.7.0-eligius_sendfee.patch"
 }
 
 src_compile() {
@@ -68,6 +70,7 @@ src_compile() {
 	else
 		OPTS+=(USE_UPNP=)
 	fi
+	use ipv6 || OPTS+=("USE_IPV6=-")
 
 	cd src || die
 	emake -f makefile.unix "${OPTS[@]}" ${PN}
