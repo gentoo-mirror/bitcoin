@@ -15,7 +15,7 @@ SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} 
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/eligius_sendfee/0.6.0-eligius_sendfee.patch.xz )
 "
 
-LICENSE="MIT ISC GPL-3 md2k7-asyouwish LGPL-2.1 public-domain"
+LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode ssl upnp"
