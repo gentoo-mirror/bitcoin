@@ -16,7 +16,7 @@ SRC_URI="https://github.com/warner/python-${PN}/tarball/python-${P} -> ${P}.tar.
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="test"
 
 DEPEND="test? ( dev-libs/openssl:0 )"
 
