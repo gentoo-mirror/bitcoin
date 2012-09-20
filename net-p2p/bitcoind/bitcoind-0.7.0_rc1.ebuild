@@ -17,7 +17,7 @@ SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoi
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="+eligius examples ipv6 logrotate upnp"
+IUSE="+eligius examples logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -70,7 +70,6 @@ src_compile() {
 	else
 		OPTS+=(USE_UPNP=)
 	fi
-	use ipv6 || OPTS+=("USE_IPV6=-")
 
 	cd src || die
 	emake -f makefile.unix "${OPTS[@]}" ${PN}

@@ -18,7 +18,7 @@ SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoi
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CCPL-Attribution-ShareAlike-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="$IUSE 1stclassmsg dbus +eligius ipv6 +qrcode upnp"
+IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0
@@ -84,7 +84,6 @@ src_configure() {
 	fi
 	use qrcode && OPTS+=("USE_QRCODE=1")
 	use 1stclassmsg && OPTS+=("FIRST_CLASS_MESSAGING=1")
-	use ipv6 || OPTS+=("USE_IPV6=-")
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
