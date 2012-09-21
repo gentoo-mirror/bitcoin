@@ -12,7 +12,6 @@ inherit db-use eutils qt4-r2 git-2 versionator
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="
-	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.7.0-eligius_sendfee.patch.xz )
 "
 EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
@@ -45,7 +44,7 @@ DOCS="doc/README"
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${WORKDIR}/0.7.0-eligius_sendfee.patch"
+	use eligius && epatch "${FILESDIR}/9999-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=
 
