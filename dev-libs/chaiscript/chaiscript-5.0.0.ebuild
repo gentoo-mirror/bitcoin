@@ -17,18 +17,18 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="examples test"
 
-DEPEND=">=sys-devel/gcc-4.6
-		sys-libs/readline"
-RDEPEND="sys-libs/readline"
+DEPEND="sys-libs/readline"
+RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${P}-Source"
 
 src_prepare() {
+	local required="4.6"
 	einfo "checking current gcc profile"
-	if [[ $(gcc-major-version)$(gcc-minor-version) -lt 46 ]] ; then
-		eerror "${P} requires gcc-4.6 or greater"
+	if ! version_is_at_least ${required} $(gcc-version) ; then
+		eerror "${P} requires gcc-${required} or greater"
 		eerror "have you gcc-config'ed to the latest version?"
-		die "current gcc profile is less than 4.6"
+		die "current gcc profile is less than ${required}"
 	fi
 	epatch "${FILESDIR}/samples+unittests.patch"
 }
