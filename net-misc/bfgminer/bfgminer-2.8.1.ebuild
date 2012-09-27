@@ -30,7 +30,7 @@ DEPEND='
 	ncurses? (
 		sys-libs/ncurses
 	)
-	dev-libs/jansson
+	>=dev-libs/jansson-2
 	udev? (
 		sys-fs/udev
 	)
