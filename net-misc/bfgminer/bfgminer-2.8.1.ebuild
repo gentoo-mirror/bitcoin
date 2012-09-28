@@ -117,7 +117,7 @@ src_install() {
 	fi
 	if use modminer; then
 		insinto /usr/lib/bfgminer/modminer
-		doins bitstreams/*.ncd
+		doins bitstreams/fpgaminer*.bit
 		dodoc bitstreams/COPYING_fpgaminer
 	fi
 	if use opencl; then
@@ -126,7 +126,7 @@ src_install() {
 	fi
 	if use ztex; then
 		insinto /usr/lib/bfgminer/ztex
-		doins bitstreams/*.bit
+		doins bitstreams/ztex*.bit
 		dodoc bitstreams/COPYING_ztex
 	fi
 	if use examples; then
