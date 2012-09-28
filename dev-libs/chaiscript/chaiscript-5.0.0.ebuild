@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit eutils cmake-utils
+inherit eutils cmake-utils versionator
 
 MY_PN="ChaiScript"
 
