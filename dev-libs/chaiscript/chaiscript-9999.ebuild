@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://github.com/ChaiScript/ChaiScript.git \
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE="examples test"
 
 DEPEND="sys-libs/readline"
