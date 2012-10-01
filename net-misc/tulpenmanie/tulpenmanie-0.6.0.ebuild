@@ -6,16 +6,15 @@ EAPI=4
 
 PYTHON_COMPAT="python2_7"
 
-inherit eutils git-2 python-distutils-ng
+inherit eutils python-distutils-ng
 
 DESCRIPTION="Graphical speculation platform, supports Bitstamp, BTC-e, CampBX, MtGox."
 HOMEPAGE="https://github.com/3M3RY/${PN}"
-EGIT_REPO_URI="git://github.com/3M3RY/tulpenmanie.git \
-			   https://github.com/3M3RY/tulpenmanie.git"
+SRC_URI="https://github.com/downloads/3M3RY/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 RDEPEND="dev-python/PyQt4"
