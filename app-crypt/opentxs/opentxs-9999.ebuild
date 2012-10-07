@@ -5,7 +5,7 @@
 EAPI=4
 PYTHON_DEPEND="python? *"
 
-inherit eutils autotools-utils git-2 python
+inherit eutils git-2 java-pkg-opt-2 autotools-utils python
 
 DESCRIPTION="Open Transactions is a system for issuing and manipulating digital assets."
 HOMEPAGE="https://github.com/FellowTraveler/Open-Transactions"
@@ -15,26 +15,34 @@ LICENSE="AGPL-3"
 
 SLOT="0"
 KEYWORDS=""
-IUSE="python"
+IUSE="java python"
 
-DEPEND="dev-libs/boost
-		>=dev-libs/chaiscript-6.0.0
-		dev-libs/msgpack
-		dev-libs/openssl:0
-		dev-libs/protobuf
-		net-libs/zeromq
-		python? ( dev-lang/swig )"
+COMMON_DEP="dev-libs/boost
+			>=dev-libs/chaiscript-6.0.0
+			dev-libs/msgpack
+			dev-libs/openssl:0
+			dev-libs/protobuf
+			net-libs/zeromq"
+RDEPEND="java? ( >=virtual/jre-1.4 )
+		 ${COMMON_DEP}"
+DEPEND="java? ( dev-lang/swig )
+		java? ( >=virtual/jdk-1.4 )
+		python? ( dev-lang/swig )
+		${COMMON_DEP}"
 
 AUTOTOOLS_AUTORECONF=1
 
 pkg_setup() {
+	use java && java-pkg-opt-2_pkg_setup
 	use python && python_pkg_setup
 }
 
 src_configure() {
 	local myeconfargs=(
+		$(use_with java)
 		$(use_with python)
 	)
+	use java && local JAVAC="javac"
 	autotools-utils_src_configure
 }
 
