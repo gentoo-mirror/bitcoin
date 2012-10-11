@@ -22,13 +22,6 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/${P}-Source"
 
 src_prepare() {
-	local required="4.6"
-	einfo "checking current gcc profile"
-	if ! version_is_at_least ${required} $(gcc-version) ; then
-		eerror "${P} requires gcc-${required} or greater"
-		eerror "have you gcc-config'ed to the latest version?"
-		die "current gcc profile is less than ${required}"
-	fi
 	epatch "${FILESDIR}/samples+unittests.patch"
 }
 
