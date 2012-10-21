@@ -16,14 +16,17 @@ LICENSE="AGPL-3"
 
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="java python"
+IUSE="gnome-keyring java kwallet python"
+REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
 COMMON_DEP="dev-libs/boost
-			>=dev-libs/chaiscript-6.0.0
+			|| ( =dev-libs/chaiscript-4* =dev-libs/chaiscript-9999 )
 			dev-libs/msgpack
 			dev-libs/openssl:0
 			dev-libs/protobuf
-			net-libs/zeromq"
+			net-libs/zeromq
+			gnome-keyring? ( gnome-base/gnome-keyring )
+			kwallet? ( kde-base/kwallet )"
 RDEPEND="java? ( >=virtual/jre-1.4 )
 		 ${COMMON_DEP}"
 DEPEND="java? ( dev-lang/swig )
@@ -36,14 +39,16 @@ AUTOTOOLS_AUTORECONF=1
 pkg_setup() {
 	use java && java-pkg-opt-2_pkg_setup
 	use python && python_pkg_setup
+
 }
 
 src_configure() {
+	use java && local JAVAC="javac"
 	local myeconfargs=(
 		$(use_with java)
-		$(use_with python)
-	)
-	use java && local JAVAC="javac"
+		$(use_with python))
+	use gnome-keyring && myeconfargs=(${myeconfargs[@]} '--with-keyring=gnome')
+	use kwallet && myeconfargs=(${myeconfargs[@]} '--with-keyring=kwallet')
 	autotools-utils_src_configure
 }
 
@@ -58,6 +63,12 @@ src_install() {
 		doins swig/glue/python/otapi.py
 		dosym ../../_otapi.so $(python_get_sitedir)/_otapi.so
 	fi
+	cd docs
+	for docfile in ./*.txt ; do
+		if [ ${docfile/#"INSTALL"/""} == ${docfile} ] ; then
+			dodoc ${docfile}
+		fi
+	done
 }
 
 pkg_postinst() {
