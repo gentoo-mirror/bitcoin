@@ -17,8 +17,10 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="examples test"
 
-DEPEND="sys-libs/readline"
-RDEPEND="${DEPEND}"
+COMMON_DEP="sys-libs/readline"
+DEPEND="${COMMON_DEP}
+		>=sys-devel/gcc-4.6.0"
+RDEPEND="${COMMON_DEP}"
 
 S="${WORKDIR}/${P}-Source"
 
