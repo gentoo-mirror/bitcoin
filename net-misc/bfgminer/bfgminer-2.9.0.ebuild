@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 
 IUSE="+adl altivec bitforce +cpumining examples hardened icarus modminer ncurses +opencl padlock scrypt sse2 sse2_4way sse4 +udev x6500 ztex"
 REQUIRED_USE='
-	|| ( bitforce cpumining icarus modminer opencl ztex )
+	|| ( bitforce cpumining icarus modminer opencl x6500 ztex )
 	adl? ( opencl )
 	altivec? ( cpumining ppc ppc64 )
 	padlock? ( cpumining || ( amd64 x86 ) )
