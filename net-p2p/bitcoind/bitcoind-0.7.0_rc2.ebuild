@@ -71,6 +71,9 @@ src_compile() {
 		OPTS+=(USE_UPNP=)
 	fi
 
+	# Workaround for bug #440034
+	share/genbuild.sh src/obj/build.h
+
 	cd src || die
 	emake -f makefile.unix "${OPTS[@]}" ${PN}
 }

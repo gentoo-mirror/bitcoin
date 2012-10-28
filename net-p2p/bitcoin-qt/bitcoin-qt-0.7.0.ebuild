@@ -99,6 +99,9 @@ src_configure() {
 }
 
 src_compile() {
+	# Workaround for bug #440034
+	share/genbuild.sh build/build.h
+
 	emake
 }
 

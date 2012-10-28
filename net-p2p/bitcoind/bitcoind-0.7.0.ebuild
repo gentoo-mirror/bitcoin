@@ -72,6 +72,9 @@ src_compile() {
 	fi
 	use ipv6 || OPTS+=("USE_IPV6=-")
 
+	# Workaround for bug #440034
+	share/genbuild.sh src/obj/build.h
+
 	cd src || die
 	emake -f makefile.unix "${OPTS[@]}" ${PN}
 }
