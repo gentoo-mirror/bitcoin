@@ -11,20 +11,19 @@ DESCRIPTION="Open Transactions is a system for issuing and manipulating digital 
 HOMEPAGE="https://github.com/FellowTraveler/Open-Transactions"
 EGIT_REPO_URI="git://github.com/FellowTraveler/Open-Transactions.git \
 			   https://github.com/FellowTraveler/Open-Transactions.git"
-EGIT_COMMIT="b4e691c4b68f7a49b03e22c4031020e87b4bfceb"
 LICENSE="AGPL-3"
 
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE="doc gnome-keyring java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
 COMMON_DEP="dev-libs/boost
-			|| ( =dev-libs/chaiscript-4* =dev-libs/chaiscript-9999 )
+			=dev-libs/chaiscript-9999
 			dev-libs/msgpack
 			dev-libs/openssl:0
-			>=dev-libs/protobuf-2.4.1
-			net-libs/zeromq
+			dev-libs/protobuf
+			>=net-libs/zeromq-2.4.1
 			gnome-keyring? ( gnome-base/gnome-keyring )
 			kwallet? ( kde-base/kwallet )"
 RDEPEND="java? ( >=virtual/jre-1.4 )
