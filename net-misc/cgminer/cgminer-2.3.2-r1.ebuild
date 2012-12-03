@@ -47,7 +47,7 @@ DEPEND='
 		)
 	)
 	udev? (
-		sys-fs/udev
+		virtual/udev
 	)
 '
 RDEPEND="${DEPEND}"
