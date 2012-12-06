@@ -32,7 +32,7 @@ DEPEND='
 	)
 	>=dev-libs/jansson-2
 	udev? (
-		sys-fs/udev
+		virtual/udev
 	)
 	x6500? (
 		virtual/libusb:1

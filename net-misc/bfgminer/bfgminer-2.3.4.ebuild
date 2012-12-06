@@ -32,7 +32,7 @@ DEPEND='
 	)
 	dev-libs/jansson
 	udev? (
-		sys-fs/udev
+		virtual/udev
 	)
 	ztex? (
 		virtual/libusb:1
