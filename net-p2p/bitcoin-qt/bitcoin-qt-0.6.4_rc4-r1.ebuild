@@ -11,13 +11,13 @@ inherit db-use eutils qt4-r2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/392d30f0 -> bitcoin-v${PV}.tgz
+SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}-r1.tgz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.6.1-eligius_sendfee.patch.xz )
 "
 
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
+KEYWORDS="amd64 arm x86"
 IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
 
 RDEPEND="
