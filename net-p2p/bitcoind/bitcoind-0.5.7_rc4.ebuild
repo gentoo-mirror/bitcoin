@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm x86"
 IUSE="+bip16 +eligius examples logrotate ssl upnp"
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0
+	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/openssl[-bindist]
 	logrotate? (
 		app-admin/logrotate
@@ -58,7 +58,6 @@ src_prepare() {
 
 src_compile() {
 	OPTS=()
-	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("DEBUGFLAGS=")
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
@@ -66,13 +65,6 @@ src_compile() {
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
-
-	BOOST_PKG="$(best_version 'dev-libs/boost')"
-	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
-	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
-	BOOST_INC="/usr/include/boost-${BOOST_VER}"
-	OPTS+=("BOOST_INCLUDE_PATH=${BOOST_INC}")
-	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 
 	use ssl  && OPTS+=(USE_SSL=1)
 	if use upnp; then
