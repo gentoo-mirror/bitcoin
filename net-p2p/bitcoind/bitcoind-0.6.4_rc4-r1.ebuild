@@ -10,7 +10,7 @@ inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/392d30f0 -> bitcoin-v${PV}.tgz
+SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}-r1.tgz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.6.1-eligius_sendfee.patch.xz )
 	logrotate? ( https://github.com/bitcoin/bitcoin/commit/9af080c351c40a4f56d37174253d33a9f4ffdb69.diff -> 0.6.3-reopen_log_file.patch )
 "
@@ -21,7 +21,7 @@ KEYWORDS="amd64 ~arm ~x86"
 IUSE="+eligius examples logrotate upnp"
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0
+	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/openssl[-bindist]
 	logrotate? (
 		app-admin/logrotate
@@ -51,7 +51,6 @@ src_prepare() {
 
 src_compile() {
 	OPTS=()
-	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("DEBUGFLAGS=")
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
@@ -59,13 +58,6 @@ src_compile() {
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
-
-	BOOST_PKG="$(best_version 'dev-libs/boost')"
-	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
-	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
-	BOOST_INC="/usr/include/boost-${BOOST_VER}"
-	OPTS+=("BOOST_INCLUDE_PATH=${BOOST_INC}")
-	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 
 	if use upnp; then
 		OPTS+=(USE_UPNP=1)

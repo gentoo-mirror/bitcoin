@@ -11,7 +11,7 @@ inherit db-use eutils qt4-r2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/392d30f0 -> bitcoin-v${PV}.tgz
+SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}-r1.tgz
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.6.1-eligius_sendfee.patch.xz )
 "
 
@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm x86"
 IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0
+	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/openssl[-bindist]
 	qrcode? (
 		media-gfx/qrencode
@@ -74,7 +74,6 @@ src_prepare() {
 
 src_configure() {
 	OPTS=()
-	local BOOST_PKG BOOST_VER
 
 	use dbus && OPTS+=("USE_DBUS=1")
 	if use upnp; then
@@ -87,12 +86,6 @@ src_configure() {
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
-
-	BOOST_PKG="$(best_version 'dev-libs/boost')"
-	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
-	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
-	OPTS+=("BOOST_INCLUDE_PATH=/usr/include/boost-${BOOST_VER}")
-	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 
 	eqmake4 "${PN}.pro" "${OPTS[@]}"
 }

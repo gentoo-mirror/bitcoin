@@ -18,7 +18,7 @@ KEYWORDS="amd64 x86"
 IUSE="ssl upnp"
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0
+	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/crypto++
 	dev-libs/openssl[-bindist]
 	upnp? (
@@ -45,20 +45,12 @@ src_prepare() {
 
 src_compile() {
 	local OPTS=()
-	local BOOST_PKG BOOST_VER BOOST_INC
 
 	OPTS+=("CXXFLAGS=${CXXFLAGS}")
 	OPTS+=( "LDFLAGS=${LDFLAGS}")
 
 	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
 	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
-
-	BOOST_PKG="$(best_version 'dev-libs/boost')"
-	BOOST_VER="$(get_version_component_range 1-2 "${BOOST_PKG/*boost-/}")"
-	BOOST_VER="$(replace_all_version_separators _ "${BOOST_VER}")"
-	BOOST_INC="/usr/include/boost-${BOOST_VER}"
-	OPTS+=("BOOST_CXXFLAGS=-I${BOOST_INC}")
-	OPTS+=("BOOST_LIB_SUFFIX=-${BOOST_VER}")
 
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
