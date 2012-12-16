@@ -36,7 +36,7 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
-	dodoc readme.txt
+	dodoc readme.md
 	dodoc releasenotes.txt
 	if use examples ; then
 		docinto "samples"
