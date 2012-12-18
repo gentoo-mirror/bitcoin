@@ -14,7 +14,7 @@ EGIT_REPO_URI="git://github.com/FellowTraveler/Open-Transactions.git \
 LICENSE="AGPL-3"
 
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE="doc gnome-keyring java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
@@ -42,7 +42,12 @@ pkg_setup() {
 
 src_prepare() {
 	autotools-utils_src_prepare
-	if [ use java || use python ]; then
+
+	if use doc || use python; then
+		sed -i '14i%feature("autodoc","1") ;' swig/otapi/OTAPI.i
+	fi
+
+	if use java || use python; then
 		ebegin "Regenerating SWIG wrappers"
 		use java && WRAPPERS="${WRAPPERS} java"
 		use python && WRAPPERS="${WRAPPERS} python"
@@ -68,7 +73,7 @@ src_install() {
 	if use python ; then
 		insinto $(python_get_sitedir)
 		doins swig/glue/python/otapi.py
-		dosym ../../opentxs/python/_otapi.so $(python_get_sitedir)/
+		dosym ../../_otapi.so $(python_get_sitedir)/
 	fi
 	cd docs
 	for docfile in ./*.txt ; do

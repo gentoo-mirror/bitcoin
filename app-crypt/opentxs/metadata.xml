@@ -5,6 +5,7 @@
 	<email>gitorious@emery.neomailbox.net</email>
 </maintainer>
 <use>
-	<flag name="kwallet"><pkg>kde-base/kwallet</pkg> keyring support</flag>
+	<flag name="doc">Include doc strings in python SWIG wrapper.</flag>
+	<flag name="kwallet"><pkg>kde-base/kwallet</pkg> keyring support.</flag>
 </use>
 </pkgmetadata>

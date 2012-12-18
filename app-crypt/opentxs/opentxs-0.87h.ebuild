@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=4
-PYTHON_DEPEND="python? *"
+PYTHON_DEPEND="python? 2"
 
 inherit eutils git-2 java-pkg-opt-2 autotools-utils python
 
@@ -11,7 +11,7 @@ DESCRIPTION="Open Transactions is a system for issuing and manipulating digital 
 HOMEPAGE="https://github.com/FellowTraveler/Open-Transactions"
 EGIT_REPO_URI="git://github.com/FellowTraveler/Open-Transactions.git \
 			   https://github.com/FellowTraveler/Open-Transactions.git"
-EGIT_COMMIT="b4e691c4b68f7a49b03e22c4031020e87b4bfceb"
+EGIT_COMMIT="5c72743d136d255c2ce0411d3967b02d16acceaa"
 LICENSE="AGPL-3"
 
 SLOT="0"
@@ -20,7 +20,7 @@ IUSE="doc gnome-keyring java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
 COMMON_DEP="dev-libs/boost
-			=dev-libs/chaiscript-9999
+			<dev-libs/chaiscript-5.0.0
 			dev-libs/msgpack
 			dev-libs/openssl:0
 			>=dev-libs/protobuf-2.4.1
@@ -41,6 +41,24 @@ pkg_setup() {
 	use python && python_pkg_setup
 }
 
+src_prepare() {
+	autotools-utils_src_prepare
+
+	if use doc || use python; then
+		sed -i '14i%feature("autodoc","1") ;' swig/otapi/OTAPI.i
+	fi
+
+	if use java || use python; then
+		ebegin "Regenerating SWIG wrappers"
+		use java && WRAPPERS="${WRAPPERS} java"
+		use python && WRAPPERS="${WRAPPERS} python"
+		cd swig
+		sed -i "s/csharp java perl5 php python ruby tcl d/${WRAPPERS}/g" buildwrappers.sh
+		./buildwrappers.sh
+		eend $?
+	fi
+}
+
 src_configure() {
 	use java && local JAVAC="javac"
 	local myeconfargs=(
@@ -51,16 +69,12 @@ src_configure() {
 	autotools-utils_src_configure
 }
 
-src_compile() {
-	autotools-utils_src_compile
-}
-
 src_install() {
 	autotools-utils_src_install
 	if use python ; then
 		insinto $(python_get_sitedir)
 		doins swig/glue/python/otapi.py
-		dosym ../../_otapi.so $(python_get_sitedir)/_otapi.so
+		dosym ../../_otapi.so $(python_get_sitedir)/
 	fi
 	cd docs
 	for docfile in ./*.txt ; do
