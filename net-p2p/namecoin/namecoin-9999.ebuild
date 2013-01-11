@@ -1,4 +1,4 @@
-# Copyright 2010-2011 Gentoo Foundation
+# Copyright 2010-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -69,13 +69,13 @@ src_install() {
 	fperms 600 /etc/namecoin/namecoin.conf
 
 	newconfd "${FILESDIR}/${PN}.confd" ${PN}d
-	newinitd "${FILESDIR}/${PN}.initd" ${PN}d
+	newinitd "${FILESDIR}/0.3.50-${PN}.initd" ${PN}d
 
 	keepdir /var/lib/namecoin/.namecoin
 	fperms 700 /var/lib/namecoin
 	fowners namecoin:namecoin /var/lib/namecoin/
 	fowners namecoin:namecoin /var/lib/namecoin/.namecoin
-	dosym /etc/namecoin/namecoin.conf /var/lib/namecoin/.namecoin/bitcoin.conf
+	dosym /etc/namecoin/namecoin.conf /var/lib/namecoin/.namecoin/namecoin.conf
 
 	dodoc doc/README
 	dodoc DESIGN-namecoin.md FAQ.md doc/README_merged-mining.md
