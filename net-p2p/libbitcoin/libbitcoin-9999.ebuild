@@ -4,7 +4,7 @@
 
 EAPI=4
 
-EGIT_REPO_URI="git://gitorious.org/libbitcoin/libbitcoin.git"
+EGIT_REPO_URI="git://github.com/spesmilo/libbitcoin.git"
 inherit git-2 autotools
 
 DESCRIPTION="Modular library for implementing Bitcoin (crypto-currency) tools and clients"
