@@ -6,16 +6,15 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit db-use eutils git-2 versionator
+inherit db-use eutils versionator
 
 DESCRIPTION="A P2P network based domain name system"
 HOMEPAGE="https://dot-bit.org/"
-EGIT_PROJECT='namecoin'
-EGIT_REPO_URI="https://github.com/namecoin/namecoin.git"
+SRC_URI="https://github.com/namecoin/namecoin/tarball/nc0.3.50.00 -> ${P}.tgz"
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="amd64 x86"
 IUSE="ssl upnp"
 
 RDEPEND="
@@ -31,7 +30,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/namecoin-namecoin-b7d3a08"
+S="${WORKDIR}/namecoin-namecoin-20dcc50"
 
 pkg_setup() {
 	local UG='namecoin'
