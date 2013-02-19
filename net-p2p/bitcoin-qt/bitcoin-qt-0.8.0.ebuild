@@ -7,7 +7,7 @@ EAPI=4
 DB_VER="4.8"
 
 LANGS="bg ca_ES cs da de el_GR en es es_CL et eu_ES fa fa_IR fi fr fr_CA gu_IN he hi_IN hr hu it ja lt nb nl pl pt_BR pt_PT ro_RO ru sk sr sv th_TH tr uk zh_CN zh_TW"
-inherit db-use eutils qt4-r2 git-2 versionator
+inherit db-use eutils qt4-r2 versionator
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -15,15 +15,13 @@ MyP="${MyPN}-${MyPV}"
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="
+SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 	1stclassmsg? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/1stclassmsg/0.7.1-1stclassmsg.patch.xz )
 "
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CCPL-Attribution-ShareAlike-3.0 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="$IUSE 1stclassmsg dbus ipv6 +qrcode upnp"
 
 RDEPEND="
@@ -48,9 +46,11 @@ DEPEND="${RDEPEND}
 
 DOCS="doc/README"
 
+S="${WORKDIR}/${MyP}"
+
 src_prepare() {
 	use 1stclassmsg && epatch "${WORKDIR}/0.7.1-1stclassmsg.patch"
-	epatch "${FILESDIR}/0.8.0-sys_leveldb.patch"
+	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
 	rm -r src/leveldb
 
 	cd src || die
