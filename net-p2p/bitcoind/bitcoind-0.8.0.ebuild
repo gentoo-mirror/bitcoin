@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit db-use eutils git-2 versionator
+inherit db-use eutils versionator
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -14,14 +14,12 @@ MyP="${MyPN}-${MyPV}"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="
+SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 "
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="examples ipv6 logrotate upnp"
 
 RDEPEND="
@@ -40,6 +38,8 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
+S="${WORKDIR}/${MyP}"
+
 pkg_setup() {
 	local UG='bitcoin'
 	enewgroup "${UG}"
@@ -47,7 +47,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/0.8.0-sys_leveldb.patch"
+	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
 	rm -r src/leveldb
 }
 
