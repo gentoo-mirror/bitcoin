@@ -10,7 +10,7 @@ SRC_URI="http://download2-developer.amd.com/amd/GPU/zip/ADL_SDK_${PV}.zip"
 
 LICENSE="AMD-ADL"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="doc examples"
 
 DEPEND=""
