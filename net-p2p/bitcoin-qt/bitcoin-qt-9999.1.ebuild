@@ -17,7 +17,7 @@ EGIT_PROJECT='bitcoin'
 EGIT_REPO_URI="git://gitorious.org/~Luke-Jr/bitcoin/luke-jr-bitcoin.git https://git.gitorious.org/~Luke-Jr/bitcoin/luke-jr-bitcoin.git"
 EGIT_BRANCH='next'
 
-LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CCPL-Attribution-ShareAlike-3.0 LGPL-2.1 )"
+LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS=""
 IUSE="$IUSE 1stclassmsg dbus +eligius ipv6 +qrcode upnp"

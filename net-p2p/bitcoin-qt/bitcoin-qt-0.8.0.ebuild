@@ -19,7 +19,7 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 	1stclassmsg? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/1stclassmsg/0.7.1-1stclassmsg.patch.xz )
 "
 
-LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CCPL-Attribution-ShareAlike-3.0 LGPL-2.1 )"
+LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE="$IUSE 1stclassmsg dbus ipv6 +qrcode upnp"

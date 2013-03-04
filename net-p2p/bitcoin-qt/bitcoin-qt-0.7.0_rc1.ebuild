@@ -15,7 +15,7 @@ SRC_URI="https://nodeload.github.com/bitcoin/bitcoin/tarball/v${PV/_/} -> bitcoi
 	eligius? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/eligius/sendfee/0.7.0-eligius_sendfee.patch.xz )
 "
 
-LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CCPL-Attribution-ShareAlike-3.0 LGPL-2.1 )"
+LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode upnp"
