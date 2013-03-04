@@ -30,9 +30,9 @@ RDEPEND="
 		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
-	x11-libs/qt-gui:4
+	dev-qt/qtgui:4
 	dbus? (
-		x11-libs/qt-dbus:4
+		dev-qt/qtdbus:4
 	)
 "
 DEPEND="${RDEPEND}

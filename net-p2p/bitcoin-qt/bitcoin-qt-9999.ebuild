@@ -37,9 +37,9 @@ RDEPEND="
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 	=dev-libs/leveldb-1.9.0*
-	x11-libs/qt-gui:4
+	dev-qt/qtgui:4
 	dbus? (
-		x11-libs/qt-dbus:4
+		dev-qt/qtdbus:4
 	)
 "
 DEPEND="${RDEPEND}
