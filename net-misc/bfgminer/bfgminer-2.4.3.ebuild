@@ -7,7 +7,7 @@ EAPI=4
 inherit eutils
 
 DESCRIPTION="Modular Bitcoin CPU/GPU/FPGA miner in C"
-HOMEPAGE="https://bitcointalk.org/index.php?topic=78192.0"
+HOMEPAGE="https://bitcointalk.org/?topic=168174"
 SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${PN}/${PV}/${P}.tbz2"
 
 LICENSE="GPL-3"
