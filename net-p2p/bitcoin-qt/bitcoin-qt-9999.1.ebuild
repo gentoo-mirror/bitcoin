@@ -66,7 +66,7 @@ src_prepare() {
 			yeslang="$yeslang $x"
 		fi
 	done
-	filt="bitcoin_\\(${filt:2}\\)\\.qm"
+	filt="bitcoin_\\(${filt:2}\\)\\.\(qm\|ts\)"
 	sed "/${filt}/d" -i 'qt/bitcoin.qrc'
 	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 }

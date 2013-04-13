@@ -47,7 +47,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/0.8.0-sys_leveldb.patch"
+	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
 	rm -r src/leveldb
 }
 

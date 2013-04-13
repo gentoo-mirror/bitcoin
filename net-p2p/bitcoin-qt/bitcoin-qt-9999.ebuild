@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-LANGS="bg ca_ES cs da de el_GR en es es_CL et eu_ES fa fa_IR fi fr fr_CA gu_IN he hi_IN hr hu it ja lt nb nl pl pt_BR pt_PT ro_RO ru sk sr sv th_TH tr uk zh_CN zh_TW"
+LANGS="bg bs ca ca_ES cs cy da de el_GR en eo es es_CL et eu_ES fa fa_IR fi fr fr_CA gu_IN he hi_IN hr hu it ja la lt lv_LV nb nl pl pt_BR pt_PT ro_RO ru sk sr sv th_TH tr uk zh_CN zh_TW"
 inherit db-use eutils qt4-r2 git-2 versionator
 
 MyPV="${PV/_/}"
@@ -50,7 +50,7 @@ DOCS="doc/README"
 
 src_prepare() {
 	use 1stclassmsg && epatch "${WORKDIR}/0.7.1-1stclassmsg.patch"
-	epatch "${FILESDIR}/0.8.0-sys_leveldb.patch"
+	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
 	rm -r src/leveldb
 
 	cd src || die
@@ -75,7 +75,8 @@ src_prepare() {
 			yeslang="$yeslang $x"
 		fi
 	done
-	filt="bitcoin_\\(${filt:2}\\)\\.qm"
+	filt="bitcoin_\\(${filt:2}\\)\\.\(qm\|ts\)"
+	echo $filt
 	sed "/${filt}/d" -i 'qt/bitcoin.qrc'
 	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 }
