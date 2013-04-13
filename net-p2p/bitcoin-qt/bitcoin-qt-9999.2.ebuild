@@ -20,7 +20,7 @@ EGIT_BRANCH='next-test'
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS=""
-IUSE="$IUSE 1stclassmsg dbus +eligius ipv6 +qrcode upnp"
+IUSE="$IUSE 1stclassmsg dbus ipv6 +qrcode upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -45,7 +45,6 @@ DOCS="doc/README"
 
 src_prepare() {
 	cd src || die
-	use eligius && epatch "${FILESDIR}/9999.2-eligius_sendfee.patch"
 
 	local filt= yeslang= nolang=
 

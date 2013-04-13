@@ -19,7 +19,7 @@ EGIT_BRANCH='next'
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="+eligius examples ipv6 logrotate upnp"
+IUSE="examples ipv6 logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -40,11 +40,6 @@ pkg_setup() {
 	local UG='bitcoin'
 	enewgroup "${UG}"
 	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
-}
-
-src_prepare() {
-	cd src || die
-	use eligius && epatch "${FILESDIR}/9999.1-eligius_sendfee.patch"
 }
 
 src_compile() {
