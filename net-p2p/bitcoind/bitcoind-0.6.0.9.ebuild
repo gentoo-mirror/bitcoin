@@ -21,7 +21,7 @@ IUSE="+eligius examples logrotate ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
-	dev-libs/openssl[-bindist]
+	dev-libs/openssl:0[-bindist]
 	logrotate? (
 		app-admin/logrotate
 	)

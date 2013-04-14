@@ -22,7 +22,7 @@ IUSE="$IUSE 1stclassmsg dbus +eligius +qrcode ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
-	dev-libs/openssl[-bindist]
+	dev-libs/openssl:0[-bindist]
 	qrcode? (
 		media-gfx/qrencode
 	)

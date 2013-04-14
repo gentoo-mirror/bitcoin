@@ -25,7 +25,7 @@ IUSE="$IUSE +bip16 dbus +eligius ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
-	dev-libs/openssl[-bindist]
+	dev-libs/openssl:0[-bindist]
 	upnp? (
 		net-libs/miniupnpc
 	)

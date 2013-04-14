@@ -22,7 +22,7 @@ IUSE="+bip16 logrotate ssl upnp"
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/crypto++
-	dev-libs/openssl[-bindist]
+	dev-libs/openssl:0[-bindist]
 	logrotate? (
 		app-admin/logrotate
 	)
