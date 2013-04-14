@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-RDEPEND="dev-python/matplotlib
+RDEPEND="dev-python/matplotlib[qt4]
 		 dev-python/numpy
 		 dev-python/PyQt4"
 DEPEND="${RDEPEND}"
