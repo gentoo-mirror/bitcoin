@@ -1,13 +1,12 @@
 # Copyright 1999-2013 Gentoo Foundation
-# Distributed under the terms of the WTFPL
+# Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=4
 
 inherit git-2
 
-DESCRIPTION="Armory is a Bitcoin client, offering a dozen
-innovative features not found anywhere else."
+DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else."
 HOMEPAGE="http://bitcoinarmory.com/"
 
 EGIT_REPO_URI="git://github.com/etotheipi/BitcoinArmory.git"
