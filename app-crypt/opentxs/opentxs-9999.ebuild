@@ -1,11 +1,12 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
-PYTHON_DEPEND="python? 2"
+EAPI=5
 
-inherit eutils git-2 java-pkg-opt-2 autotools-utils python
+PYTHON_COMPAT=( python{3_1,3_2,3_3} )
+
+inherit eutils git-2 java-pkg-opt-2 autotools-utils python-r1
 
 DESCRIPTION="Open Transactions is a system for issuing and manipulating digital assets."
 HOMEPAGE="https://github.com/FellowTraveler/Open-Transactions"
@@ -23,9 +24,11 @@ COMMON_DEP="dev-libs/boost
 			dev-libs/msgpack
 			dev-libs/openssl:0
 			>=dev-libs/protobuf-2.4.1
-			net-libs/zeromq
+			<net-libs/zeromq-3.0.0
 			gnome-keyring? ( gnome-base/gnome-keyring )
-			kwallet? ( kde-base/kwallet )"
+			kwallet? ( kde-base/kwallet )
+			python? ( ${PYTHON_DEPS} )
+"
 RDEPEND="java? ( >=virtual/jre-1.4 )
 		 ${COMMON_DEP}"
 DEPEND="java? ( dev-lang/swig )
@@ -33,11 +36,11 @@ DEPEND="java? ( dev-lang/swig )
 		python? ( dev-lang/swig )
 		${COMMON_DEP}"
 
-AUTOTOOLS_AUTORECONF=1
+AUTOTOOLS_AUTORECONF=0
 
 pkg_setup() {
 	use java && java-pkg-opt-2_pkg_setup
-	use python && python_pkg_setup
+	use python && python-r1_pkg_setup
 }
 
 src_prepare() {
@@ -74,6 +77,7 @@ src_install() {
 		insinto $(python_get_sitedir)
 		doins swig/glue/python/otapi.py
 		dosym ../../_otapi.so $(python_get_sitedir)/
+		python_optimize
 	fi
 	cd docs
 	for docfile in ./*.txt ; do
@@ -81,12 +85,4 @@ src_install() {
 			dodoc ${docfile}
 		fi
 	done
-}
-
-pkg_postinst() {
-	use python && python_mod_optimize otapi.py
-}
-
-pkg_postrm() {
-	use python && python_mod_cleanup otapi.py
 }
