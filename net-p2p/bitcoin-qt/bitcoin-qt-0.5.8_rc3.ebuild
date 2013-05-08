@@ -6,25 +6,23 @@ EAPI=4
 
 DB_VER="4.8"
 
-LANGS="bg ca_ES cs da de el_GR en es es_CL et eu_ES fa fa_IR fi fr fr_CA he hr hu it lt nb nl pl pt_BR pt_PT ro_RO ru sk sr sv tr uk zh_CN zh_TW"
+LANGS="da de en es es_CL hu it nb nl pt_BR ru uk zh_CN zh_TW"
 inherit db-use eutils qt4-r2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.5.6-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
 "
 
-LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
+LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
-IUSE="$IUSE 1stclassmsg dbus ipv6 +qrcode upnp"
+KEYWORDS="amd64 arm x86"
+IUSE="$IUSE +bip16 dbus ssl upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
-	qrcode? (
-		media-gfx/qrencode
-	)
 	upnp? (
 		net-libs/miniupnpc
 	)
@@ -44,6 +42,9 @@ S="${WORKDIR}/bitcoin-bitcoind-stable"
 
 src_prepare() {
 	cd src || die
+	if use bip16; then
+		epatch "${WORKDIR}/0.5.6-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch"
+	fi
 
 	local filt= yeslang= nolang=
 
@@ -74,14 +75,12 @@ src_configure() {
 	OPTS=()
 
 	use dbus && OPTS+=("USE_DBUS=1")
+	use ssl  && OPTS+=("DEFINES+=USE_SSL")
 	if use upnp; then
 		OPTS+=("USE_UPNP=1")
 	else
 		OPTS+=("USE_UPNP=-")
 	fi
-	use qrcode && OPTS+=("USE_QRCODE=1")
-	use 1stclassmsg && OPTS+=("FIRST_CLASS_MESSAGING=1")
-	use ipv6 || OPTS+=("USE_IPV6=-")
 
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
@@ -90,9 +89,6 @@ src_configure() {
 }
 
 src_compile() {
-	# Workaround for bug #440034
-	share/genbuild.sh build/build.h
-
 	emake
 }
 
