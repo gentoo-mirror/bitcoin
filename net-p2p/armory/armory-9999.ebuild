@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -10,27 +10,24 @@ DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features no
 HOMEPAGE="http://bitcoinarmory.com/"
 
 EGIT_REPO_URI="git://github.com/etotheipi/BitcoinArmory.git"
-EGIT_COMMIT="v0.87.2-beta"
+EGIT_BRANCH="testing"
 
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="-*"
+IUSE="network"
 
 DEPEND="dev-libs/crypto++
-		dev-python/PyQt4
-		dev-lang/swig
-		dev-python/twisted
-		x11-misc/xdg-utils"
+	dev-python/PyQt4
+	dev-lang/swig
+	dev-python/twisted
+	x11-misc/xdg-utils"
 
-RDEPEND="|| ( net-p2p/bitcoin-qt net-p2p/bitcoind )
-		dev-libs/crypto++
-		dev-python/PyQt4
-		dev-python/twisted
-		x11-misc/xdg-utils"
+RDEPEND="network? ( || ( net-p2p/bitcoind net-p2p/bitcoin-qt ) )
+	${DEPEND}"
 
 src_prepare() {
-	sed -e 's/`python -c/`python2 -c/' -i cppForSwig/Makefile \
-	|| die "sed failed"
+	sed -e 's/`python -c/`python2 -c/' -i cppForSwig/Makefile
 	echo python2 /usr/share/armory/ArmoryQt.py > armory
 }
 
@@ -46,3 +43,4 @@ pkg_postinst() {
 	xdg-icon-resource install --novendor --context apps --size 64 /usr/share/armory/img/armory_icon_64x64.png armoryofflineicon
 	xdg-icon-resource install --novendor --context apps --size 64 /usr/share/armory/img/armory_icon_green_64x64.png armorytestneticon
 }
+
