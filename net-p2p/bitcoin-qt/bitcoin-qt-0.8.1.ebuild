@@ -21,7 +21,7 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
+KEYWORDS="amd64 arm x86"
 IUSE="$IUSE 1stclassmsg dbus ipv6 +qrcode upnp"
 
 RDEPEND="
