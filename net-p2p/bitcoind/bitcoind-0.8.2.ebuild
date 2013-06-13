@@ -36,6 +36,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
+	sys-apps/sed
 "
 
 S="${WORKDIR}/${MyP}"
@@ -49,6 +50,10 @@ pkg_setup() {
 src_prepare() {
 	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
 	rm -r src/leveldb
+
+	if has_version '>=dev-libs/boost-1.52'; then
+		sed -i 's/\(-l db_cxx\)/-l boost_chrono$(BOOST_LIB_SUFFIX) \1/' src/makefile.unix
+	fi
 }
 
 src_compile() {
