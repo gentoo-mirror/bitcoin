@@ -12,6 +12,7 @@ inherit db-use eutils qt4-r2 versionator
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+	1stclassmsg? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/1stclassmsg/0.7.1-1stclassmsg.patch.xz )
 "
 
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
@@ -43,6 +44,7 @@ DOCS="doc/README"
 S="${WORKDIR}/bitcoin-bitcoind-stable"
 
 src_prepare() {
+	use 1stclassmsg && epatch "${WORKDIR}/0.7.1-1stclassmsg.patch"
 	cd src || die
 
 	local filt= yeslang= nolang=
