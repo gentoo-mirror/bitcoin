@@ -71,6 +71,11 @@ DEPEND="${DEPEND}
 	)
 "
 
+src_prepare() {
+	epatch "${FILESDIR}/3.1.0-Bugfix-opencl-Build-fpgautils-even-if-OpenCL-is-the-.patch"
+	NOSUBMODULES=1 ./autogen.sh
+}
+
 src_configure() {
 	local CFLAGS="${CFLAGS}"
 	use hardened && CFLAGS="${CFLAGS} -nopie"
