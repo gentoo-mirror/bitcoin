@@ -73,6 +73,7 @@ DEPEND="${DEPEND}
 
 src_prepare() {
 	epatch "${FILESDIR}/3.1.0-Bugfix-opencl-Build-fpgautils-even-if-OpenCL-is-the-.patch"
+	epatch "${FILESDIR}/3.1.0-Bugfix-opencl-Add-missing-include-for-fpgautils.h-ne.patch"
 	NOSUBMODULES=1 ./autogen.sh
 }
 
