@@ -24,6 +24,7 @@ DEPEND="dev-libs/crypto++
 	x11-misc/xdg-utils"
 
 RDEPEND="network? ( || ( net-p2p/bitcoind net-p2p/bitcoin-qt ) )
+	dev-python/psutil
 	${DEPEND}"
 
 src_prepare() {
