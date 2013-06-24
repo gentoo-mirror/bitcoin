@@ -96,18 +96,6 @@ src_configure() {
 
 src_install() {
 	emake install DESTDIR="$D"
-	if ! use avalon; then
-		rm "${D}/usr/share/doc/${PF}/README.ASIC"
-	fi
-	if ! { use modminer || use bitforce || use icarus || use ztex; }; then
-		rm "${D}/usr/share/doc/${PF}/README.FPGA"
-	fi
-	if ! use opencl; then
-		rm "${D}/usr/share/doc/${PF}/README.GPU"
-	fi
-	if ! use scrypt; then
-		rm "${D}/usr/share/doc/${PF}/README.scrypt"
-	fi
 	if ! use examples; then
 		rm -r "${D}/usr/share/doc/${PF}/rpc-examples"
 	fi
