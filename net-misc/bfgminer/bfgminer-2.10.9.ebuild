@@ -136,7 +136,7 @@ src_install() {
 	fi
 	if use examples; then
 		docinto examples
-		dodoc api-example.php miner.php API.java api-example.c
+		dodoc api-example.php miner.php api-example.c
 	fi
 	cd libblkmaker
 	emake DESTDIR="$D" install
