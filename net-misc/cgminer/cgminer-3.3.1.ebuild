@@ -8,7 +8,10 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Bitcoin CPU/GPU/FPGA/ASIC miner in C"
 HOMEPAGE="http://bitcointalk.org/?topic=28402.msg357369 http://github.com/ckolivas/cgminer"
-SRC_URI="https://github.com/ckolivas/cgminer/archive/v${PV}.tar.gz"
+# this version based on GIT revision number, author forgot to add a release tag ...
+GIT_REVISION="9f15a08f2aaaf97b19443bdcf0bfef6886aeb361"
+SRC_URI="https://github.com/ckolivas/cgminer/archive/${GIT_REVISION}.tar.gz -> cgminer-${PV}.tar.gz"
+S="${WORKDIR}/cgminer-${GIT_REVISION}"
 
 LICENSE="GPL-3"
 SLOT="0"
