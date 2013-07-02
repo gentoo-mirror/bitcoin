@@ -6,7 +6,7 @@ EAPI=5
 
 inherit autotools flag-o-matic
 
-DESCRIPTION="Bitcoin CPU/GPU/FPGA miner in C"
+DESCRIPTION="Bitcoin CPU/GPU/FPGA/ASIC miner in C"
 HOMEPAGE="http://bitcointalk.org/?topic=28402.msg357369 http://github.com/ckolivas/cgminer"
 SRC_URI="https://github.com/ckolivas/cgminer/archive/v${PV}.tar.gz"
 
@@ -14,11 +14,10 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc examples hardened ncurses opencl adl scrypt
-	-avalon -bflsc -bitforce -icarus -modminer -ztex"
+	avalon bflsc bitforce icarus modminer ztex"
 
 REQUIRED_USE="|| ( opencl avalon bflsc bitforce icarus modminer ztex )
 	adl? ( opencl )
-	opencl? ( ncurses )
 	scrypt? ( opencl )"
 
 DEPEND="net-misc/curl
@@ -26,6 +25,11 @@ DEPEND="net-misc/curl
 	adl? ( x11-libs/amd-adl-sdk )
 	ncurses? ( sys-libs/ncurses )
 	opencl? ( virtual/opencl )
+	avalon? ( virtual/libusb:1 )
+	bflsc? ( virtual/libusb:1 )
+	bitforce? ( virtual/libusb:1 )
+	icarus? ( virtual/libusb:1 )
+	modminer? ( virtual/libusb:1 )
 	ztex? (	virtual/libusb:1 )"
 RDEPEND="${DEPEND}"
 
@@ -56,7 +60,8 @@ src_install() { # How about using some make install?
 	if use doc; then
 		dodoc AUTHORS NEWS README API-README
 		use scrypt && dodoc SCRYPT-README
-		use icarus || use bitforce && dodoc FPGA-README
+		use icarus || use bitforce || use ztex || use modminer && dodoc FPGA-README
+		use avalon || use bflsc && dodoc ASIC-README
 	fi
 
 	if use modminer; then
