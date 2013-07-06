@@ -18,9 +18,9 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-RDEPEND="dev-python/matplotlib[qt4]
-		 dev-python/numpy
-		 dev-python/PyQt4"
+RDEPEND="dev-python/matplotlib[qt4,${PYTHON_USEDEP}]
+		 dev-python/numpy[${PYTHON_USEDEP}]
+		 dev-python/PyQt4[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}"
 
 pkg_preinst() {
