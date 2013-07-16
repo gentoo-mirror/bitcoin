@@ -20,7 +20,7 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="examples ipv6 logrotate upnp"
+IUSE="bash-completion examples ipv6 logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -103,6 +103,11 @@ src_install() {
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
 	dodoc doc/README.md doc/release-notes.md
+
+	if use bash-completion; then
+		insinto /usr/share/bash-completion
+		newins contrib/bitcoind.bash-completion bitcoind
+	fi
 
 	if use examples; then
 		docinto examples
