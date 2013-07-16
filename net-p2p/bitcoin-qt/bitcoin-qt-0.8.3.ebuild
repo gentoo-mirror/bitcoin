@@ -118,6 +118,8 @@ src_install() {
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
 	make_desktop_entry ${PN} "Bitcoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Network;P2P"
 	
+	doman contrib/debian/manpages/bitcoin-qt.1
+	
 	if use kde; then
 		insinto /usr/share/kde4/services
 		doins contrib/debian/bitcoin-qt.protocol
