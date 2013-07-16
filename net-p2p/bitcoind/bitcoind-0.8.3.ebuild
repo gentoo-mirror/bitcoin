@@ -103,6 +103,7 @@ src_install() {
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
 	dodoc doc/README.md doc/release-notes.md
+	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
 
 	if use bash-completion; then
 		insinto /usr/share/bash-completion
