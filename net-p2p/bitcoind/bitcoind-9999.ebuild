@@ -22,7 +22,7 @@ EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/b
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="examples ipv6 logrotate upnp"
+IUSE="bash-completion examples ipv6 logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -38,6 +38,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
+	sys-apps/sed
 "
 
 pkg_setup() {
@@ -49,6 +50,10 @@ pkg_setup() {
 src_prepare() {
 	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
 	rm -r src/leveldb
+
+	if has_version '>=dev-libs/boost-1.52'; then
+		sed -i 's/\(-l db_cxx\)/-l boost_chrono$(BOOST_LIB_SUFFIX) \1/' src/makefile.unix
+	fi
 }
 
 src_compile() {
@@ -97,7 +102,13 @@ src_install() {
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
-	dodoc doc/README
+	dodoc doc/README.md doc/release-notes.md
+	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
+
+	if use bash-completion; then
+		insinto /usr/share/bash-completion
+		newins contrib/bitcoind.bash-completion bitcoind
+	fi
 
 	if use examples; then
 		docinto examples

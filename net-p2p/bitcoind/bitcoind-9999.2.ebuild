@@ -19,7 +19,7 @@ EGIT_BRANCH='next-test'
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="examples ipv6 logrotate upnp"
+IUSE="bash-completion examples ipv6 logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -31,15 +31,25 @@ RDEPEND="
 		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
+	=dev-libs/leveldb-1.9.0*
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
+	sys-apps/sed
 "
 
 pkg_setup() {
 	local UG='bitcoin'
 	enewgroup "${UG}"
 	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
+}
+
+src_prepare() {
+	rm -r src/leveldb
+
+	if has_version '>=dev-libs/boost-1.52'; then
+		sed -i 's/\(-l db_cxx\)/-l boost_chrono$(BOOST_LIB_SUFFIX) \1/' src/makefile.unix
+	fi
 }
 
 src_compile() {
@@ -58,6 +68,8 @@ src_compile() {
 		OPTS+=(USE_UPNP=)
 	fi
 	use ipv6 || OPTS+=("USE_IPV6=-")
+
+	OPTS+=("USE_SYSTEM_LEVELDB=1")
 
 	cd src || die
 	emake -f makefile.unix "${OPTS[@]}" ${PN}
@@ -86,11 +98,17 @@ src_install() {
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
-	dodoc doc/README
+	dodoc doc/README.md doc/release-notes.md
+	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
+
+	if use bash-completion; then
+		insinto /usr/share/bash-completion
+		newins contrib/bitcoind.bash-completion bitcoind
+	fi
 
 	if use examples; then
 		docinto examples
-		dodoc -r contrib/{bitrpc,pyminer,wallettools}
+		dodoc -r contrib/{bitrpc,pyminer,spendfrom,tidy_datadir.sh,wallettools}
 	fi
 
 	if use logrotate; then
