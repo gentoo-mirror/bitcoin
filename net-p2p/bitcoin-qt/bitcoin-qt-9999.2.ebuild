@@ -6,8 +6,8 @@ EAPI=4
 
 DB_VER="4.8"
 
-LANGS="bg ca_ES cs da de el_GR en es es_CL et eu_ES fa fa_IR fi fr fr_CA he hr hu it lt nb nl pl pt_BR pt_PT ro_RO ru sk sr sv tr uk zh_CN zh_TW"
-inherit db-use eutils qt4-r2 git-2 versionator
+LANGS="af_ZA ar bg bs ca ca_ES cs cy da de el_GR en eo es es_CL et eu_ES fa fa_IR fi fr fr_CA gu_IN he hi_IN hr hu it ja la lt lv_LV nb nl pl pt_BR pt_PT ro_RO ru sk sr sv th_TH tr uk zh_CN zh_TW"
+inherit db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
@@ -20,7 +20,7 @@ EGIT_BRANCH='next-test'
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS=""
-IUSE="$IUSE 1stclassmsg dbus ipv6 +qrcode upnp"
+IUSE="$IUSE 1stclassmsg dbus ipv6 kde +qrcode upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -32,6 +32,7 @@ RDEPEND="
 		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
+	=dev-libs/leveldb-1.9.0*[-snappy]
 	dev-qt/qtgui:4
 	dbus? (
 		dev-qt/qtdbus:4
@@ -41,9 +42,11 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-DOCS="doc/README"
+DOCS="doc/README.md doc/release-notes.md"
 
 src_prepare() {
+	rm -r src/leveldb
+
 	cd src || die
 
 	local filt= yeslang= nolang=
@@ -84,14 +87,16 @@ src_configure() {
 	use 1stclassmsg && OPTS+=("FIRST_CLASS_MESSAGING=1")
 	use ipv6 || OPTS+=("USE_IPV6=-")
 
+	OPTS+=("USE_SYSTEM_LEVELDB=1")
+
 	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
 	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
 
-	eqmake4 "${PN}.pro" "${OPTS[@]}"
-}
+	if has_version '>=dev-libs/boost-1.52'; then
+		OPTS+=("LIBS+=-lboost_chrono\$\$BOOST_LIB_SUFFIX")
+	fi
 
-src_compile() {
-	emake
+	eqmake4 "${PN}.pro" "${OPTS[@]}"
 }
 
 src_test() {
@@ -106,4 +111,25 @@ src_install() {
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
 	make_desktop_entry ${PN} "Bitcoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Network;P2P"
+
+	doman contrib/debian/manpages/bitcoin-qt.1
+
+	if use kde; then
+		insinto /usr/share/kde4/services
+		doins contrib/debian/bitcoin-qt.protocol
+	fi
+}
+
+update_caches() {
+	gnome2_icon_cache_update
+	fdo-mime_desktop_database_update
+	buildsycoca
+}
+
+pkg_postinst() {
+	update_caches
+}
+
+pkg_postrm() {
+	update_caches
 }
