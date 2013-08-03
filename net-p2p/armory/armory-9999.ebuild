@@ -20,7 +20,7 @@ IUSE="network"
 DEPEND="dev-libs/crypto++
 	dev-python/PyQt4
 	dev-lang/swig
-	dev-python/twisted
+	dev-python/twisted-core
 	x11-misc/xdg-utils"
 
 RDEPEND="network? ( || ( net-p2p/bitcoind net-p2p/bitcoin-qt ) )
