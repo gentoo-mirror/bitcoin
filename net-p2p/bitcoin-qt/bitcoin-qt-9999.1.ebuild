@@ -112,7 +112,7 @@ src_install() {
 	dobin ${PN}
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
-	make_desktop_entry ${PN} "Bitcoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Network;P2P"
+	make_desktop_entry "${PN} %u" "Bitcoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Network;P2P" "MimeType=x-scheme-handler/bitcoin;"
 
 	doman contrib/debian/manpages/bitcoin-qt.1
 

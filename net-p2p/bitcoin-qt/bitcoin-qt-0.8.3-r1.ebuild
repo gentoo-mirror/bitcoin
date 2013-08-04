@@ -7,19 +7,21 @@ EAPI=4
 DB_VER="4.8"
 
 LANGS="af_ZA ar bg bs ca ca_ES cs cy da de el_GR en eo es es_CL et eu_ES fa fa_IR fi fr fr_CA gu_IN he hi_IN hr hu it ja la lt lv_LV nb nl pl pt_BR pt_PT ro_RO ru sk sr sv th_TH tr uk zh_CN zh_TW"
-inherit db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2 versionator
+inherit db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2 versionator
+
+MyPV="${PV/_/}"
+MyPN="bitcoin"
+MyP="${MyPN}-${MyPV}"
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="
+SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
+	1stclassmsg? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/1stclassmsg/0.8.2-1stclassmsg.patch.xz )
 "
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://gitorious.org/~Luke-Jr/bitcoin/luke-jr-bitcoin.git https://git.gitorious.org/~Luke-Jr/bitcoin/luke-jr-bitcoin.git"
-EGIT_BRANCH='next-test'
 
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="$IUSE 1stclassmsg dbus ipv6 kde +qrcode upnp"
 
 RDEPEND="
@@ -44,7 +46,11 @@ DEPEND="${RDEPEND}
 
 DOCS="doc/README.md doc/release-notes.md"
 
+S="${WORKDIR}/${MyP}"
+
 src_prepare() {
+	use 1stclassmsg && epatch "${WORKDIR}/0.8.2-1stclassmsg.patch"
+	epatch "${FILESDIR}/0.8.2-sys_leveldb.patch"
 	rm -r src/leveldb
 
 	cd src || die
@@ -111,9 +117,9 @@ src_install() {
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
 	make_desktop_entry "${PN} %u" "Bitcoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Network;P2P" "MimeType=x-scheme-handler/bitcoin;"
-
+	
 	doman contrib/debian/manpages/bitcoin-qt.1
-
+	
 	if use kde; then
 		insinto /usr/share/kde4/services
 		doins contrib/debian/bitcoin-qt.protocol
