@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python{3_1,3_2,3_3} )
 
 inherit eutils git-r3 java-pkg-opt-2 autotools-utils python-r1
 
-DESCRIPTION="Open Transactions is a system for issuing and manipulating digital assets."
+DESCRIPTION="Financial cryptography library, API, CLI, and prototype server."
 HOMEPAGE="http://opentransactions.org"
 EGIT_REPO_URI="git://github.com/FellowTraveler/Open-Transactions.git \
 			   https://github.com/FellowTraveler/Open-Transactions.git"
@@ -28,10 +28,11 @@ COMMON_DEP="dev-libs/boost
 			<net-libs/zeromq-3.0.0
 			gnome-keyring? ( gnome-base/gnome-keyring )
 			kwallet? ( kde-base/kwallet )
-			python? ( ${PYTHON_DEPS} )
-"
-RDEPEND="java? ( >=virtual/jre-1.4 )
+			python? ( ${PYTHON_DEPS} )"
+
+RDEPEND="java? ( >=virtual/jre-1.4 sys-apps/ed )
 		 ${COMMON_DEP}"
+
 DEPEND="java? ( dev-lang/swig )
 		java? ( >=virtual/jdk-1.4 )
 		python? ( dev-lang/swig )

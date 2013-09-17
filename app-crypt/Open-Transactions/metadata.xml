@@ -2,7 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 <maintainer>
-	<email>gitorious@emery.neomailbox.net</email>
+	<email>emery@fuzzlabs.org</email>
 </maintainer>
 <use>
 	<flag name="doc">Include doc strings in python SWIG wrapper.</flag>
