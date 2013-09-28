@@ -6,10 +6,10 @@ EAPI=5
 
 PYTHON_COMPAT=( python{3_1,3_2,3_3} )
 
-inherit eutils git-2 java-pkg-opt-2 autotools-utils python-r1
+inherit eutils git-r3 java-pkg-opt-2 autotools-utils python-r1
 
 DESCRIPTION="Open Transactions is a system for issuing and manipulating digital assets."
-HOMEPAGE="https://github.com/FellowTraveler/Open-Transactions"
+HOMEPAGE="http://opentransactions.org"
 EGIT_REPO_URI="git://github.com/FellowTraveler/Open-Transactions.git \
 			   https://github.com/FellowTraveler/Open-Transactions.git"
 LICENSE="AGPL-3"
