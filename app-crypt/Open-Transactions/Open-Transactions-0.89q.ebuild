@@ -4,7 +4,7 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python{3_1,3_2,3_3} )
+PYTHON_COMPAT=( python{2_6,2_7} )
 
 inherit eutils git-r3 java-pkg-opt-2 autotools-utils python-r1
 
@@ -27,13 +27,12 @@ COMMON_DEP="dev-libs/boost
 			>=dev-libs/protobuf-2.4.1
 			<net-libs/zeromq-3.0.0
 			gnome-keyring? ( gnome-base/gnome-keyring )
-			kwallet? ( kde-base/kwallet )
-			python? ( ${PYTHON_DEPS} )"
+			kwallet? ( kde-base/kwallet )"
 
-RDEPEND="java? ( >=virtual/jre-1.4 sys-apps/ed )
+RDEPEND="java? ( >=virtual/jre-1.4 )
 		 ${COMMON_DEP}"
 
-DEPEND="java? ( dev-lang/swig )
+DEPEND="java? ( dev-lang/swig sys-apps/ed )
 		java? ( >=virtual/jdk-1.4 )
 		python? ( dev-lang/swig )
 		${COMMON_DEP}"
@@ -42,7 +41,6 @@ AUTOTOOLS_AUTORECONF=0
 
 pkg_setup() {
 	use java && java-pkg-opt-2_pkg_setup
-	use python && python-r1_pkg_setup
 }
 
 src_prepare() {
@@ -76,10 +74,9 @@ src_configure() {
 src_install() {
 	autotools-utils_src_install
 	if use python ; then
-		insinto $(python_get_sitedir)
-		doins swig/glue/python/otapi.py
-		dosym ../../_otapi.so $(python_get_sitedir)/
-		python_optimize
+		python_export_best
+		python_domodule swig/glue/python/otapi.py
+		dosym ../../_otapi.so "$(python_get_sitedir)/_otapi.so"
 	fi
 	cd docs
 	for docfile in ./*.txt ; do
