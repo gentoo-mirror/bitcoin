@@ -4,7 +4,7 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python{3_1,3_2,3_3} )
+PYTHON_COMPAT=( python{2_6,2_7} )
 
 inherit eutils git-r3 java-pkg-opt-2 autotools-utils python-r1
 
@@ -16,7 +16,7 @@ LICENSE="AGPL-3"
 
 SLOT="0"
 KEYWORDS=""
-IUSE="doc gnome-keyring java kwallet python"
+IUSE="doc gnome-keyring go java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
 COMMON_DEP="dev-libs/boost
@@ -26,45 +26,28 @@ COMMON_DEP="dev-libs/boost
 			>=dev-libs/protobuf-2.4.1
 			<net-libs/zeromq-3.0.0
 			gnome-keyring? ( gnome-base/gnome-keyring )
-			kwallet? ( kde-base/kwallet )
-			python? ( ${PYTHON_DEPS} )"
+			kwallet? ( kde-base/kwallet )"
 
-RDEPEND="java? ( >=virtual/jre-1.4 sys-apps/ed )
+RDEPEND="java? ( >=virtual/jre-1.4 )
 		 ${COMMON_DEP}"
 
-DEPEND="java? ( dev-lang/swig )
-		java? ( >=virtual/jdk-1.4 )
-		python? ( dev-lang/swig )
+DEPEND="java? ( >=virtual/jdk-1.4 )
 		${COMMON_DEP}"
 
 AUTOTOOLS_AUTORECONF=0
 
 pkg_setup() {
 	use java && java-pkg-opt-2_pkg_setup
-	use python && python-r1_pkg_setup
 }
 
 src_prepare() {
 	autotools-utils_src_prepare
-
-	if use doc || use python; then
-		sed -i '14i%feature("autodoc","1") ;' swig/otapi/OTAPI.i
-	fi
-
-	if use java || use python; then
-		ebegin "Regenerating SWIG wrappers"
-		use java && WRAPPERS="${WRAPPERS} java"
-		use python && WRAPPERS="${WRAPPERS} python"
-		cd swig
-		sed -i "s/csharp java perl5 php python ruby tcl d/${WRAPPERS}/g" buildwrappers.sh
-		./buildwrappers.sh
-		eend $?
-	fi
 }
 
 src_configure() {
 	use java && local JAVAC="javac"
 	local myeconfargs=(
+		$(use_with go)
 		$(use_with java)
 		$(use_with python))
 	use gnome-keyring && myeconfargs=(${myeconfargs[@]} '--with-keyring=gnome')
@@ -75,11 +58,11 @@ src_configure() {
 src_install() {
 	autotools-utils_src_install
 	if use python ; then
-		insinto $(python_get_sitedir)
-		doins swig/glue/python/otapi.py
-		dosym ../../_otapi.so $(python_get_sitedir)/
-		python_optimize
+		python_export_best
+		python_domodule swig/glue/python/otapi.py
+		dosym ../../_otapi.so "$(python_get_sitedir)/_otapi.so"
 	fi
+	dodoc README.md
 	cd docs
 	for docfile in ./*.txt ; do
 		if [ ${docfile/#"INSTALL"/""} == ${docfile} ] ; then

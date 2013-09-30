@@ -12,12 +12,12 @@ DESCRIPTION="Financial cryptography library, API, CLI, and prototype server."
 HOMEPAGE="http://opentransactions.org"
 EGIT_REPO_URI="git://github.com/FellowTraveler/Open-Transactions.git \
 			   https://github.com/FellowTraveler/Open-Transactions.git"
-EGIT_COMMIT="7baa743c10282aa0ff48fb3527d9a2732059383b"
+EGIT_COMMIT="29e9c716381fc6cea292f751614cf83f486103af"
 LICENSE="AGPL-3"
 
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="doc gnome-keyring java kwallet python"
+IUSE="doc gnome-keyring go java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
 COMMON_DEP="dev-libs/boost
@@ -48,6 +48,7 @@ src_prepare() {
 src_configure() {
 	use java && local JAVAC="javac"
 	local myeconfargs=(
+		$(use_with go)
 		$(use_with java)
 		$(use_with python))
 	use gnome-keyring && myeconfargs=(${myeconfargs[@]} '--with-keyring=gnome')
