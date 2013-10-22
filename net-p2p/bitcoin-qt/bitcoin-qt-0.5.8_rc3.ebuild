@@ -11,7 +11,7 @@ inherit db-use eutils qt4-r2 versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+SRC_URI="https://gitorious.org/bitcoin/bitcoind-stable/archive/v${PV/_/}.tar.gz -> bitcoin-v${PV}.tgz
 	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.5.6-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
 "
 

@@ -10,7 +10,7 @@ inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+SRC_URI="https://gitorious.org/bitcoin/${PN}-stable/archive/v${PV/_/}.tar.gz -> bitcoin-v${PV}.tgz
 	bip16? ( http://luke.dashjr.org/programs/bitcoin/files/bip16/0.5.6-Minimal-support-for-mining-BIP16-pay-to-script-hash-.patch.xz )
 "
 

@@ -10,7 +10,7 @@ inherit db-use eutils versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v${PV/_/} -> bitcoin-v${PV}.tgz
+SRC_URI="https://gitorious.org/bitcoin/${PN}-stable/archive/v${PV/_/}.tar.gz -> bitcoin-v${PV}.tgz
 	logrotate? ( https://github.com/bitcoin/bitcoin/commit/9af080c351c40a4f56d37174253d33a9f4ffdb69.diff -> 0.6.3-reopen_log_file.patch )
 "
 

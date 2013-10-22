@@ -8,7 +8,7 @@ DESCRIPTION="C implementation of getblocktemplate (BIP 22)"
 HOMEPAGE="https://gitorious.org/bitcoin/libblkmaker"
 LICENSE="MIT"
 
-SRC_URI="https://gitorious.org/bitcoin/${PN}/archive-tarball/v${PV} -> ${P}.tgz"
+SRC_URI="https://gitorious.org/bitcoin/${PN}/archive/v${PV}.tar.gz -> ${P}.tgz"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 IUSE=""
