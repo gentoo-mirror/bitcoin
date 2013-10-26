@@ -21,6 +21,7 @@
 		<flag name='littlefury'>Enable support for mining with LittleFury USB sticks</flag>
 		<flag name='metabank'>Enable support for mining on Metabank host Raspberry Pi</flag>
 		<flag name='modminer'>Enable support for mining with ModMiner FPGAs</flag>
+		<flag name='nanofury'>Enable support for mining with NanoFury USB sticks</flag>
 		<flag name='opencl'>Enable support for mining with OpenCL-capable devices (GPUs)</flag>
 		<flag name='padlock'>Enable support for mining with VIA Padlock CPUs</flag>
 		<flag name='proxy'>Enable support for virtual proxy device</flag>
