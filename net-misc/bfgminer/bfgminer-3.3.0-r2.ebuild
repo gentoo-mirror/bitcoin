@@ -96,6 +96,8 @@ src_configure() {
 		else
 			with_curses='--with-curses=ncurses'
 		fi
+	else
+		with_curses='--without-curses'
 	fi
 
 	CFLAGS="${CFLAGS}" \
@@ -112,11 +114,10 @@ src_configure() {
 		$(use_enable littlefury) \
 		$(use_enable metabank) \
 		$(use_enable modminer) \
-		$(use_with ncurses curses) \
 		$(use_enable opencl) \
 		$(use_enable scrypt) \
 		--with-system-libblkmaker \
-		$with_curses
+		$with_curses \
 		$(use_with udev libudev) \
 		$(use_with lm_sensors sensors) \
 		$(use_with proxy_getwork libmicrohttpd) \

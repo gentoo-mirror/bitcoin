@@ -14,13 +14,22 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 
-IUSE="+adl avalon bitforce cpumining examples hardened icarus lm_sensors modminer ncurses +opencl scrypt +udev unicode x6500 ztex"
+# TODO: knc (needs i2c-tools header)
+IUSE="+adl avalon bitforce bfsb bigpic bitfury cpumining examples hardened icarus littlefury lm_sensors metabank modminer nanofury ncurses +opencl proxy proxy_getwork proxy_stratum scrypt +udev unicode x6500 ztex"
 REQUIRED_USE='
-	|| ( avalon bitforce cpumining icarus modminer opencl x6500 ztex )
+	|| ( avalon bitforce cpumining icarus modminer opencl proxy x6500 ztex )
 	adl? ( opencl )
+	bfsb? ( bitfury )
+	bigpic? ( bitfury )
+	littlefury? ( bitfury )
 	lm_sensors? ( opencl )
+	metabank? ( bitfury )
+	nanofury? ( bitfury )
 	scrypt? ( || ( cpumining opencl ) )
 	unicode? ( ncurses )
+	proxy? ( || ( proxy_getwork proxy_stratum ) )
+	proxy_getwork? ( proxy )
+	proxy_stratum? ( proxy )
 '
 
 DEPEND='
@@ -35,6 +44,15 @@ DEPEND='
 	)
 	lm_sensors? (
 		sys-apps/lm_sensors
+	)
+	nanofury? (
+		dev-libs/hidapi
+	)
+	proxy_getwork? (
+		net-libs/libmicrohttpd
+	)
+	proxy_stratum? (
+		dev-libs/libevent
 	)
 	x6500? (
 		virtual/libusb:1
@@ -83,6 +101,8 @@ src_configure() {
 		else
 			with_curses='--with-curses=ncurses'
 		fi
+	else
+		with_curses='--without-curses'
 	fi
 
 	CFLAGS="${CFLAGS}" \
@@ -91,16 +111,23 @@ src_configure() {
 		$(use_enable adl) \
 		$(use_enable avalon) \
 		$(use_enable bitforce) \
+		$(use_enable bfsb) \
+		$(use_enable bigpic) \
+		$(use_enable bitfury) \
 		$(use_enable cpumining) \
 		$(use_enable icarus) \
+		$(use_enable littlefury) \
+		$(use_enable metabank) \
 		$(use_enable modminer) \
-		$(use_with ncurses curses) \
+		$(use_enable nanofury) \
 		$(use_enable opencl) \
 		$(use_enable scrypt) \
 		--with-system-libblkmaker \
-		$with_curses
+		$with_curses \
 		$(use_with udev libudev) \
 		$(use_with lm_sensors sensors) \
+		$(use_with proxy_getwork libmicrohttpd) \
+		$(use_with proxy_stratum libevent) \
 		$(use_enable x6500) \
 		$(use_enable ztex)
 }
