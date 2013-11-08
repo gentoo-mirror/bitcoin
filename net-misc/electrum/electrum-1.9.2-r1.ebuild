@@ -17,7 +17,6 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="gtk qt4"
-REQUIRED_USE="|| ( gtk qt4 )"
 
 LANGS="br cs de eo es fr it lv nl ru sl vi zh"
 
@@ -28,7 +27,7 @@ unset X
 
 RDEPEND="
 	dev-python/setuptools
-	dev-python/ecdsa
+	>=dev-python/ecdsa-0.9
 	dev-python/slowaes
 	gtk? ( dev-python/pygtk:2 )
 	qt4? ( dev-python/PyQt4 )"
@@ -57,10 +56,18 @@ src_prepare() {
 
 	# Remove unrequested GUI implementations:
 	if use !gtk; then
-		sed -i "/'electrum_gui.gtk/d" setup.py	|| die
+		sed -i "/'electrum_gui.gtk/d" setup.py || die
 	fi
 	if use !qt4; then
-		sed -i "/'electrum_gui.qt/d" setup.py	|| die
+		sed -i "/'electrum_gui.qt/d" setup.py  || die
+	fi
+
+	if use !qt4; then
+		if use gtk; then
+			sed -i "s/config.get('gui','classic')/ config.get('gui','gtk')/" electrum || die
+		else
+			sed -i "s/config.get('gui','classic')/ config.get('gui','text')/" electrum || die
+		fi
 	fi
 
 	distutils-r1_src_prepare
