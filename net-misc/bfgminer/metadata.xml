@@ -19,6 +19,7 @@
 		<flag name='cpumining'>Enable support for mining with CPUs</flag>
 		<flag name='hashbuster'>Enable support for mining with HashBuster nano boards</flag>
 		<flag name='icarus'>Enable support for mining with Icarus-compatible devices (including Block Erupter Sapphire ASICs)</flag>
+		<flag name='klondike'>Enable support for mining with Klondike USB miners</flag>
 		<flag name='littlefury'>Enable support for mining with LittleFury USB sticks</flag>
 		<flag name='metabank'>Enable support for mining on Metabank host Raspberry Pi</flag>
 		<flag name='modminer'>Enable support for mining with ModMiner FPGAs</flag>
