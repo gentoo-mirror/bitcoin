@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="gtk qt4"
 
-LANGS="br cs de eo es fr it lv nl ru sl vi zh"
+LANGS="ar br cs de eo es fr hu id it ja ky lv nl pt ru sl ta vi zh"
 
 for X in ${LANGS}; do
 	IUSE+=" linguas_${X}"
