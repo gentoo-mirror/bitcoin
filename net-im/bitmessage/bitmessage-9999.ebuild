@@ -19,3 +19,18 @@ DEPEND="dev-python/PyQt4
 		dev-libs/openssl"
                                                                                                                                                                                                                               
 RDEPEND="${DEPEND}"
+
+pkg_setup() {
+        enewgroup bitmessage
+        enewuser bitmessage -1 -1 /var/lib/bitmessage bitmessage
+}
+
+src_install() {
+    emake DESTDIR="${D}" PREFIX="/usr" install
+    keepdir /var/lib/bitmessage
+    keepdir /var/log/bitmessage
+    # Install README and (Debian) changelog
+    dodoc README.md debian/changelog
+    doinitd ${FILESDIR}/bitmessage
+}
+
