@@ -1,0 +1,28 @@
+diff --git a/setup.py b/setup.py
+index 8c1dd0c..f92b056 100644
+--- a/setup.py
++++ b/setup.py
+@@ -16,15 +16,12 @@ if sys.version_info[:3] < (2, 6, 0):
+     sys.exit("Error: Electrum requires Python version >= 2.6.0...")
+ 
+ usr_share = '/usr/share'
+-if not os.access(usr_share, os.W_OK):
+-    usr_share = os.getenv("XDG_DATA_HOME", os.path.join(os.getenv("HOME"), ".local", "share"))
+ 
+ data_files = []
+ if (len(sys.argv) > 1 and (sys.argv[1] == "sdist")) or (platform.system() != 'Windows' and platform.system() != 'Darwin'):
+     print "Including all files"
+     data_files += [
+         (os.path.join(usr_share, 'applications/'), ['electrum.desktop']),
+-        (os.path.join(usr_share, 'app-install', 'icons/'), ['icons/electrum.png'])
+     ]
+     if not os.path.exists('locale'):
+         os.mkdir('locale')
+@@ -33,7 +30,6 @@ if (len(sys.argv) > 1 and (sys.argv[1] == "sdist")) or (platform.system() != 'Wi
+             data_files.append((os.path.join(usr_share, 'locale/%s/LC_MESSAGES' % lang), ['locale/%s/LC_MESSAGES/electrum.mo' % lang]))
+ 
+ data_files += [
+-    (util.appdata_dir(), ["data/README"]),
+     (os.path.join(util.appdata_dir(), "cleanlook"), [
+         "data/cleanlook/name.cfg",
+         "data/cleanlook/style.css"

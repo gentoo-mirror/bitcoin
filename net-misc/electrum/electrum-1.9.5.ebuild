@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/electrum/electrum-1.9.2.ebuild,v 1.1 2013/11/06 12:19:06 blueness Exp $
+# $Header: $
 
 EAPI="5"
 
@@ -16,14 +16,13 @@ SRC_URI="http://download.electrum.org/download/${MY_P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+LINGUAS="ar_SA de_DE es_ES hu_HU it_IT ky_KG nl_NL pt_BR ru_RU ta_IN zh_CN
+		 cs_CZ eo_UY fr_FR id_ID ja_JP lv_LV pl_PL pt_PT sl_SI vi_VN"
 IUSE="gtk qt4"
 
-LANGS="ar br cs de eo es fr hu id it ja ky lv nl pt ru sl ta vi zh"
-
-for X in ${LANGS}; do
-	IUSE+=" linguas_${X}"
+for lingua in ${LINGUAS}; do
+		IUSE+=" linguas_${lingua}"
 done
-unset X
 
 RDEPEND="
 	dev-python/setuptools
@@ -37,20 +36,22 @@ S=${WORKDIR}/${MY_P}
 DOCS="RELEASE-NOTES"
 
 src_prepare() {
-	# Prevent icon from being installed in the wrong location:
-	sed -i '/electrum\.png/ d' setup.py || die
-	sed -i "s:^Icon=.*:Icon=${PN}:" "${PN}.desktop" || die
+	# Prevent .desktop, icon, and translations from being installed in the wrong locations
+	epatch "${FILESDIR}"/setup.py-${PV}.patch
 
-	# Fix .desktop to pass validation
-	sed -i 's:bitcoin$:bitcoin;:' electrum.desktop || die
+	epatch "${FILESDIR}"/electrum.desktop-${PV}.patch
+	validate_desktop_entries
+
+	for i in locale/*; do
+		mv ${i} ${i::9}_${i:10} || die "failed to fix locale directory"
+	done
 
 	# Remove unrequested localization files:
-	local lang
-	for lang in ${LANGS#en}; do
-		if use linguas_$lang; then
-			test -f "locale/$lang/LC_MESSAGES/${PN}.mo" || die
+	for lang in ${LINGUAS}; do
+		if use linguas_${lang}; then
+			test -f "locale/${lang}/LC_MESSAGES/${PN}.mo" || die
 		else
-			rm -r "locale/$lang" || die
+			rm -r "locale/${lang}" || die
 		fi
 	done
 
@@ -74,7 +75,7 @@ src_prepare() {
 }
 
 src_install() {
-	doicon -s 64 icons/${PN}.png
+	doicon -s 128 icons/${PN}.png
 	distutils-r1_src_install
 }
 
