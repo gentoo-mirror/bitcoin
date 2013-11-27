@@ -18,7 +18,7 @@ KEYWORDS="-*"
 IUSE="network"
 
 DEPEND="dev-libs/crypto++
-	dev-python/PyQt4
+	dev-python/PyQt4[X]
 	dev-lang/swig
 	dev-python/twisted-core
 	x11-misc/xdg-utils"
