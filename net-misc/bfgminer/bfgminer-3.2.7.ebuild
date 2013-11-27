@@ -12,7 +12,7 @@ SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${PN}/${PV}/${P}.tbz2"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 arm mips ppc ppc64 x86"
 
 IUSE="+adl avalon bitforce cpumining examples hardened icarus lm_sensors modminer ncurses +opencl proxy scrypt +udev unicode x6500 ztex"
 REQUIRED_USE='
