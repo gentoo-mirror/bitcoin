@@ -30,6 +30,7 @@ REQUIRED_USE='
 	scrypt? ( || ( cpumining opencl ) )
 	twinfury? ( bitfury )
 	unicode? ( ncurses )
+	ncurses? ( unicode )
 	proxy? ( || ( proxy_getwork proxy_stratum ) )
 	proxy_getwork? ( proxy )
 	proxy_stratum? ( proxy )
