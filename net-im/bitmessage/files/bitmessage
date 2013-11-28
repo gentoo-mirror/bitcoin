@@ -1,0 +1,17 @@
+#!/sbin/runscript
+
+depend() {
+  need net
+}
+
+start() {
+  ebegin "Starting Bitmessage"
+  start-stop-daemon --start --user bitmessage:bitmessage --exec /usr/bin/pybitmessage --pidfile /var/run/bitmessage.pid --background --make-pidfile --stdout /var/log/bitmessage/bitmessage.log --stderr /var/log/bitmessage/bitmessage.log
+  eend $?
+}
+
+stop() {
+  ebegin "Stopping Bitmessage"
+  start-stop-daemon --stop --pidfile /var/run/bitmessage.pid
+  eend $?
+}
