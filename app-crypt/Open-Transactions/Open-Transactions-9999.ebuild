@@ -52,6 +52,7 @@ src_configure() {
 		$(use_with python))
 	use gnome-keyring && myeconfargs=(${myeconfargs[@]} '--with-keyring=gnome')
 	use kwallet && myeconfargs=(${myeconfargs[@]} '--with-keyring=kwallet')
+	myeconfargs=(${myeconfargs[@]} '--enable-cxx11')
 	autotools-utils_src_configure
 }
 
