@@ -17,8 +17,7 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="examples test"
 
-DEPEND="dev-libs/boost
-		sys-libs/readline"
+DEPEND="sys-libs/readline"
 RDEPEND="sys-libs/readline"
 
 S="${WORKDIR}/${P}-Source"
