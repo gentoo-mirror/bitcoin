@@ -16,7 +16,7 @@ EGIT_COMMIT="645243028271104891a324784e71c549bd6f32dd"
 LICENSE="AGPL-3"
 
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 IUSE="doc gnome-keyring go java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
