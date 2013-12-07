@@ -19,8 +19,8 @@ IUSE="debug doc"
 RDEPEND="app-crypt/Open-Transactions[java]"
 
 DEPEND="app-crypt/Open-Transactions[java]
-        dev-qt/qtgui:4
-        dev-qt/qtsql:4
+        dev-qt/qtgui:4 
+        dev-qt/qtsql:4 
         dev-qt/qtcore:4"
 
 PATCHES=(
@@ -39,9 +39,17 @@ src_compile() {
 src_install() {   
     cd "${S}"/src/ || die
     emake DESTDIR="${D}" PREFIX="/usr" INSTALL_ROOT="${D}" install || die
+    insinto /usr/share/applications
+    doins "${FILESDIR}/moneychanger.desktop" || die
+    insinto /usr/share/moneychanger/img/
+    doins "${FILESDIR}/moneychanger_icon_64x64.png" || die
     dobin "${S}"/src/moneychanger/moneychanger-qt || die
     dodoc "${S}"/documentation/presentable_documentation/{object_connections.pdf,object_permissions.png} || die
     dodoc "${S}"/documentation/source_documentation/{object_connections.odg,object_permissions.odg} || die 
     dodoc "${S}"/documentation/translating || die
+}
+
+pkg_postinst() {
+        xdg-icon-resource install --novendor --context apps --size 64 /usr/share/moneychanger/img/moneychanger_icon_64x64.png moneychangericon
 }
 
