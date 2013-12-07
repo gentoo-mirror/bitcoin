@@ -18,10 +18,9 @@ IUSE="debug doc"
 
 RDEPEND="app-crypt/Open-Transactions[java]"
 
-DEPEND="app-crypt/Open-Transactions[java] \
-        dev-qt/qtgui:4 \
-        dev-qt/qtsql:4 \    
-        dev-qt/qtnetwork:4 \
+DEPEND="app-crypt/Open-Transactions[java]
+        dev-qt/qtgui:4
+        dev-qt/qtsql:4
         dev-qt/qtcore:4"
 
 PATCHES=(
