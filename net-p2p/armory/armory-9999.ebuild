@@ -14,7 +14,7 @@ EGIT_BRANCH="testing"
 
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS=""
 IUSE="network"
 
 DEPEND="dev-libs/crypto++
@@ -44,4 +44,3 @@ pkg_postinst() {
 	xdg-icon-resource install --novendor --context apps --size 64 /usr/share/armory/img/armory_icon_64x64.png armoryofflineicon
 	xdg-icon-resource install --novendor --context apps --size 64 /usr/share/armory/img/armory_icon_green_64x64.png armorytestneticon
 }
-
