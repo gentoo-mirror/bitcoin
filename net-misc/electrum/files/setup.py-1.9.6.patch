@@ -1,5 +1,5 @@
 diff --git a/setup.py b/setup.py
-index 8c1dd0c..f92b056 100644
+index c2eba94..1e032d7 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -16,15 +16,12 @@ if sys.version_info[:3] < (2, 6, 0):
@@ -18,11 +18,11 @@ index 8c1dd0c..f92b056 100644
      ]
      if not os.path.exists('locale'):
          os.mkdir('locale')
-@@ -33,7 +30,6 @@ if (len(sys.argv) > 1 and (sys.argv[1] == "sdist")) or (platform.system() != 'Wi
-             data_files.append((os.path.join(usr_share, 'locale/%s/LC_MESSAGES' % lang), ['locale/%s/LC_MESSAGES/electrum.mo' % lang]))
+@@ -37,7 +34,6 @@ if not os.access(appdata_dir, os.W_OK):
+     appdata_dir = os.path.join(usr_share, "electrum")
  
  data_files += [
--    (util.appdata_dir(), ["data/README"]),
-     (os.path.join(util.appdata_dir(), "cleanlook"), [
+-    (appdata_dir, ["data/README"]),
+     (os.path.join(appdata_dir, "cleanlook"), [
          "data/cleanlook/name.cfg",
          "data/cleanlook/style.css"

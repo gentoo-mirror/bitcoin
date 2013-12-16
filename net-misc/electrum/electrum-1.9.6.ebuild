@@ -42,10 +42,6 @@ src_prepare() {
 	epatch "${FILESDIR}"/electrum.desktop-${PV}.patch
 	validate_desktop_entries
 
-	for i in locale/*; do
-		mv ${i} ${i::9}_${i:10} || die "failed to fix locale directory"
-	done
-
 	# Remove unrequested localization files:
 	for lang in ${LINGUAS}; do
 		if use linguas_${lang}; then
