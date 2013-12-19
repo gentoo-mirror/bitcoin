@@ -17,16 +17,18 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="${PYTHON_DEPS}
-	dev-libs/crypto++
-	dev-libs/leveldb
-	dev-python/PyQt4[X]
-	dev-lang/swig
-	dev-python/twisted-core
-	x11-misc/xdg-utils"
+COMMON_DEPEND="${PYTHON_DEPS}
+			   dev-libs/crypto++
+			   dev-libs/leveldb
+			   dev-python/PyQt4[X]
+			   dev-python/twisted-core"
 
-RDEPEND="${DEPEND}
-	dev-python/psutil"
+DEPEND="${COMMON_DEPEND}
+		dev-lang/swig
+		x11-misc/xdg-utils"
+
+RDEPEND="${COMMON_DEPEND}
+		 dev-python/psutil"
 
 S="${WORKDIR}/BitcoinArmory-${PV}-beta"
 
@@ -43,6 +45,7 @@ src_install() {
 
 	dodoc README
 
+	dodir /usr/share/armory/img
 	insinto /usr/share/armory/img
 	doins img/* /usr/share/armory/img
 
