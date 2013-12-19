@@ -45,19 +45,20 @@ src_install() {
 
 	dodoc README
 
-	dodir /usr/share/armory/img
 	insinto /usr/share/armory/img
-	doins img/* /usr/share/armory/img
+	doins img/*
 
 	domenu dpkgfiles/*.desktop
 	validate_desktop_entries
+
+	echo "python2 $(python_get_sitedir)/armory/ArmoryQt.py" > "${T}/armory"
+	dobin "${T}/armory"
 }
 
 pkg_postinst() {
 	xdg-icon-resource install --novendor --context apps --size 64 /usr/share/armory/img/armory_icon_64x64.png armoryicon
 	xdg-icon-resource install --novendor --context apps --size 64 /usr/share/armory/img/armory_icon_64x64.png armoryofflineicon
 	xdg-icon-resource install --novendor --context apps --size 64 /usr/share/armory/img/armory_icon_green_64x64.png armorytestneticon
-	fdo-mime_desktop_database_update
 }
 
 pkg_postrm() { fdo-mime_desktop_database_update; }
