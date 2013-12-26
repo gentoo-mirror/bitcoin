@@ -10,8 +10,8 @@ inherit eutils git-r3 java-pkg-opt-2 autotools-utils python-r1
 
 DESCRIPTION="Financial cryptography library, API, CLI, and prototype server."
 HOMEPAGE="http://opentransactions.org"
-EGIT_REPO_URI="git://github.com/FellowTraveler/Open-Transactions.git \
-			   https://github.com/FellowTraveler/Open-Transactions.git"
+EGIT_REPO_URI="git://github.com/Open-Transactions/Open-Transactions.git \
+			 https://github.com/Open-Transactions/Open-Transactions.git"
 LICENSE="AGPL-3"
 
 SLOT="0"
