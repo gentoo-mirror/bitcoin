@@ -10,10 +10,11 @@ DESCRIPTION="An intuitive QT/C++ system tray client for Open-Transactions."
 HOMEPAGE="http://opentransactions.org"
 EGIT_REPO_URI="git://github.com/Open-Transactions/Moneychanger.git \
 			 https://github.com/Open-Transactions/Moneychanger.git"
+EGIT_COMMIT="c14614e499c54d87074b551dd48468537cd41610"
 LICENSE="AGPL-3"
 
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 IUSE="doc"
 
 RDEPEND="app-crypt/Open-Transactions[java]"
