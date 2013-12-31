@@ -32,6 +32,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 		 ${COMMON_DEP}"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
+		 >=sys-devel/autoconf-2.65
 		${COMMON_DEP}"
 
 AUTOTOOLS_AUTORECONF=0
@@ -41,19 +42,28 @@ pkg_setup() {
 }
 
 src_prepare() {
+	local required_version="4.7"
+	einfo "checking current gcc profile"
+	if ! version_is_at_least ${required_version} $(gcc-version) ; then
+		eerror "${P} requires gcc-${required_version} or greater to build."
+		eerror "Have you gcc-config'ed to the latest version?"
+		die "current gcc profile is less than ${required_version}"
+	fi
+
 	autotools-utils_src_prepare
 }
 
 src_configure() {
 	use java && local JAVAC="javac"
 	local myeconfargs=(
+		--enable-cxx11
+		--disable-boost
 		$(use_with go)
 		$(use_with java)
-		$(use_with python))
-	use gnome-keyring && myeconfargs=(${myeconfargs[@]} '--with-keyring=gnome')
-	use kwallet && myeconfargs=(${myeconfargs[@]} '--with-keyring=kwallet')
-	myeconfargs=(${myeconfargs[@]} '--enable-cxx11')
-	myeconfargs=(${myeconfargs[@]} '--disable-boost')
+		$(use_with python)
+		$(use gnome-keyring && echo "--with-keyring=gnome")
+		$(use kwallet && echo "--with-keyring=kwallet")
+	)
 	autotools-utils_src_configure
 }
 
