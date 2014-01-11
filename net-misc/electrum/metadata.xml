@@ -15,7 +15,10 @@
 		<name>Maks Verver</name>
 	</maintainer>
 	<maintainer>
-		<email>emery@fuzzlabs.org</email>
+		<email>emery@vfemail.net</email>
 		<name>Emery Hemingway</name>
 	</maintainer>
+	<use>
+		<flag name='qrcode'>Enable QR code scanning with <pkg>media-gfx/zbar/</pkg></flag>
+	</use>
 </pkgmetadata>
