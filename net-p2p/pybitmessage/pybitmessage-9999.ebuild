@@ -4,12 +4,13 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
+PYTHON_REQ_USE="sqlite"
 
-inherit user eutils fdo-mime python-any-r1 git-2
+inherit user eutils fdo-mime python-single-r1 gnome2-utils git-2
 
 DESCRIPTION="Bitmessage is a P2P communications protocol used to send encrypted messages to another person or to many subscribers."
-HOMEPAGE="http://bitmessage.org"
+HOMEPAGE="https://bitmessage.org"
 
 EGIT_REPO_URI="git://github.com/Bitmessage/PyBitmessage.git"
 
@@ -19,19 +20,19 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE="doc X"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-COMMON_DEPEND="${PYTHON_DEPS}
-                           X? ( dev-python/PyQt4[X] )"
 
-DEPEND="${COMMON_DEPEND}
-		dev-libs/openssl"
-                                                                                                                                                                                                                              
-RDEPEND="${DEPEND}"
+DEPEND="${PYTHON_DEPS}"
+RDEPEND="${DEPEND}
+        dev-libs/openssl[-bindist]
+        dev-python/PyQt4[${PYTHON_USEDEP}]"
 
 pkg_setup() {
         enewgroup bitmessage
         enewuser bitmessage -1 -1 -1 bitmessage
 	esethome bitmessage /var/lib/bitmessage
 }
+
+src_compile() { :; }
 
 src_install() {
 	#python modules
@@ -54,6 +55,7 @@ src_install() {
 	if use doc ; then
 		dodoc ${S}/README.md ${S}/debian/changelog
 	fi
+        doman ${S}/man/*
 
 	keepdir /var/log/bitmessage
 
@@ -73,5 +75,31 @@ src_install() {
 	fperms 0660 /var/lib/bitmessage/.config/PyBitmessage/keys.dat.bootstrap /var/lib/bitmessage/.config/PyBitmessage/messages.dat.bootstrap
 }
 
-pkg_postrm() { fdo-mime_desktop_database_update; }
+pkg_preinst() {
+        gnome2_icon_savelist
+}
+
+pkg_postinst() {
+        gnome2_icon_cache_update
+
+	# Copy bootstrap configs into place IFF no existing configs exist.
+	# This allows PyBitmessage-Daemon to be run to set up API access before
+	# starting the daemon for the first time.
+
+	KEYS_DAT="/var/lib/bitmessage/.config/PyBitmessage/keys.dat"
+	MESSAGES_DAT="/var/lib/bitmessage/.config/PyBitmessage/messages.dat"
+
+        if [[ ! -e "${KEYS_DAT}" ]] ; then
+                cp -a "${KEYS_DAT}.bootstrap" "${KEYS_DAT}"
+        fi
+  
+        if [[ ! -e "${MESSAGES_DAT}" ]] ; then
+                cp -a "${MESSAGES_DAT}.bootstrap" "${MESSAGES_DAT}"
+        fi
+}
+
+pkg_postrm() {
+        gnome2_icon_cache_update
+	fdo-mime_desktop_database_update
+}
 

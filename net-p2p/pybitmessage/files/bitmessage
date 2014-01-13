@@ -9,17 +9,9 @@ depend() {
 
 start() {
 	ebegin "Starting Bitmessage"
-
-	if [[ ! -e "${KEYS_DAT}" ]] ; then
-		cp -a "${KEYS_DAT}.bootstrap" "${KEYS_DAT}"
-	fi
-  
-	if [[ ! -e "${MESSAGES_DAT}" ]] ; then
-		cp -a "${MESSAGES_DAT}.bootstrap" "${MESSAGES_DAT}"
-	fi
-  
 	start-stop-daemon --start --user bitmessage:bitmessage --exec /usr/bin/pybitmessage --pidfile /var/run/bitmessage.pid --background --make-pidfile --stdout /var/log/bitmessage/bitmessage.log --stderr /var/log/bitmessage/bitmessage.log
-	sleep 10
+	# make sure bitmessage has finished started up before continuing, to make sure bmwrapper will start correctly.
+	sleep 5
 	eend $?
 }
 
