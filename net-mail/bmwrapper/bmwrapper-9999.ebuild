@@ -6,33 +6,49 @@ EAPI=5
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit eutils python-any-r1 git-2
+inherit eutils python-single-r1 git-2
 
 DESCRIPTION="bmwrapper is a poorly hacked together python script to let Thunderbird and PyBitmessage communicate."
 HOMEPAGE="https://github.com/Arceliar/bmwrapper"
-EGIT_REPO_URI="git://github.com/Arceliar/bmwrapper"
+EGIT_REPO_URI="git://github.com/Arceliar/bmwrapper.git"
 EGIT_BRANCH="master"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE=""
 
-COMMON_DEPEND="${PYTHON_DEPS}"
+IUSE="doc"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND="${COMMON_DEPEND}
-		net-im/bitmessage"
+DEPEND="${PYTHON_DEPS}"
+RDEPEND="${DEPEND}
+        net-p2p/pybitmessage
+	net-misc/socat"
 
-RDEPEND="${COMMON_DEPEND}
-		net-im/bitmessage"
+src_compile() { :; }
 
 src_install() {
+	#python modules
+	
+	cd ${S}
+	python_setup
 	python_moduleinto ${PN}
-	python_domodule main.py bminterface.py incoming.py outgoing.py
+	python_domodule *.py
 
-	echo "#!/bin/sh" > "${T}/bmwrapper"
-	echo "exec python2 $(python_get_sitedir)/bmwrapper/main.py" >> "${T}/bmwrapper"
-	dobin "${T}/bmwrapper"
+	# Install README
+	if use doc ; then
+		dodoc README.md
+	fi
+
+	echo "#!/bin/bash" > "${T}/${PN}"
+	echo "exec python2 $(python_get_sitedir)/${PN}/main.py" >> "${T}/${PN}"
+	dobin "${T}/${PN}"
+
 	doinitd ${FILESDIR}/bmwrapper
-	doconfd ${FILESDIR}/bmwrapper.conf
+	newconfd ${FILESDIR}/bmwrapper.conf bmwrapper
+
+	LOG_DIR="/var/log/bmwrapper"
+	keepdir "${LOG_DIR}"
+	fowners bitmessage:bitmessage "${LOG_DIR}"
+	fperms 0770 "${LOG_DIR}"
 }
