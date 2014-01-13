@@ -4,7 +4,7 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit eutils python-any-r1 git-2
 
