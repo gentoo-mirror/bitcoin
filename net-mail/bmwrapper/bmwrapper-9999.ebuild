@@ -4,7 +4,7 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python{2_7} )
 
 inherit eutils python-any-r1 git-2
 
@@ -31,8 +31,8 @@ src_install() {
 	python_domodule main.py bminterface.py incoming.py outgoing.py
 
 	echo "#!/bin/sh" > "${T}/bmwrapper"
-	echo "exec python2 $(python_get_sitedir)/bmwrapper/main.py" > "${T}/bmwrapper"
+	echo "exec python2 $(python_get_sitedir)/bmwrapper/main.py" >> "${T}/bmwrapper"
 	dobin "${T}/bmwrapper"
 	doinitd ${FILESDIR}/bmwrapper
-	doconfd bmwrapper ${FILESDIR}/bmwrapper.conf
+	doconfd ${FILESDIR}/bmwrapper.conf
 }

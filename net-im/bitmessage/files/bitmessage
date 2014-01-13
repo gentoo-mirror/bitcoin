@@ -7,6 +7,7 @@ depend() {
 start() {
   ebegin "Starting Bitmessage"
   start-stop-daemon --start --user bitmessage:bitmessage --exec /usr/bin/pybitmessage --pidfile /var/run/bitmessage.pid --background --make-pidfile --stdout /var/log/bitmessage/bitmessage.log --stderr /var/log/bitmessage/bitmessage.log
+  sleep 10
   eend $?
 }
 
