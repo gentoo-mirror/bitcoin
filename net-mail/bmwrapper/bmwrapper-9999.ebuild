@@ -30,7 +30,9 @@ src_install() {
 	python_moduleinto ${PN}
 	python_domodule main.py bminterface.py incoming.py outgoing.py
 
-	echo "python2 $(python_get_sitedir)/bmwrapper/main.py 2>&1 | logger" > "${T}/bmwrapper"
+	echo "#!/bin/sh" > "${T}/bmwrapper"
+	echo "exec python2 $(python_get_sitedir)/bmwrapper/main.py" > "${T}/bmwrapper"
 	dobin "${T}/bmwrapper"
 	doinitd ${FILESDIR}/bmwrapper
+	doconfd bmwrapper ${FILESDIR}/bmwrapper.conf
 }
