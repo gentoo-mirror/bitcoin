@@ -20,7 +20,6 @@ IUSE="doc gnome-keyring go java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
 COMMON_DEP="dev-libs/boost
-			>dev-libs/chaiscript-5
 			dev-libs/msgpack
 			dev-libs/openssl:0
 			>=dev-libs/protobuf-2.4.1
