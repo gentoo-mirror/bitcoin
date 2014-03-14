@@ -12,7 +12,7 @@ DESCRIPTION="Financial cryptography library, API, CLI, and prototype server."
 HOMEPAGE="http://opentransactions.org"
 EGIT_REPO_URI="git://github.com/Open-Transactions/Open-Transactions.git \
 			 https://github.com/Open-Transactions/Open-Transactions.git"
-EGIT_COMMIT="5600378ea85e291b41a87efef8536d1799bef771"
+EGIT_COMMIT="adec807824040fe7216ece00484e1709e7ea26c8"
 LICENSE="AGPL-3"
 
 SLOT="0"
@@ -21,7 +21,6 @@ IUSE="doc gnome-keyring go java kwallet python"
 REQUIRED_USE="gnome-keyring? ( !kwallet ) kwallet? ( !gnome-keyring )"
 
 COMMON_DEP="dev-libs/boost
-			>dev-libs/chaiscript-5
 			dev-libs/msgpack
 			dev-libs/openssl:0
 			>=dev-libs/protobuf-2.4.1
@@ -59,6 +58,8 @@ src_configure() {
 	local myeconfargs=(
 		--enable-cxx11
 		--disable-boost
+		--with-script=chai5
+		--disable-cxxtr1
 		$(use_with go)
 		$(use_with java)
 		$(use_with python)
