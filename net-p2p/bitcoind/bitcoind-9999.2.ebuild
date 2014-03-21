@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit bash-completion-r1 db-use eutils git-2 versionator
+inherit bash-completion-r1 db-use eutils git-2 user versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"

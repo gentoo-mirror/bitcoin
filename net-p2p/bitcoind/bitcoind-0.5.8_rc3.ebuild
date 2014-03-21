@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit db-use eutils versionator
+inherit db-use eutils user versionator
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"

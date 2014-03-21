@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit bash-completion-r1 db-use eutils versionator
+inherit bash-completion-r1 db-use eutils user versionator
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"

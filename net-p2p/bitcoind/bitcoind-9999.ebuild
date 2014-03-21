@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit bash-completion-r1 db-use eutils git-2 versionator
+inherit bash-completion-r1 db-use eutils git-2 user versionator systemd
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -48,45 +48,25 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
+	epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
 	rm -r src/leveldb
-
-	if has_version '>=dev-libs/boost-1.52'; then
-		sed -i 's/\(-l db_cxx\)/-l boost_chrono$(BOOST_LIB_SUFFIX) \1/' src/makefile.unix
-	fi
+	./autogen.sh
 }
 
-src_compile() {
-	OPTS=()
-
-	OPTS+=("DEBUGFLAGS=")
-	OPTS+=("CXXFLAGS=${CXXFLAGS}")
-	OPTS+=("LDFLAGS=${LDFLAGS}")
-
-	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
-	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
-
-	if use upnp; then
-		OPTS+=(USE_UPNP=1)
-	else
-		OPTS+=(USE_UPNP=)
-	fi
-	use ipv6 || OPTS+=("USE_IPV6=-")
-
-	OPTS+=("USE_SYSTEM_LEVELDB=1")
-
-	cd src || die
-	emake -f makefile.unix "${OPTS[@]}" ${PN}
+src_configure() {
+	econf \
+		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
+		$(use_enable ipv6)  \
+		$(use_enable test tests)  \
+		--with-system-leveldb  \
+		--without-gui
 }
-
 src_test() {
-	cd src || die
-	emake -f makefile.unix "${OPTS[@]}" test_bitcoin
-	./test_bitcoin || die 'Tests failed'
+	src/test/test_bitcoin || die 'Tests failed'
 }
 
 src_install() {
-	dobin src/${PN}
+	einstall
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
@@ -95,6 +75,7 @@ src_install() {
 
 	newconfd "${FILESDIR}/bitcoin.confd" ${PN}
 	newinitd "${FILESDIR}/bitcoin.initd" ${PN}
+	systemd_dounit "${FILESDIR}/bitcoind.service"
 
 	keepdir /var/lib/bitcoin/.bitcoin
 	fperms 700 /var/lib/bitcoin
@@ -103,6 +84,7 @@ src_install() {
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
 	dodoc doc/README.md doc/release-notes.md
+	dodoc doc/assets-attribution.md doc/tor.md
 	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
 
 	if use bash-completion; then
@@ -111,7 +93,7 @@ src_install() {
 
 	if use examples; then
 		docinto examples
-		dodoc -r contrib/{bitrpc,pyminer,spendfrom,tidy_datadir.sh,wallettools}
+		dodoc -r contrib/{bitrpc,pyminer,qos,spendfrom,tidy_datadir.sh}
 	fi
 
 	if use logrotate; then
