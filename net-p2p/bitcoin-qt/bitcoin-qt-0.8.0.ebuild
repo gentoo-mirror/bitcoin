@@ -7,7 +7,7 @@ EAPI=4
 DB_VER="4.8"
 
 LANGS="bg ca_ES cs da de el_GR en es es_CL et eu_ES fa fa_IR fi fr fr_CA gu_IN he hi_IN hr hu it ja lt nb nl pl pt_BR pt_PT ro_RO ru sk sr sv th_TH tr uk zh_CN zh_TW"
-inherit db-use eutils qt4-r2 versionator
+inherit db-use eutils qt4-r2 user versionator
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"

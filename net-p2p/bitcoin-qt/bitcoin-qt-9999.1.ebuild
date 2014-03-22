@@ -7,7 +7,7 @@ EAPI=4
 DB_VER="4.8"
 
 LANGS="af_ZA ar bg bs ca ca_ES cs cy da de el_GR en eo es es_CL et eu_ES fa fa_IR fi fr fr_CA gu_IN he hi_IN hr hu it ja la lt lv_LV nb nl pl pt_BR pt_PT ro_RO ru sk sr sv th_TH tr uk zh_CN zh_TW"
-inherit db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2 versionator
+inherit db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2 user versionator
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
 HOMEPAGE="http://bitcoin.org/"
