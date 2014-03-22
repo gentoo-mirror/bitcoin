@@ -21,7 +21,7 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="$IUSE dbus ipv6 kde +qrcode upnp"
+IUSE="$IUSE dbus ipv6 kde +qrcode test upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -92,7 +92,7 @@ src_configure() {
 
 src_test() {
 	src/test/test_bitcoin || die 'Tests failed'
-	src/test/qt/test_bitcoin-qt || die 'Qt Tests failed'
+	src/qt/test/test_bitcoin-qt || die 'Qt Tests failed'
 }
 
 src_install() {

@@ -20,7 +20,7 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="bash-completion examples ipv6 logrotate upnp"
+IUSE="bash-completion examples ipv6 logrotate test upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]

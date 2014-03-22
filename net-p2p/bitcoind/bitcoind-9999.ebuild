@@ -22,7 +22,7 @@ EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/b
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="bash-completion examples ipv6 logrotate upnp"
+IUSE="bash-completion examples ipv6 logrotate test upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
