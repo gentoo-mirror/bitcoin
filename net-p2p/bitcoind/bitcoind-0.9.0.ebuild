@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit bash-completion-r1 db-use eutils user versionator systemd
+inherit autotools bash-completion-r1 db-use eutils user versionator systemd
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -50,7 +50,7 @@ pkg_setup() {
 src_prepare() {
 	epatch "${FILESDIR}/${PV}-sys_leveldb.patch"
 	rm -r src/leveldb
-	./autogen.sh
+	eautoreconf
 }
 
 src_configure() {
@@ -63,7 +63,7 @@ src_configure() {
 }
 
 src_test() {
-	src/test/test_bitcoin || die 'Tests failed'
+	emake check
 }
 
 src_install() {
