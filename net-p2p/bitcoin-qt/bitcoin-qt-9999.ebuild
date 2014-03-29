@@ -7,7 +7,7 @@ EAPI=4
 DB_VER="4.8"
 
 LANGS="ach af_ZA ar be_BY bg bs ca ca@valencia ca_ES cmn cs cy da de de_AT el_GR en eo es es_CL es_DO es_MX es_UY et eu_ES fa fa_IR fi fr fr_CA gl gu_IN he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru sah sk sl_SI sq sr sv th_TH tr uk ur_PK uz@Cyrl vi vi_VN zh_HK zh_CN zh_TW"
-inherit db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2 user versionator
+inherit autotools db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2 user versionator
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -75,7 +75,7 @@ src_prepare() {
 	sed "s/locale\/${filt}/bitcoin.qrc/" -i 'src/qt/Makefile.am'
 	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 
-	./autogen.sh
+	eautoreconf
 }
 
 src_configure() {
@@ -91,8 +91,7 @@ src_configure() {
 }
 
 src_test() {
-	src/test/test_bitcoin || die 'Tests failed'
-	src/qt/test/test_bitcoin-qt || die 'Qt Tests failed'
+	emake check
 }
 
 src_install() {
