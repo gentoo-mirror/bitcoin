@@ -22,7 +22,7 @@ EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/b
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="bash-completion examples ipv6 logrotate test upnp"
+IUSE="bash-completion examples ipv6 logrotate test upnp +wallet"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -33,7 +33,9 @@ RDEPEND="
 	upnp? (
 		net-libs/miniupnpc
 	)
-	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
+	wallet? (
+		sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
+	)
 	virtual/bitcoin-leveldb
 "
 DEPEND="${RDEPEND}
@@ -58,6 +60,7 @@ src_configure() {
 		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
 		$(use_enable ipv6)  \
 		$(use_enable test tests)  \
+		$(use_enable wallet)  \
 		--with-system-leveldb  \
 		--without-gui
 }
