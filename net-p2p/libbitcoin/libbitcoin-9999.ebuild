@@ -1,30 +1,29 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=4
 
-EGIT_REPO_URI="git://github.com/spesmilo/libbitcoin.git"
+EGIT_REPO_URI="https://github.com/spesmilo/libbitcoin.git"
 inherit git-2 autotools
 
-DESCRIPTION="Modular library for implementing Bitcoin (crypto-currency) tools and clients"
+DESCRIPTION="libbitcoin asynchronous C++ library for Bitcoin"
 HOMEPAGE="http://libbitcoin.org/"
 SRC_URI=""
 
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="berkdb postgres doc"
+IUSE="leveldb testnet debug doc"
 
 RDEPEND="
 	>=dev-libs/boost-1.48.0
-	postgres? ( >=dev-db/cppdb-0.0.3[postgres] )
-	berkdb? ( sys-libs/db:5.1[cxx] >=dev-libs/protobuf-2.3 )
 	>=dev-libs/openssl-0.9
+	leveldb? ( dev-libs/leveldb )
 "
 
 DEPEND="${RDEPEND}
-	>=sys-devel/gcc-4.6
+	>=sys-devel/gcc-4.7
 "
 
 src_prepare() {
@@ -32,7 +31,7 @@ src_prepare() {
 }
 
 src_configure() {
-	econf $(use_enable berkdb bdb) $(use_enable postgres) || die "Configure failed"
+	econf $(use_enable leveldb) $(use_enable testnet) $(use_enable debug) || die "Configure failed"
 }
 
 src_compile() {
