@@ -14,7 +14,7 @@ SRC_URI=""
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="leveldb testnet debug doc"
+IUSE="+leveldb testnet debug doc"
 
 RDEPEND="
 	>=dev-libs/boost-1.48.0
