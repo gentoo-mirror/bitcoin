@@ -5,7 +5,7 @@
 EAPI=5
 inherit eutils
 
-COMMIT="adc9e82f3a703920551339ffc4d764849f4a6ecf"
+COMMIT="3f16049a3affd1a3ce78614f9334340be31ed239"
 
 DESCRIPTION="anynomous secure microblogging platform based on Bitcoin and BitTorrent protocols"
 HOMEPAGE="http://twister.net.co"
@@ -33,7 +33,6 @@ S="${WORKDIR}/twister-core-${COMMIT}"
 
 src_prepare() {
 	sed s/'#include <db_cxx.h>'/'#include DB_CXX_HEADER'/ -i src/db.h
-	echo "twisterd_LDADD += @BOOST_CHRONO_LIB@" >> Makefile.am
 }
 
 src_configure() {
