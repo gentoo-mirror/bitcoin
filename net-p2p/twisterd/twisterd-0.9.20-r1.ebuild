@@ -5,7 +5,7 @@
 EAPI=5
 inherit eutils
 
-COMMIT="3f16049a3affd1a3ce78614f9334340be31ed239"
+COMMIT="03b13711908524f121047f0aef10c8685e4f9e1b"
 
 DESCRIPTION="anynomous secure microblogging platform based on Bitcoin and BitTorrent protocols"
 HOMEPAGE="http://twister.net.co"
@@ -30,10 +30,6 @@ DEPEND="${RDEPEND}
 "
 
 S="${WORKDIR}/twister-core-${COMMIT}"
-
-src_prepare() {
-	sed s/'#include <db_cxx.h>'/'#include DB_CXX_HEADER'/ -i src/db.h
-}
 
 src_configure() {
 	./autotool.sh || die
