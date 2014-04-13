@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/spesmilo/libwallet.git"
 DESCRIPTION="Wallet related functionality forked from libbitcoin"
 SRC_URI=""
 
-LICENSE="AGPL3"
+LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS=""
 IUSE=""
