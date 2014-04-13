@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-RDEPEND=">net-p2p/libbitcoin-2.0"
+RDEPEND=">=net-p2p/libbitcoin-2.1"
 
 DEPEND="${RDEPEND}"
 
