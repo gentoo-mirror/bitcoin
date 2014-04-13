@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=5
-inherit git-2 autotools
+inherit autotools
 
 COMMIT="v2.0"
 
