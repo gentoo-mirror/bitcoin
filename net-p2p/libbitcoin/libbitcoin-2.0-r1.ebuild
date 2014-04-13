@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
-
-EGIT_REPO_URI="https://github.com/spesmilo/libbitcoin.git"
-EGIT_COMMIT="v2.0"
+EAPI=5
 inherit git-2 autotools
+
+COMMIT="v2.0"
 
 DESCRIPTION="libbitcoin asynchronous C++ library for Bitcoin"
 HOMEPAGE="http://libbitcoin.org/"
-SRC_URI=""
+SRC_URI="https://github.com/spesmilo/libbitcoin/archive/${COMMIT}.tar.gz"
+RESTRICT="mirror"
 
 LICENSE="AGPL-3"
 SLOT="0"
