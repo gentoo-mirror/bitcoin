@@ -5,7 +5,7 @@
 EAPI=5
 inherit git-2 autotools
 
-EGIT_REPO_URI="https://github.com/spesmilo/libwallet.git"
+EGIT_REPO_URI="https://github.com/libbitcoin/libwallet.git"
 
 DESCRIPTION="Wallet related functionality forked from libbitcoin"
 SRC_URI=""
