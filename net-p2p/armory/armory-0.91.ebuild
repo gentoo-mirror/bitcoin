@@ -11,7 +11,7 @@ inherit eutils fdo-mime python-any-r1 git-2
 DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else."
 HOMEPAGE="http://bitcoinarmory.com/"
 EGIT_REPO_URI="git://github.com/etotheipi/BitcoinArmory.git"
-EGIT_BRANCH="0.91-dev"
+EGIT_COMMIT="v${PV}-beta"
 
 LICENSE="AGPL-3"
 SLOT="0"
@@ -32,7 +32,7 @@ RDEPEND="${COMMON_DEPEND}
 		 dev-python/psutil"
 
 src_prepare() {
-	epatch "${FILESDIR}/make-${PV}.patch"
+	epatch "${FILESDIR}/snappy-${PV}.patch"
 
 	sed -i "s|python /usr/lib/|${EPYTHON} $( python_get_sitedir)/|" \
 		dpkgfiles/*.desktop || die "failed to modify desktop entry exec parameter"
