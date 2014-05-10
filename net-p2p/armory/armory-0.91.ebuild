@@ -32,7 +32,7 @@ RDEPEND="${COMMON_DEPEND}
 		 dev-python/psutil"
 
 src_prepare() {
-	epatch "${FILESDIR}/snappy-${PV}.patch"
+	epatch "${FILESDIR}/snappy-0.91.patch"
 
 	sed -i "s|python /usr/lib/|${EPYTHON} $( python_get_sitedir)/|" \
 		dpkgfiles/*.desktop || die "failed to modify desktop entry exec parameter"
