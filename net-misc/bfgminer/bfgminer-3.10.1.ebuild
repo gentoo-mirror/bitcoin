@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 # TODO: knc (needs i2c-tools header)
 IUSE="+adl antminer avalon bifury bitforce bfsb bigpic bitfury cpumining drillbit examples hardened hashbuster hashbuster2 hashfast icarus klondike +libusb littlefury lm_sensors metabank modminer nanofury ncurses +opencl proxy proxy_getwork proxy_stratum scrypt twinfury +udev unicode x6500 ztex"
 REQUIRED_USE='
-	|| ( avalon bitforce cpumining icarus modminer opencl proxy x6500 ztex )
+	|| ( antminer avalon bfsb bifury bigpic bitforce bitfury cpumining drillbit hashbuster hashbuster2 hashfast icarus klondike littlefury metabank modminer nanofury opencl proxy twinfury x6500 ztex )
 	adl? ( opencl )
 	bfsb? ( bitfury )
 	bigpic? ( bitfury )
@@ -126,7 +126,7 @@ src_configure() {
 		$(use_enable cpumining) \
 		$(use_enable drillbit) \
 		$(use_enable hashbuster) \
-		$(use_enable hashbuster2) \
+		$(use_enable hashbuster2 hashbusterusb) \
 		$(use_enable hashfast) \
 		$(use_enable icarus) \
 		$(use_enable klondike) \

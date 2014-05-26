@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 # TODO: knc (needs i2c-tools header)
 IUSE="+adl avalon bitforce bfsb bigpic bitfury cpumining examples hardened hashbuster icarus littlefury lm_sensors metabank modminer nanofury ncurses +opencl proxy proxy_getwork proxy_stratum scrypt +udev unicode x6500 ztex"
 REQUIRED_USE='
-	|| ( avalon bitforce cpumining icarus modminer opencl proxy x6500 ztex )
+	|| ( avalon bfsb bigpic bitforce bitfury cpumining hashbuster icarus littlefury metabank modminer nanofury opencl proxy x6500 ztex )
 	adl? ( opencl )
 	bfsb? ( bitfury )
 	bigpic? ( bitfury )
