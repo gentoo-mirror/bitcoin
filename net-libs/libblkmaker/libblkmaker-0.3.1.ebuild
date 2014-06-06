@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libblkmaker/libblkmaker-0.3.1.ebuild,v 1.4 2013/10/22 16:20:14 blueness Exp $
 
 EAPI=5
 
@@ -10,7 +10,7 @@ LICENSE="MIT"
 
 SRC_URI="https://gitorious.org/bitcoin/${PN}/archive/v${PV}.tar.gz -> ${P}.tgz"
 SLOT="0"
-KEYWORDS="amd64 arm mips ppc ppc64 x86"
+KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 IUSE=""
 
 DEPEND="
