@@ -1,8 +1,8 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/bfgminer/bfgminer-3.5.8.ebuild,v 1.2 2014/05/27 15:28:47 blueness Exp $
 
-EAPI=4
+EAPI=5
 
 inherit eutils
 
