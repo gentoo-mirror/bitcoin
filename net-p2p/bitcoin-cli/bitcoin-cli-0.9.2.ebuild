@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools eutils git-2
+inherit autotools eutils
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -12,10 +12,8 @@ MyP="${MyPN}-${MyPV}"
 
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="
+SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 "
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC"
 SLOT="0"
@@ -27,6 +25,8 @@ RDEPEND="
 	dev-libs/openssl:0[-bindist]
 "
 DEPEND="${RDEPEND}"
+
+S="${WORKDIR}/${MyP}"
 
 src_prepare() {
 	eautoreconf

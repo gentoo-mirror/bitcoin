@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit autotools bash-completion-r1 db-use eutils git-2 user versionator systemd
+inherit autotools bash-completion-r1 db-use eutils user versionator systemd
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -14,14 +14,12 @@ MyP="${MyPN}-${MyPV}"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="
+SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 "
-EGIT_PROJECT='bitcoin'
-EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="bash-completion examples logrotate test upnp +wallet"
 
 RDEPEND="
@@ -42,6 +40,8 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 	sys-apps/sed
 "
+
+S="${WORKDIR}/${MyP}"
 
 pkg_setup() {
 	local UG='bitcoin'
@@ -64,6 +64,7 @@ src_configure() {
 		--without-cli  \
 		--without-gui
 }
+
 src_test() {
 	emake check
 }
