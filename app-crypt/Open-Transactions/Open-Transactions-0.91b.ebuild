@@ -56,10 +56,6 @@ src_prepare() {
 src_configure() {
 	use java && local JAVAC="javac"
 	local myeconfargs=(
-		--enable-cxx11
-		--disable-boost
-		--with-script=chai5
-		--disable-cxxtr1
 		$(use_with go)
 		$(use_with java)
 		$(use_with python)
