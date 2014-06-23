@@ -12,7 +12,7 @@ DESCRIPTION="Financial cryptography library, API, CLI, and prototype server."
 HOMEPAGE="http://opentransactions.org"
 EGIT_REPO_URI="git://github.com/Open-Transactions/Open-Transactions.git \
 			 https://github.com/Open-Transactions/Open-Transactions.git"
-EGIT_COMMIT="adec807824040fe7216ece00484e1709e7ea26c8"
+EGIT_COMMIT="0a226941324f587073e43daee44cbb411908dd56"
 LICENSE="AGPL-3"
 
 SLOT="0"
