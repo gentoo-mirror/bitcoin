@@ -19,6 +19,7 @@ IUSE="+leveldb testnet debug doc"
 RDEPEND="
 	>=dev-libs/boost-1.48.0
 	>=dev-libs/openssl-0.9
+	dev-libs/secp256k1
 	leveldb? ( dev-libs/leveldb )
 "
 
