@@ -11,12 +11,13 @@ inherit autotools bash-completion-r1 db-use eutils user versionator systemd
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-LJR_PATCH="bitcoin-${PV}.ljr20140913.patch"
+LJR_PV="${PV}.ljr20141002"
+LJR_PATCH="bitcoin-${LJR_PV}.patch"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
-	ljr? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/0.9.x/${PV}/${LJR_PATCH}.xz )
+	ljr? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/0.9.x/${LJR_PV}/${LJR_PATCH}.xz )
 "
 
 LICENSE="MIT ISC GPL-2"
