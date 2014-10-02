@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Gentoo Foundation
+# Copyright 2010-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -30,7 +30,7 @@ REQUIRED_USE="
 	1stclassmsg? ( ljr )
 "
 RDEPEND="
-	>=dev-libs/boost-1.41.0[threads(+)]
+	>=dev-libs/boost-1.53.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	dev-libs/protobuf
 	qrcode? (
@@ -105,7 +105,7 @@ src_test() {
 }
 
 src_install() {
-	einstall
+	emake DESTDIR="${D}" install
 
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"

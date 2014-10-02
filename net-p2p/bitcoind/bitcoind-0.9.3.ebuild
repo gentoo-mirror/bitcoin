@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Gentoo Foundation
+# Copyright 2010-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -22,10 +22,10 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="bash-completion examples +ljr logrotate test upnp +wallet"
+IUSE="examples +ljr logrotate test upnp +wallet"
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0[threads(+)]
+	>=dev-libs/boost-1.53.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	logrotate? (
 		app-admin/logrotate
@@ -76,7 +76,7 @@ src_test() {
 }
 
 src_install() {
-	einstall
+	emake DESTDIR="${D}" install
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
@@ -97,9 +97,7 @@ src_install() {
 	dodoc doc/assets-attribution.md doc/tor.md
 	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
 
-	if use bash-completion; then
-		newbashcomp contrib/${PN}.bash-completion ${PN}
-	fi
+	newbashcomp contrib/${PN}.bash-completion ${PN}
 
 	if use examples; then
 		docinto examples

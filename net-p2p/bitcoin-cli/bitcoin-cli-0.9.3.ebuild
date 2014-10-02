@@ -24,7 +24,7 @@ KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0[threads(+)]
+	>=dev-libs/boost-1.53.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 "
 DEPEND="${RDEPEND}"
@@ -47,7 +47,7 @@ src_configure() {
 }
 
 src_install() {
-	einstall
+	emake DESTDIR="${D}" install
 
 	dodoc doc/README.md doc/release-notes.md
 	dodoc doc/assets-attribution.md doc/tor.md
