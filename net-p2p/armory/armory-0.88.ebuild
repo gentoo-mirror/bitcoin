@@ -29,7 +29,7 @@ RDEPEND="network? ( || ( net-p2p/bitcoind net-p2p/bitcoin-qt ) )
 
 src_prepare() {
 	sed -e 's/`python -c/`python2 -c/' -i cppForSwig/Makefile
-	echo python2 /usr/share/armory/ArmoryQt.py > armory
+	echo "python2 /usr/share/armory/ArmoryQt.py $@" > armory
 }
 
 src_install() {

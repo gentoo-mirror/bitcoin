@@ -51,7 +51,7 @@ src_install() {
 	domenu dpkgfiles/*.desktop
 	validate_desktop_entries
 
-	echo "python2 $(python_get_sitedir)/armory/ArmoryQt.py" > "${T}/armory"
+	echo "python2 $(python_get_sitedir)/armory/ArmoryQt.py $@" > "${T}/armory"
 	dobin "${T}/armory"
 }
 
