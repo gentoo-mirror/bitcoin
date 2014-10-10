@@ -1,6 +1,6 @@
 # Copyright 2010-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/net-p2p/bitcoin-qt/bitcoin-qt-0.9.3.ebuild,v 1.2 2014/10/10 11:30:23 blueness Exp $
 
 EAPI=4
 
@@ -96,7 +96,7 @@ src_configure() {
 		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
 		$(use_with qrcode qrencode)  \
 		$(use_enable test tests)  \
-		$(use_enable 1stclassmsg first-class-messaging)  \
+		$(usex ljr $(use_enable 1stclassmsg first-class-messaging))  \
 		--with-system-leveldb  \
 		--without-cli --without-daemon \
 		--with-gui
