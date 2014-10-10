@@ -23,8 +23,11 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="examples +ljr logrotate test upnp +wallet"
+IUSE="examples ljr ljr-antispam logrotate test upnp +wallet"
 
+REQUIRED_USE="
+	ljr-antispam? ( ljr )
+"
 RDEPEND="
 	>=dev-libs/boost-1.53.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
@@ -55,6 +58,7 @@ pkg_setup() {
 src_prepare() {
 	if use ljr; then
 		epatch "${WORKDIR}/${LJR_PATCH}"
+		use ljr-antispam || epatch "${FILESDIR}/0.9.x-ljr_noblacklist.patch"
 	else
 		epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
 	fi
