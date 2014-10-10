@@ -24,10 +24,11 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="$IUSE 1stclassmsg dbus kde +ljr +qrcode test upnp"
+IUSE="$IUSE 1stclassmsg dbus kde ljr ljr-antispam +qrcode test upnp"
 
 REQUIRED_USE="
 	1stclassmsg? ( ljr )
+	ljr-antispam? ( ljr )
 "
 RDEPEND="
 	>=dev-libs/boost-1.53.0[threads(+)]
@@ -55,6 +56,7 @@ S="${WORKDIR}/${MyP}"
 src_prepare() {
 	if use ljr; then
 		epatch "${WORKDIR}/${LJR_PATCH}"
+		use ljr-antispam || epatch "${FILESDIR}/0.9.x-ljr_noblacklist.patch"
 	else
 		epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
 	fi
