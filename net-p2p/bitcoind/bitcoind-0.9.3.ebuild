@@ -29,7 +29,7 @@ REQUIRED_USE="
 	ljr-antispam? ( ljr )
 "
 RDEPEND="
-	>=dev-libs/boost-1.53.0[threads(+)]
+	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	logrotate? (
 		app-admin/logrotate

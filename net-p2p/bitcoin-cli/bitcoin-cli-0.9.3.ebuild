@@ -24,7 +24,7 @@ KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-libs/boost-1.53.0[threads(+)]
+	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 "
 DEPEND="${RDEPEND}"
