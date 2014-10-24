@@ -29,6 +29,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_prepare() {
+	sed -i 's/bitcoin-tx//' src/Makefile.am
 	eautoreconf
 }
 

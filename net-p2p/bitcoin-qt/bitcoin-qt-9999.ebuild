@@ -86,7 +86,7 @@ src_configure() {
 		$(use_with qrcode qrencode)  \
 		$(use_enable test tests)  \
 		--with-system-leveldb  \
-		--without-cli --without-daemon \
+		--without-utils --without-daemon \
 		--with-gui
 }
 

@@ -62,7 +62,7 @@ src_configure() {
 		$(use_enable test tests)  \
 		$(use_enable wallet)  \
 		--with-system-leveldb  \
-		--without-cli  \
+		--without-utils  \
 		--without-gui
 }
 
