@@ -26,7 +26,7 @@ KEYWORDS=""
 IUSE="$IUSE dbus kde +qrcode test upnp"
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0[threads(+)]
+	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	dev-libs/protobuf
 	qrcode? (
@@ -94,7 +94,7 @@ src_test() {
 }
 
 src_install() {
-	einstall
+	emake DESTDIR="${D}" install
 
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"

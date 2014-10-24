@@ -22,10 +22,10 @@ EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/b
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="bash-completion examples logrotate test upnp +wallet"
+IUSE="examples logrotate test upnp +wallet"
 
 RDEPEND="
-	>=dev-libs/boost-1.41.0[threads(+)]
+	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	logrotate? (
 		app-admin/logrotate
@@ -64,12 +64,13 @@ src_configure() {
 		--without-cli  \
 		--without-gui
 }
+
 src_test() {
 	emake check
 }
 
 src_install() {
-	einstall
+	emake DESTDIR="${D}" install
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
@@ -77,7 +78,7 @@ src_install() {
 	fperms 600 /etc/bitcoin/bitcoin.conf
 
 	newconfd "${FILESDIR}/bitcoin.confd" ${PN}
-	newinitd "${FILESDIR}/bitcoin.initd" ${PN}
+	newinitd "${FILESDIR}/bitcoin.initd-r1" ${PN}
 	systemd_dounit "${FILESDIR}/bitcoind.service"
 
 	keepdir /var/lib/bitcoin/.bitcoin
@@ -90,9 +91,7 @@ src_install() {
 	dodoc doc/assets-attribution.md doc/tor.md
 	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
 
-	if use bash-completion; then
-		newbashcomp contrib/${PN}.bash-completion ${PN}
-	fi
+	newbashcomp contrib/${PN}.bash-completion ${PN}
 
 	if use examples; then
 		docinto examples
