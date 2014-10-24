@@ -34,6 +34,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
+		--disable-ccache \
 		--without-miniupnpc  \
 		$(use_enable ipv6)  \
 		--disable-tests  \

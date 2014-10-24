@@ -39,6 +39,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
+		--disable-ccache \
 		--without-miniupnpc  \
 		--disable-tests  \
 		--disable-wallet  \

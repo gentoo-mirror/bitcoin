@@ -80,6 +80,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
+		--disable-ccache \
 		$(use_with dbus qtdbus)  \
 		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
 		$(use_with qrcode qrencode)  \

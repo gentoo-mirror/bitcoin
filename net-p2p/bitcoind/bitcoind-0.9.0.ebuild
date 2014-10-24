@@ -57,6 +57,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
+		--disable-ccache \
 		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
 		$(use_enable ipv6)  \
 		$(use_enable test tests)  \
