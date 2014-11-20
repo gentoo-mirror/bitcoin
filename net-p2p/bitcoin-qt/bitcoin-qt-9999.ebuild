@@ -87,6 +87,7 @@ src_configure() {
 		$(use_enable test tests)  \
 		--with-system-leveldb  \
 		--without-utils --without-daemon \
+		--without-libs \
 		--with-gui
 }
 
@@ -96,6 +97,8 @@ src_test() {
 
 src_install() {
 	emake DESTDIR="${D}" install
+
+	rm "${D}/usr/bin/test_bitcoin"
 
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
