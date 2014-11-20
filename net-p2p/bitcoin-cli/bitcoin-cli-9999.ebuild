@@ -40,6 +40,7 @@ src_configure() {
 		--disable-tests  \
 		--disable-wallet  \
 		--without-daemon  \
+		--without-libs \
 		--without-gui
 }
 
