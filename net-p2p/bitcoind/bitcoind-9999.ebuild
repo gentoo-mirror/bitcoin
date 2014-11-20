@@ -62,6 +62,7 @@ src_configure() {
 		$(use_enable test tests)  \
 		$(use_enable wallet)  \
 		--with-system-leveldb  \
+		--without-libs \
 		--without-utils  \
 		--without-gui
 }
@@ -72,6 +73,8 @@ src_test() {
 
 src_install() {
 	emake DESTDIR="${D}" install
+
+	rm "${D}/usr/bin/test_bitcoin"
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
