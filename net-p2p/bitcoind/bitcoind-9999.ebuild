@@ -37,6 +37,7 @@ RDEPEND="
 		sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 	)
 	virtual/bitcoin-leveldb
+	dev-libs/libsecp256k1
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
@@ -51,7 +52,8 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
-	rm -r src/leveldb
+	epatch "${FILESDIR}/${PV}-sys_libsecp256k1.patch"
+	rm -r src/leveldb src/secp256k1
 	eautoreconf
 }
 
