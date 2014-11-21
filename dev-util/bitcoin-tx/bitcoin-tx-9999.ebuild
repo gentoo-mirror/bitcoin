@@ -25,11 +25,14 @@ IUSE=""
 RDEPEND="
 	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
+	dev-libs/libsecp256k1
 "
 DEPEND="${RDEPEND}"
 
 src_prepare() {
 	sed -i 's/bitcoin-cli//' src/Makefile.am
+	epatch "${FILESDIR}/${PV}-sys_libsecp256k1.patch"
+	rm -r src/secp256k1
 	eautoreconf
 }
 
