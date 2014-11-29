@@ -34,7 +34,7 @@ REQUIRED_USE='
 	lm_sensors? ( opencl )
 	metabank? ( bitfury )
 	nanofury? ( bitfury )
-	scrypt? ( || ( cpumining dualminer gridseed opencl zeusminer ) )
+	scrypt? ( || ( cpumining dualminer gridseed opencl proxy zeusminer ) )
 	twinfury? ( bitfury )
 	unicode? ( ncurses )
 	proxy? ( || ( proxy_getwork proxy_stratum ) )

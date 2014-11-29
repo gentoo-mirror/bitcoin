@@ -29,7 +29,7 @@ REQUIRED_USE='
 	lm_sensors? ( opencl )
 	metabank? ( bitfury )
 	nanofury? ( bitfury )
-	scrypt? ( || ( cpumining opencl ) )
+	scrypt? ( || ( cpumining opencl proxy ) )
 	twinfury? ( bitfury )
 	unicode? ( ncurses )
 	proxy? ( || ( proxy_getwork proxy_stratum ) )
