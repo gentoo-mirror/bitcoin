@@ -4,40 +4,38 @@
 
 EAPI=5
 
-inherit eutils qt4-r2 git-r3 multilib
+inherit eutils qmake-utils git-r3 multilib
 
 DESCRIPTION="An intuitive QT/C++ system tray client for Open-Transactions."
 HOMEPAGE="http://opentransactions.org"
-EGIT_REPO_URI="git://github.com/Open-Transactions/Moneychanger.git \
-			 https://github.com/Open-Transactions/Moneychanger.git"
+EGIT_REPO_URI="git://github.com/yamamushi/Moneychanger.git \
+			 https://github.com/yamamushi/Moneychanger.git"
+EGIT_BRANCH="develop"
 LICENSE="AGPL-3"
 
 SLOT="0"
 KEYWORDS=""
 IUSE="doc"
 
-RDEPEND="app-crypt/Open-Transactions[java]"
+RDEPEND="app-crypt/opentxs"
 
-DEPEND="app-crypt/Open-Transactions[java]
+DEPEND="app-crypt/opentxs
+		dev-libs/xmlrpc-c
 		dev-qt/qtgui:4
 		dev-qt/qtsql:4
 		dev-qt/qtcore:4"
 
-PATCHES=(
-	"${FILESDIR}/c++11.patch"
-)
-
 src_configure() {
-	eqmake4 "${S}"/src/"${PN}".pro 	LIBDIR="$(get_libdir)" || die "Configure failed"
+	eqmake4 "${S}"/project/"${PN}.pro" 	LIBDIR="$(get_libdir)" || die "Configure failed"
 }
 
 src_compile() {
-	cd "${S}"/src/ || die
+	cd "${S}"/project/ || die
 	emake || die "Compile failed"
 }
 
 src_install() {
-	dobin src/moneychanger/moneychanger-qt
+	dobin "${S}"/project/moneychanger-qt/moneychanger-qt
 
 	if use doc ; then
 		dodoc documentation/presentable_documentation/{object_connections.pdf,object_permissions.png}
@@ -45,7 +43,7 @@ src_install() {
 		dodoc documentation/translating
 	fi
 
-	cd "${S}"/src/ || die
+	cd "${S}"/project/ || die
 	emake DESTDIR="${D}" PREFIX="/usr" INSTALL_ROOT="${D}" install || die
 
 	insinto /usr/share/applications
