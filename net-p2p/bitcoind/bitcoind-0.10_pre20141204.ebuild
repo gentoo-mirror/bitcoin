@@ -25,7 +25,7 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/a0417b8cc840ff6f49b4fb1f8cee
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="examples +extras logrotate test upnp +wallet"
+IUSE="examples +ljr logrotate test upnp +wallet"
 MyPolicies="cpfp spamfilter"
 for mypolicy in ${MyPolicies}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
@@ -54,7 +54,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MyPN}-a0417b8cc840ff6f49b4fb1f8ceef54f8e3d0df1"
 
 pkg_pretend() {
-	if use extras; then
+	if use ljr; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 	fi
 	local enabledpolicies=
@@ -79,7 +79,7 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "$(LJR_PATCH syslibs)"
-	if use extras; then
+	if use ljr; then
 		epatch "$(LJR_PATCH ljrF)"
 	fi
 	for mypolicy in ${MyPolicies}; do
