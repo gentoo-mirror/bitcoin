@@ -48,7 +48,7 @@ RDEPEND="
 		net-libs/zeromq
 	)
 	virtual/bitcoin-leveldb
-	dev-libs/libsecp256k1
+	=dev-libs/libsecp256k1-0.0.0_pre20141212
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
