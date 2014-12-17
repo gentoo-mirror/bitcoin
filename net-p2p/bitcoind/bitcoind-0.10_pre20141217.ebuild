@@ -27,7 +27,7 @@ LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
 IUSE="examples +ljr logrotate test upnp +wallet zeromq"
-MyPolicies="cpfp spamfilter"
+MyPolicies="cpfp dcmp spamfilter"
 for mypolicy in ${MyPolicies}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
 done
@@ -66,6 +66,11 @@ pkg_pretend() {
 		einfo "CPFP policy is enabled: If you mine, you will give consideration to child transaction fees to pay for their parents."
 	else
 		einfo "CPFP policy is disabled: If you mine, you will ignore transactions unless they have sufficient fee themselves, even if child transactions offer a fee to cover their cost."
+	fi
+	if use bitcoin_policy_dcmp; then
+		einfo "Data Carrier Multi-Push policy is enabled: Your node will assist transactions with at most a single multiple-'push' data carrier output."
+	else
+		einfo "Data Carrier Multi-Push policy is disabled: Your node will assist transactions with at most a single data carrier output with only a single 'push'."
 	fi
 	if use bitcoin_policy_spamfilter; then
 		einfo "Enhanced spam filter policy is enabled: Notorious spammers will not be assisted by your node. This may impact your ability to use some spammy services (see link for a list)."
