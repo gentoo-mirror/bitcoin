@@ -11,21 +11,22 @@ inherit autotools bash-completion-r1 db-use eutils user versionator systemd
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-LJR_PV() { echo "${PV}.${1}-20141204"; }
+COMMITHASH="c3c635b3167bac056030e3c8cbeb1343a4d244f5"
+LJR_PV() { echo "${PV}.${1}-20141217"; }
 LJR_PATCHDIR="${MyPN}-$(LJR_PV ljr).patches"
 LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV "$@").patch"; }
 LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/a0417b8cc840ff6f49b4fb1f8ceef54f8e3d0df1.tar.gz -> ${MyPN}-v${PV}.tgz
+SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz
 	http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz
 "
 
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="examples +ljr logrotate test upnp +wallet"
+IUSE="examples +ljr logrotate test upnp +wallet zeromq"
 MyPolicies="cpfp spamfilter"
 for mypolicy in ${MyPolicies}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
@@ -43,6 +44,9 @@ RDEPEND="
 	wallet? (
 		sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 	)
+	zeromq? (
+		net-libs/zeromq
+	)
 	virtual/bitcoin-leveldb
 	dev-libs/libsecp256k1
 "
@@ -51,10 +55,10 @@ DEPEND="${RDEPEND}
 	sys-apps/sed
 "
 
-S="${WORKDIR}/${MyPN}-a0417b8cc840ff6f49b4fb1f8ceef54f8e3d0df1"
+S="${WORKDIR}/${MyPN}-${COMMITHASH}"
 
 pkg_pretend() {
-	if use ljr; then
+	if use ljr || use zeromq; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 	fi
 	local enabledpolicies=
@@ -82,6 +86,7 @@ src_prepare() {
 	if use ljr; then
 		epatch "$(LJR_PATCH ljrF)"
 	fi
+	use zeromq && epatch "$(LJR_PATCH zeromq)"
 	for mypolicy in ${MyPolicies}; do
 		use bitcoin_policy_${mypolicy} && epatch "$(LJR_PATCH ${mypolicy})"
 	done
@@ -90,6 +95,7 @@ src_prepare() {
 }
 
 src_configure() {
+	# NOTE: --enable-zmq actually disables it
 	econf \
 		--disable-ccache \
 		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
