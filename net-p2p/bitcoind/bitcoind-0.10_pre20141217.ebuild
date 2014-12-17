@@ -68,7 +68,7 @@ pkg_pretend() {
 		einfo "CPFP policy is disabled: If you mine, you will ignore transactions unless they have sufficient fee themselves, even if child transactions offer a fee to cover their cost."
 	fi
 	if use bitcoin_policy_spamfilter; then
-		einfo "Enhanced spam filter policy is enabled: Notorious spammers will not be assisted by your node."
+		einfo "Enhanced spam filter policy is enabled: Notorious spammers will not be assisted by your node. This may impact your ability to use some spammy services (see link for a list)."
 	else
 		einfo "Enhanced spam filter policy is DISABLED: Your node will not be checking for notorious spammers, and may assist them. Set BITCOIN_POLICY=spamfilter to enable."
 	fi
