@@ -11,10 +11,10 @@ inherit autotools bash-completion-r1 db-use eutils user versionator systemd
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-COMMITHASH="c3c635b3167bac056030e3c8cbeb1343a4d244f5"
-LJR_PV() { echo "${PV}.${1}-20141217"; }
+COMMITHASH="4e0bfa581438a662147fe4459522b308406d7f57"
+LJR_PV() { echo "${MyPV}.${1}20141224"; }
 LJR_PATCHDIR="${MyPN}-$(LJR_PV ljr).patches"
-LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV "$@").patch"; }
+LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV ljr).$@.patch"; }
 LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
