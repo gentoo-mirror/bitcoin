@@ -5,7 +5,4 @@
 		<email>luke_gentoo_bitcoin@dashjr.org</email>
 		<name>Luke Dashjr</name>
 	</maintainer>
-	<use>
-		<flag name='bitcoin_policy_dcmp'>Data Carrier Multi-Push policy: Your node will assist transactions with multiple pushes in their data carrier (if any)</flag>
-	</use>
 </pkgmetadata>

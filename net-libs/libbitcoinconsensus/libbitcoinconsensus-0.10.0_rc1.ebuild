@@ -6,10 +6,10 @@ EAPI=5
 
 BITCOINCORE_COMMITHASH="4e0bfa581438a662147fe4459522b308406d7f57"
 BITCOINCORE_POLICY_PATCHES="dcmp"
-inherit autotools bitcoincore-v0.10-20141224 eutils user versionator
+inherit bitcoincore-v0.10-20141224 eutils
 
 DESCRIPTION="Bitcoin Core consensus library"
-LICENSE="MIT ISC GPL-2"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 IUSE="test"

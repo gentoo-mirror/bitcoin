@@ -16,19 +16,11 @@
 has "${EAPI:-0}" 5 || die "EAPI=${EAPI} not supported"
 
 DB_VER="4.8"
-inherit db-use
-
-hasiuse() {
-	has "$1" ${IUSE} || has "+$1" ${IUSE}
-}
-
-hasuse() {
-	hasiuse "$1" && use "$1"
-}
+inherit autotools db-use eutils
 
 EXPORT_FUNCTIONS src_prepare src_test src_install
 
-if hasiuse ljr || hasiuse 1stclassmsg || hasiuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
+if in_iuse ljr || in_iuse 1stclassmsg || in_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
 	EXPORT_FUNCTIONS pkg_pretend
 fi
 
@@ -64,7 +56,7 @@ BITCOINCORE_COMMON_DEPEND="
 	=dev-libs/libsecp256k1-0.0.0_pre20141212
 "
 bitcoincore_common_depend_use() {
-	hasiuse "$1" || return
+	in_iuse "$1" || return
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $1? ( $2 )"
 }
 bitcoincore_common_depend_use upnp net-libs/miniupnpc
@@ -73,14 +65,15 @@ bitcoincore_common_depend_use zeromq net-libs/zeromq
 RDEPEND="${RDEPEND} ${BITCOINCORE_COMMON_DEPEND}"
 DEPEND="${DEPEND} ${BITCOINCORE_COMMON_DEPEND}
 	>=app-shells/bash-4.1
+	sys-apps/sed
 	dev-vcs/git
 "
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
 bitcoincore_policymsg() {
-	local USEFlag="bitcoin_policy_$1"; shift
-	hasiuse "${USEFlag}" || return
+	local USEFlag="bitcoin_policy_$1"
+	in_iuse "${USEFlag}" || return
 	if use "${USEFlag}"; then
 		[ -n "$2" ] && einfo "$2"
 	else
@@ -91,7 +84,7 @@ bitcoincore_policymsg() {
 
 bitcoincore_pkg_pretend() {
 	bitcoincore_policymsg_flag=false
-	if hasuse ljr || hasuse 1stclassmsg || hasuse zeromq; then
+	if use_if_iuse ljr || use_if_iuse 1stclassmsg || use_if_iuse zeromq; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 		bitcoincore_policymsg_flag=true
 	fi
@@ -113,16 +106,16 @@ bitcoincore-v0.10-20141224_pkg_pretend() {
 
 bitcoincore_prepare() {
 	epatch "$(LJR_PATCH syslibs)"
-	if hasuse ljr; then
+	if use_if_iuse ljr; then
 		# Regular epatch won't work with binary files
 		local patchfile="$(LJR_PATCH ljrF)"
 		einfo "Applying ${patchfile##*/} ..."
 		git apply --whitespace=nowarn "${patchfile}"
 	fi
-	if hasuse 1stclassmsg; then
+	if use_if_iuse 1stclassmsg; then
 		epatch "$(LJR_PATCH 1stclassmsg)"
 	fi
-	hasuse zeromq && epatch "$(LJR_PATCH zeromq)"
+	use_if_iuse zeromq && epatch "$(LJR_PATCH zeromq)"
 	for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 		use bitcoin_policy_${mypolicy} && epatch "$(LJR_PATCH ${mypolicy})"
 	done
@@ -140,17 +133,17 @@ bitcoincore-v0.10-20141224_src_prepare() {
 
 bitcoincore_conf() {
 	local my_econf=
-	if hasuse upnp; then
+	if use_if_iuse upnp; then
 		my_econf="${my_econf} --with-miniupnpc --enable-upnp-default"
 	else
 		my_econf="${my_econf} --without-miniupnpc --disable-upnp-default"
 	fi
-	if hasuse test; then
+	if use_if_iuse test; then
 		my_econf="${my_econf} --enable-tests"
 	else
 		my_econf="${my_econf} --disable-tests"
 	fi
-	if hasuse wallet; then
+	if use_if_iuse wallet; then
 		my_econf="${my_econf} --enable-wallet"
 	else
 		my_econf="${my_econf} --disable-wallet"
