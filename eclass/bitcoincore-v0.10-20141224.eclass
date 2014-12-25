@@ -18,6 +18,10 @@ has "${EAPI:-0}" 5 || die "EAPI=${EAPI} not supported"
 DB_VER="4.8"
 inherit autotools db-use eutils
 
+if [ -z "$BITCOINCORE_COMMITHASH" ]; then
+	inherit git-2
+fi
+
 EXPORT_FUNCTIONS src_prepare src_test src_install
 
 if in_iuse ljr || in_iuse 1stclassmsg || in_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
@@ -42,18 +46,36 @@ LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV ljr).$@.patch"; 
 LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
 
 HOMEPAGE="http://bitcoin.org/"
-SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz
-	http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz
-"
+
+if [ -z "$BITCOINCORE_COMMITHASH" ]; then
+	EGIT_PROJECT='bitcoin'
+	EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
+else
+	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz
+		http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz
+	"
+	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+fi
 
 for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
 done
 
+case "${PV}" in
+0.10*)
+	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20141212"
+	;;
+9999*)
+	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-9999"
+	;;
+*)
+	die "Unrecognised version"
+	;;
+esac
 BITCOINCORE_COMMON_DEPEND="
 	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
-	=dev-libs/libsecp256k1-0.0.0_pre20141212
+	$LIBSECP256K1_DEPEND
 "
 bitcoincore_common_depend_use() {
 	in_iuse "$1" || return
@@ -66,10 +88,10 @@ RDEPEND="${RDEPEND} ${BITCOINCORE_COMMON_DEPEND}"
 DEPEND="${DEPEND} ${BITCOINCORE_COMMON_DEPEND}
 	>=app-shells/bash-4.1
 	sys-apps/sed
-	dev-vcs/git
 "
-
-S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+if in_iuse ljr; then
+	DEPEND="${DEPEND} ljr? ( dev-vcs/git )"
+fi
 
 bitcoincore_policymsg() {
 	local USEFlag="bitcoin_policy_$1"
@@ -105,7 +127,13 @@ bitcoincore-v0.10-20141224_pkg_pretend() {
 }
 
 bitcoincore_prepare() {
-	epatch "$(LJR_PATCH syslibs)"
+	if [ "${PV}" = "9999" ]; then
+		epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
+		# Temporarily use embedded secp256k1 while API is in flux
+		#epatch "${FILESDIR}/${PV}-sys_libsecp256k1.patch"
+	else
+		epatch "$(LJR_PATCH syslibs)"
+	fi
 	if use_if_iuse ljr; then
 		# Regular epatch won't work with binary files
 		local patchfile="$(LJR_PATCH ljrF)"
@@ -123,7 +151,8 @@ bitcoincore_prepare() {
 
 bitcoincore_autoreconf() {
 	eautoreconf
-	rm -r src/leveldb src/secp256k1
+	rm -r src/leveldb
+	[ "${PV}" != "9999" ] && rm -r src/secp256k1
 }
 
 bitcoincore-v0.10-20141224_src_prepare() {
@@ -165,7 +194,7 @@ bitcoincore_src_test() {
 }
 
 bitcoincore-v0.10-20141224_src_test() {
-	 bitcoincore_src_test
+	bitcoincore_src_test
 }
 
 bitcoincore_install() {
