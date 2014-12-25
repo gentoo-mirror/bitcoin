@@ -5,6 +5,7 @@
 EAPI=5
 
 BITCOINCORE_COMMITHASH="4e0bfa581438a662147fe4459522b308406d7f57"
+BITCOINCORE_NO_SYSLIBS=1
 inherit bitcoincore-v0.10-20141224
 
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"

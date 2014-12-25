@@ -51,9 +51,10 @@ if [ -z "$BITCOINCORE_COMMITHASH" ]; then
 	EGIT_PROJECT='bitcoin'
 	EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 else
-	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz
-		http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz
-	"
+	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz"
+	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ]; then
+		SRC_URI="${SRC_URI} http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz"
+	fi
 	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 fi
 
@@ -127,7 +128,9 @@ bitcoincore-v0.10-20141224_pkg_pretend() {
 }
 
 bitcoincore_prepare() {
-	if [ "${PV}" = "9999" ]; then
+	if [ -n "${BITCOINCORE_NO_SYSLIBS}" ]; then
+		true
+	elif [ "${PV}" = "9999" ]; then
 		epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
 		# Temporarily use embedded secp256k1 while API is in flux
 		#epatch "${FILESDIR}/${PV}-sys_libsecp256k1.patch"
@@ -200,7 +203,7 @@ bitcoincore-v0.10-20141224_src_test() {
 bitcoincore_install() {
 	emake DESTDIR="${D}" install
 
-	rm "${D}/usr/bin/test_bitcoin"
+	[ "${PN}" = "libbitcoinconsensus" ] || rm "${D}/usr/bin/test_bitcoin"
 
 	dodoc doc/README.md doc/release-notes.md
 }
