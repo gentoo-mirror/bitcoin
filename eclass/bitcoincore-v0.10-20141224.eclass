@@ -18,7 +18,19 @@ has "${EAPI:-0}" 5 || die "EAPI=${EAPI} not supported"
 DB_VER="4.8"
 inherit db-use
 
-EXPORT_FUNCTIONS pkg_pretend src_prepare src_test
+hasiuse() {
+	has "$1" ${IUSE} || has "+$1" ${IUSE}
+}
+
+hasuse() {
+	hasiuse "$1" && use "$1"
+}
+
+EXPORT_FUNCTIONS src_prepare src_test src_install
+
+if hasiuse ljr || hasiuse 1stclassmsg || hasiuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
+	EXPORT_FUNCTIONS pkg_pretend
+fi
 
 # @ECLASS-VARIABLE: BITCOINCORE_COMMITHASH
 # @DESCRIPTION:
@@ -46,20 +58,9 @@ for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
 done
 
-hasiuse() {
-	has "$1" ${IUSE} || has "+$1" ${IUSE}
-}
-
-hasuse() {
-	hasiuse "$1" && use "$1"
-}
-
 BITCOINCORE_COMMON_DEPEND="
 	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
-	zeromq? (
-		net-libs/zeromq
-	)
 	virtual/bitcoin-leveldb
 	=dev-libs/libsecp256k1-0.0.0_pre20141212
 "
@@ -145,9 +146,13 @@ bitcoincore_conf() {
 	else
 		my_econf="${my_econf} --without-miniupnpc --disable-upnp-default"
 	fi
+	if hasuse test; then
+		my_econf="${my_econf} --enable-tests"
+	else
+		my_econf="${my_econf} --disable-tests"
+	fi
 	econf \
 		--disable-ccache \
-		$(use_enable test tests)  \
 		--with-system-leveldb       \
 		--with-system-libsecp256k1  \
 		--without-libs    \
@@ -172,4 +177,8 @@ bitcoincore_install() {
 	rm "${D}/usr/bin/test_bitcoin"
 
 	dodoc doc/README.md doc/release-notes.md
+}
+
+bitcoincore-v0.10-20141224_src_install() {
+	 bitcoincore_install
 }
