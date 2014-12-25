@@ -61,7 +61,6 @@ done
 BITCOINCORE_COMMON_DEPEND="
 	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
-	virtual/bitcoin-leveldb
 	=dev-libs/libsecp256k1-0.0.0_pre20141212
 "
 bitcoincore_common_depend_use() {
@@ -150,6 +149,11 @@ bitcoincore_conf() {
 		my_econf="${my_econf} --enable-tests"
 	else
 		my_econf="${my_econf} --disable-tests"
+	fi
+	if hasuse wallet; then
+		my_econf="${my_econf} --enable-wallet"
+	else
+		my_econf="${my_econf} --disable-wallet"
 	fi
 	econf \
 		--disable-ccache \

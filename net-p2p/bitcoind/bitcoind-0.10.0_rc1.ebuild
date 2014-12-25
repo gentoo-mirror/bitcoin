@@ -16,6 +16,7 @@ KEYWORDS=""
 IUSE="examples +ljr logrotate test upnp +wallet zeromq"
 
 RDEPEND="
+	virtual/bitcoin-leveldb
 	logrotate? (
 		app-admin/logrotate
 	)

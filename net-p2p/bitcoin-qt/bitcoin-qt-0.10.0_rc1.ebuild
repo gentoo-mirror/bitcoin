@@ -17,6 +17,7 @@ KEYWORDS=""
 IUSE="$IUSE 1stclassmsg dbus kde +ljr +qrcode test upnp +wallet zeromq"
 
 RDEPEND="
+	virtual/bitcoin-leveldb
 	dev-libs/protobuf
 	qrcode? (
 		media-gfx/qrencode
