@@ -4,8 +4,8 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="4e0bfa581438a662147fe4459522b308406d7f57"
-inherit bitcoincore-v0.10-20141224
+BITCOINCORE_COMMITHASH="263b65ebf0ce0beae5622a533234c8f897aec4e1"
+inherit bitcoincore-v0.10-20150108
 
 DESCRIPTION="Command-line Bitcoin transaction tool"
 LICENSE="MIT"
@@ -15,11 +15,10 @@ IUSE=""
 
 src_prepare() {
 	bitcoincore_prepare
-	sed -i 's/bitcoin-cli//' src/Makefile.am
 	bitcoincore_autoreconf
 }
 
 src_configure() {
 	bitcoincore_conf \
-		--with-utils
+		--enable-util-tx
 }

@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 #
-# @ECLASS: bitcoincore-v0.10-20141224.eclass
+# @ECLASS: bitcoincore-v0.10-20150108.eclass
 # @MAINTAINER:
 # Luke Dashjr <luke_gentoo_bitcoin@dashjr.org>
 # @BLURB: common code for Bitcoin Core 0.10 ebuilds
@@ -40,7 +40,7 @@ fi
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-LJR_PV() { echo "${MyPV}.${1}20141224"; }
+LJR_PV() { echo "${MyPV}.${1}20150108"; }
 LJR_PATCHDIR="${MyPN}-$(LJR_PV ljr).patches"
 LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV ljr).$@.patch"; }
 LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
@@ -51,7 +51,7 @@ if [ -z "$BITCOINCORE_COMMITHASH" ]; then
 	EGIT_PROJECT='bitcoin'
 	EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 else
-	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz"
+	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz"
 	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ]; then
 		SRC_URI="${SRC_URI} http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz"
 	fi
@@ -74,10 +74,12 @@ case "${PV}" in
 	;;
 esac
 BITCOINCORE_COMMON_DEPEND="
-	>=dev-libs/boost-1.52.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	$LIBSECP256K1_DEPEND
 "
+if [ "${PN}" != "libbitcoinconsensus" ]; then
+	BITCOINCORE_COMMON_DEPEND=">=dev-libs/boost-1.52.0[threads(+)]"
+fi
 bitcoincore_common_depend_use() {
 	in_iuse "$1" || return
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $1? ( $2 )"
@@ -123,7 +125,7 @@ bitcoincore_pkg_pretend() {
 	$bitcoincore_policymsg_flag && einfo "For more information, see ${LJR_PATCH_DESC}"
 }
 
-bitcoincore-v0.10-20141224_pkg_pretend() {
+bitcoincore-v0.10-20150108_pkg_pretend() {
 	 bitcoincore_pkg_pretend
 }
 
@@ -138,10 +140,7 @@ bitcoincore_prepare() {
 		epatch "$(LJR_PATCH syslibs)"
 	fi
 	if use_if_iuse ljr; then
-		# Regular epatch won't work with binary files
-		local patchfile="$(LJR_PATCH ljrF)"
-		einfo "Applying ${patchfile##*/} ..."
-		git apply --whitespace=nowarn "${patchfile}"
+		epatch "$(LJR_PATCH ljrF)"
 	fi
 	if use_if_iuse 1stclassmsg; then
 		epatch "$(LJR_PATCH 1stclassmsg)"
@@ -158,7 +157,7 @@ bitcoincore_autoreconf() {
 	[ "${PV}" != "9999" ] && rm -r src/secp256k1
 }
 
-bitcoincore-v0.10-20141224_src_prepare() {
+bitcoincore-v0.10-20150108_src_prepare() {
 	 bitcoincore_prepare
 	 bitcoincore_autoreconf
 }
@@ -180,13 +179,17 @@ bitcoincore_conf() {
 	else
 		my_econf="${my_econf} --disable-wallet"
 	fi
+	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ] && [ "${PV}" != "9999" ]; then
+		my_econf="${my_econf} --disable-util-cli --disable-util-tx"
+	else
+		my_econf="${my_econf} --without-utils"
+	fi
 	econf \
 		--disable-ccache \
 		--with-system-leveldb       \
 		--with-system-libsecp256k1  \
 		--without-libs    \
 		--without-daemon  \
-		--without-utils   \
 		--without-gui     \
 		${my_econf}  \
 		"$@"
@@ -196,7 +199,7 @@ bitcoincore_src_test() {
 	emake check
 }
 
-bitcoincore-v0.10-20141224_src_test() {
+bitcoincore-v0.10-20150108_src_test() {
 	bitcoincore_src_test
 }
 
@@ -208,6 +211,6 @@ bitcoincore_install() {
 	dodoc doc/README.md doc/release-notes.md
 }
 
-bitcoincore-v0.10-20141224_src_install() {
+bitcoincore-v0.10-20150108_src_install() {
 	 bitcoincore_install
 }

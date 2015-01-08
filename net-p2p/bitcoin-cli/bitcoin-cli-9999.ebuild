@@ -1,11 +1,11 @@
-# Copyright 2010-2014 Gentoo Foundation
+# Copyright 2010-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=5
 
 BITCOINCORE_NO_SYSLIBS=1
-inherit bitcoincore-v0.10-20141224
+inherit bitcoincore-v0.10-20150108
 
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
 LICENSE="MIT"

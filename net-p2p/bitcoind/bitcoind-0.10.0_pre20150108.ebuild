@@ -4,9 +4,9 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="4e0bfa581438a662147fe4459522b308406d7f57"
+BITCOINCORE_COMMITHASH="263b65ebf0ce0beae5622a533234c8f897aec4e1"
 BITCOINCORE_POLICY_PATCHES="cpfp dcmp spamfilter"
-inherit bash-completion-r1 bitcoincore-v0.10-20141224 user systemd
+inherit bash-completion-r1 bitcoincore-v0.10-20150108 user systemd
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
