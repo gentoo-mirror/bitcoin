@@ -1,6 +1,6 @@
-# Copyright 2010-2014 Gentoo Foundation
+# Copyright 2010-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-p2p/bitcoin-qt/bitcoin-qt-0.9.3.ebuild,v 1.2 2014/10/10 11:30:23 blueness Exp $
+# $Header: $
 
 EAPI=4
 
@@ -31,7 +31,7 @@ REQUIRED_USE="
 	ljr-antispam? ( ljr )
 "
 RDEPEND="
-	>=dev-libs/boost-1.52.0[threads(+)]
+	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	dev-libs/protobuf
 	qrcode? (
@@ -54,6 +54,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MyP}"
 
 src_prepare() {
+	epatch "${FILESDIR}/0.9-openssl-101k.patch"
 	if use ljr; then
 		epatch "${WORKDIR}/${LJR_PATCH}"
 		use ljr-antispam || epatch "${FILESDIR}/0.9.x-ljr_noblacklist.patch"

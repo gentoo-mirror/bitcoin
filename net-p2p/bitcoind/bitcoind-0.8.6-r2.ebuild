@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Gentoo Foundation
+# Copyright 2010-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,7 +6,7 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit bash-completion-r1 db-use eutils user versionator systemd
+inherit bash-completion-r1 db-use eutils versionator systemd toolchain-funcs user
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -20,7 +20,7 @@ SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="bash-completion examples ipv6 logrotate upnp"
+IUSE="examples ipv6 logrotate upnp"
 
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
@@ -32,7 +32,7 @@ RDEPEND="
 		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
-	<=dev-libs/leveldb-1.15.0-r1[-snappy]
+	virtual/bitcoin-leveldb
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
@@ -48,6 +48,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}/0.8-openssl-101k.patch"
 	epatch "${FILESDIR}/0.8.2-sys_leveldb.patch"
 	rm -r src/leveldb
 
@@ -76,12 +77,12 @@ src_compile() {
 	OPTS+=("USE_SYSTEM_LEVELDB=1")
 
 	cd src || die
-	emake -f makefile.unix "${OPTS[@]}" ${PN}
+	emake CC="$(tc-getCC)" CXX="$(tc-getCXX)" -f makefile.unix "${OPTS[@]}" ${PN}
 }
 
 src_test() {
 	cd src || die
-	emake -f makefile.unix "${OPTS[@]}" test_bitcoin
+	emake CC="$(tc-getCC)" CXX="$(tc-getCXX)" -f makefile.unix "${OPTS[@]}" test_bitcoin
 	./test_bitcoin || die 'Tests failed'
 }
 
@@ -94,7 +95,7 @@ src_install() {
 	fperms 600 /etc/bitcoin/bitcoin.conf
 
 	newconfd "${FILESDIR}/bitcoin.confd" ${PN}
-	newinitd "${FILESDIR}/bitcoin.initd" ${PN}
+	newinitd "${FILESDIR}/bitcoin.initd-r1" ${PN}
 	systemd_dounit "${FILESDIR}/bitcoind.service"
 
 	keepdir /var/lib/bitcoin/.bitcoin
@@ -106,9 +107,7 @@ src_install() {
 	dodoc doc/README.md doc/release-notes.md
 	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
 
-	if use bash-completion; then
-		newbashcomp contrib/${PN}.bash-completion ${PN}
-	fi
+	newbashcomp contrib/${PN}.bash-completion ${PN}
 
 	if use examples; then
 		docinto examples

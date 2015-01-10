@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Gentoo Foundation
+# Copyright 2010-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,22 +6,28 @@ EAPI=4
 
 DB_VER="4.8"
 
-inherit db-use eutils user versionator
+inherit autotools bash-completion-r1 db-use eutils user versionator systemd
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
+LJR_PV="${PV}.ljr20141002"
+LJR_PATCH="bitcoin-${LJR_PV}.patch"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="http://bitcoin.org/"
 SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
+	ljr? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/0.9.x/${LJR_PV}/${LJR_PATCH}.xz )
 "
 
 LICENSE="MIT ISC GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm x86"
-IUSE="examples ipv6 logrotate upnp"
+KEYWORDS="~amd64 ~arm ~x86"
+IUSE="examples ljr ljr-antispam logrotate test upnp +wallet"
 
+REQUIRED_USE="
+	ljr-antispam? ( ljr )
+"
 RDEPEND="
 	>=dev-libs/boost-1.41.0[threads(+)]
 	dev-libs/openssl:0[-bindist]
@@ -31,11 +37,14 @@ RDEPEND="
 	upnp? (
 		net-libs/miniupnpc
 	)
-	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
-	<=dev-libs/leveldb-1.15.0-r1[-snappy]
+	wallet? (
+		sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
+	)
+	virtual/bitcoin-leveldb
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
+	sys-apps/sed
 "
 
 S="${WORKDIR}/${MyP}"
@@ -47,41 +56,34 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/0.8.0-sys_leveldb.patch"
+	epatch "${FILESDIR}/0.9-openssl-101k.patch"
+	if use ljr; then
+		epatch "${WORKDIR}/${LJR_PATCH}"
+		use ljr-antispam || epatch "${FILESDIR}/0.9.x-ljr_noblacklist.patch"
+	else
+		epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
+	fi
 	rm -r src/leveldb
+	eautoreconf
 }
 
-src_compile() {
-	OPTS=()
-
-	OPTS+=("DEBUGFLAGS=")
-	OPTS+=("CXXFLAGS=${CXXFLAGS}")
-	OPTS+=("LDFLAGS=${LDFLAGS}")
-
-	OPTS+=("BDB_INCLUDE_PATH=$(db_includedir "${DB_VER}")")
-	OPTS+=("BDB_LIB_SUFFIX=-${DB_VER}")
-
-	if use upnp; then
-		OPTS+=(USE_UPNP=1)
-	else
-		OPTS+=(USE_UPNP=)
-	fi
-	use ipv6 || OPTS+=("USE_IPV6=-")
-
-	OPTS+=("USE_SYSTEM_LEVELDB=1")
-
-	cd src || die
-	emake -f makefile.unix "${OPTS[@]}" ${PN}
+src_configure() {
+	econf \
+		--disable-ccache \
+		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
+		$(use_enable test tests)  \
+		$(use_enable wallet)  \
+		--with-system-leveldb  \
+		--without-cli  \
+		--without-gui
 }
 
 src_test() {
-	cd src || die
-	emake -f makefile.unix "${OPTS[@]}" test_bitcoin
-	./test_bitcoin || die 'Tests failed'
+	emake check
 }
 
 src_install() {
-	dobin src/${PN}
+	emake DESTDIR="${D}" install
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
@@ -89,7 +91,8 @@ src_install() {
 	fperms 600 /etc/bitcoin/bitcoin.conf
 
 	newconfd "${FILESDIR}/bitcoin.confd" ${PN}
-	newinitd "${FILESDIR}/bitcoin.initd" ${PN}
+	newinitd "${FILESDIR}/bitcoin.initd-r1" ${PN}
+	systemd_dounit "${FILESDIR}/bitcoind.service"
 
 	keepdir /var/lib/bitcoin/.bitcoin
 	fperms 700 /var/lib/bitcoin
@@ -97,11 +100,15 @@ src_install() {
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
-	dodoc doc/README
+	dodoc doc/README.md doc/release-notes.md
+	dodoc doc/tor.md
+	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
+
+	newbashcomp contrib/${PN}.bash-completion ${PN}
 
 	if use examples; then
 		docinto examples
-		dodoc -r contrib/{bitrpc,pyminer,spendfrom,tidy_datadir.sh,wallettools}
+		dodoc -r contrib/{bitrpc,pyminer,qos,spendfrom,tidy_datadir.sh}
 	fi
 
 	if use logrotate; then
