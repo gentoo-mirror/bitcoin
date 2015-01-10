@@ -6,7 +6,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python{2_6,2_7} )
 
-inherit eutils fdo-mime python-any-r1 git-2
+inherit eutils fdo-mime python-any-r1 git-r3
 
 DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else."
 HOMEPAGE="http://bitcoinarmory.com/"
