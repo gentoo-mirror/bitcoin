@@ -4,8 +4,8 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="263b65ebf0ce0beae5622a533234c8f897aec4e1"
-inherit bitcoincore-v0.10-20150108
+BITCOINCORE_COMMITHASH="249bf0e0492758d71dc5d8fa77103b31b604979f"
+inherit bitcoincore-v0.10-20150112
 
 DESCRIPTION="Command-line Bitcoin transaction tool"
 LICENSE="MIT"
