@@ -4,11 +4,13 @@
 
 EAPI=5
 
-EGIT_REPO_URI="https://github.com/bitcoin/secp256k1.git"
-inherit git-2 autotools eutils
+inherit autotools eutils
 
+MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
-HOMEPAGE="https://github.com/bitcoin/secp256k1"
+HOMEPAGE="https://github.com/bitcoin/${MyPN}"
+COMMITHASH="2a53a472f24acd9ff10878b5bf21b5b27ab8060a"
+SRC_URI="https://github.com/bitcoin/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -27,7 +29,10 @@ DEPEND="${RDEPEND}
 	test? ( dev-libs/openssl )
 "
 
+S="${WORKDIR}/${MyPN}-${COMMITHASH}"
+
 src_prepare() {
+	epatch "${FILESDIR}/20141212-fixes.patch"
 	eautoreconf
 }
 

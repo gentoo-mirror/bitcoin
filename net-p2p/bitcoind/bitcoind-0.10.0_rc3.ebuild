@@ -4,6 +4,8 @@
 
 EAPI=5
 
+BITCOINCORE_COMMITHASH="249bf0e0492758d71dc5d8fa77103b31b604979f"
+BITCOINCORE_POLICY_PATCHES="cpfp dcmp spamfilter"
 inherit bash-completion-r1 bitcoincore-v0.10-20150112 user systemd
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
@@ -11,7 +13,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 
-IUSE="examples logrotate test upnp +wallet"
+IUSE="examples +ljr logrotate test upnp +wallet zeromq"
 
 RDEPEND="
 	virtual/bitcoin-leveldb

@@ -4,15 +4,17 @@
 
 EAPI=5
 
+BITCOINCORE_COMMITHASH="249bf0e0492758d71dc5d8fa77103b31b604979f"
+BITCOINCORE_POLICY_PATCHES="cpfp dcmp spamfilter"
 LANGS="ach af_ZA ar be_BY bg bs ca ca@valencia ca_ES cmn cs cy da de el_GR en eo es es_CL es_DO es_MX es_UY et eu_ES fa fa_IR fi fr fr_CA gl gu_IN he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV mn ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru sah sk sl_SI sq sr sv th_TH tr uk ur_PK uz@Cyrl vi vi_VN zh_HK zh_CN zh_TW"
-inherit bitcoincore-v0.10-20150112 eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2
+inherit bitcoincore-v0.10-20150112 eutils fdo-mime gnome2-utils kde4-functions qt4-r2
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 LICENSE="MIT GPL-3 LGPL-2.1 || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS=""
 
-IUSE="$IUSE dbus kde +qrcode test upnp +wallet"
+IUSE="$IUSE 1stclassmsg dbus kde +ljr +qrcode test upnp +wallet zeromq"
 
 RDEPEND="
 	virtual/bitcoin-leveldb
@@ -63,6 +65,7 @@ src_configure() {
 	bitcoincore_conf \
 		$(use_with dbus qtdbus)  \
 		$(use_with qrcode qrencode)  \
+		$(usex 1stclassmsg --enable-first-class-messaging)  \
 		--with-gui
 }
 

@@ -4,7 +4,7 @@
 
 EAPI=5
 
-BITCOINCORE_NO_SYSLIBS=1
+BITCOINCORE_COMMITHASH="249bf0e0492758d71dc5d8fa77103b31b604979f"
 inherit bitcoincore-v0.10-20150112
 
 DESCRIPTION="Command-line Bitcoin transaction tool"
@@ -15,11 +15,10 @@ IUSE=""
 
 src_prepare() {
 	bitcoincore_prepare
-	sed -i 's/bitcoin-cli//' src/Makefile.am
 	bitcoincore_autoreconf
 }
 
 src_configure() {
 	bitcoincore_conf \
-		--with-utils
+		--enable-util-tx
 }
