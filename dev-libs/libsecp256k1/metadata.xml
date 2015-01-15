@@ -7,5 +7,6 @@
 	</maintainer>
 	<use>
 		<flag name='asm'>Enable x86_64 assembly optimisation</flag>
+		<flag name='endomorphism'>Enable endomorphism</flag>
 	</use>
 </pkgmetadata>

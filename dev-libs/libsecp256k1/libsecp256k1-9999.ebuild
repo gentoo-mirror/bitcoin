@@ -40,7 +40,7 @@ src_configure() {
 	else
 		field=32bit
 	fi
-	
+
 	econf \
 		--disable-benchmark \
 		$(use_enable test tests) \
