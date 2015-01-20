@@ -8,8 +8,8 @@ inherit eutils qmake-utils git-r3 multilib
 
 DESCRIPTION="An intuitive QT/C++ system tray client for Open-Transactions."
 HOMEPAGE="http://opentransactions.org"
-EGIT_REPO_URI="git://github.com/yamamushi/Moneychanger.git \
-			 https://github.com/yamamushi/Moneychanger.git"
+EGIT_REPO_URI="git://github.com/Open-Transactions/Moneychanger.git \
+			 https://github.com/Open-Transactions/Moneychanger.git"
 EGIT_BRANCH="develop"
 LICENSE="AGPL-3"
 
