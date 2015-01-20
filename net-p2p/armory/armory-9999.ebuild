@@ -6,7 +6,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python{2_6,2_7} )
 
-inherit eutils fdo-mime python-any-r1 git-r3
+inherit eutils fdo-mime git-r3 python-any-r1
 
 DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else."
 HOMEPAGE="http://bitcoinarmory.com/"
@@ -33,7 +33,7 @@ RDEPEND="${COMMON_DEPEND}
 		 dev-python/psutil"
 
 src_prepare() {
-	epatch "${FILESDIR}/snappy-0.91.patch"
+#	epatch "${FILESDIR}/snappy-0.91.patch"
 
 	sed -i "s|python /usr/lib/|${EPYTHON} $( python_get_sitedir)/|" \
 		dpkgfiles/*.desktop || die "failed to modify desktop entry exec parameter"
