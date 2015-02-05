@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit bash-completion-r1 bitcoincore-v0.10-20150205 user systemd
+inherit bash-completion-r1 bitcoincore user systemd
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"

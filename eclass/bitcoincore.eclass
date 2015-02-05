@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 #
-# @ECLASS: bitcoincore-v0.10-20150205.eclass
+# @ECLASS: bitcoincore.eclass
 # @MAINTAINER:
 # Luke Dashjr <luke_gentoo_bitcoin@dashjr.org>
 # @BLURB: common code for Bitcoin Core 0.10 ebuilds
@@ -128,7 +128,7 @@ bitcoincore_pkg_pretend() {
 	$bitcoincore_policymsg_flag && einfo "For more information on any of the above, see ${LJR_PATCH_DESC}"
 }
 
-bitcoincore-v0.10-20150205_pkg_pretend() {
+bitcoincore_pkg_pretend() {
 	 bitcoincore_pkg_pretend
 }
 
@@ -160,7 +160,7 @@ bitcoincore_autoreconf() {
 	[ "${PV}" != "9999" ] && rm -r src/secp256k1
 }
 
-bitcoincore-v0.10-20150205_src_prepare() {
+bitcoincore_src_prepare() {
 	 bitcoincore_prepare
 	 bitcoincore_autoreconf
 }
@@ -202,7 +202,7 @@ bitcoincore_src_test() {
 	emake check
 }
 
-bitcoincore-v0.10-20150205_src_test() {
+bitcoincore_src_test() {
 	bitcoincore_src_test
 }
 
@@ -214,6 +214,6 @@ bitcoincore_install() {
 	dodoc doc/README.md doc/release-notes.md
 }
 
-bitcoincore-v0.10-20150205_src_install() {
+bitcoincore_src_install() {
 	 bitcoincore_install
 }

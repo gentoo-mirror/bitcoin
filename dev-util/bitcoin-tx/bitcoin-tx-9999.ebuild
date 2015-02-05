@@ -5,7 +5,7 @@
 EAPI=5
 
 BITCOINCORE_NO_SYSLIBS=1
-inherit bitcoincore-v0.10-20150205
+inherit bitcoincore
 
 DESCRIPTION="Command-line Bitcoin transaction tool"
 LICENSE="MIT"

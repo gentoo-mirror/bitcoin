@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit bitcoincore-v0.10-20150205 eutils
+inherit bitcoincore eutils
 
 DESCRIPTION="Bitcoin Core consensus library"
 LICENSE="MIT"
