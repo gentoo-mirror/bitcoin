@@ -5,7 +5,7 @@
 # @ECLASS: bitcoincore.eclass
 # @MAINTAINER:
 # Luke Dashjr <luke_gentoo_bitcoin@dashjr.org>
-# @BLURB: common code for Bitcoin Core 0.10 ebuilds
+# @BLURB: common code for Bitcoin Core ebuilds
 # @DESCRIPTION:
 # This eclass is used in Bitcoin Core ebuilds (bitcoin-qt, bitcoind,
 # libbitcoinconsensus) to provide a single common place for the common ebuild
@@ -32,18 +32,42 @@ fi
 # @DESCRIPTION:
 # Set this variable before the inherit line, to the upstream commit hash.
 
+# @ECLASS-VARIABLE: BITCOINCORE_LJR_DATE
+# @DESCRIPTION:
+# Set this variable before the inherit line, to the datestamp of the ljr
+# patchset.
+
 # @ECLASS-VARIABLE: BITCOINCORE_POLICY_PATCHES
 # @DESCRIPTION:
 # Set this variable before the inherit line, to a space-delimited list of
 # supported policies.
 
+# These are expected to change in future versions
+DOCS="${DOCS} doc/README.md doc/release-notes.md"
+OPENSSL_DEPEND="dev-libs/openssl:0[-bindist]"
+WALLET_DEPEND="sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]"
+
+case "${PV}" in
+0.10*)
+	BITCOINCORE_SERIES="0.10.x"
+	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20141212"
+	;;
+9999*)
+	BITCOINCORE_SERIES="9999"
+	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-9999"
+	;;
+*)
+	die "Unrecognised version"
+	;;
+esac
+
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-LJR_PV() { echo "${MyPV}.${1}20150205"; }
+LJR_PV() { echo "${MyPV}.${1}${BITCOINCORE_LJR_DATE}"; }
 LJR_PATCHDIR="${MyPN}-$(LJR_PV ljr).patches"
 LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV ljr).$@.patch"; }
-LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
+LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/${BITCOINCORE_SERIES}/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
 
 HOMEPAGE="http://bitcoin.org/"
 
@@ -53,7 +77,7 @@ if [ -z "$BITCOINCORE_COMMITHASH" ]; then
 else
 	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tgz"
 	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ]; then
-		SRC_URI="${SRC_URI} http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz"
+		SRC_URI="${SRC_URI} http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/${BITCOINCORE_SERIES}/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz"
 	fi
 	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 fi
@@ -65,19 +89,8 @@ if in_iuse bitcoin_policy_spamfilter; then
 	REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( ljr )"
 fi
 
-case "${PV}" in
-0.10*)
-	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20141212"
-	;;
-9999*)
-	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-9999"
-	;;
-*)
-	die "Unrecognised version"
-	;;
-esac
 BITCOINCORE_COMMON_DEPEND="
-	dev-libs/openssl:0[-bindist]
+	${OPENSSL_DEPEND}
 	$LIBSECP256K1_DEPEND
 "
 if [ "${PN}" != "libbitcoinconsensus" ]; then
@@ -88,16 +101,13 @@ bitcoincore_common_depend_use() {
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $1? ( $2 )"
 }
 bitcoincore_common_depend_use upnp net-libs/miniupnpc
-bitcoincore_common_depend_use wallet "sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]"
+bitcoincore_common_depend_use wallet "${WALLET_DEPEND}"
 bitcoincore_common_depend_use zeromq net-libs/zeromq
 RDEPEND="${RDEPEND} ${BITCOINCORE_COMMON_DEPEND}"
 DEPEND="${DEPEND} ${BITCOINCORE_COMMON_DEPEND}
 	>=app-shells/bash-4.1
 	sys-apps/sed
 "
-if in_iuse ljr; then
-	DEPEND="${DEPEND} ljr? ( dev-vcs/git )"
-fi
 
 bitcoincore_policymsg() {
 	local USEFlag="bitcoin_policy_$1"
@@ -211,7 +221,7 @@ bitcoincore_install() {
 
 	[ "${PN}" = "libbitcoinconsensus" ] || rm "${D}/usr/bin/test_bitcoin"
 
-	dodoc doc/README.md doc/release-notes.md
+	dodoc ${DOCS}
 }
 
 bitcoincore_src_install() {

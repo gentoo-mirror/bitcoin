@@ -5,6 +5,7 @@
 EAPI=5
 
 BITCOINCORE_COMMITHASH="e43f25c5b1c7b38d28cd0fba09098a9d56d9ac6b"
+BITCOINCORE_LJR_DATE="20150205"
 inherit bitcoincore
 
 DESCRIPTION="Command-line Bitcoin transaction tool"
