@@ -4,8 +4,8 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="249bf0e0492758d71dc5d8fa77103b31b604979f"
-inherit bitcoincore-v0.10-20150112 eutils
+BITCOINCORE_COMMITHASH="e43f25c5b1c7b38d28cd0fba09098a9d56d9ac6b"
+inherit bitcoincore-v0.10-20150205 eutils
 
 DESCRIPTION="Bitcoin Core consensus library"
 LICENSE="MIT"

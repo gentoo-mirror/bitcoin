@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 #
-# @ECLASS: bitcoincore-v0.10-20150112.eclass
+# @ECLASS: bitcoincore-v0.10-20150205.eclass
 # @MAINTAINER:
 # Luke Dashjr <luke_gentoo_bitcoin@dashjr.org>
 # @BLURB: common code for Bitcoin Core 0.10 ebuilds
@@ -40,7 +40,7 @@ fi
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-LJR_PV() { echo "${MyPV}.${1}20150112"; }
+LJR_PV() { echo "${MyPV}.${1}20150205"; }
 LJR_PATCHDIR="${MyPN}-$(LJR_PV ljr).patches"
 LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV ljr).$@.patch"; }
 LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/0.10.x/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
@@ -61,6 +61,9 @@ fi
 for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
 done
+if in_iuse bitcoin_policy_spamfilter; then
+	REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( ljr )"
+fi
 
 case "${PV}" in
 0.10*)
@@ -125,7 +128,7 @@ bitcoincore_pkg_pretend() {
 	$bitcoincore_policymsg_flag && einfo "For more information on any of the above, see ${LJR_PATCH_DESC}"
 }
 
-bitcoincore-v0.10-20150112_pkg_pretend() {
+bitcoincore-v0.10-20150205_pkg_pretend() {
 	 bitcoincore_pkg_pretend
 }
 
@@ -157,7 +160,7 @@ bitcoincore_autoreconf() {
 	[ "${PV}" != "9999" ] && rm -r src/secp256k1
 }
 
-bitcoincore-v0.10-20150112_src_prepare() {
+bitcoincore-v0.10-20150205_src_prepare() {
 	 bitcoincore_prepare
 	 bitcoincore_autoreconf
 }
@@ -199,7 +202,7 @@ bitcoincore_src_test() {
 	emake check
 }
 
-bitcoincore-v0.10-20150112_src_test() {
+bitcoincore-v0.10-20150205_src_test() {
 	bitcoincore_src_test
 }
 
@@ -211,6 +214,6 @@ bitcoincore_install() {
 	dodoc doc/README.md doc/release-notes.md
 }
 
-bitcoincore-v0.10-20150112_src_install() {
+bitcoincore-v0.10-20150205_src_install() {
 	 bitcoincore_install
 }
