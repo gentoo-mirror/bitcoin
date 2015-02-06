@@ -75,7 +75,7 @@ LJR_PATCHDIR="${MyPN}-$(LJR_PV ljr).patches"
 LJR_PATCH() { echo "${WORKDIR}/${LJR_PATCHDIR}/${MyPN}-$(LJR_PV ljr).$@.patch"; }
 LJR_PATCH_DESC="http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/${BITCOINCORE_SERIES}/$(LJR_PV ljr)/${MyPN}-$(LJR_PV ljr).desc.txt"
 
-HOMEPAGE="http://bitcoin.org/"
+HOMEPAGE="https://github.com/bitcoin/bitcoin"
 
 if [ -z "$BITCOINCORE_COMMITHASH" ]; then
 	EGIT_PROJECT='bitcoin'
