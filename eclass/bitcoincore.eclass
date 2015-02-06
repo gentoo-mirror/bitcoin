@@ -144,10 +144,6 @@ bitcoincore_pkg_pretend() {
 	$bitcoincore_policymsg_flag && einfo "For more information on any of the above, see ${LJR_PATCH_DESC}"
 }
 
-bitcoincore_pkg_pretend() {
-	 bitcoincore_pkg_pretend
-}
-
 bitcoincore_prepare() {
 	if [ -n "${BITCOINCORE_NO_SYSLIBS}" ]; then
 		true
@@ -216,10 +212,6 @@ bitcoincore_conf() {
 
 bitcoincore_src_test() {
 	emake check
-}
-
-bitcoincore_src_test() {
-	bitcoincore_src_test
 }
 
 bitcoincore_install() {
