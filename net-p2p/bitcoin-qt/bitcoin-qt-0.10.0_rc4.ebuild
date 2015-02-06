@@ -71,7 +71,7 @@ src_configure() {
 }
 
 src_install() {
-	bitcoincore_install
+	bitcoincore_src_install
 
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"

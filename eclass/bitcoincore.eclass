@@ -218,16 +218,9 @@ bitcoincore_src_test() {
 	emake check
 }
 
-bitcoincore_install() {
-	emake DESTDIR="${D}" install
-
-	[ "${PN}" = "libbitcoinconsensus" ] || rm "${D}/usr/bin/test_bitcoin"
-
-	dodoc ${DOCS}
-}
-
 bitcoincore_src_install() {
-	 bitcoincore_install
+	default
+	[ "${PN}" = "libbitcoinconsensus" ] || rm "${D}/usr/bin/test_bitcoin"
 }
 
 _BITCOINCORE_ECLASS=1

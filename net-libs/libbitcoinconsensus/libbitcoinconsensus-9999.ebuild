@@ -18,6 +18,6 @@ src_configure() {
 }
 
 src_install() {
-	bitcoincore_install
+	bitcoincore_src_install
 	prune_libtool_files
 }

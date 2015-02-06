@@ -34,7 +34,7 @@ src_configure() {
 }
 
 src_install() {
-	bitcoincore_install
+	bitcoincore_src_install
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
