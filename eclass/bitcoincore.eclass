@@ -15,6 +15,8 @@
 
 has "${EAPI:-0}" 5 || die "EAPI=${EAPI} not supported"
 
+if [[ ! ${_BITCOINCORE_ECLASS} ]]; then
+
 DB_VER="4.8"
 inherit autotools db-use eutils
 
@@ -22,11 +24,15 @@ if [ -z "$BITCOINCORE_COMMITHASH" ]; then
 	inherit git-2
 fi
 
+fi
+
 EXPORT_FUNCTIONS src_prepare src_test src_install
 
 if in_iuse ljr || in_iuse 1stclassmsg || in_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
 	EXPORT_FUNCTIONS pkg_pretend
 fi
+
+if [[ ! ${_BITCOINCORE_ECLASS} ]]; then
 
 # @ECLASS-VARIABLE: BITCOINCORE_COMMITHASH
 # @DESCRIPTION:
@@ -227,3 +233,6 @@ bitcoincore_install() {
 bitcoincore_src_install() {
 	 bitcoincore_install
 }
+
+_BITCOINCORE_ECLASS=1
+fi
