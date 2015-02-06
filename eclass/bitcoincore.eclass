@@ -168,8 +168,12 @@ bitcoincore_prepare() {
 
 bitcoincore_autoreconf() {
 	eautoreconf
-	rm -r src/leveldb
-	[ "${PV}" != "9999" ] && rm -r src/secp256k1
+	rm -r src/leveldb || die
+	
+	# Temporarily using embedded secp256k1 for 9999 while API is in flux
+	if [ "${PV}" != "9999" ]; then
+		rm -r src/secp256k1 || die
+	fi
 }
 
 bitcoincore_src_prepare() {
