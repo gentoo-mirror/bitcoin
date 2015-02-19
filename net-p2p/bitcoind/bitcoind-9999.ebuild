@@ -4,14 +4,13 @@
 
 EAPI=5
 
+BITCOINCORE_IUSE="examples logrotate test upnp +wallet"
 inherit bash-completion-r1 bitcoincore user systemd
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-
-IUSE="examples logrotate test upnp +wallet"
 
 RDEPEND="
 	virtual/bitcoin-leveldb

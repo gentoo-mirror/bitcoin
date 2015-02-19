@@ -5,13 +5,13 @@
 EAPI=5
 
 BITCOINCORE_NO_SYSLIBS=1
+BITCOINCORE_IUSE=""
 inherit bitcoincore
 
 DESCRIPTION="Command-line Bitcoin transaction tool"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
 
 src_prepare() {
 	bitcoincore_prepare

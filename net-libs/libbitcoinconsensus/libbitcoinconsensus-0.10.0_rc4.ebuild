@@ -6,13 +6,13 @@ EAPI=5
 
 BITCOINCORE_COMMITHASH="e43f25c5b1c7b38d28cd0fba09098a9d56d9ac6b"
 BITCOINCORE_LJR_DATE="20150205"
+BITCOINCORE_IUSE="test"
 inherit bitcoincore eutils
 
 DESCRIPTION="Bitcoin Core consensus library"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="test"
 
 src_configure() {
 	bitcoincore_conf \

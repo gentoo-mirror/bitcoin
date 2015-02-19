@@ -17,6 +17,18 @@ has "${EAPI:-0}" 5 || die "EAPI=${EAPI} not supported"
 
 if [[ ! ${_BITCOINCORE_ECLASS} ]]; then
 
+in_bcc_iuse() {
+	local liuse=( ${BITCOINCORE_IUSE} )
+	has "${1}" "${liuse[@]#[+-]}"
+}
+
+in_bcc_policy() {
+	local liuse=( ${BITCOINCORE_POLICY_PATCHES} )
+	has "${1}" "${liuse[@]#[+-]}"
+}
+in_bcc_policy cpfpd
+in_bcc_policy spamfilter
+
 DB_VER="4.8"
 inherit autotools db-use eutils
 
@@ -28,7 +40,7 @@ fi
 
 EXPORT_FUNCTIONS src_prepare src_test src_install
 
-if in_iuse ljr || in_iuse 1stclassmsg || in_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
+if in_bcc_iuse ljr || in_bcc_iuse 1stclassmsg || in_bcc_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
 	EXPORT_FUNCTIONS pkg_pretend
 fi
 
@@ -37,6 +49,10 @@ if [[ ! ${_BITCOINCORE_ECLASS} ]]; then
 # @ECLASS-VARIABLE: BITCOINCORE_COMMITHASH
 # @DESCRIPTION:
 # Set this variable before the inherit line, to the upstream commit hash.
+
+# @ECLASS-VARIABLE: BITCOINCORE_IUSE
+# @DESCRIPTION:
+# Set this variable before the inherit line, to the USE flags supported.
 
 # @ECLASS-VARIABLE: BITCOINCORE_LJR_DATE
 # @DESCRIPTION:
@@ -88,10 +104,11 @@ else
 	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 fi
 
+IUSE="$IUSE $BITCOINCORE_IUSE"
 for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
 done
-if in_iuse bitcoin_policy_spamfilter; then
+if in_bcc_policy spamfilter; then
 	REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( ljr )"
 fi
 
@@ -103,7 +120,7 @@ if [ "${PN}" != "libbitcoinconsensus" ]; then
 	BITCOINCORE_COMMON_DEPEND=">=dev-libs/boost-1.52.0[threads(+)]"
 fi
 bitcoincore_common_depend_use() {
-	in_iuse "$1" || return
+	in_bcc_iuse "$1" || return
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $1? ( $2 )"
 }
 bitcoincore_common_depend_use upnp net-libs/miniupnpc
