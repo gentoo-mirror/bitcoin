@@ -10,7 +10,7 @@ LICENSE="MIT"
 
 SRC_URI="https://gitorious.org/bitcoin/${PN}/archive/v${PV}.tar.gz -> ${P}.tgz"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 arm mips ppc ppc64 x86"
 IUSE=""
 
 DEPEND="
