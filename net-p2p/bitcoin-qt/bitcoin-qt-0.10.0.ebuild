@@ -4,8 +4,8 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="e43f25c5b1c7b38d28cd0fba09098a9d56d9ac6b"
-BITCOINCORE_LJR_DATE="20150205"
+BITCOINCORE_COMMITHASH="047a89831760ff124740fe9f58411d57ee087078"
+BITCOINCORE_LJR_DATE="20150220"
 BITCOINCORE_IUSE="1stclassmsg dbus kde +ljr +qrcode test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="cpfp dcmp spamfilter"
 LANGS="ach af_ZA ar be_BY bg bs ca ca@valencia ca_ES cmn cs cy da de el_GR en eo es es_CL es_DO es_MX es_UY et eu_ES fa fa_IR fi fr fr_CA gl gu_IN he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV mn ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru sah sk sl_SI sq sr sv th_TH tr uk ur_PK uz@Cyrl vi vi_VN zh_HK zh_CN zh_TW"

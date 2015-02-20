@@ -108,9 +108,6 @@ IUSE="$IUSE $BITCOINCORE_IUSE"
 for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
 done
-if in_bcc_policy spamfilter; then
-	REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( ljr )"
-fi
 
 BITCOINCORE_COMMON_DEPEND="
 	${OPENSSL_DEPEND}
@@ -131,6 +128,9 @@ DEPEND="${DEPEND} ${BITCOINCORE_COMMON_DEPEND}
 	>=app-shells/bash-4.1
 	sys-apps/sed
 "
+if in_bcc_iuse ljr && [ "$BITCOINCORE_SERIES" = "0.10.x" ]; then
+	DEPEND="${DEPEND} ljr? ( dev-vcs/git )"
+fi
 
 bitcoincore_policymsg() {
 	local USEFlag="bitcoin_policy_$1"
@@ -172,7 +172,14 @@ bitcoincore_prepare() {
 		epatch "$(LJR_PATCH syslibs)"
 	fi
 	if use_if_iuse ljr; then
-		epatch "$(LJR_PATCH ljrF)"
+		if [ "${BITCOINCORE_SERIES}" = "0.10.x" ]; then
+			# Regular epatch won't work with binary files
+			local patchfile="$(LJR_PATCH ljrF)"
+			einfo "Applying ${patchfile##*/} ..."
+			git apply --whitespace=nowarn "${patchfile}" || die
+		else
+			epatch "$(LJR_PATCH ljrF)"
+		fi
 	fi
 	if use_if_iuse 1stclassmsg; then
 		epatch "$(LJR_PATCH 1stclassmsg)"
