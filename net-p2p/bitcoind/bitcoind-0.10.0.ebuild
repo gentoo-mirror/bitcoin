@@ -6,7 +6,8 @@ EAPI=5
 
 BITCOINCORE_COMMITHASH="047a89831760ff124740fe9f58411d57ee087078"
 BITCOINCORE_LJR_DATE="20150220"
-BITCOINCORE_IUSE="examples +ljr logrotate test upnp +wallet zeromq"
+BITCOINCORE_XT_DIFF="047a89831760ff124740fe9f58411d57ee087078...d4084b62c42c38bfe302d712b98909ab26ecce2f"
+BITCOINCORE_IUSE="examples +ljr logrotate test upnp +wallet xt zeromq"
 BITCOINCORE_POLICY_PATCHES="cpfp dcmp spamfilter"
 inherit bash-completion-r1 bitcoincore user systemd
 

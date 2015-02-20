@@ -101,6 +101,10 @@ else
 	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ]; then
 		SRC_URI="${SRC_URI} http://luke.dashjr.org/programs/${MyPN}/files/${MyPN}d/luke-jr/${BITCOINCORE_SERIES}/$(LJR_PV ljr)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz"
 	fi
+	if in_bcc_iuse xt; then
+		BITCOINXT_PATCHFILE="${MyPN}xt-v${PV}.patch"
+		SRC_URI="${SRC_URI} xt? ( https://github.com/bitcoinxt/bitcoinxt/compare/${BITCOINCORE_XT_DIFF}.diff -> ${BITCOINXT_PATCHFILE} )"
+	fi
 	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 fi
 
@@ -145,7 +149,7 @@ bitcoincore_policymsg() {
 
 bitcoincore_pkg_pretend() {
 	bitcoincore_policymsg_flag=false
-	if use_if_iuse ljr || use_if_iuse 1stclassmsg || use_if_iuse zeromq; then
+	if use_if_iuse ljr || use_if_iuse 1stclassmsg || use_if_iuse xt || use_if_iuse zeromq; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 		bitcoincore_policymsg_flag=true
 	fi
@@ -183,6 +187,9 @@ bitcoincore_prepare() {
 	fi
 	if use_if_iuse 1stclassmsg; then
 		epatch "$(LJR_PATCH 1stclassmsg)"
+	fi
+	if use_if_iuse xt; then
+		epatch "${DISTDIR}/${BITCOINXT_PATCHFILE}"
 	fi
 	use_if_iuse zeromq && epatch "$(LJR_PATCH zeromq)"
 	for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do

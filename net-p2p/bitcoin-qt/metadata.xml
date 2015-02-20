@@ -15,6 +15,7 @@
 		<flag name='qrcode'>Enable generation of QR Codes for receiving payments</flag>
 		<flag name='upnp'>Enable Universal Plug and Play</flag>
 		<flag name='wallet'>Enable wallet support</flag>
+		<flag name='xt'>Enable Mike Hearn's Bitcoin XT patches</flag>
 		<flag name='zeromq'>Report blocks and transactions via zeromq</flag>
 	</use>
 </pkgmetadata>
