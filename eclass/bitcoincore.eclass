@@ -26,8 +26,6 @@ in_bcc_policy() {
 	local liuse=( ${BITCOINCORE_POLICY_PATCHES} )
 	has "${1}" "${liuse[@]#[+-]}"
 }
-in_bcc_policy cpfpd
-in_bcc_policy spamfilter
 
 DB_VER="4.8"
 inherit autotools db-use eutils
@@ -73,6 +71,7 @@ case "${PV}" in
 0.10*)
 	BITCOINCORE_SERIES="0.10.x"
 	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20141212"
+	BITCOINCORE_XT_DIFF="047a89831760ff124740fe9f58411d57ee087078...d4084b62c42c38bfe302d712b98909ab26ecce2f"
 	;;
 9999*)
 	BITCOINCORE_SERIES="9999"
@@ -108,10 +107,20 @@ else
 	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 fi
 
-IUSE="$IUSE $BITCOINCORE_IUSE"
-for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
-	IUSE="$IUSE +bitcoin_policy_${mypolicy}"
-done
+bitcoincore_policy_iuse() {
+	local mypolicy iuse_def new_BITCOINCORE_IUSE=
+	for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
+		if [[ "${mypolicy:0:1}" =~ ^[+-] ]]; then
+			iuse_def=${mypolicy:0:1}
+			mypolicy="${mypolicy:1}"
+		else
+			iuse_def=
+		fi
+		new_BITCOINCORE_IUSE="$new_BITCOINCORE_IUSE ${iuse_def}bitcoin_policy_${mypolicy}"
+	done
+	echo $new_BITCOINCORE_IUSE
+}
+IUSE="$IUSE $BITCOINCORE_IUSE $(bitcoincore_policy_iuse)"
 
 BITCOINCORE_COMMON_DEPEND="
 	${OPENSSL_DEPEND}
@@ -193,7 +202,9 @@ bitcoincore_prepare() {
 	fi
 	use_if_iuse zeromq && epatch "$(LJR_PATCH zeromq)"
 	for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
-		use bitcoin_policy_${mypolicy} && epatch "$(LJR_PATCH ${mypolicy})"
+		mypolicy="${mypolicy#[-+]}"
+		use bitcoin_policy_${mypolicy} || continue
+		epatch "$(LJR_PATCH ${mypolicy})"
 	done
 }
 
