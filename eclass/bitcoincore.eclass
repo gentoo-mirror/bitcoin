@@ -71,6 +71,7 @@ case "${PV}" in
 0.10*)
 	BITCOINCORE_SERIES="0.10.x"
 	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20141212"
+	BITCOINCORE_RBF_DIFF="e43f25c5b1c7b38d28cd0fba09098a9d56d9ac6b...eb22364e5a7cd2595d98c890e3668e97c0905a06"
 	BITCOINCORE_XT_DIFF="047a89831760ff124740fe9f58411d57ee087078...d4084b62c42c38bfe302d712b98909ab26ecce2f"
 	;;
 9999*)
@@ -104,6 +105,10 @@ else
 		BITCOINXT_PATCHFILE="${MyPN}xt-v${PV}.patch"
 		SRC_URI="${SRC_URI} xt? ( https://github.com/bitcoinxt/bitcoinxt/compare/${BITCOINCORE_XT_DIFF}.diff -> ${BITCOINXT_PATCHFILE} )"
 	fi
+	if in_bcc_policy rbf; then
+		BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v${PV}.patch"
+		SRC_URI="${SRC_URI} bitcoin_policy_rbf? ( https://github.com/petertodd/bitcoin/compare/${BITCOINCORE_RBF_DIFF}.diff -> ${BITCOINCORE_RBF_PATCHFILE} )"
+	fi
 	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 fi
 
@@ -121,6 +126,9 @@ bitcoincore_policy_iuse() {
 	echo $new_BITCOINCORE_IUSE
 }
 IUSE="$IUSE $BITCOINCORE_IUSE $(bitcoincore_policy_iuse)"
+if in_bcc_policy rbf && in_bcc_iuse xt; then
+	REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_rbf? ( !xt )"
+fi
 
 BITCOINCORE_COMMON_DEPEND="
 	${OPENSSL_DEPEND}
@@ -168,6 +176,9 @@ bitcoincore_pkg_pretend() {
 	bitcoincore_policymsg dcmp \
 		"Data Carrier Multi-Push policy is enabled: Your node will assist transactions with at most a single multiple-'push' data carrier output." \
 		"Data Carrier Multi-Push policy is disabled: Your node will assist transactions with at most a single data carrier output with only a single 'push'."
+	bitcoincore_policymsg rbf \
+		"Replace By Fee policy is enabled: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order." \
+		"Replace By Fee policy is disabled: Your node will only accept the first transaction seen consuming a conflicting input, regardless of fee offered by later ones."
 	bitcoincore_policymsg spamfilter \
 		"Enhanced spam filter policy is enabled: Notorious spammers will not be assisted by your node. This may impact your ability to use some spammy services (see link for a list)." \
 		"Enhanced spam filter policy is DISABLED: Your node will not be checking for notorious spammers, and may assist them. Set BITCOIN_POLICY=spamfilter to enable."
@@ -204,7 +215,14 @@ bitcoincore_prepare() {
 	for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 		mypolicy="${mypolicy#[-+]}"
 		use bitcoin_policy_${mypolicy} || continue
-		epatch "$(LJR_PATCH ${mypolicy})"
+		case "${mypolicy}" in
+		rbf)
+			epatch "${DISTDIR}/${BITCOINCORE_RBF_PATCHFILE}"
+			;;
+		*)
+			epatch "$(LJR_PATCH ${mypolicy})"
+			;;
+		esac
 	done
 }
 
