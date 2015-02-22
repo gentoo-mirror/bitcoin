@@ -23,4 +23,5 @@ RDEPEND="
 		=dev-libs/leveldb-1.14.0-r1[-snappy]
 		=dev-libs/leveldb-1.15.0-r1[-snappy]
 		=dev-libs/leveldb-1.17[-snappy]
+		=dev-libs/leveldb-1.18[-snappy]
 	)"
