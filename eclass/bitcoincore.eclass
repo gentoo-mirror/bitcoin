@@ -265,6 +265,7 @@ bitcoincore_conf() {
 	fi
 	econf \
 		--disable-ccache \
+		--disable-static \
 		--with-system-leveldb       \
 		--with-system-libsecp256k1  \
 		--without-libs    \
