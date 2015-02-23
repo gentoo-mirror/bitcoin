@@ -6,6 +6,7 @@ EAPI=5
 
 LANGS="ach af_ZA ar be_BY bg bs ca ca@valencia ca_ES cmn cs cy da de el_GR en eo es es_CL es_DO es_MX es_UY et eu_ES fa fa_IR fi fr fr_CA gl gu_IN he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV mn ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru sah sk sl_SI sq sr sv th_TH tr uk ur_PK uz@Cyrl vi vi_VN zh_HK zh_CN zh_TW"
 BITCOINCORE_IUSE="dbus kde +qrcode test upnp +wallet"
+BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2
 
@@ -15,7 +16,6 @@ SLOT="0"
 KEYWORDS=""
 
 RDEPEND="
-	virtual/bitcoin-leveldb
 	dev-libs/protobuf
 	qrcode? (
 		media-gfx/qrencode

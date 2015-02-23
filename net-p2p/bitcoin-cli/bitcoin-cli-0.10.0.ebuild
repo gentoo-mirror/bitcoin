@@ -14,10 +14,6 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86 ~amd64-linux ~x86-linux"
 
-RDEPEND="
-	virtual/bitcoin-leveldb
-"
-
 src_prepare() {
 	bitcoincore_prepare
 	bitcoincore_autoreconf

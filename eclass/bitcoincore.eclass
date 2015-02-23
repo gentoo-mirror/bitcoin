@@ -151,6 +151,9 @@ DEPEND="${DEPEND} ${BITCOINCORE_COMMON_DEPEND}
 	>=app-shells/bash-4.1
 	sys-apps/sed
 "
+if [ "${BITCOINCORE_NEED_LEVELDB}" = "1" ]; then
+	RDEPEND="${RDEPEND} virtual/bitcoin-leveldb"
+fi
 if in_bcc_iuse ljr && [ "$BITCOINCORE_SERIES" = "0.10.x" ]; then
 	DEPEND="${DEPEND} ljr? ( dev-vcs/git )"
 fi
@@ -265,10 +268,13 @@ bitcoincore_conf() {
 	else
 		my_econf="${my_econf} --without-utils"
 	fi
+	if [ "${BITCOINCORE_NEED_LEVELDB}" = "1" ]; then
+		# Passing --with-system-leveldb fails if leveldb is not installed, so only use it for targets that use LevelDB
+		my_econf="${my_econf} --with-system-leveldb"
+	fi
 	econf \
 		--disable-ccache \
 		--disable-static \
-		--with-system-leveldb       \
 		--with-system-libsecp256k1  \
 		--without-libs    \
 		--without-daemon  \

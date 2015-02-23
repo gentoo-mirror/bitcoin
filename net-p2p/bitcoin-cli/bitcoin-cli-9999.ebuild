@@ -13,10 +13,6 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 
-RDEPEND="
-	virtual/bitcoin-leveldb
-"
-
 src_prepare() {
 	bitcoincore_prepare
 	sed -i 's/bitcoin-tx//' src/Makefile.am

@@ -5,6 +5,7 @@
 EAPI=5
 
 BITCOINCORE_IUSE="examples logrotate test upnp +wallet"
+BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bash-completion-r1 bitcoincore user systemd
 
@@ -14,7 +15,6 @@ SLOT="0"
 KEYWORDS=""
 
 RDEPEND="
-	virtual/bitcoin-leveldb
 	logrotate? (
 		app-admin/logrotate
 	)
