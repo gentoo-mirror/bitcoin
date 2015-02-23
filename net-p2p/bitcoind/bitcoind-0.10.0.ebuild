@@ -8,6 +8,7 @@ BITCOINCORE_COMMITHASH="047a89831760ff124740fe9f58411d57ee087078"
 BITCOINCORE_LJR_DATE="20150220"
 BITCOINCORE_IUSE="examples +ljr logrotate test upnp +wallet xt zeromq"
 BITCOINCORE_POLICY_PATCHES="+cpfp +dcmp rbf +spamfilter"
+BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bash-completion-r1 bitcoincore user systemd
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"

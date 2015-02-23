@@ -5,6 +5,7 @@
 EAPI=5
 
 BITCOINCORE_IUSE="examples logrotate test upnp +wallet"
+BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bash-completion-r1 bitcoincore user systemd
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
