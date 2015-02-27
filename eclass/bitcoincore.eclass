@@ -185,8 +185,8 @@ bitcoincore_pkg_pretend() {
 		"Replace By Fee policy is enabled: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order." \
 		"Replace By Fee policy is disabled: Your node will only accept the first transaction seen consuming a conflicting input, regardless of fee offered by later ones."
 	bitcoincore_policymsg spamfilter \
-		"Enhanced spam filter policy is enabled: Notorious spammers will not be assisted by your node. This may impact your ability to use some spammy services (see link for a list)." \
-		"Enhanced spam filter policy is DISABLED: Your node will not be checking for notorious spammers, and may assist them. Set BITCOIN_POLICY=spamfilter to enable."
+		"Enhanced spam filter policy is enabled: Your node will identify notorious spam scripts and avoid assisting them. This may impact your ability to use some spammy services (see link for a list)." \
+		"Enhanced spam filter policy is DISABLED: Your node will not check for notorious spam scripts, and may assist them. Set BITCOIN_POLICY=spamfilter to enable."
 	$bitcoincore_policymsg_flag && einfo "For more information on any of the above, see ${LJR_PATCH_DESC}"
 }
 
