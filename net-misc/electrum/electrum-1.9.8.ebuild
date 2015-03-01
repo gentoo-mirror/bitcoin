@@ -24,7 +24,7 @@ LINGUAS="ar_SA cs_CZ de_DE eo_UY es_ES fr_FR hu_HU
 IUSE="gtk qrcode +qt4 webkit"
 
 for lingua in ${LINGUAS}; do
-		IUSE+=" linguas_${lingua}"
+	IUSE+=" linguas_${lingua}"
 done
 
 RDEPEND="
@@ -36,9 +36,9 @@ RDEPEND="
 	qt4? (
 		 webkit? ( dev-python/PyQt4[webkit] )
 		 dev-python/PyQt4[${PYTHON_USEDEP}]
-		 )"
+	)"
 
-S=${WORKDIR}/${MY_P}
+S="${WORKDIR}/${MY_P}"
 
 DOCS="RELEASE-NOTES"
 
