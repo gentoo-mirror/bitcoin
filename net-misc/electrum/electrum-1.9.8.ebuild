@@ -66,6 +66,9 @@ src_prepare() {
 	epatch "${FILESDIR}"/electrum.desktop-1.9.7.patch
 	validate_desktop_entries
 
+	# Bugfix
+	epatch "${FILESDIR}/${PV}-gtk3-fix.patch"
+
 	# Remove unrequested localization files:
 	for lang in ${LINGUAS}; do
 		if use linguas_${lang}; then
