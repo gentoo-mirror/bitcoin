@@ -62,14 +62,14 @@ src_prepare() {
 	done
 
 	# Remove unrequested GUI implementations:
-	if use !gtk; then
+	if ! use gtk; then
 		sed -i "/'electrum_gui.gtk/d" setup.py || die
 	fi
-	if use !qt4; then
+	if ! use qt4; then
 		sed -i "/'electrum_gui.qt/d" setup.py  || die
 	fi
 
-	if use !qt4; then
+	if ! use qt4; then
 		if use gtk; then
 			sed -i "s/config.get('gui','classic')/ config.get('gui','gtk')/" electrum || die
 		else
@@ -77,11 +77,11 @@ src_prepare() {
 		fi
 	fi
 
-	if use !webkit; then
+	if ! use webkit; then
 		sed -i "/'electrum_plugins.coinbase_buyback/d" setup.py || die
 	fi
 
-	if use !qrcode; then
+	if ! use qrcode; then
 		sed -i "/'electrum_plugins.qrscanner/d" setup.py || die
 	fi
 
