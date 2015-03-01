@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 LINGUAS="ar_SA cs_CZ de_DE eo_UY es_ES fr_FR hu_HU
 		 id_ID it_IT ja_JP ky_KG lv_LV nl_NL
-		 pl_PL pt_BR pt_PT ro_RO ru_RU sl_SI
+		 pl_PL pt_BR pt_PT ro_RO ru_RU sk_SK sl_SI
 		 ta_IN th_TH vi_VN zh_CN"
 
 IUSE="gtk qrcode +qt4 webkit"
