@@ -5,6 +5,7 @@
 EAPI="5"
 
 PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_REQ_USE="ncurses="
 
 inherit eutils distutils-r1 gnome2-utils
 
@@ -21,13 +22,14 @@ LINGUAS="ar_SA cs_CZ de_DE eo_UY es_ES fr_FR hu_HU
 		 pl_PL pt_BR pt_PT ro_RO ru_RU sk_SK sl_SI
 		 ta_IN th_TH vi_VN zh_CN"
 
-IUSE="aliases coinbase_com +fiat gtk pos qrcode +qt4 sync vkb"
+IUSE="aliases cli coinbase_com +fiat gtk3 ncurses pos qrcode +qt4 sync vkb"
 
 for lingua in ${LINGUAS}; do
 	IUSE+=" linguas_${lingua}"
 done
 
 REQUIRED_USE="
+	|| ( cli gtk3 ncurses qt4 )
 	aliases? ( qt4 )
 	coinbase_com? ( qt4 )
 	fiat? ( qt4 )
@@ -41,12 +43,17 @@ RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	>=dev-python/ecdsa-0.9[${PYTHON_USEDEP}]
 	dev-python/slowaes[${PYTHON_USEDEP}]
-	gtk? ( dev-python/pygtk:2[${PYTHON_USEDEP}] )
+	gtk3? (
+		dev-python/pygobject:3[${PYTHON_USEDEP}]
+		x11-libs/gtk+:3[introspection]
+	)
 	qrcode? ( media-gfx/zbar[python,v4l,${PYTHON_USEDEP}] )
 	qt4? (
 		coinbase_com? ( dev-python/PyQt4[${PYTHON_USEDEP},webkit] )
 		dev-python/PyQt4[${PYTHON_USEDEP}]
-	)"
+	)
+	ncurses? ( dev-lang/python )
+"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -69,19 +76,19 @@ src_prepare() {
 	done
 
 	# Remove unrequested GUI implementations:
-	if ! use gtk; then
-		sed -i "/'electrum_gui.gtk/d" setup.py || die
-	fi
-	if ! use qt4; then
-		sed -i "/'electrum_gui.qt/d" setup.py  || die
-	fi
+	local gui
+	for gui in  \
+		$(usex cli      '' stdio)  \
+		$(usex gtk3     '' gtk  )  \
+		$(usex qt4      '' qt   )  \
+		$(usex ncurses  '' text )  \
+	; do
+		sed -i "/'electrum_gui\.${gui}/d" setup.py || die
+	done
 
 	if ! use qt4; then
-		if use gtk; then
-			sed -i "s/config.get('gui','classic')/ config.get('gui','gtk')/" electrum || die
-		else
-			sed -i "s/config.get('gui','classic')/ config.get('gui','text')/" electrum || die
-		fi
+		local bestgui=$(usex gtk3 gtk $(usex ncurses text stdio))
+		sed -i "s/\(config.get('gui', \?\)'classic'/\1'${bestgui}'/" electrum || die
 	fi
 
 	local plugin
