@@ -27,6 +27,10 @@ for lingua in ${LINGUAS}; do
 	IUSE+=" linguas_${lingua}"
 done
 
+REQUIRED_USE="
+	webkit? ( qt4 )
+"
+
 RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	>=dev-python/ecdsa-0.9[${PYTHON_USEDEP}]
@@ -34,8 +38,7 @@ RDEPEND="
 	gtk? ( dev-python/pygtk:2[${PYTHON_USEDEP}] )
 	qrcode? ( media-gfx/zbar[python,v4l,${PYTHON_USEDEP}] )
 	qt4? (
-		 webkit? ( dev-python/PyQt4[webkit] )
-		 dev-python/PyQt4[${PYTHON_USEDEP}]
+		 dev-python/PyQt4[${PYTHON_USEDEP},webkit=]
 	)"
 
 S="${WORKDIR}/${MY_P}"
