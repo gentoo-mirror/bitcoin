@@ -21,14 +21,20 @@ LINGUAS="ar_SA cs_CZ de_DE eo_UY es_ES fr_FR hu_HU
 		 pl_PL pt_BR pt_PT ro_RO ru_RU sk_SK sl_SI
 		 ta_IN th_TH vi_VN zh_CN"
 
-IUSE="gtk qrcode +qt4 webkit"
+IUSE="aliases coinbase_com +fiat gtk pos qrcode +qt4 sync vkb"
 
 for lingua in ${LINGUAS}; do
 	IUSE+=" linguas_${lingua}"
 done
 
 REQUIRED_USE="
-	webkit? ( qt4 )
+	aliases? ( qt4 )
+	coinbase_com? ( qt4 )
+	fiat? ( qt4 )
+	pos? ( qt4 )
+	qrcode? ( qt4 )
+	sync? ( qt4 )
+	vkb? ( qt4 )
 "
 
 RDEPEND="
@@ -38,7 +44,8 @@ RDEPEND="
 	gtk? ( dev-python/pygtk:2[${PYTHON_USEDEP}] )
 	qrcode? ( media-gfx/zbar[python,v4l,${PYTHON_USEDEP}] )
 	qt4? (
-		 dev-python/PyQt4[${PYTHON_USEDEP},webkit=]
+		coinbase_com? ( dev-python/PyQt4[${PYTHON_USEDEP},webkit] )
+		dev-python/PyQt4[${PYTHON_USEDEP}]
 	)"
 
 S="${WORKDIR}/${MY_P}"
@@ -77,13 +84,18 @@ src_prepare() {
 		fi
 	fi
 
-	if ! use webkit; then
-		sed -i "/'electrum_plugins.coinbase_buyback/d" setup.py || die
-	fi
-
-	if ! use qrcode; then
-		sed -i "/'electrum_plugins.qrscanner/d" setup.py || die
-	fi
+	local plugin
+	for plugin in  \
+		$(usex aliases       '' aliases         )  \
+		$(usex coinbase_com  '' coinbase_buyback)  \
+		$(usex fiat          '' exchange_rate   )  \
+		$(usex sync          '' labels          )  \
+		$(usex pos           '' pointofsale     )  \
+		$(usex qrcode        '' qrscanner       )  \
+		$(usex vkb           '' virtualkeyboard )  \
+	; do
+		sed -i "/'electrum_plugins\.${plugin}/d" setup.py || die
+	done
 
 	distutils-r1_src_prepare
 }
