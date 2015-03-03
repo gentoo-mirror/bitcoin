@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-misc/bfgminer/bfgminer-3.10.3.ebuild,v 1.1 2014/06/12 14:35:32 blueness Exp $
 
@@ -45,7 +45,7 @@ DEPEND='
 		sys-libs/ncurses[unicode?]
 	)
 	>=dev-libs/jansson-2
-	net-libs/libblkmaker
+	net-libs/libblkmaker:=
 	udev? (
 		virtual/udev
 	)
