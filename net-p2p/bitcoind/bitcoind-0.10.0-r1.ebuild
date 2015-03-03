@@ -30,6 +30,11 @@ pkg_setup() {
 	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
 }
 
+src_prepare() {
+	epatch "${FILESDIR}/${PV}-openrc-compat.patch"
+	bitcoincore_src_prepare
+}
+
 src_configure() {
 	# NOTE: --enable-zmq actually disables it
 	bitcoincore_conf \
@@ -44,8 +49,8 @@ src_install() {
 	fowners bitcoin:bitcoin /etc/bitcoin/bitcoin.conf
 	fperms 600 /etc/bitcoin/bitcoin.conf
 
-	newconfd "${FILESDIR}/bitcoin.confd" ${PN}
-	newinitd "${FILESDIR}/bitcoin.initd-r1" ${PN}
+	newconfd "contrib/init/bitcoind.openrcconf" ${PN}
+	newinitd "contrib/init/bitcoind.openrc" ${PN}
 	systemd_dounit "${FILESDIR}/bitcoind.service"
 
 	keepdir /var/lib/bitcoin/.bitcoin
