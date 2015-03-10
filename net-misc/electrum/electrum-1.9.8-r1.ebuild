@@ -5,7 +5,7 @@
 EAPI="5"
 
 PYTHON_COMPAT=( python{2_6,2_7} )
-PYTHON_REQ_USE="ncurses="
+PYTHON_REQ_USE="ncurses?"
 
 inherit eutils distutils-r1 gnome2-utils
 
