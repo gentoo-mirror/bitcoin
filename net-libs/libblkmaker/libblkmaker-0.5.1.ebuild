@@ -5,10 +5,10 @@
 EAPI=5
 
 DESCRIPTION="C implementation of getblocktemplate (BIP 22)"
-HOMEPAGE="https://gitorious.org/bitcoin/libblkmaker"
+HOMEPAGE="https://github.com/bitcoin/libblkmaker"
 LICENSE="MIT"
 
-SRC_URI="https://gitorious.org/bitcoin/${PN}/archive/v${PV}.tar.gz -> ${P}.tgz"
+SRC_URI="https://github.com/bitcoin/libblkmaker/archive/v${PV}.tar.gz -> ${P}-github.tgz"
 SLOT="0/7"
 KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 IUSE=""
@@ -20,8 +20,6 @@ DEPEND="
 RDEPEND="${DEPEND}
 	!<net-misc/bfgminer-3.0.3
 "
-
-S="${WORKDIR}/bitcoin-libblkmaker/"
 
 src_prepare() {
 	./autogen.sh || die
