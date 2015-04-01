@@ -5,4 +5,4 @@ Using the ebuilds:
 Whenever you update (emerge --sync), also run:
 	layman -S
 
-Come to Freenode #bitcoin-gentoo and indicate your gitorious account name if you would like commit access.
+Come to freenode #bitcoin-gentoo and indicate your GitLab account name if you would like commit access.
