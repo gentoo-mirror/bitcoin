@@ -5,6 +5,7 @@
 EAPI=5
 
 BITCOINCORE_COMMITHASH="d8ac90184254fea3a7f4991fd0529dfbd750aea0"
+BITCOINCORE_LJR_PV="0.10.1"
 BITCOINCORE_LJR_DATE="20150428"
 BITCOINCORE_IUSE="1stclassmsg dbus kde +ljr +qrcode qt4 qt5 test upnp +wallet xt zeromq"
 BITCOINCORE_POLICY_PATCHES="+cpfp +dcmp rbf spamfilter"

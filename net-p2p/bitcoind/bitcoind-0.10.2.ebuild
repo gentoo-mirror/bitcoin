@@ -4,8 +4,9 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="047a89831760ff124740fe9f58411d57ee087078"
-BITCOINCORE_LJR_DATE="20150311"
+BITCOINCORE_COMMITHASH="d8ac90184254fea3a7f4991fd0529dfbd750aea0"
+BITCOINCORE_LJR_PV="0.10.1"
+BITCOINCORE_LJR_DATE="20150428"
 BITCOINCORE_IUSE="examples +ljr logrotate test upnp +wallet xt zeromq"
 BITCOINCORE_POLICY_PATCHES="+cpfp +dcmp rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
@@ -31,7 +32,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${PV}-openrc-compat.patch"
+	epatch "${FILESDIR}/0.10.0-openrc-compat.patch"
 	bitcoincore_src_prepare
 }
 
