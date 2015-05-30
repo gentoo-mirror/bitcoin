@@ -70,7 +70,7 @@ src_configure() {
 	bitcoincore_conf \
 		$(use_with dbus qtdbus)  \
 		$(use_with qrcode qrencode)  \
-		$(usex 1stclassmsg --enable-first-class-messaging)  \
+		$(usex 1stclassmsg --enable-first-class-messaging '')  \
 		--with-gui=$(usex qt5 qt5 qt4)
 }
 

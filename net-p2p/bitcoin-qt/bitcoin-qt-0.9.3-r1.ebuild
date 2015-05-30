@@ -98,7 +98,7 @@ src_configure() {
 		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default) \
 		$(use_with qrcode qrencode)  \
 		$(use_enable test tests)  \
-		$(usex ljr $(use_enable 1stclassmsg first-class-messaging))  \
+		$(usex ljr $(use_enable 1stclassmsg first-class-messaging) '')  \
 		--with-system-leveldb  \
 		--without-cli --without-daemon \
 		--with-gui
