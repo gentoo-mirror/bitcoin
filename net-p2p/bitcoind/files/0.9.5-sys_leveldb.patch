@@ -1,0 +1,63 @@
+diff --git a/configure.ac b/configure.ac
+index 7924105..a899b3c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -394,10 +394,44 @@ AC_TRY_COMPILE([#include <sys/socket.h>],
+  [ AC_MSG_RESULT(no)]
+ )
+ 
++dnl Check for leveldb, only if explicitly requested
+ LEVELDB_CPPFLAGS=
+ LIBLEVELDB=
+ LIBMEMENV=
+-AM_CONDITIONAL([EMBEDDED_LEVELDB],[true])
++AC_ARG_WITH([system-leveldb],
++  [AS_HELP_STRING([--with-system-leveldb],
++  [Build with system LevelDB (default is no; DANGEROUS; NOT SUPPORTED)])],
++  [system_leveldb=$withval],
++  [system_leveldb=no]
++)
++if test x$system_leveldb != xno; then
++  LEVELDB_CPPFLAGS=
++  AC_CHECK_LIB([leveldb],[main],[
++    LIBLEVELDB=-lleveldb
++  ],[
++    AC_MSG_ERROR([leveldb library not found; using --with-system-leveldb is not supported anyway])
++  ])
++  TEMP_LIBS="$LIBS"
++  LIBS="$LIBS $LIBLEVELDB"
++  AC_CHECK_LIB([memenv],[main],[
++    LIBMEMENV=-lmemenv
++  ],[
++    AC_MSG_ERROR([LevelDB's memenv library not found; using --with-system-leveldb is not supported anyway])
++  ])
++  LIBS="$TEMP_LIBS"
++  AC_CHECK_HEADER([leveldb/filter_policy.h],[],[
++    AC_MSG_ERROR([LevelDB headers not found; using --with-system-leveldb is not supported anyway])
++  ])
++  AC_CHECK_HEADER([leveldb/helpers/memenv.h],[
++    AC_MSG_CHECKING([for memenv.h path])
++    BITCOIN_SUBDIR_TO_INCLUDE([LEVELDB_CPPFLAGS],[leveldb/helpers/],[memenv])
++  ],[
++    AC_CHECK_HEADER([memenv.h],[],[
++      AC_MSG_ERROR([LevelDB headers not found; using --with-system-leveldb is not supported anyway])
++    ])
++  ])
++fi
++AM_CONDITIONAL([EMBEDDED_LEVELDB],[test x$system_leveldb = xno])
+ AC_SUBST(LEVELDB_CPPFLAGS)
+ AC_SUBST(LIBLEVELDB)
+ AC_SUBST(LIBMEMENV)
+diff --git a/src/m4/bitcoin_subdir_to_include.m4 b/src/m4/bitcoin_subdir_to_include.m4
+index 66f106c..5f0a3b1 100644
+--- a/src/m4/bitcoin_subdir_to_include.m4
++++ b/src/m4/bitcoin_subdir_to_include.m4
+@@ -5,7 +5,7 @@ AC_DEFUN([BITCOIN_SUBDIR_TO_INCLUDE],[
+     AC_MSG_RESULT([default])
+   else
+     echo "#include <$2$3.h>" >conftest.cpp
+-    newinclpath=`${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null | [ tr -d '\\n\\r\\\\' | sed -e 's/^.*[[:space:]:]\(\/[^[:space:]]*\)]$3[\.h[[:space:]].*$/\1/' -e t -e d`]
++    newinclpath=$(${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null | sed [-E -e ':a' -e '/\\$/!b b' -e N -e 's/\\\n/ /' -e 't a' -e ':b' -e 's/^[^:]*:[[:space:]]*(([^[:space:]\]|\\.)*[[:space:]])*(([^[:space:]\]|\\.)*)]$3\.h[([[:space:]].*)?$/\3/' -e 't' -e d])
+     AC_MSG_RESULT([${newinclpath}])
+     if test "x${newinclpath}" != "x"; then
+       eval "$1=\"\$$1\"' -I${newinclpath}'"
