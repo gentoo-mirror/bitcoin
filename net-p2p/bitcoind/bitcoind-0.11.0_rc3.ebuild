@@ -31,6 +31,11 @@ pkg_setup() {
 	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
 }
 
+src_prepare() {
+	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind bitcoind\) bitcoin-cli$/\1/' contrib/${PN}.bash-completion
+	bitcoincore_src_prepare
+}
+
 src_configure() {
 	bitcoincore_conf \
 		--with-daemon
