@@ -4,9 +4,9 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="88accef336a806ddc4e5f49be63d8435d7c97325"
-BITCOINCORE_LJR_PV="0.11.0rc2"
-BITCOINCORE_LJR_DATE="20150624"
+BITCOINCORE_COMMITHASH="afc60de4164dc723f9010da7f3867f8354f81530"
+BITCOINCORE_LJR_PV="0.11.0rc3"
+BITCOINCORE_LJR_DATE="20150702"
 BITCOINCORE_IUSE="examples +ljr logrotate test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+cltv +cpfp rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
@@ -24,7 +24,6 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}"
-REQUIRED_USE="bitcoin_policy_spamfilter? ( ljr !bitcoin_policy_rbf )"
 
 pkg_setup() {
 	local UG='bitcoin'
@@ -33,7 +32,6 @@ pkg_setup() {
 }
 
 src_configure() {
-	# NOTE: --enable-zmq actually disables it
 	bitcoincore_conf \
 		--with-daemon
 }
