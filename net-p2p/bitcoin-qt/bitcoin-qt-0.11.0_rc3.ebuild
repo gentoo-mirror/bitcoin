@@ -15,7 +15,7 @@ BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
-LICENSE="MIT CC-BY-SA-3.0"  # FIXME: Will this be resolved for final?
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 
