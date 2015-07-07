@@ -14,7 +14,7 @@ inherit bash-completion-r1 bitcoincore
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 arm arm64 x86 amd64-linux x86-linux"
 SRC_URI="${SRC_URI}
 	https://raw.githubusercontent.com/bitcoin/bitcoin/v0.11.0rc3/contrib/debian/manpages/bitcoin-cli.1 -> bitcoin-cli-manpage-v0.11.0rc3.1"
 
