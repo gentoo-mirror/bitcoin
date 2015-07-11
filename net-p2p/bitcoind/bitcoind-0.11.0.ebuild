@@ -4,9 +4,8 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="afc60de4164dc723f9010da7f3867f8354f81530"
-BITCOINCORE_LJR_PV="0.11.0rc3"
-BITCOINCORE_LJR_DATE="20150703"
+BITCOINCORE_COMMITHASH="d26f951802c762de04fb68e1a112d611929920ba"
+BITCOINCORE_LJR_DATE="20150711"
 BITCOINCORE_IUSE="examples +ljr logrotate test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+cltv +cpfp rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
@@ -16,7 +15,7 @@ inherit bash-completion-r1 bitcoincore user systemd
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""  # reminder: big endian can now be supported
+KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
 
 RDEPEND="
 	logrotate? (
