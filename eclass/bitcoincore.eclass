@@ -88,6 +88,12 @@ case "${PV}" in
 	esac
 	BITCOINCORE_XT_DIFF="047a89831760ff124740fe9f58411d57ee087078...d4084b62c42c38bfe302d712b98909ab26ecce2f"
 	;;
+0.11*)
+	BITCOINCORE_SERIES="0.11.x"
+	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20150423"
+	BITCOINCORE_RBF_DIFF="5f032c75eefb0fe8ff79ed9595da1112c05f5c4a...660b96d24916b8ef4e0677e5d6162e24e2db447e"
+	BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v0.11.0rc3.patch"
+	;;
 9999*)
 	BITCOINCORE_SERIES="9999"
 	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-9999"
@@ -185,6 +191,9 @@ bitcoincore_pkg_pretend() {
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 		bitcoincore_policymsg_flag=true
 	fi
+	bitcoincore_policymsg cltv \
+		"CLTV policy is enabled: Your node will recognise and assist OP_CHECKLOCKTIMEVERIFY (BIP65) transactions." \
+		"CLTV policy is disabled: Your node will not recognise OP_CHECKLOCKTIMEVERIFY (BIP65) transactions."
 	bitcoincore_policymsg cpfp \
 		"CPFP policy is enabled: If you mine, you will give consideration to child transaction fees to pay for their parents." \
 		"CPFP policy is disabled: If you mine, you will ignore transactions unless they have sufficient fee themselves, even if child transactions offer a fee to cover their cost."
