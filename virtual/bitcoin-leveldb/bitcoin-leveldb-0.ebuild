@@ -15,12 +15,6 @@ KEYWORDS="amd64 arm arm64 x86 amd64-linux x86-linux"
 DEPEND=""
 RDEPEND="
 	|| (
-		=dev-libs/leveldb-1.9.0-r6
-		=dev-libs/leveldb-1.10.0-r1
-		=dev-libs/leveldb-1.11.0-r1
-		=dev-libs/leveldb-1.12.0-r1
-		=dev-libs/leveldb-1.13.0-r1
-		=dev-libs/leveldb-1.14.0-r1
 		=dev-libs/leveldb-1.15.0-r1
 		=dev-libs/leveldb-1.17
 		=dev-libs/leveldb-1.18
