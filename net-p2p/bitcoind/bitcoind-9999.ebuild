@@ -27,8 +27,12 @@ pkg_setup() {
 	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
 }
 
+src_prepare() {
+	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind bitcoind\) bitcoin-cli$/\1/' contrib/${PN}.bash-completion
+	bitcoincore_src_prepare
+}
+
 src_configure() {
-	# NOTE: --enable-zmq actually disables it
 	bitcoincore_conf \
 		--with-daemon
 }
@@ -41,8 +45,8 @@ src_install() {
 	fowners bitcoin:bitcoin /etc/bitcoin/bitcoin.conf
 	fperms 600 /etc/bitcoin/bitcoin.conf
 
-	newconfd "${FILESDIR}/bitcoin.confd" ${PN}
-	newinitd "${FILESDIR}/bitcoin.initd-r1" ${PN}
+	newconfd "contrib/init/bitcoind.openrcconf" ${PN}
+	newinitd "contrib/init/bitcoind.openrc" ${PN}
 	systemd_dounit "${FILESDIR}/bitcoind.service"
 
 	keepdir /var/lib/bitcoin/.bitcoin
@@ -51,18 +55,18 @@ src_install() {
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
-	dodoc doc/assets-attribution.md doc/tor.md
+	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
 	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
 
 	newbashcomp contrib/${PN}.bash-completion ${PN}
 
 	if use examples; then
 		docinto examples
-		dodoc -r contrib/{bitrpc,pyminer,qos,spendfrom,tidy_datadir.sh}
+		dodoc -r contrib/{bitrpc,qos,spendfrom,tidy_datadir.sh}
 	fi
 
 	if use logrotate; then
 		insinto /etc/logrotate.d
-		newins "${FILESDIR}/bitcoind.logrotate" bitcoind
+		newins "${FILESDIR}/bitcoind.logrotate-r1" bitcoind
 	fi
 }

@@ -96,7 +96,7 @@ case "${PV}" in
 	;;
 9999*)
 	BITCOINCORE_SERIES="9999"
-	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-9999"
+	LIBSECP256K1_DEPEND=">dev-libs/libsecp256k1-0.0.0_pre20150422"
 	;;
 *)
 	die "Unrecognised version"
@@ -213,9 +213,7 @@ bitcoincore_prepare() {
 	if [ -n "${BITCOINCORE_NO_SYSLIBS}" ]; then
 		true
 	elif [ "${PV}" = "9999" ]; then
-		epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
-		# Temporarily use embedded secp256k1 while API is in flux
-		#epatch "${FILESDIR}/${PV}-sys_libsecp256k1.patch"
+		epatch "${FILESDIR}/${PV}-syslibs.patch"
 	else
 		epatch "$(LJR_PATCH syslibs)"
 	fi
@@ -253,11 +251,7 @@ bitcoincore_prepare() {
 bitcoincore_autoreconf() {
 	eautoreconf
 	rm -r src/leveldb || die
-	
-	# Temporarily using embedded secp256k1 for 9999 while API is in flux
-	if [ "${PV}" != "9999" ]; then
-		rm -r src/secp256k1 || die
-	fi
+	rm -r src/secp256k1 || die
 }
 
 bitcoincore_src_prepare() {
@@ -282,7 +276,7 @@ bitcoincore_conf() {
 	else
 		my_econf="${my_econf} --disable-wallet"
 	fi
-	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ] && [ "${PV}" != "9999" ]; then
+	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ]; then
 		my_econf="${my_econf} --disable-util-cli --disable-util-tx"
 	else
 		my_econf="${my_econf} --without-utils"

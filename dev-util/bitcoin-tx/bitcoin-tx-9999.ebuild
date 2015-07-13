@@ -4,7 +4,6 @@
 
 EAPI=5
 
-BITCOINCORE_NO_SYSLIBS=1
 BITCOINCORE_IUSE=""
 BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bitcoincore
@@ -14,13 +13,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 
-src_prepare() {
-	bitcoincore_prepare
-	sed -i 's/bitcoin-cli//' src/Makefile.am
-	bitcoincore_autoreconf
-}
-
 src_configure() {
 	bitcoincore_conf \
-		--with-utils
+		--enable-util-tx
 }
