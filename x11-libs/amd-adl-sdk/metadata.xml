@@ -2,11 +2,11 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer>
-		<email>blueness@gentoo.org</email>
-		<name>Anthony G. Basile</name>
+		<email>mrueg@gentoo.org</email>
+		<name>Manuel Rüger</name>
 	</maintainer>
 	<maintainer>
-		<email>luke_gentoo_bitcoin@dashjr.org</email>
-		<name>Luke Dashjr</name>
+		<email>blueness@gentoo.org</email>
+		<name>Anthony G. Basile</name>
 	</maintainer>
 </pkgmetadata>

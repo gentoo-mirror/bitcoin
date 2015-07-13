@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -19,12 +19,12 @@ REQUIRED_USE="
 	asm? ( amd64 )
 "
 RDEPEND="
-	gmp? ( dev-libs/gmp )
+	gmp? ( dev-libs/gmp:0 )
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	>=sys-devel/gcc-4.7
-	test? ( dev-libs/openssl )
+	test? ( dev-libs/openssl:0 )
 "
 
 src_prepare() {

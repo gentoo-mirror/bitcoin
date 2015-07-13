@@ -21,11 +21,11 @@ REQUIRED_USE="
 	asm? ( amd64 )
 "
 RDEPEND="
-	gmp? ( dev-libs/gmp )
+	gmp? ( dev-libs/gmp:0 )
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	test? ( dev-libs/openssl )
+	test? ( dev-libs/openssl:0 )
 "
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
