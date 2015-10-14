@@ -193,6 +193,9 @@ bitcoincore_pkg_pretend() {
 	if use_if_iuse ljr || use_if_iuse 1stclassmsg || use_if_iuse addrindex || use_if_iuse xt || use_if_iuse zeromq; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 		bitcoincore_policymsg_flag=true
+		if use_if_iuse addrindex addrindex; then
+			einfo "Please be aware that the addrindex functionality is known to be unreliable."
+		fi
 	fi
 	bitcoincore_policymsg cltv \
 		"CLTV policy is enabled: Your node will recognise and assist OP_CHECKLOCKTIMEVERIFY (BIP65) transactions." \
