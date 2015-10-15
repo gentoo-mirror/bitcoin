@@ -41,14 +41,14 @@ REQUIRED_USE='
 	proxy_getwork? ( proxy )
 	proxy_stratum? ( proxy )
 	x6500? ( libusb )
-	zeusminer? ( scrypt )
+	zeusminer? ( scrypt icarus )
 	ztex? ( libusb )
 '
 
 DEPEND='
 	net-misc/curl
 	ncurses? (
-		sys-libs/ncurses[unicode?]
+		sys-libs/ncurses:=[unicode?]
 	)
 	>=dev-libs/jansson-2
 	dev-libs/libbase58

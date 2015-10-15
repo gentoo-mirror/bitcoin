@@ -58,14 +58,14 @@ REQUIRED_USE='
 	rockminer? ( sha256d )
 	twinfury? ( sha256d )
 	x6500? ( sha256d libusb )
-	zeusminer? ( scrypt )
+	zeusminer? ( scrypt icarus )
 	ztex? ( sha256d libusb )
 '
 
 DEPEND='
 	net-misc/curl
 	ncurses? (
-		sys-libs/ncurses[unicode?]
+		sys-libs/ncurses:=[unicode?]
 	)
 	>=dev-libs/jansson-2
 	dev-libs/libbase58
