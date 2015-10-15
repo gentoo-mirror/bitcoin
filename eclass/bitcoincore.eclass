@@ -91,8 +91,11 @@ case "${PV}" in
 0.11*)
 	BITCOINCORE_SERIES="0.11.x"
 	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20150423"
-	BITCOINCORE_RBF_DIFF="5f032c75eefb0fe8ff79ed9595da1112c05f5c4a...660b96d24916b8ef4e0677e5d6162e24e2db447e"
-	BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v0.11.0rc3.patch"
+	# RBF is bundled with ljr patchset since 0.11.1
+	if [ "${PVR}" = "0.11.0" ]; then
+		BITCOINCORE_RBF_DIFF="5f032c75eefb0fe8ff79ed9595da1112c05f5c4a...660b96d24916b8ef4e0677e5d6162e24e2db447e"
+		BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v0.11.0rc3.patch"
+	fi
 	;;
 9999*)
 	BITCOINCORE_SERIES="9999"
@@ -125,7 +128,7 @@ else
 		BITCOINXT_PATCHFILE="${MyPN}xt-v${PV}.patch"
 		SRC_URI="${SRC_URI} xt? ( https://github.com/bitcoinxt/bitcoinxt/compare/${BITCOINCORE_XT_DIFF}.diff -> ${BITCOINXT_PATCHFILE} )"
 	fi
-	if in_bcc_policy rbf; then
+	if in_bcc_policy rbf && [ -n "${BITCOINCORE_RBF_DIFF}" ]; then
 		SRC_URI="${SRC_URI} bitcoin_policy_rbf? ( https://github.com/petertodd/bitcoin/compare/${BITCOINCORE_RBF_DIFF}.diff -> ${BITCOINCORE_RBF_PATCHFILE} )"
 	fi
 	S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
@@ -248,7 +251,11 @@ bitcoincore_prepare() {
 		use bitcoin_policy_${mypolicy} || continue
 		case "${mypolicy}" in
 		rbf)
-			epatch "${DISTDIR}/${BITCOINCORE_RBF_PATCHFILE}"
+			if [ -n "${BITCOINCORE_RBF_PATCHFILE}" ]; then
+				epatch "${DISTDIR}/${BITCOINCORE_RBF_PATCHFILE}"
+			else
+				epatch "$(LJR_PATCH ${mypolicy})"
+			fi
 			;;
 		*)
 			epatch "$(LJR_PATCH ${mypolicy})"
