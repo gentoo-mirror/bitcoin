@@ -62,7 +62,7 @@ src_prepare() {
 	fi
 	rm -r src/leveldb
 
-	local filt= yeslang= nolang=
+	local filt= yeslang= nolang= lan ts x
 
 	for lan in $LANGS; do
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then

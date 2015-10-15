@@ -35,7 +35,7 @@ REQUIRED_USE="${REQUIRED_USE} ^^ ( qt4 qt5 )"
 src_prepare() {
 	bitcoincore_prepare
 
-	local filt= yeslang= nolang=
+	local filt= yeslang= nolang= lan ts x
 
 	for lan in $LANGS; do
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
