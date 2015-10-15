@@ -33,7 +33,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind bitcoind\) bitcoin-cli$/\1/' contrib/${PN}.bash-completion
+	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind bitcoind\) bitcoin-cli$/\1/' contrib/${PN}.bash-completion || die
 	epatch "${FILESDIR}/0.10.0-openrc-compat.patch"
 	bitcoincore_src_prepare
 }

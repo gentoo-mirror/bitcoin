@@ -70,14 +70,14 @@ src_prepare() {
 		x="${x/.ts/}"
 		if ! use "linguas_$x"; then
 			nolang="$nolang $x"
-			rm "$ts"
+			rm "$ts" || die
 			filt="$filt\\|$x"
 		else
 			yeslang="$yeslang $x"
 		fi
 	done
 	filt="bitcoin_\\(${filt:2}\\)\\.\(qm\|ts\)"
-	sed "/${filt}/d" -i 'qt/bitcoin.qrc'
+	sed "/${filt}/d" -i 'qt/bitcoin.qrc' || die
 	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 }
 
