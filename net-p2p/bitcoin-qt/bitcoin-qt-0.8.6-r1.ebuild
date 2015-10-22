@@ -50,13 +50,15 @@ S="${WORKDIR}/${MyP}"
 
 src_prepare() {
 	epatch "${FILESDIR}/0.8-openssl-101k.patch"
+	epatch "${FILESDIR}/miniupnpc-14.patch"
+
 	use 1stclassmsg && epatch "${WORKDIR}/0.8.2-1stclassmsg.patch"
 	epatch "${FILESDIR}/0.8.2-sys_leveldb.patch"
 	rm -r src/leveldb
 
 	cd src || die
 
-	local filt= yeslang= nolang=
+	local filt= yeslang= nolang= lan ts x
 
 	for lan in $LANGS; do
 		if [ ! -e qt/locale/bitcoin_$lan.ts ]; then
@@ -70,14 +72,14 @@ src_prepare() {
 		x="${x/.ts/}"
 		if ! use "linguas_$x"; then
 			nolang="$nolang $x"
-			rm "$ts"
+			rm "$ts" || die
 			filt="$filt\\|$x"
 		else
 			yeslang="$yeslang $x"
 		fi
 	done
 	filt="bitcoin_\\(${filt:2}\\)\\.\(qm\|ts\)"
-	sed "/${filt}/d" -i 'qt/bitcoin.qrc'
+	sed "/${filt}/d" -i 'qt/bitcoin.qrc' || die
 	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 }
 
@@ -127,6 +129,10 @@ src_install() {
 		insinto /usr/share/kde4/services
 		doins contrib/debian/bitcoin-qt.protocol
 	fi
+}
+
+pkg_preinst() {
+	gnome2_icon_savelist
 }
 
 update_caches() {

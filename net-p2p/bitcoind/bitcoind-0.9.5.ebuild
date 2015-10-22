@@ -49,6 +49,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}/miniupnpc-14.patch"
 	epatch "${FILESDIR}/0.9.5-sys_leveldb.patch"
 	rm -r src/leveldb
 	eautoreconf

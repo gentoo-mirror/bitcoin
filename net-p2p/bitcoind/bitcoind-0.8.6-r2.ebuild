@@ -49,11 +49,12 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}/0.8-openssl-101k.patch"
+	epatch "${FILESDIR}/miniupnpc-14.patch"
 	epatch "${FILESDIR}/0.8.2-sys_leveldb.patch"
 	rm -r src/leveldb
 
 	if has_version '>=dev-libs/boost-1.52'; then
-		sed -i 's/\(-l db_cxx\)/-l boost_chrono$(BOOST_LIB_SUFFIX) \1/' src/makefile.unix
+		sed -i 's/\(-l db_cxx\)/-l boost_chrono$(BOOST_LIB_SUFFIX) \1/' src/makefile.unix || die
 	fi
 }
 

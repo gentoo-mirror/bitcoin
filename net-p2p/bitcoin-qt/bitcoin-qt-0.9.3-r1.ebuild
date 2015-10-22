@@ -55,6 +55,8 @@ S="${WORKDIR}/${MyP}"
 
 src_prepare() {
 	epatch "${FILESDIR}/0.9-openssl-101k.patch"
+	epatch "${FILESDIR}/miniupnpc-14.patch"
+
 	if use ljr; then
 		epatch "${WORKDIR}/${LJR_PATCH}"
 		use ljr-antispam || epatch "${FILESDIR}/0.9.x-ljr_noblacklist.patch"
@@ -63,7 +65,7 @@ src_prepare() {
 	fi
 	rm -r src/leveldb
 
-	local filt= yeslang= nolang=
+	local filt= yeslang= nolang= lan ts x
 
 	for lan in $LANGS; do
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
@@ -77,15 +79,15 @@ src_prepare() {
 		x="${x/.ts/}"
 		if ! use "linguas_$x"; then
 			nolang="$nolang $x"
-			rm "$ts"
+			rm "$ts" || die
 			filt="$filt\\|$x"
 		else
 			yeslang="$yeslang $x"
 		fi
 	done
 	filt="bitcoin_\\(${filt:2}\\)\\.\(qm\|ts\)"
-	sed "/${filt}/d" -i 'src/qt/bitcoin.qrc'
-	sed "s/locale\/${filt}/bitcoin.qrc/" -i 'src/qt/Makefile.am'
+	sed "/${filt}/d" -i 'src/qt/bitcoin.qrc' || die
+	sed "s/locale\/${filt}/bitcoin.qrc/" -i 'src/qt/Makefile.am' || die
 	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 
 	eautoreconf
@@ -123,6 +125,10 @@ src_install() {
 		insinto /usr/share/kde4/services
 		doins contrib/debian/bitcoin-qt.protocol
 	fi
+}
+
+pkg_preinst() {
+	gnome2_icon_savelist
 }
 
 update_caches() {

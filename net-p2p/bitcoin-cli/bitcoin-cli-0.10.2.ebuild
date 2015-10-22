@@ -19,7 +19,7 @@ SRC_URI="${SRC_URI}
 	https://raw.githubusercontent.com/bitcoin/bitcoin/v0.11.0rc3/contrib/debian/manpages/bitcoin-cli.1 -> bitcoin-cli-manpage-v0.11.0rc3.1"
 
 src_prepare() {
-	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind \)bitcoind \(bitcoin-cli\)$/\1\2/' contrib/bitcoind.bash-completion
+	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind \)bitcoind \(bitcoin-cli\)$/\1\2/' contrib/bitcoind.bash-completion || die
 	cp "${DISTDIR}/bitcoin-cli-manpage-v0.11.0rc3.1" contrib/debian/manpages/bitcoin-cli.1
 	bitcoincore_src_prepare
 }
