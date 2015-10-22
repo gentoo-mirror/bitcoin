@@ -50,6 +50,8 @@ S="${WORKDIR}/${MyP}"
 
 src_prepare() {
 	epatch "${FILESDIR}/0.8-openssl-101k.patch"
+	epatch "${FILESDIR}/miniupnpc-14.patch"
+
 	use 1stclassmsg && epatch "${WORKDIR}/0.8.2-1stclassmsg.patch"
 	epatch "${FILESDIR}/0.8.2-sys_leveldb.patch"
 	rm -r src/leveldb

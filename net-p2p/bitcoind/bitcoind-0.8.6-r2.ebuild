@@ -49,6 +49,7 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}/0.8-openssl-101k.patch"
+	epatch "${FILESDIR}/miniupnpc-14.patch"
 	epatch "${FILESDIR}/0.8.2-sys_leveldb.patch"
 	rm -r src/leveldb
 

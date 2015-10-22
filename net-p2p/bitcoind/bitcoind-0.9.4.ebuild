@@ -56,6 +56,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}/miniupnpc-14.patch"
 	if use ljr; then
 		epatch "${WORKDIR}/${LJR_PATCH}"
 		use ljr-antispam || epatch "${FILESDIR}/0.9.x-ljr_noblacklist.patch"
