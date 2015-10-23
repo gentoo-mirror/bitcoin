@@ -46,7 +46,7 @@ src_prepare() {
 		fi
 	done
 
-	for ts in $(ls src/qt/locale/*.ts)
+	for ts in src/qt/locale/*.ts
 	do
 		x="${ts/*bitcoin_/}"
 		x="${x/.ts/}"
