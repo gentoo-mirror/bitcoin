@@ -33,7 +33,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )
 "
-REQUIRED_USE="${REQUIRED_USE} ^^ ( qt4 qt5 )"
+REQUIRED_USE="^^ ( qt4 qt5 )"
 
 src_prepare() {
 	bitcoincore_prepare
