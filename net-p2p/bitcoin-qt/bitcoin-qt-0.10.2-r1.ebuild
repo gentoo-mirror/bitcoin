@@ -35,7 +35,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )
 "
-REQUIRED_USE="${REQUIRED_USE} ^^ ( qt4 qt5 )"
+REQUIRED_USE="^^ ( qt4 qt5 )"
 
 src_prepare() {
 	epatch "${FILESDIR}/miniupnpc-14.patch"
@@ -50,7 +50,7 @@ src_prepare() {
 		fi
 	done
 
-	for ts in $(ls src/qt/locale/*.ts)
+	for ts in src/qt/locale/*.ts
 	do
 		x="${ts/*bitcoin_/}"
 		x="${x/.ts/}"
