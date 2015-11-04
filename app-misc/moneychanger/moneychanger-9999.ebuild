@@ -21,21 +21,26 @@ RDEPEND="app-crypt/opentxs"
 
 DEPEND="app-crypt/opentxs
 		dev-libs/xmlrpc-c
-		dev-qt/qtgui:4
-		dev-qt/qtsql:4
-		dev-qt/qtcore:4"
+		dev-qt/qtgui:5
+		dev-qt/qtsql:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtwidgets:5
+		dev-qt/qtscript:5
+		dev-qt/qttest:5
+		dev-qt/qtcore:5"
 
 src_configure() {
-	eqmake4 "${S}"/project/"${PN}.pro" 	LIBDIR="$(get_libdir)" || die "Configure failed"
+	cd "${S}"
+	eqmake5 "${S}"/project/"${PN}.pro" 	LIBDIR="$(get_libdir)" || die "Configure failed"
 }
 
 src_compile() {
-	cd "${S}"/project/ || die
+	cd "${S}" || die
 	emake || die "Compile failed"
 }
 
 src_install() {
-	dobin "${S}"/project/moneychanger-qt/moneychanger-qt
+	dobin "${S}"/moneychanger-qt/moneychanger-qt
 
 	if use doc ; then
 		dodoc documentation/presentable_documentation/{object_connections.pdf,object_permissions.png}
@@ -43,7 +48,7 @@ src_install() {
 		dodoc documentation/translating
 	fi
 
-	cd "${S}"/project/ || die
+	cd "${S}" || die
 	emake DESTDIR="${D}" PREFIX="/usr" INSTALL_ROOT="${D}" install || die
 
 	insinto /usr/share/applications

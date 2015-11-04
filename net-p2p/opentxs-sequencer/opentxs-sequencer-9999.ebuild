@@ -21,7 +21,7 @@ DEPEND="
 	app-crypt/opentxs"
 RDEPEND="
 	app-crypt/opentxs
-	net-libs/zeromq:0/5"
+	>=net-libs/zeromq-4.1"
 
 src_prepare() {
 	local required_version="4.7"
