@@ -10,20 +10,25 @@ DESCRIPTION="Financial cryptography library, API, CLI"
 HOMEPAGE="http://opentransactions.org"
 EGIT_REPO_URI="git://github.com/Open-Transactions/opentxs.git \
 			 https://github.com/Open-Transactions/opentxs.git"
-LICENSE="AGPL-3"
+EGIT_BRANCH="develop"
+LICENSE="MPL-2"
 
 SLOT="0"
 KEYWORDS=""
-IUSE="doc flat gnome kde"
+IUSE="doc flat gnome kde +openssl python +rsa +secp256k1"
 
-DEPEND="
+COMMONDEPEND="
 	doc? ( app-doc/doxygen )
 	gnome? ( gnome-base/gnome-keyring )
 	kde? ( kde-frameworks/kwallet )
 	dev-libs/openssl
 	dev-libs/protobuf
 	sys-libs/zlib
-	~net-libs/zeromq-4.0.4"
+	>=net-libs/zeromq-4.1"
+DEPEND="
+	python? ( dev-lang/swig )
+	${COMMONDEPEND=}"
+RDEPEND="${COMMONDEPEND=}"
 
 src_prepare() {
 	local required_version="4.7"
@@ -43,12 +48,17 @@ src_configure() {
 		$(cmake-utils_use gnome KEYRING_GNOME)
 		$(cmake-utils_use kde KEYRING_KWALLET)
 		$(cmake-utils_use flat KEYRING_FLATFILE)
+		$(cmake-utils_use python PYTHON)
+		$(cmake-utils_use rsa OT_CRYPTO_SUPPORTED_KEY_RSA)
+		$(cmake-utils_use openssl OT_CRYPTO_USING_OPENSSL)
+		$(cmake-utils_use secp256k1 OT_CRYPTO_USING_LIBSECP256K1)
+		$(cmake-utils_use secp256k1 OT_CRYPTO_SUPPORTED_KEY_SECP256K1)
 	)
 	cmake-utils_src_configure
 }
 
 src_install() {
 	cmake-utils_src_install
-	
+
 	dodoc README.md
 }
