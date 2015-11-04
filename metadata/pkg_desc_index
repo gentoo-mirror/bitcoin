@@ -1,8 +1,7 @@
-app-crypt/Open-Transactions 0.91c 9999: Financial cryptography library, API, CLI, and prototype server.
 app-crypt/libwallet 0.4 9999: Wallet related functionality forked from libbitcoin
-app-crypt/opentxs 0.93_pre9999 9999: Financial cryptography library, API, CLI
+app-crypt/opentxs 9999: Financial cryptography library, API, CLI
 app-misc/dojima 9999: Graphical bitcoin exchange client in PyQt.
-app-misc/moneychanger 0_pre20131224 9999: An intuitive QT/C++ system tray client for Open-Transactions.
+app-misc/moneychanger 9999: An intuitive QT/C++ system tray client for Open-Transactions.
 dev-libs/chaiscript 4.2.0 5.2.0 9999: ECMAScript-inspired, embedded functional-like scripting language.
 dev-libs/libbase58 0.1.0 0.1.1: C implementation of Bitcoin's base58 encoding
 dev-libs/libsecp256k1 0.0.0_pre20141212 0.0.0_pre20150423 9999: Optimized C library for EC operations on curve secp256k1
