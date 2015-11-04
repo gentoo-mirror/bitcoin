@@ -1,0 +1,14 @@
+[Unit]
+Description=Start btcd
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+User=btcd
+ExecStart=/usr/bin/btcd
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
