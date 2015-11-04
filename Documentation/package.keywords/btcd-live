@@ -1,0 +1,19 @@
+=dev-go/btcd-blockchain-9999 **
+=dev-go/btcd-chaincfg-9999 **
+=dev-go/btcd-database-9999 **
+=dev-go/btcd-txscript-9999 **
+=dev-go/btcd-wire-9999 **
+=dev-go/btcec-9999 **
+=dev-go/btclog-9999 **
+=dev-go/btcsuite-flags-9999 **
+=dev-go/btcsuite-leveldb-9999 **
+=dev-go/btcsuite-ripemd160-9999 **
+=dev-go/btcsuite-seelog-9999 **
+=dev-go/btcsuite-snappy-9999 **
+=dev-go/btcsuite-socks-9999 **
+=dev-go/btcsuite-websocket-9999 **
+=dev-go/btcutil-9999 **
+=dev-go/btcutil-bloom-9999 **
+=dev-go/fastsha256-9999 **
+dev-go/go-spew
+=net-p2p/btcd-9999 **
