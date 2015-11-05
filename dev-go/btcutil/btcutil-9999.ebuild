@@ -26,8 +26,14 @@ DEPEND="dev-go/btcec
 	dev-go/btcsuite-ripemd160"
 RDEPEND=""
 
-src_install() {
+src_install()
+{
         # avoid file collisions with btcutil-bloom
 	golang-build_src_install
+	rm -r "${D}/usr/lib/go-gentoo/pkg/linux_${ARCH}/${EGO_PN}/base58.a"
+	rm -r "${D}/usr/lib/go-gentoo/pkg/linux_${ARCH}/${EGO_PN}/bloom.a"
+	rm -r "${D}/usr/lib/go-gentoo/pkg/linux_${ARCH}/${EGO_PN}/hdkeychain.a"
+        rm -r "${D}/usr/lib/go-gentoo/src/${EGO_PN}/base58"
         rm -r "${D}/usr/lib/go-gentoo/src/${EGO_PN}/bloom"
+        rm -r "${D}/usr/lib/go-gentoo/src/${EGO_PN}/hdkeychain"
 }
