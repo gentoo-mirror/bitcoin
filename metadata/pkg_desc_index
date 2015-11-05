@@ -1,5 +1,6 @@
 app-crypt/libwallet 0.4 9999: Wallet related functionality forked from libbitcoin
 app-crypt/opentxs 9999: Financial cryptography library, API, CLI
+app-misc/btcwallet 9999: A secure bitcoin wallet daemon written in Go
 app-misc/dojima 9999: Graphical bitcoin exchange client in PyQt.
 app-misc/moneychanger 9999: An intuitive QT/C++ system tray client for Open-Transactions.
 dev-go/btcd-blockchain 9999: A library implenenting bitcoin block handling and chain selection rules
@@ -8,16 +9,27 @@ dev-go/btcd-database 9999: Provides a database interface for the bitcoin block c
 dev-go/btcd-txscript 9999: Implementation of the bitcoin transaction script language
 dev-go/btcd-wire 9999: Implementation of the bitcoin wire protocol
 dev-go/btcec 9999: Implementation of elliptic curve cryptography needed for working with Bitcoin
+dev-go/btcjson 9999: Concrete types for marshalling to and from the bitcoin JSON-RPC API
 dev-go/btclog 9999: A subsystem aware logger backed by seelog
+dev-go/btcrpcclient 9999: A robust and easy to use websocket-enabled Bitcoin JSON-RPC client.
+dev-go/btcsuite-bolt 9999: A low-level key/value database for Go.
 dev-go/btcsuite-flags 9999: go command line option parser
 dev-go/btcsuite-leveldb 9999: LevelDB key/value database in Go.
+dev-go/btcsuite-pbkdf2 9999: Vendored version of Go crypto library pbkdf2 function
+dev-go/btcsuite-poly1305 9999: Vendored version of Go crypto library poly1305 function
 dev-go/btcsuite-ripemd160 9999: Go implementation of ripemd160 hash function
+dev-go/btcsuite-salsa20 9999: Vendored version of Go crypto library salsa20 function
+dev-go/btcsuite-scrypt 9999: Vendored version of Go crypto library scrypt function
+dev-go/btcsuite-secretbox 9999: Vendored version of Go crypto library version of nacl/secretbox
 dev-go/btcsuite-seelog 9999: Seelog provides logging functionality with flexible dispatching, filtering, and formatting.
 dev-go/btcsuite-snappy 9999: Implementation of the Snappy compression format written in go
 dev-go/btcsuite-socks 9999: SOCKS5 Proxy Package for Go
+dev-go/btcsuite-terminal 9999: Vendored version of Go crypto library ssh/terminal
 dev-go/btcsuite-websocket 9999: A WebSocket implementation for Go.
 dev-go/btcutil 9999: Provides bitcoin-specific convenience functions and types
+dev-go/btcutil-base58 9999: An API for encoding and decoding to and from the modified base58 encoding
 dev-go/btcutil-bloom 9999: Provides provides an API for dealing with bitcoin-specific bloom filters.
+dev-go/btcutil-hdkeychain 9999: An API for bitcoin hierarchical deterministic extended keys (BIP0032)
 dev-go/fastsha256 9999: Optimized sha256 library
 dev-libs/chaiscript 4.2.0 5.2.0 9999: ECMAScript-inspired, embedded functional-like scripting language.
 dev-libs/libbase58 0.1.0 0.1.1: C implementation of Bitcoin's base58 encoding
