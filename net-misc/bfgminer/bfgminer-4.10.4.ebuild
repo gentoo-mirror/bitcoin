@@ -12,7 +12,7 @@ SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${PN}/${PV}/${P}.txz -> $
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 arm mips ppc ppc64 x86"
 
 # TODO: knc (needs i2c-tools header)
 # TODO: minergate (needs actual miner_gate)
