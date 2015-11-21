@@ -12,37 +12,54 @@ SRC_URI="http://luke.dashjr.org/programs/bitcoin/files/${PN}/${PV}/${P}.txz -> $
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm mips ppc ppc64 x86"
+KEYWORDS="~amd64 ~arm ~mips ~ppc ~ppc64 ~x86"
 
 # TODO: knc (needs i2c-tools header)
+# TODO: kncasic & titan (need systemwide knc-asic install)
 # TODO: minergate (needs actual miner_gate)
-# TODO: titan
-IUSE="adl antminer avalon avalonmm bfx bifury bitforce bfsb bigpic bitfury cointerra cpumining drillbit dualminer examples gridseed hardened hashbuster hashbuster2 hashfast icarus jingtian klondike +libusb littlefury lm_sensors metabank modminer nanofury ncurses opencl proxy proxy_getwork proxy_stratum rockminer screen scrypt twinfury +udev udev-broad-rules unicode x6500 zeusminer ztex"
+IUSE="adl antminer avalon avalonmm bfsb bfx bifury bigpic bitforce bitfury cointerra cpumining drillbit dualminer examples gridseed hardened hashbuster hashbuster2 hashfast icarus jingtian keccak klondike +libusb littlefury lm_sensors metabank minion modminer nanofury ncurses opencl proxy proxy_getwork proxy_stratum rockminer screen scrypt +sha256d twinfury +udev udev-broad-rules unicode x6500 zeusminer ztex"
 REQUIRED_USE='
+	|| ( keccak scrypt sha256d )
 	|| ( antminer avalon avalonmm bfsb bfx bifury bigpic bitforce bitfury cointerra cpumining drillbit dualminer gridseed hashbuster hashbuster2 hashfast icarus klondike littlefury metabank modminer nanofury opencl proxy twinfury x6500 zeusminer ztex )
 	adl? ( opencl )
-	bfsb? ( bitfury )
-	bfx? ( bitfury libusb )
-	bigpic? ( bitfury )
-	drillbit? ( bitfury )
-	dualminer? ( icarus )
+	antminer? ( sha256d )
+	avalon? ( sha256d )
+	avalonmm? ( sha256d )
+	bfsb? ( sha256d bitfury )
+	bfx? ( sha256d bitfury libusb )
+	bifury? ( sha256d )
+	bigpic? ( sha256d bitfury )
+	bitforce? ( sha256d )
+	bitfury? ( sha256d )
+	cointerra? ( sha256d )
+	drillbit? ( sha256d bitfury )
+	dualminer? ( || ( sha256d scrypt ) icarus )
 	gridseed? ( scrypt )
-	hashbuster? ( bitfury )
-	hashbuster2? ( bitfury libusb )
-	klondike? ( libusb )
-	littlefury? ( bitfury )
+	hashbuster? ( sha256d bitfury )
+	hashbuster2? ( sha256d bitfury libusb )
+	hashfast? ( sha256d )
+	icarus? ( || ( scrypt sha256d ) )
+	jingtian? ( sha256d )
+	keccak? ( || ( cpumining opencl proxy ) )
+	klondike? ( sha256d libusb )
+	littlefury? ( sha256d bitfury )
 	lm_sensors? ( opencl )
-	metabank? ( bitfury )
-	nanofury? ( bitfury )
+	metabank? ( sha256d bitfury )
+	minion? ( sha256d )
+	modminer? ( sha256d )
+	nanofury? ( sha256d bitfury )
 	scrypt? ( || ( cpumining dualminer gridseed opencl proxy zeusminer ) )
+	sha256d? ( || ( antminer avalon avalonmm bfx bifury bitforce bfsb bigpic bitfury cointerra cpumining drillbit dualminer hashbuster hashbuster2 hashfast icarus jingtian klondike littlefury metabank modminer nanofury opencl proxy rockminer twinfury x6500 ztex ) )
 	twinfury? ( bitfury )
 	unicode? ( ncurses )
 	proxy? ( || ( proxy_getwork proxy_stratum ) )
 	proxy_getwork? ( proxy )
 	proxy_stratum? ( proxy )
-	x6500? ( libusb )
+	rockminer? ( sha256d )
+	twinfury? ( sha256d )
+	x6500? ( sha256d libusb )
 	zeusminer? ( scrypt icarus )
-	ztex? ( libusb )
+	ztex? ( sha256d libusb )
 '
 
 DEPEND='
@@ -150,14 +167,17 @@ src_configure() {
 		$(use_enable hashfast) \
 		$(use_enable icarus) \
 		$(use_enable jingtian) \
+		$(use_enable keccak) \
 		$(use_enable klondike) \
 		$(use_enable littlefury) \
 		$(use_enable metabank) \
+		$(use_enable minion) \
 		$(use_enable modminer) \
 		$(use_enable nanofury) \
 		$(use_enable opencl) \
 		$(use_enable rockminer) \
 		$(use_enable scrypt) \
+		$(use_enable sha256d) \
 		$(use_enable twinfury) \
 		--with-system-libblkmaker \
 		$with_curses \
