@@ -1,0 +1,8 @@
+DEFINED_PHASES=-
+DESCRIPTION=Virtual for jsonrpc.proxy.ServiceProxy
+EAPI=3
+KEYWORDS=amd64 x86
+RDEPEND=|| ( dev-python/bitcoinrpc[jsonrpc-compat] dev-python/jsonrpc )
+SLOT=0
+_eclass_exported_funcs=-
+_md5_=f30c62e5c4e3dff3e41ac461f85b04ae

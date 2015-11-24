@@ -1,0 +1,14 @@
+DEFINED_PHASES=compile install prepare setup
+DEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/crypto++ dev-libs/openssl[-bindist] upnp? ( <net-libs/miniupnpc-1.6 ) sys-libs/db:4.8[cxx] >=app-shells/bash-4.1
+DESCRIPTION=A P2P network based domain name system
+EAPI=4
+HOMEPAGE=https://dot-bit.org/
+IUSE=ssl upnp
+KEYWORDS=amd64 x86
+LICENSE=MIT ISC
+RDEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/crypto++ dev-libs/openssl[-bindist] upnp? ( <net-libs/miniupnpc-1.6 ) sys-libs/db:4.8[cxx]
+SLOT=0
+SRC_URI=https://github.com/namecoin/namecoin/tarball/nc0.3.24.66 -> namecoin-0.3.24.66.tgz
+_eclass_exported_funcs=pkg_setup:- src_prepare:- src_compile:- src_install:-
+_eclasses_=db-use	a4966c7f4f7df444ead1212848c13cc9	eutils	f20548a2f7b0128068388cd2ec26708a	multilib	3972ca401cf7dbb430df9995f5d8d580	toolchain-funcs	7a212e5e01adfa4805c9978366e6ee85	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
+_md5_=eb1a6203c20709d0e5d68d4f1600acea
