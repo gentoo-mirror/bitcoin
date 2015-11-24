@@ -1,0 +1,12 @@
+DEFINED_PHASES=compile configure install prepare unpack
+DEPEND=encryption? ( dev-libs/openssl ) sys-libs/db dev-libs/boost geoip? ( dev-libs/geoip ) virtual/libiconv upnp? ( net-libs/miniupnpc ) sys-apps/sed dev-vcs/git
+DESCRIPTION=anynomous secure microblogging platform based on Bitcoin and BitTorrent protocols
+EAPI=5
+HOMEPAGE=http://twister.net.co
+IUSE=logging +debug +dht +encryption sse2 upnp pool-allocators invariant-checks statistics disk-stats geoip
+LICENSE=MIT BSD
+RDEPEND=encryption? ( dev-libs/openssl ) sys-libs/db dev-libs/boost geoip? ( dev-libs/geoip ) virtual/libiconv upnp? ( net-libs/miniupnpc )
+SLOT=live
+_eclass_exported_funcs=src_unpack:git-2 src_prepare:- src_configure:- src_compile:- src_install:-
+_eclasses_=eutils	f20548a2f7b0128068388cd2ec26708a	git-2	df00117322129fb906bb0a53c3d6a020	multilib	3972ca401cf7dbb430df9995f5d8d580	toolchain-funcs	7a212e5e01adfa4805c9978366e6ee85
+_md5_=8b7236a8e7ed0e8cccad3b4bdde32d21

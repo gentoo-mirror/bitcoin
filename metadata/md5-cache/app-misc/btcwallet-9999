@@ -1,0 +1,11 @@
+DEFINED_PHASES=compile install test unpack
+DEPEND=dev-go/btcsuite-bolt dev-go/btcd-blockchain dev-go/btcec dev-go/btcjson dev-go/btcd-chaincfg dev-go/btcd-txscript dev-go/btcd-wire dev-go/btclog dev-go/btcrpcclient dev-go/btcutil dev-go/btcutil-hdkeychain dev-go/fastsha256 dev-go/btcsuite-flags dev-go/btcsuite-secretbox dev-go/btcsuite-ripemd160 dev-go/btcsuite-scrypt dev-go/btcsuite-terminal dev-go/btcsuite-seelog dev-go/btcsuite-websocket >=dev-lang/go-1.4.2:=
+DESCRIPTION=A secure bitcoin wallet daemon written in Go
+EAPI=5
+HOMEPAGE=https://github.com/btcsuite/btcwallet
+LICENSE=MIT
+RESTRICT=test
+SLOT=0
+_eclass_exported_funcs=src_unpack:golang-vcs src_compile:golang-build src_test:golang-build src_install:-
+_eclasses_=eutils	f20548a2f7b0128068388cd2ec26708a	golang-base	59e300a2d8836a6e8d508276da0d570f	golang-build	1b49258a68ba3972a575490adf3b7b4c	golang-vcs	6625d7992916e5a3bed86489f4b9a73d	multilib	3972ca401cf7dbb430df9995f5d8d580	toolchain-funcs	7a212e5e01adfa4805c9978366e6ee85
+_md5_=1239cdcb6c118272d3a597334bf1bb45
