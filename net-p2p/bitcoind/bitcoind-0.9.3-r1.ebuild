@@ -15,7 +15,7 @@ LJR_PV="${PV}.ljr20141002"
 LJR_PATCH="bitcoin-${LJR_PV}.patch"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
-HOMEPAGE="http://bitcoin.org/"
+HOMEPAGE="http://bitcoincore.org/"
 SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 	ljr? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/0.9.x/${LJR_PV}/${LJR_PATCH}.xz )
 "

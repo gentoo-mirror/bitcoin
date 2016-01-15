@@ -11,7 +11,7 @@ MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
 
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
-HOMEPAGE="http://bitcoin.org/"
+HOMEPAGE="http://bitcoincore.org/"
 SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 "
 

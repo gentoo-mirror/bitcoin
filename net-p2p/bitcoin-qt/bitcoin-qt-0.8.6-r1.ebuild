@@ -14,7 +14,7 @@ MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
-HOMEPAGE="http://bitcoin.org/"
+HOMEPAGE="http://bitcoincore.org/"
 SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 	1stclassmsg? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/1stclassmsg/0.8.2-1stclassmsg.patch.xz )
 "
