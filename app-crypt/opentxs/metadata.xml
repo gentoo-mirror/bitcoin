@@ -2,11 +2,13 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <maintainer>
-    <email>justus.ranvier@monetas.net</email>
+    <email>justus@opentransactions.org</email>
   </maintainer>
   <use>
     <flag name="doc">Include doc strings in python SWIG wrapper.</flag>
-    <flag name="go">Build <pkg>dev-lang/go</pkg> library.</flag>
     <flag name="kwallet"><pkg>kde-base/kwallet</pkg> keyring support.</flag>
+    <flag name="sqlite">Use <pkg>dev-db/sqlite</pkg> storage driver</flag>
+    <flag name="filesystem">Use filesystem storage driver.</flag>
+    <flag name="dht">Enable <pkg>net-libs/opendht</pkg> integration.</flag>
   </use>
 </pkgmetadata>
