@@ -25,14 +25,14 @@ COMMONDEPEND="
 	dev-libs/protobuf
 	sys-libs/zlib
 	net-libs/opentxs-proto
-	>=net-libs/zeromq-4.1"
+	>=net-libs/zeromq-4.1
 	sqlite? ( dev-db/sqlite:3 )
 	filesystem? ( dev-libs/boost )
-	dht? ( net-libs/opendht )
+	dht? ( net-libs/opendht )"
 DEPEND="
 	python? ( dev-lang/swig )
-	${COMMONDEPEND}"
-RDEPEND="${COMMONDEPEND}"
+	${COMMONDEPEND=}"
+RDEPEND="${COMMONDEPEND=}"
 
 src_prepare() {
 	local required_version="4.7"
