@@ -16,7 +16,7 @@ LJR_PV="0.9.3.ljr20141002"
 LJR_PATCH="bitcoin-${LJR_PV}.patch"
 
 DESCRIPTION="An end-user Qt4 GUI for the Bitcoin crypto-currency"
-HOMEPAGE="http://bitcoin.org/"
+HOMEPAGE="http://bitcoincore.org/"
 SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/v${MyPV}.tar.gz -> ${MyPN}-v${PV}.tgz
 	ljr? ( http://luke.dashjr.org/programs/bitcoin/files/bitcoind/luke-jr/0.9.x/${LJR_PV}/${LJR_PATCH}.xz )
 "
