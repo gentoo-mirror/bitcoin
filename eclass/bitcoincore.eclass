@@ -74,7 +74,7 @@ WALLET_DEPEND="sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]"
 
 case "${PV}" in
 0.10*)
-	BITCOINCORE_SERIES="0.10.x"
+	BITCOINCORE_MINOR=10
 	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20141212"
 	case "${PVR}" in
 	0.10.2)
@@ -89,7 +89,7 @@ case "${PV}" in
 	BITCOINCORE_XT_DIFF="047a89831760ff124740fe9f58411d57ee087078...d4084b62c42c38bfe302d712b98909ab26ecce2f"
 	;;
 0.11*)
-	BITCOINCORE_SERIES="0.11.x"
+	BITCOINCORE_MINOR=11
 	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20150423"
 	# RBF is bundled with ljr patchset since 0.11.1
 	if [ "${PVR}" = "0.11.0" ]; then
@@ -98,6 +98,7 @@ case "${PV}" in
 	fi
 	;;
 9999*)
+	BITCOINCORE_MINOR=9999
 	BITCOINCORE_SERIES="9999"
 	LIBSECP256K1_DEPEND=">dev-libs/libsecp256k1-0.0.0_pre20150422"
 	;;
@@ -105,6 +106,8 @@ case "${PV}" in
 	die "Unrecognised version"
 	;;
 esac
+
+[ -n "${BITCOINCORE_SERIES}" ] || BITCOINCORE_SERIES="0.${BITCOINCORE_MINOR}.x"
 
 LJR_PV() { echo "${BITCOINCORE_LJR_PV}.${1}${BITCOINCORE_LJR_DATE}"; }
 LJR_PATCHDIR="${MyPN}-$(LJR_PV ljr).patches"
