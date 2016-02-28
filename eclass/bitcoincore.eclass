@@ -296,6 +296,10 @@ bitcoincore_conf() {
 	else
 		my_econf="${my_econf} --disable-wallet"
 	fi
+	if ! use_if_iuse zeromq; then
+		# NOTE: Older (pre-0.12) patches would disable ZMQ if --enable-zmq was passed
+		my_econf="${my_econf} --disable-zmq"
+	fi
 	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ]; then
 		my_econf="${my_econf} --disable-util-cli --disable-util-tx"
 	else
