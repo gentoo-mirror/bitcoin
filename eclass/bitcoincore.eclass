@@ -70,6 +70,8 @@ MyP="${MyPN}-${MyPV}"
 DOCS="${DOCS} doc/README.md doc/release-notes.md"
 OPENSSL_DEPEND="dev-libs/openssl:0[-bindist]"
 WALLET_DEPEND="sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]"
+LIBEVENT_DEPEND=""
+UNIVALUE_DEPEND=""
 [ -n "${BITCOINCORE_LJR_PV}" ] || BITCOINCORE_LJR_PV="${PV}"
 
 case "${PV}" in
@@ -100,7 +102,9 @@ case "${PV}" in
 9999*)
 	BITCOINCORE_MINOR=9999
 	BITCOINCORE_SERIES="9999"
+	LIBEVENT_DEPEND="dev-libs/libevent"
 	LIBSECP256K1_DEPEND=">dev-libs/libsecp256k1-0.0.0_pre20150422"
+	UNIVALUE_DEPEND="dev-libs/univalue"
 	;;
 *)
 	die "Unrecognised version"
@@ -157,6 +161,8 @@ fi
 
 BITCOINCORE_COMMON_DEPEND="
 	${OPENSSL_DEPEND}
+	${LIBEVENT_DEPEND}
+	${UNIVALUE_DEPEND}
 "
 if [ "${BITCOINCORE_NEED_LIBSECP256K1}" = "1" ]; then
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $LIBSECP256K1_DEPEND"
@@ -196,7 +202,7 @@ bitcoincore_policymsg() {
 
 bitcoincore_pkg_pretend() {
 	bitcoincore_policymsg_flag=false
-	if use_if_iuse ljr || use_if_iuse 1stclassmsg || use_if_iuse addrindex || use_if_iuse xt || use_if_iuse zeromq; then
+	if use_if_iuse ljr || use_if_iuse 1stclassmsg || use_if_iuse addrindex || use_if_iuse xt || { use_if_iuse zeromq && [ "${BITCOINCORE_MINOR}" -lt 12 ]; }; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 		bitcoincore_policymsg_flag=true
 		if use_if_iuse addrindex addrindex; then
@@ -249,7 +255,7 @@ bitcoincore_prepare() {
 	if use_if_iuse xt; then
 		epatch "${DISTDIR}/${BITCOINXT_PATCHFILE}"
 	fi
-	use_if_iuse zeromq && epatch "$(LJR_PATCH zeromq)"
+	{ use_if_iuse zeromq && [ "${BITCOINCORE_MINOR}" -lt 12 ]; } && epatch "$(LJR_PATCH zeromq)"
 	for mypolicy in ${BITCOINCORE_POLICY_PATCHES}; do
 		mypolicy="${mypolicy#[-+]}"
 		use bitcoin_policy_${mypolicy} || continue
@@ -310,9 +316,11 @@ bitcoincore_conf() {
 		my_econf="${my_econf} --with-system-leveldb"
 	fi
 	econf \
+		--disable-bench  \
 		--disable-ccache \
 		--disable-static \
 		--with-system-libsecp256k1  \
+		--with-system-univalue  \
 		--without-libs    \
 		--without-daemon  \
 		--without-gui     \

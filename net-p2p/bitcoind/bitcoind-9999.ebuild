@@ -4,7 +4,7 @@
 
 EAPI=5
 
-BITCOINCORE_IUSE="examples test upnp +wallet"
+BITCOINCORE_IUSE="examples test upnp +wallet zeromq"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bash-completion-r1 bitcoincore user systemd
@@ -51,11 +51,14 @@ src_install() {
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
 	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
 
+	use zeromq && dodoc doc/zmq.md
+
 	newbashcomp contrib/${PN}.bash-completion ${PN}
 
 	if use examples; then
 		docinto examples
 		dodoc -r contrib/{bitrpc,qos,spendfrom,tidy_datadir.sh}
+		use zeromq && dodoc -r contrib/zmq
 	fi
 
 	insinto /etc/logrotate.d
