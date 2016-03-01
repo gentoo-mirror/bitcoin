@@ -392,12 +392,9 @@ bitcoincore_conf() {
 	else
 		my_econf="${my_econf} --without-utils"
 	fi
-	if has libevent ${BITCOINCORE_NO_DEPEND}; then
+	# Knots 0.12.0 errors if --with-libevent used for bitcoin{d,-cli}, so only disable it when not wanted
+	if has libevent ${BITCOINCORE_NO_DEPEND} || { in_bcc_iuse libevent && ! use libevent; }; then
 		my_econf="${my_econf} --without-libevent"
-	elif in_bcc_iuse libevent; then
-		my_econf="${my_econf} $(use_with libevent)"
-	else
-		my_econf="${my_econf} --with-libevent"
 	fi
 	if [ "${BITCOINCORE_NEED_LEVELDB}" = "1" ]; then
 		# Passing --with-system-leveldb fails if leveldb is not installed, so only use it for targets that use LevelDB
