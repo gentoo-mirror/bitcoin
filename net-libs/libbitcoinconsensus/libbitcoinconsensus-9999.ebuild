@@ -13,6 +13,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 
+src_prepare() {
+	bitcoincore_src_prepare
+	epatch "${FILESDIR}/bugfix_bench_checks.patch"
+}
+
 src_configure() {
 	bitcoincore_conf \
 		--with-libs
