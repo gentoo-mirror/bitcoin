@@ -6,6 +6,7 @@ EAPI=5
 
 BITCOINCORE_IUSE=""
 BITCOINCORE_NEED_LIBSECP256K1=1
+BITCOINCORE_NO_DEPEND="libevent"
 inherit bitcoincore
 
 DESCRIPTION="Command-line Bitcoin transaction tool"

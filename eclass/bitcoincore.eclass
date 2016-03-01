@@ -161,14 +161,18 @@ fi
 
 BITCOINCORE_COMMON_DEPEND="
 	${OPENSSL_DEPEND}
-	${LIBEVENT_DEPEND}
-	${UNIVALUE_DEPEND}
 "
+if ! has libevent ${BITCOINCORE_NO_DEPEND}; then
+	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} ${LIBEVENT_DEPEND}"
+fi
 if [ "${BITCOINCORE_NEED_LIBSECP256K1}" = "1" ]; then
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $LIBSECP256K1_DEPEND"
 fi
 if [ "${PN}" != "libbitcoinconsensus" ]; then
-	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} >=dev-libs/boost-1.52.0[threads(+)]"
+	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND}
+		${UNIVALUE_DEPEND}
+		>=dev-libs/boost-1.52.0[threads(+)]
+	"
 fi
 bitcoincore_common_depend_use() {
 	in_bcc_iuse "$1" || return
