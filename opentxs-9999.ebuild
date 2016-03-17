@@ -31,8 +31,8 @@ COMMONDEPEND="
 	dht? ( net-libs/opendht )"
 DEPEND="
 	python? ( dev-lang/swig )
-	${COMMONDEPEND}"
-RDEPEND="${COMMONDEPEND}"
+	${COMMONDEPEND=}"
+RDEPEND="${COMMONDEPEND=}"
 
 src_prepare() {
 	local required_version="4.7"
