@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )
 	ljr? (
 		gnome-base/librsvg
-		media-gfx/imagemagick
+		media-gfx/imagemagick[png]
 	)
 "
 REQUIRED_USE="^^ ( qt4 qt5 )
