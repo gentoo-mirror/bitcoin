@@ -42,6 +42,7 @@ DEPEND="${RDEPEND}
 REQUIRED_USE="^^ ( qt4 qt5 )
 	rpc? ( libevent ) tor? ( libevent ) libevent? ( rpc tor )
 	!libevent? ( ljr )
+	libressl? ( ljr )
 "
 
 for lang in ${KNOTS_LANGS}; do
@@ -49,9 +50,8 @@ for lang in ${KNOTS_LANGS}; do
 done
 
 src_prepare() {
-	epatch "${FILESDIR}/${PV}-libressl.patch"
-
 	bitcoincore_prepare
+	use ljr && epatch "${FILESDIR}/${PV}-libressl.patch"
 
 	local filt= yeslang= nolang= lan ts x
 
