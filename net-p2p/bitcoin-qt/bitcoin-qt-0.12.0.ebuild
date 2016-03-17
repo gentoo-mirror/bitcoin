@@ -49,6 +49,8 @@ for lang in ${KNOTS_LANGS}; do
 done
 
 src_prepare() {
+	epatch "${FILESDIR}/${PV}-libressl.patch"
+
 	bitcoincore_prepare
 
 	local filt= yeslang= nolang= lan ts x
