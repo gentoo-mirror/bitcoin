@@ -7,7 +7,7 @@ EAPI=5
 BITCOINCORE_COMMITHASH="188ca9c305d3dd0fb462b9d6a44048b1d99a05f3"
 BITCOINCORE_LJR_DATE="20160226"
 BITCOINCORE_LJR_PREV="rc1"
-BITCOINCORE_IUSE="dbus kde +libevent +ljr +qrcode qt4 qt5 +rpc test +tor upnp +wallet zeromq"
+BITCOINCORE_IUSE="dbus kde +libevent +ljr +qrcode qt4 qt5 +http test +tor upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 LANGS="af_ZA ar be_BY bg bg_BG bs ca ca@valencia ca_ES cs cs_CZ cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV mk_MK mn ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru ru_RU sk sl_SI sq sr sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_TW"
 KNOTS_LANGS="es_AR es_CO ta"
@@ -40,7 +40,7 @@ DEPEND="${RDEPEND}
 	)
 "
 REQUIRED_USE="^^ ( qt4 qt5 )
-	rpc? ( libevent ) tor? ( libevent ) libevent? ( rpc tor )
+	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
 	!libevent? ( ljr )
 	libressl? ( ljr )
 "
