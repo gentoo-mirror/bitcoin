@@ -9,6 +9,9 @@
 		<email>luke-jr+gentoobugs@utopios.org</email>
 		<name>Luke Dashjr</name>
 	</maintainer>
+	<use>
+		<flag name="ljr">Enable Luke Dashjr's patches</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">bitcoin/bitcoin</remote-id>
 	</upstream>
