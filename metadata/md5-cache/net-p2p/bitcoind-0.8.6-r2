@@ -2,7 +2,7 @@ DEFINED_PHASES=compile install prepare setup test
 DEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/openssl:0[-bindist] logrotate? ( app-admin/logrotate ) upnp? ( net-libs/miniupnpc ) sys-libs/db:4.8[cxx] virtual/bitcoin-leveldb >=app-shells/bash-4.1 sys-apps/sed virtual/pkgconfig
 DESCRIPTION=Original Bitcoin crypto-currency wallet for automated services
 EAPI=4
-HOMEPAGE=http://bitcoin.org/
+HOMEPAGE=http://bitcoincore.org/
 IUSE=examples ipv6 logrotate upnp
 KEYWORDS=amd64 arm x86
 LICENSE=MIT ISC GPL-2
@@ -11,4 +11,4 @@ SLOT=0
 SRC_URI=https://github.com/bitcoin/bitcoin/archive/v0.8.6.tar.gz -> bitcoin-v0.8.6.tgz
 _eclass_exported_funcs=pkg_setup:- src_prepare:- src_compile:- src_test:- src_install:-
 _eclasses_=bash-completion-r1	acf715fa09463f043fbfdc1640f3fb85	db-use	a4966c7f4f7df444ead1212848c13cc9	eutils	9d81603248f2ba3ec59124320d123e5e	multilib	3972ca401cf7dbb430df9995f5d8d580	systemd	3165c885f3c71ffae7a867d931fb0e07	toolchain-funcs	7a212e5e01adfa4805c9978366e6ee85	user	906f3c8eb3a2350a4f1191a89baa3e46	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
-_md5_=93199214c451c6298a7984198e3599d0
+_md5_=83b2066c9e0659d64e55e31dbefbf4a9

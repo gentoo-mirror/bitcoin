@@ -9,7 +9,11 @@ app-crypt/opentxs:kwallet - kde-base/kwallet keyring support.
 app-crypt/opentxs:sqlite - Use dev-db/sqlite storage driver
 dev-libs/libbase58:tools - Build command line base58 tool
 dev-libs/libsecp256k1:asm - Enable x86_64 assembly optimisation
+dev-libs/libsecp256k1:ecdh - Enable ECDH shared secret computation
 dev-libs/libsecp256k1:endomorphism - Enable endomorphism
+dev-libs/libsecp256k1:experimental - Allow experimental USE flags
+dev-libs/libsecp256k1:recovery - Enable ECDSA pubkey recovery module
+dev-libs/libsecp256k1:schnorr - Enable Schnorr signature module
 net-libs/libbitcoinconsensus:ljr - Enable Luke Dashjr's patches
 net-misc/bfgminer:adl - Enable support for controlling fans and overclocking on AMD cards with AMD Display Library
 net-misc/bfgminer:antminer - Enable support for mining with AntMiner U1 sticks
@@ -59,9 +63,12 @@ net-p2p/bitcoin-qt:bitcoin_policy_cpfp - Child-Pays-For-Parent policy: If you mi
 net-p2p/bitcoin-qt:bitcoin_policy_dcmp - Data Carrier Multi-Push policy: Your node will assist transactions with multiple pushes in their data carrier (if any)
 net-p2p/bitcoin-qt:bitcoin_policy_rbf - Replace By Fee policy: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order
 net-p2p/bitcoin-qt:bitcoin_policy_spamfilter - Enhanced spam filter policy: Notorious spammers will not be assisted by your node
+net-p2p/bitcoin-qt:http - Enable support for the JSON-RPC and REST HTTP server (builtin net-p2p/bitcoind)
+net-p2p/bitcoin-qt:libevent - Use dev-libs/libevent
 net-p2p/bitcoin-qt:ljr - Enable Luke Dashjr's patches
 net-p2p/bitcoin-qt:ljr-antispam - Enable Luke Dashjr's address-based spam filter
 net-p2p/bitcoin-qt:qrcode - Enable generation of QR Codes for receiving payments
+net-p2p/bitcoin-qt:tor - Enable automatic configuration of a Tor hidden service
 net-p2p/bitcoin-qt:upnp - Enable Universal Plug and Play
 net-p2p/bitcoin-qt:wallet - Enable wallet support
 net-p2p/bitcoin-qt:xt - Enable Mike Hearn's Bitcoin XT patches
