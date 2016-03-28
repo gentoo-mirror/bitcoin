@@ -11,4 +11,4 @@ SLOT=0
 SRC_URI=https://github.com/namecoin/namecoin/tarball/nc0.3.50.00 -> namecoin-0.3.50.00.tgz
 _eclass_exported_funcs=pkg_setup:- src_prepare:- src_compile:- src_install:-
 _eclasses_=db-use	a4966c7f4f7df444ead1212848c13cc9	eutils	9d81603248f2ba3ec59124320d123e5e	multilib	3972ca401cf7dbb430df9995f5d8d580	toolchain-funcs	7a212e5e01adfa4805c9978366e6ee85	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
-_md5_=4e25d2e650c4bb66ea797eaf34b2d4c7
+_md5_=7a97b7f09b7520eaa707fe28aeddfb7a

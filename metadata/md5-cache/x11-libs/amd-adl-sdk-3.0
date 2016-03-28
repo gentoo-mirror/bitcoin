@@ -11,4 +11,4 @@ RESTRICT=mirror
 SLOT=0
 SRC_URI=http://download2-developer.amd.com/amd/GPU/zip/ADL_SDK_3.0.zip
 _eclass_exported_funcs=src_install:-
-_md5_=3fee3ae14da8442d7a7d6de98e8578f1
+_md5_=a3c1318722d71cef9255f3ca20d15e6e

@@ -10,4 +10,4 @@ RDEPEND=network? ( || ( net-p2p/bitcoind net-p2p/bitcoin-qt ) ) dev-python/psuti
 SLOT=0
 _eclass_exported_funcs=pkg_postinst:- src_unpack:git-2 src_prepare:- src_install:-
 _eclasses_=git-2	df00117322129fb906bb0a53c3d6a020
-_md5_=48026b92a32969e754e485fcc22c3691
+_md5_=879b3df5e0545ad6560e34fdfbb0281e

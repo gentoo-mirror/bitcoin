@@ -9,4 +9,4 @@ RDEPEND==dev-libs/jansson-1* dev-libs/libevent dev-libs/libmemcached dev-libs/op
 SLOT=0
 _eclass_exported_funcs=src_unpack:git-2 src_configure:- src_install:-
 _eclasses_=git-2	df00117322129fb906bb0a53c3d6a020
-_md5_=1803f438bba00bb3e59f64472f2aaf83
+_md5_=01899f918b472dcbd0c7d2895d5f3f28

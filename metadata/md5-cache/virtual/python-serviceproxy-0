@@ -5,4 +5,4 @@ KEYWORDS=amd64 x86
 RDEPEND=|| ( dev-python/bitcoinrpc[jsonrpc-compat] dev-python/jsonrpc )
 SLOT=0
 _eclass_exported_funcs=-
-_md5_=f30c62e5c4e3dff3e41ac461f85b04ae
+_md5_=be9fc075c5571c83347d2e32c795bb77
