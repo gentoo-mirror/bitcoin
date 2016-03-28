@@ -1,6 +1,6 @@
 # Copyright 2010-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -61,7 +61,7 @@ src_install() {
 
 	if use examples; then
 		docinto examples
-		dodoc -r contrib/{bitrpc,qos,spendfrom,tidy_datadir.sh}
+		dodoc -r contrib/{qos,spendfrom,tidy_datadir.sh}
 		use zeromq && dodoc -r contrib/zmq
 	fi
 
