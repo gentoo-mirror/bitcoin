@@ -15,7 +15,7 @@ LICENSE="MPL-2"
 
 SLOT="0"
 KEYWORDS=""
-IUSE="dht doc filesystem flat gnome kde +openssl python +rsa +secp256k1 +sqlite"
+IUSE="dht doc filesystem flat gnome kde +openssl nopassword python +rsa +secp256k1 +sqlite"
 
 COMMONDEPEND="
 	doc? ( app-doc/doxygen )
@@ -60,6 +60,7 @@ src_configure() {
 		$(cmake-utils_use dht OT_DHT)
 		$(cmake-utils_use filesystem OT_STORAGE_FS)
 		$(cmake-utils_use sqlite OT_STORAGE_SQLITE)
+		$(cmake-utils_use nopassword NO_PASSWORD)
 	)
 	cmake-utils_src_configure
 }
