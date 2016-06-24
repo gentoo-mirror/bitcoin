@@ -1,11 +1,12 @@
 DEFINED_PHASES=compile configure install prepare test unpack
-DEPEND=>=dev-libs/protobuf-2.6 >=dev-vcs/git-1.8.2.1 sys-devel/make >=dev-util/cmake-2.8.12
+DEPEND=>=dev-libs/protobuf-2.7 java? ( dev-java/protobuf-java ) python? ( dev-python/protobuf-python ) >=dev-vcs/git-1.8.2.1 sys-devel/make >=dev-util/cmake-2.8.12
 DESCRIPTION=Protobuf message library for Open-Transactions
 EAPI=5
 HOMEPAGE=http://opentransactions.org
+IUSE=java javascript python
 LICENSE=MPL-2
-RDEPEND=>=dev-libs/protobuf-2.6
+RDEPEND=>=dev-libs/protobuf-2.7 java? ( dev-java/protobuf-java ) python? ( dev-python/protobuf-python )
 SLOT=0
-_eclass_exported_funcs=src_unpack:git-r3 src_prepare:cmake-utils src_configure:cmake-utils src_compile:cmake-utils src_test:cmake-utils src_install:-
+_eclass_exported_funcs=src_unpack:git-r3 src_prepare:cmake-utils src_configure:- src_compile:cmake-utils src_test:cmake-utils src_install:-
 _eclasses_=cmake-utils	ac5bd012586c6cf0d9826400d9de2830	eutils	792f83d5ec9536cb5ccef375469d8bde	flag-o-matic	d270fa247153df66074f795fa42dba3e	git-r3	00f60a84fc7b499c99edfe99caea9f95	multilib	d062ae4ba2fc40a19c11de2ad89b6616	toolchain-funcs	c9d9187f4caa4026a0ceddd8dfceb3c1	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
-_md5_=3d3674dae1f22bf94fbd467a6a5cc809
+_md5_=75f694aa2116e9d298c9d09890cc92f4
