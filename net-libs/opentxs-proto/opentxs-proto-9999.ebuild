@@ -15,9 +15,21 @@ LICENSE="MPL-2"
 
 SLOT="0"
 KEYWORDS=""
+IUSE="java javascript python"
 
-DEPEND=">=dev-libs/protobuf-2.6"
+DEPEND=">=dev-libs/protobuf-2.7
+	java? ( dev-java/protobuf-java )
+	python? ( dev-python/protobuf-python )"
 RDEPEND="${DEPEND}"
+
+src_configure() {
+        local mycmakeargs=(
+                $(cmake-utils_use java JAVA)
+                $(cmake-utils_use javascript JAVASCRIPT)
+                $(cmake-utils_use python PYTHON)
+        )
+        cmake-utils_src_configure
+}
 
 src_install() {
 	cmake-utils_src_install
