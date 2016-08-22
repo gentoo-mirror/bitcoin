@@ -18,14 +18,14 @@ inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 arm arm64 mips ppc x86 amd64-linux x86-linux"
 
 RDEPEND="
 	dev-libs/protobuf
 	qrcode? (
 		media-gfx/qrencode
 	)
-	qt4? ( dev-qt/qtgui:4 )
+	qt4? ( dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 )
 	qt5? ( dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 )
 	dbus? (
 		qt4? ( dev-qt/qtdbus:4 )

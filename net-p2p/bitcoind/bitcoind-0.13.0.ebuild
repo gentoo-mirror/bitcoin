@@ -4,9 +4,8 @@
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="9779e1e1f320a45255f2e81325f2feceec3fa944"
-BITCOINCORE_LJR_DATE="20160629"
-BITCOINCORE_LJR_PREV="rc2"
+BITCOINCORE_COMMITHASH="a402396dce64c42ea73535b7dde4a9164d430438"
+BITCOINCORE_LJR_DATE="20160814"
 BITCOINCORE_IUSE="examples +ljr test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
@@ -16,7 +15,7 @@ inherit bash-completion-r1 bitcoincore user systemd
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 mips ppc x86 amd64-linux x86-linux"
+KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
 
 pkg_setup() {
 	local UG='bitcoin'

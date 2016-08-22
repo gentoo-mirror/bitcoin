@@ -1,14 +1,14 @@
-# Copyright 2010-2015 Gentoo Foundation
+# Copyright 2010-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="7e278929df53e1fb4191bc5ba3176a177ce718bf"
-BITCOINCORE_LJR_DATE="20151118"
-BITCOINCORE_IUSE="dbus kde +ljr +qrcode qt4 qt5 test upnp +wallet zeromq"
-BITCOINCORE_POLICY_PATCHES="+cpfp +dcmp rbf spamfilter"
-LANGS="ach af_ZA ar be_BY bg bs ca ca@valencia ca_ES cmn cs cy da de el_GR en eo es es_CL es_DO es_MX es_UY et eu_ES fa fa_IR fi fr fr_CA gl gu_IN he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV mn ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru sah sk sl_SI sq sr sv th_TH tr uk ur_PK uz@Cyrl vi vi_VN zh_HK zh_CN zh_TW"
+BITCOINCORE_COMMITHASH="a402396dce64c42ea73535b7dde4a9164d430438"
+BITCOINCORE_LJR_DATE="20160814"
+BITCOINCORE_IUSE="dbus kde +libevent +ljr +qrcode qt4 qt5 +http test +tor upnp +wallet zeromq"
+BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
+LANGS="af af_ZA ar be_BY bg bg_BG ca ca@valencia ca_ES cs cs_CZ cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2
@@ -32,8 +32,20 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )
+	ljr? (
+		gnome-base/librsvg
+		media-gfx/imagemagick[png]
+	)
 "
-REQUIRED_USE="^^ ( qt4 qt5 )"
+REQUIRED_USE="^^ ( qt4 qt5 )
+	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
+	!libevent? ( ljr )
+	libressl? ( ljr )
+"
+
+for lang in ${KNOTS_LANGS}; do
+	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( ljr )"
+done
 
 src_prepare() {
 	bitcoincore_prepare
@@ -42,6 +54,10 @@ src_prepare() {
 
 	for lan in $LANGS; do
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
+			if has $lan $KNOTS_LANGS && ! use ljr; then
+				# Expected
+				continue
+			fi
 			die "Language '$lan' no longer supported. Ebuild needs update."
 		fi
 	done
@@ -77,7 +93,11 @@ src_install() {
 	bitcoincore_src_install
 
 	insinto /usr/share/pixmaps
-	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
+	if use ljr; then
+		newins "src/qt/res/rendered_icons/bitcoin.ico" "${PN}.ico"
+	else
+		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
+	fi
 	make_desktop_entry "${PN} %u" "Bitcoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Qt;Network;P2P;Office;Finance;" "MimeType=x-scheme-handler/bitcoin;\nTerminal=false"
 
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
