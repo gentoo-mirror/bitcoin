@@ -8,8 +8,8 @@ SUPPORT_PYTHON_ABIS=1
 inherit git-2 python
 
 DESCRIPTION="Python module for working with arbitrary rational numbers, in any radix"
-HOMEPAGE="https://gitorious.org/anynumber"
-EGIT_REPO_URI="git://gitorious.org/anynumber/python.git"
+HOMEPAGE="https://gitlab.com/anynumber/python"
+EGIT_REPO_URI="https://gitlab.com/anynumber/python.git"
 
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
