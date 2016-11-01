@@ -11,6 +11,7 @@ inherit eutils fdo-mime git-r3 python-any-r1
 DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else."
 HOMEPAGE="https://github.com/goatpig/BitcoinArmory"
 EGIT_REPO_URI="git://github.com/goatpig/BitcoinArmory.git"
+EGIT_COMMIT="v${PV}"
 
 LICENSE="AGPL-3"
 SLOT="0"
