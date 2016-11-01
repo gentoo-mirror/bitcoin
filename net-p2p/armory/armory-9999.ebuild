@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
+# $Header: $
 
 EAPI=5
 
@@ -9,9 +9,8 @@ PYTHON_COMPAT=( python{2_6,2_7} )
 inherit eutils fdo-mime git-r3 python-any-r1
 
 DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else."
-HOMEPAGE="http://bitcoinarmory.com/"
-EGIT_REPO_URI="git://github.com/etotheipi/BitcoinArmory.git"
-EGIT_BRANCH="dev"
+HOMEPAGE="https://github.com/goatpig/BitcoinArmory"
+EGIT_REPO_URI="git://github.com/goatpig/BitcoinArmory.git"
 
 LICENSE="AGPL-3"
 SLOT="0"
@@ -29,21 +28,18 @@ DEPEND="${COMMON_DEPEND}
 		x11-misc/xdg-utils"
 
 RDEPEND="${COMMON_DEPEND}
-		 net-p2p/bittornado
 		 dev-python/psutil"
 
 src_prepare() {
-#	epatch "${FILESDIR}/snappy-0.91.patch"
-
 	sed -i "s|python /usr/lib/|${EPYTHON} $( python_get_sitedir)/|" \
 		dpkgfiles/*.desktop || die "failed to modify desktop entry exec parameter"
 }
 
 src_install() {
 	python_moduleinto ${PN}
-	python_domodule armoryengine bitcoinrpc_jsonrpc extras txjsonrpc ui *.py _CppBlockUtils.so
+	python_domodule armoryengine bitcoinrpc_jsonrpc extras txjsonrpc ui pytest *.py _CppBlockUtils.so
 
-	dodoc README
+	dodoc README.md
 
 	insinto /usr/share/armory/img
 	doins img/*
@@ -53,6 +49,7 @@ src_install() {
 
 	echo "python2 $(python_get_sitedir)/armory/ArmoryQt.py $@" > "${T}/armory"
 	dobin "${T}/armory"
+	dobin ArmoryDB
 }
 
 pkg_postinst() {
