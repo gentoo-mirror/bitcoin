@@ -29,7 +29,6 @@ DEPEND="${COMMON_DEPEND}
 		x11-misc/xdg-utils"
 
 RDEPEND="${COMMON_DEPEND}
-		 net-p2p/bittornado
 		 dev-python/psutil"
 
 src_prepare() {
