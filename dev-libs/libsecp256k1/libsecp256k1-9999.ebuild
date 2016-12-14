@@ -14,19 +14,21 @@ HOMEPAGE="https://github.com/bitcoin/${MyPN}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="asm doc ecdh endomorphism experimental gmp +recovery schnorr test"
+IUSE="asm doc ecdh endomorphism experimental gmp java +recovery test test_openssl"
 
 REQUIRED_USE="
-	asm? ( amd64 )
+	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	ecdh? ( experimental )
-	schnorr? ( experimental )
+	java? ( ecdh )
+	test_openssl? ( test )
 "
 RDEPEND="
 	gmp? ( dev-libs/gmp:0 )
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	test? ( dev-libs/openssl:0 )
+	java? ( virtual/jdk )
+	test_openssl? ( dev-libs/openssl:0 )
 "
 
 src_prepare() {
@@ -34,16 +36,27 @@ src_prepare() {
 }
 
 src_configure() {
+	local asm_opt
+	if use asm; then
+		if use arm; then
+			asm_opt=arm
+		else
+			asm_opt=auto
+		fi
+	else
+		asm_opt=no
+	fi
 	econf \
 		--disable-benchmark \
 		$(use_enable experimental) \
+		$(use_enable java jni) \
 		$(use_enable test tests) \
+		$(use_enable test_openssl openssl-tests) \
 		$(use_enable ecdh module-ecdh) \
 		$(use_enable endomorphism)  \
-		--with-asm=$(usex asm auto no) \
+		--with-asm=$asm_opt \
 		--with-bignum=$(usex gmp gmp no) \
 		$(use_enable recovery module-recovery) \
-		$(use_enable schnorr module-schnorr) \
 		--disable-static
 }
 
