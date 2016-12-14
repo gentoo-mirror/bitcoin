@@ -14,11 +14,12 @@ HOMEPAGE="https://github.com/bitcoin/${MyPN}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="asm doc ecdh endomorphism experimental gmp +recovery schnorr test"
+IUSE="asm doc ecdh endomorphism experimental gmp java +recovery schnorr test"
 
 REQUIRED_USE="
 	asm? ( amd64 )
 	ecdh? ( experimental )
+	java? ( schnorr ecdh )
 	schnorr? ( experimental )
 "
 RDEPEND="
@@ -26,6 +27,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
+	java? ( virtual/jdk )
 	test? ( dev-libs/openssl:0 )
 "
 
@@ -37,6 +39,7 @@ src_configure() {
 	econf \
 		--disable-benchmark \
 		$(use_enable experimental) \
+		$(use_enable java jni) \
 		$(use_enable test tests) \
 		$(use_enable ecdh module-ecdh) \
 		$(use_enable endomorphism)  \
