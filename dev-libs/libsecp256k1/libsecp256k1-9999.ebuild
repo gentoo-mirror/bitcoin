@@ -14,13 +14,12 @@ HOMEPAGE="https://github.com/bitcoin/${MyPN}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="asm doc ecdh endomorphism experimental gmp java +recovery schnorr test test_openssl"
+IUSE="asm doc ecdh endomorphism experimental gmp java +recovery test test_openssl"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	ecdh? ( experimental )
-	java? ( schnorr ecdh )
-	schnorr? ( experimental )
+	java? ( ecdh )
 	test_openssl? ( test )
 "
 RDEPEND="
@@ -58,7 +57,6 @@ src_configure() {
 		--with-asm=$asm_opt \
 		--with-bignum=$(usex gmp gmp no) \
 		$(use_enable recovery module-recovery) \
-		$(use_enable schnorr module-schnorr) \
 		--disable-static
 }
 
