@@ -17,7 +17,7 @@ KEYWORDS=""
 IUSE="asm doc ecdh endomorphism experimental gmp java +recovery schnorr test"
 
 REQUIRED_USE="
-	asm? ( amd64 )
+	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	ecdh? ( experimental )
 	java? ( schnorr ecdh )
 	schnorr? ( experimental )
@@ -36,6 +36,16 @@ src_prepare() {
 }
 
 src_configure() {
+	local asm_opt
+	if use asm; then
+		if use arm; then
+			asm_opt=arm
+		else
+			asm_opt=auto
+		fi
+	else
+		asm_opt=no
+	fi
 	econf \
 		--disable-benchmark \
 		$(use_enable experimental) \
@@ -43,7 +53,7 @@ src_configure() {
 		$(use_enable test tests) \
 		$(use_enable ecdh module-ecdh) \
 		$(use_enable endomorphism)  \
-		--with-asm=$(usex asm auto no) \
+		--with-asm=$asm_opt \
 		--with-bignum=$(usex gmp gmp no) \
 		$(use_enable recovery module-recovery) \
 		$(use_enable schnorr module-schnorr) \
