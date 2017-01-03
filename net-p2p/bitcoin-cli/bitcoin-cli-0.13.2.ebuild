@@ -5,7 +5,7 @@ EAPI=6
 
 BITCOINCORE_COMMITHASH="0d719145b018e28d48d35c2646a5962b87c60436"
 BITCOINCORE_LJR_DATE="20170102"
-BITCOINCORE_IUSE="+ljr"
+BITCOINCORE_IUSE="+knots"
 inherit bash-completion-r1 bitcoincore
 
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"

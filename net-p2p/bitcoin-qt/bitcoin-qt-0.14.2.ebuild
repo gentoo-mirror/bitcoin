@@ -5,7 +5,7 @@ EAPI=6
 
 BITCOINCORE_COMMITHASH="fc61c8322bd7288f7546d18ad04c36c345be13cd"
 BITCOINCORE_LJR_DATE="20170618"
-BITCOINCORE_IUSE="bip148 dbus kde +libevent +ljr +qrcode qt4 qt5 +http no-bip148 test +tor upnp +wallet zeromq"
+BITCOINCORE_IUSE="bip148 dbus kde +libevent +knots +qrcode qt4 qt5 +http no-bip148 test +tor upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 LANGS="af af_ZA ar be_BY bg bg_BG bs ca ca@valencia ca_ES cs cy da de el el_GR en en_GB eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY my nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sq sr sr@latin sv ta th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 KNOTS_LANGS="bs es_419 id my si th"
@@ -32,14 +32,14 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )
-	ljr? (
+	knots? (
 		gnome-base/librsvg
 		media-gfx/imagemagick[png]
 	)
 "
 REQUIRED_USE="^^ ( qt4 qt5 )
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
-	!libevent? ( ljr )
+	!libevent? ( knots )
 	^^ ( bip148 no-bip148 )
 "
 
@@ -48,7 +48,7 @@ for lang in ${LANGS}; do
 done
 
 for lang in ${KNOTS_LANGS}; do
-	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( ljr )"
+	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( knots )"
 done
 
 src_prepare() {
@@ -60,7 +60,7 @@ src_prepare() {
 
 	for lan in $LANGS; do
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
-			if has $lan $KNOTS_LANGS && ! use ljr; then
+			if has $lan $KNOTS_LANGS && ! use knots; then
 				# Expected
 				continue
 			fi
@@ -99,7 +99,7 @@ src_install() {
 	bitcoincore_src_install
 
 	insinto /usr/share/pixmaps
-	if use ljr; then
+	if use knots; then
 		newins "src/qt/res/rendered_icons/bitcoin.ico" "${PN}.ico"
 	else
 		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
