@@ -24,7 +24,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 			   dev-python/twisted-core"
 
 DEPEND="${COMMON_DEPEND}
-		dev-lang/swig
+		>=dev-lang/swig-3.0.0
 		x11-misc/xdg-utils"
 
 RDEPEND="${COMMON_DEPEND}
