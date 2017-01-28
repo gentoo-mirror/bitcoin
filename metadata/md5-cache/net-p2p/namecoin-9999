@@ -1,12 +1,12 @@
 DEFINED_PHASES=compile install prepare setup unpack
-DEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/crypto++ dev-libs/openssl[-bindist] upnp? ( <net-libs/miniupnpc-1.6 ) sys-libs/db:4.8[cxx] >=app-shells/bash-4.1 dev-vcs/git
+DEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/crypto++ dev-libs/openssl[-bindist] upnp? ( <net-libs/miniupnpc-1.6 ) sys-libs/db:4.8[cxx] >=dev-vcs/git-1.8.2.1
 DESCRIPTION=A P2P network based domain name system
-EAPI=4
-HOMEPAGE=https://dot-bit.org/
+EAPI=6
+HOMEPAGE=https://namecoin.info/
 IUSE=ssl upnp
 LICENSE=MIT ISC
 RDEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/crypto++ dev-libs/openssl[-bindist] upnp? ( <net-libs/miniupnpc-1.6 ) sys-libs/db:4.8[cxx]
 SLOT=0
-_eclass_exported_funcs=pkg_setup:- src_unpack:git-2 src_prepare:- src_compile:- src_install:-
-_eclasses_=db-use	a4966c7f4f7df444ead1212848c13cc9	eutils	ea170b525f6a38a006be05c9d9429f13	git-2	7af5d170bfc02983b4bcd3167dc5edd4	multilib	165fc17c38d1b11dac2008280dab6e80	toolchain-funcs	1b1da0c45c555989dc5d832b54880783	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
-_md5_=182c7d7f0d6ab193c2d917cc4fb3db12
+_eclass_exported_funcs=pkg_setup:- src_unpack:git-r3 src_prepare:- src_compile:- src_install:-
+_eclasses_=db-use	a4966c7f4f7df444ead1212848c13cc9	eutils	ea170b525f6a38a006be05c9d9429f13	git-r3	6efc2d7de07a77bf72c7207b48d0e123	multilib	165fc17c38d1b11dac2008280dab6e80	toolchain-funcs	1b1da0c45c555989dc5d832b54880783	user	80aaa71614ced86f02ee1a513821dc87	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
+_md5_=0cd3414ebc7d71e8e8f6eb3ab0252b4f

@@ -8,7 +8,7 @@ KEYWORDS=x86 amd64
 LICENSE=MIT ISC
 RDEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/crypto++ dev-libs/openssl[-bindist] upnp? ( <net-libs/miniupnpc-1.6 ) sys-libs/db:4.8[cxx]
 SLOT=0
-SRC_URI=https://github.com/namecoin/namecoin-legacy/archive/nc0.3.75.tar.gz -> namecoin-0.3.75.tar.gz
+SRC_URI=https://github.com/namecoin/namecoin-legacy/archive/v0.3.76rc1.tar.gz -> namecoin-0.3.76_rc1.tar.gz
 _eclass_exported_funcs=pkg_setup:- src_prepare:- src_compile:- src_install:-
 _eclasses_=db-use	a4966c7f4f7df444ead1212848c13cc9	eutils	ea170b525f6a38a006be05c9d9429f13	multilib	165fc17c38d1b11dac2008280dab6e80	toolchain-funcs	1b1da0c45c555989dc5d832b54880783	user	80aaa71614ced86f02ee1a513821dc87	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
 _md5_=0cd3414ebc7d71e8e8f6eb3ab0252b4f
