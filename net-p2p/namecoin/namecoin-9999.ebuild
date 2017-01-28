@@ -1,21 +1,33 @@
-# Copyright 2010-2012 Gentoo Foundation
+# Copyright 2010-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=4
+EAPI=6
 
 DB_VER="4.8"
 
-inherit db-use eutils git-2 versionator
+inherit db-use eutils versionator user
 
 DESCRIPTION="A P2P network based domain name system"
-HOMEPAGE="https://dot-bit.org/"
-EGIT_PROJECT='namecoin'
-EGIT_REPO_URI="https://github.com/namecoin/namecoin.git"
+HOMEPAGE="https://namecoin.info/"
+
+if [ "$PV" == "9999" ]; then
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}-legacy.git"
+	inherit git-r3
+	KEYWORDS=""
+	SRC_URI=""
+elif [ "$PV" == "0.3.75" ]; then
+	KEYWORDS="x86 amd64"
+	SRC_URI="https://github.com/${PN}/${PN}-legacy/archive/nc${PV}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${PN}-legacy-nc${PV}"
+else
+	KEYWORDS="x86 amd64"
+	SRC_URI="https://github.com/${PN}/${PN}-legacy/archive/v${PV/_rc/rc}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${PN}-legacy-${PV/_rc/rc}"
+fi
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS=""
 IUSE="ssl upnp"
 
 RDEPEND="
@@ -27,36 +39,30 @@ RDEPEND="
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 "
-DEPEND="${RDEPEND}
-	>=app-shells/bash-4.1
-"
-
-S="${WORKDIR}/namecoin-namecoin-b7d3a08"
+DEPEND="${RDEPEND}"
 
 pkg_setup() {
-	local UG='namecoin'
-	enewgroup "${UG}"
-	enewuser "${UG}" -1 -1 /var/lib/namecoin "${UG}"
+	enewgroup "namecoin"
+	enewuser "namecoin" -1 -1 /var/lib/namecoin "namecoin"
 }
 
 src_prepare() {
-	cd src || die
-	cp "${FILESDIR}/0.3.24-Makefile.gentoo" "Makefile" || die
+	default
+
+	cd src
+	cp "${FILESDIR}/0.3.72-Makefile.gentoo" "Makefile"
 }
 
 src_compile() {
 	local OPTS=()
 
-	OPTS+=("CXXFLAGS=${CXXFLAGS}")
-	OPTS+=( "LDFLAGS=${LDFLAGS}")
-
-	OPTS+=("DB_CXXFLAGS=-I$(db_includedir "${DB_VER}")")
-	OPTS+=("DB_LDFLAGS=-ldb_cxx-${DB_VER}")
+	OPTS+=("CXXFLAGS=${CXXFLAGS} -I$(db_includedir "${DB_VER}")")
+	OPTS+=("LDFLAGS=${LDFLAGS} -ldb_cxx-${DB_VER}")
 
 	use ssl  && OPTS+=(USE_SSL=1)
 	use upnp && OPTS+=(USE_UPNP=1)
 
-	cd src || die
+	cd src
 	emake "${OPTS[@]}" ${PN}d
 }
 
