@@ -16,10 +16,14 @@ if [ "$PV" == "9999" ]; then
 	inherit git-r3
 	KEYWORDS=""
 	SRC_URI=""
-else
+elif [ "$PV" == "0.3.75" ]; then
 	KEYWORDS="x86 amd64"
 	SRC_URI="https://github.com/${PN}/${PN}-legacy/archive/nc${PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/${PN}-legacy-nc${PV}"
+else
+	KEYWORDS="x86 amd64"
+	SRC_URI="https://github.com/${PN}/${PN}-legacy/archive/v${PV/_rc/rc}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${PN}-legacy-${PV/_rc/rc}"
 fi
 
 LICENSE="MIT ISC"
