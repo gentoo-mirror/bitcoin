@@ -1,4 +1,4 @@
-# Copyright 2010-2014 Gentoo Foundation
+# Copyright 2010-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -10,7 +10,7 @@ inherit db-use eutils versionator user
 
 DESCRIPTION="A P2P network based domain name system"
 HOMEPAGE="http://namecoin.info/"
-SRC_URI="https://github.com/${PN}/${PN}/archive/nc${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/${PN}/${PN}-legacy/archive/nc${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT ISC"
 SLOT="0"
@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-S="${WORKDIR}/${PN}-nc${PV}"
+S="${WORKDIR}/${PN}-legacy-nc${PV}"
 
 pkg_setup() {
 	enewgroup "namecoin"
