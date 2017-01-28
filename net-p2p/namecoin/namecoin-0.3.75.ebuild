@@ -9,12 +9,21 @@ DB_VER="4.8"
 inherit db-use eutils versionator user
 
 DESCRIPTION="A P2P network based domain name system"
-HOMEPAGE="http://namecoin.info/"
-SRC_URI="https://github.com/${PN}/${PN}-legacy/archive/nc${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://namecoin.info/"
+
+if [ "$PV" == "9999" ]; then
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}-legacy.git"
+	inherit git-r3
+	KEYWORDS=""
+	SRC_URI=""
+else
+	KEYWORDS="x86 amd64"
+	SRC_URI="https://github.com/${PN}/${PN}-legacy/archive/nc${PV}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${PN}-legacy-nc${PV}"
+fi
 
 LICENSE="MIT ISC"
 SLOT="0"
-KEYWORDS="amd64 x86"
 IUSE="ssl upnp"
 
 RDEPEND="
@@ -27,8 +36,6 @@ RDEPEND="
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 "
 DEPEND="${RDEPEND}"
-
-S="${WORKDIR}/${PN}-legacy-nc${PV}"
 
 pkg_setup() {
 	enewgroup "namecoin"
