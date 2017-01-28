@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 DB_VER="4.8"
 
@@ -26,9 +26,7 @@ RDEPEND="
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 "
-DEPEND="${RDEPEND}
-	>=app-shells/bash-4.1
-"
+DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${PN}-legacy-nc${PV}"
 
@@ -38,6 +36,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	default
+
 	cd src
 	cp "${FILESDIR}/0.3.72-Makefile.gentoo" "Makefile"
 }
