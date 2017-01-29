@@ -29,7 +29,7 @@ net-p2p/bitcoin-cli 0.9.0 0.9.2.1 0.9.3 0.10.0-r1 0.10.1 0.10.2 0.11.0 0.11.1 0.
 net-p2p/bitcoin-qt 0.8.6-r1 0.9.3-r1 0.9.4 0.10.2 0.10.2-r1 0.11.0 0.11.1 0.11.2 0.12.0 0.12.1 0.13.0 0.13.1-r1 0.13.2 9999: An end-user Qt GUI for the Bitcoin crypto-currency
 net-p2p/bitcoind 0.8.6-r2 0.9.3-r1 0.9.4 0.9.5 0.10.2 0.10.2-r1 0.11.0 0.11.1 0.11.2 0.12.0 0.12.1 0.13.0 0.13.1 0.13.2 9999: Original Bitcoin crypto-currency wallet for automated services
 net-p2p/libbitcoin 2.0-r1 9999: libbitcoin asynchronous C++ library for Bitcoin
-net-p2p/namecoin 0.3.75 0.3.76_rc1 9999: A P2P network based domain name system
+net-p2p/namecoin 0.3.75 0.3.76 0.3.80 9999: A P2P network based domain name system
 net-p2p/opentxs-sequencer 9999: Sequencing server for Open-Transactions
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1 9999: Bitcoin crypto-currency pooled mining proxy
 net-p2p/pybitmessage 9999: Bitmessage is a P2P communications protocol used to send encrypted messages to another person or to many subscribers.

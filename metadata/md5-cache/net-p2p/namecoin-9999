@@ -9,4 +9,4 @@ RDEPEND=>=dev-libs/boost-1.41.0[threads(+)] dev-libs/crypto++ dev-libs/openssl[-
 SLOT=0
 _eclass_exported_funcs=pkg_setup:- src_unpack:git-r3 src_prepare:- src_compile:- src_install:-
 _eclasses_=db-use	a4966c7f4f7df444ead1212848c13cc9	eutils	ea170b525f6a38a006be05c9d9429f13	git-r3	6efc2d7de07a77bf72c7207b48d0e123	multilib	165fc17c38d1b11dac2008280dab6e80	toolchain-funcs	1b1da0c45c555989dc5d832b54880783	user	80aaa71614ced86f02ee1a513821dc87	versionator	99ae9d758cbe7cfed19170e7d48f5a9c
-_md5_=0cd3414ebc7d71e8e8f6eb3ab0252b4f
+_md5_=2fb0f4cb642851769bc8a8d86836318c
