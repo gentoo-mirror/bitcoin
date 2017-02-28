@@ -8,5 +8,5 @@ LICENSE=GPL-2 MIT
 RDEPEND==dev-libs/jansson-1* dev-libs/libevent dev-libs/libmemcached dev-libs/openssl net-misc/curl sys-libs/zlib longpolling? ( dev-python/pycrypto ) mysql? ( dev-db/mysql ) postgres? ( dev-db/postgresql-server ) sqlite? ( dev-db/sqlite )
 SLOT=0
 _eclass_exported_funcs=src_unpack:git-2 src_configure:- src_install:-
-_eclasses_=git-2	7af5d170bfc02983b4bcd3167dc5edd4
+_eclasses_=git-2	195a672bfaf52d868442171c9469bbb6
 _md5_=01899f918b472dcbd0c7d2895d5f3f28
