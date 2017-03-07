@@ -100,7 +100,7 @@ case "${PV}" in
 		BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v0.11.0rc3.patch"
 	fi
 	;;
-0.12* | 0.13*)
+0.12* | 0.13* | 0.14*)
 	BITCOINCORE_MINOR=$(get_version_component_range 2)
 	IUSE="${IUSE} libressl"
 	OPENSSL_DEPEND="!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )"
@@ -109,7 +109,7 @@ case "${PV}" in
 	else
 		LIBEVENT_DEPEND="dev-libs/libevent"
 	fi
-	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]"
+	LIBSECP256K1_DEPEND=">=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]"
 	UNIVALUE_DEPEND="dev-libs/univalue"
 	BITCOINCORE_LJR_NAME=knots
 	if in_bcc_policy spamfilter; then
@@ -133,7 +133,7 @@ esac
 LJR_PV() {
 	local testsfx=
 	if [ -n "${BITCOINCORE_LJR_PREV}" ]; then
-		if [ "$1" = "dir" ]; then
+		if [ "$1" = "dir" ] && [ "${BITCOINCORE_SERIES}" = "0.12.x" ]; then
 			testsfx="/test/${BITCOINCORE_LJR_PREV}"
 		else
 			testsfx=".${BITCOINCORE_LJR_PREV}"
