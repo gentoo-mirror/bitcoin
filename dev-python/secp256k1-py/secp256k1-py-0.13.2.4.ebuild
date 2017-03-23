@@ -18,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd6
 IUSE="ecdh +recovery schnorr test"
 
 RDEPEND="
-	dev-libs/libsecp256k1[ecdh=,recovery=,schnorr=]
+	dev-libs/libsecp256k1[ecdh=,recovery=,schnorr(-)=]
 	>=dev-python/cffi-1.3.0[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}
