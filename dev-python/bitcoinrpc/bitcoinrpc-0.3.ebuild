@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=3
-SUPPORT_PYTHON_ABIS=1
+EAPI=5
+PYTHON_COMPAT=( python2_7 )
 
-inherit python
+inherit python-r1
 
 DESCRIPTION="Efficient JSON-RPC for Python"
 HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"
@@ -18,10 +18,11 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="+jsonrpc-compat"
 
-DEPEND="jsonrpc-compat? ( !dev-python/jsonrpc )"
+DEPEND="jsonrpc-compat? ( !dev-python/jsonrpc )
+	${PYTHON_DEPS}
+"
 RDEPEND="${DEPEND}"
-
-RESTRICT_PYTHON_ABIS="3.*"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 S="${WORKDIR}/${MyP}"
 
@@ -39,14 +40,7 @@ src_install() {
 		use jsonrpc-compat || subdir=/jsonrpc
 		insinto "$(python_get_sitedir)${subdir}"
 		doins -r $(MyPy) || die 'doins failed'
+		python_optimize
 	}
-	python_execute_function myinstall
-}
-
-pkg_postinst() {
-	python_mod_optimize $(MyPy)
-}
-
-pkg_postrm() {
-	python_mod_cleanup $(MyPy)
+	python_foreach_impl myinstall
 }
