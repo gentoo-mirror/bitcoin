@@ -338,12 +338,16 @@ bitcoincore_prepare() {
 		mypolicy="${mypolicy#[-+]}"
 
 		if [ "${BITCOINCORE_MINOR}" -ge 12 ]; then
+			local sed_target=src/validation.h
+			if ! [ -e src/validation.h ]; then
+				sed_target=src/main.h
+			fi
 			case "${mypolicy}" in
 			rbf)
-				use bitcoin_policy_rbf || sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/main.h
+				use bitcoin_policy_rbf || sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' "${sed_target}"
 				;;
 			spamfilter)
-				use bitcoin_policy_spamfilter || sed -i 's/\(DEFAULT_SPAMFILTER = \)true/\1false/' src/main.h
+				use bitcoin_policy_spamfilter || sed -i 's/\(DEFAULT_SPAMFILTER = \)true/\1false/' "${sed_target}"
 				;;
 			*)
 				die "Unknown policy ${mypolicy}"
