@@ -57,7 +57,7 @@ src_install() {
 
 	if use examples; then
 		docinto examples
-		dodoc -r contrib/{pyminer,qos,spendfrom,tidy_datadir.sh}
+		dodoc -r contrib/{linearize,qos,tidy_datadir.sh}
 		use zeromq && dodoc -r contrib/zmq
 	fi
 
