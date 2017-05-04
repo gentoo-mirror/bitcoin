@@ -1,0 +1,13 @@
+DEFINED_PHASES=configure install
+DEPEND==dev-libs/jansson-1* dev-libs/libevent dev-libs/libmemcached dev-libs/openssl net-misc/curl sys-libs/zlib longpolling? ( dev-python/pycrypto ) mysql? ( dev-db/mysql ) postgres? ( dev-db/postgresql-server ) sqlite? ( dev-db/sqlite )
+DESCRIPTION=Bitcoin crypto-currency pooled mining proxy
+EAPI=3
+HOMEPAGE=https://github.com/jgarzik/pushpool
+IUSE=+longpolling mysql postgres sqlite
+KEYWORDS=amd64 x86
+LICENSE=GPL-2 MIT
+RDEPEND==dev-libs/jansson-1* dev-libs/libevent dev-libs/libmemcached dev-libs/openssl net-misc/curl sys-libs/zlib longpolling? ( dev-python/pycrypto ) mysql? ( dev-db/mysql ) postgres? ( dev-db/postgresql-server ) sqlite? ( dev-db/sqlite )
+SLOT=0
+SRC_URI=http://yyz.us/bitcoin/pushpool-0.5.1.tar.gz
+_eclass_exported_funcs=src_configure:- src_install:-
+_md5_=e7c33234752e6fcec5f544f526e99324

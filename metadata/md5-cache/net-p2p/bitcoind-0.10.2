@@ -1,0 +1,15 @@
+DEFINED_PHASES=configure install prepare pretend setup test
+DEPEND=logrotate? ( app-admin/logrotate ) >=app-portage/elt-patches-20170317 !<sys-devel/gettext-0.18.1.1-r3 || ( >=sys-devel/automake-1.15:1.15 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4 dev-libs/openssl:0[-bindist] =dev-libs/libsecp256k1-0.0.0_pre20141212 >=dev-libs/boost-1.52.0[threads(+)] upnp? ( >net-libs/miniupnpc-1.9.20150915 ) wallet? ( sys-libs/db:4.8[cxx] ) zeromq? ( net-libs/zeromq ) >=app-shells/bash-4.1 sys-apps/sed ljr? ( dev-vcs/git ) virtual/pkgconfig
+DESCRIPTION=Original Bitcoin crypto-currency wallet for automated services
+EAPI=5
+HOMEPAGE=http://bitcoincore.org/
+IUSE=examples +ljr logrotate test upnp +wallet xt zeromq +bitcoin_policy_cpfp +bitcoin_policy_dcmp bitcoin_policy_rbf bitcoin_policy_spamfilter
+KEYWORDS=amd64 arm ~arm64 x86 ~amd64-linux ~x86-linux
+LICENSE=MIT
+RDEPEND=logrotate? ( app-admin/logrotate ) dev-libs/openssl:0[-bindist] =dev-libs/libsecp256k1-0.0.0_pre20141212 >=dev-libs/boost-1.52.0[threads(+)] upnp? ( >net-libs/miniupnpc-1.9.20150915 ) wallet? ( sys-libs/db:4.8[cxx] ) zeromq? ( net-libs/zeromq ) virtual/bitcoin-leveldb
+REQUIRED_USE=bitcoin_policy_rbf? ( !xt )
+SLOT=0
+SRC_URI=https://github.com/bitcoin/bitcoin/archive/d8ac90184254fea3a7f4991fd0529dfbd750aea0.tar.gz -> bitcoin-v0.10.2.tgz http://bitcoinknots.org/files/0.10.x/0.10.1.ljr20150428/bitcoin-0.10.1.ljr20150428.patches.txz -> bitcoin-0.10.1.ljr20150428.patches.tar.xz xt? ( https://github.com/bitcoinxt/bitcoinxt/compare/047a89831760ff124740fe9f58411d57ee087078...d4084b62c42c38bfe302d712b98909ab26ecce2f.diff -> bitcoinxt-v0.10.2.patch ) bitcoin_policy_rbf? ( https://github.com/petertodd/bitcoin/compare/16f45600c8c372a738ffef544292864256382601...a23678edc70204599299459a206709a00e039db7.diff -> bitcoin-rbf-v0.10.2.patch )
+_eclass_exported_funcs=pkg_pretend:bitcoincore pkg_setup:- src_prepare:- src_configure:- src_test:bitcoincore src_install:-
+_eclasses_=autotools	7027963e8e8cc12c91117bdb9225dc26	bash-completion-r1	8e447753aaf658afa609fbf961d80ab7	bitcoincore	e1fe77dbcca9b624d5452c1a620ee520	db-use	582140d1a711279e50ce284fc7b609f5	epatch	8233751dc5105a6ae8fcd86ce2bb0247	estack	43ddf5aaffa7a8d0482df54d25a66a1f	eutils	9c113d6a64826c40154cad7be15d95ea	libtool	e32ea84bf82cf8987965b574672dba93	ltprune	2770eed66a9b8ef944714cd0e968182e	multilib	0236be304ee52e7f179ed2f337075515	systemd	ec2e9154031d942186c75c0aabb41900	toolchain-funcs	6eb35f81556258a4bc9182ad3dfd58ee	user	e4b567c44272a719fabf53f0f885d3f7	versionator	c80ccf29e90adea7c5cae94b42eb76d0
+_md5_=0fd92fca4f20481891e0a9db3b810ea9
