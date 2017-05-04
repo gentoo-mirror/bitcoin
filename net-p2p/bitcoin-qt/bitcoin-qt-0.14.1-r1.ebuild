@@ -1,19 +1,23 @@
-# Copyright 2010-2015 Gentoo Foundation
+# Copyright 2010-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=5
 
-BITCOINCORE_IUSE="dbus kde +qrcode qt4 qt5 test upnp +wallet zeromq"
-LANGS="af_ZA ar be_BY bg bg_BG bs ca ca@valencia ca_ES cs cs_CZ cy da de el el_GR en en_GB eo es es_CL es_DO es_ES es_MX es_UY es_VE et eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV mk_MK mn ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru ru_RU sk sl_SI sq sr sv th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_TW"
+BITCOINCORE_COMMITHASH="964a185cc83af34587194a6ecda3ed9cf6b49263"
+BITCOINCORE_LJR_DATE="20170420"
+BITCOINCORE_IUSE="dbus kde +libevent +ljr +qrcode qt4 qt5 +http test +tor upnp +wallet zeromq"
+BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
+LANGS="af af_ZA ar be_BY bg bg_BG bs ca ca@valencia ca_ES cs cy da de el el_GR en en_GB eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
+KNOTS_LANGS="bs es_419 id si"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2
+inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
 
 RDEPEND="
 	dev-libs/protobuf
@@ -29,8 +33,19 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )
+	ljr? (
+		gnome-base/librsvg
+		media-gfx/imagemagick[png]
+	)
 "
-REQUIRED_USE="^^ ( qt4 qt5 )"
+REQUIRED_USE="^^ ( qt4 qt5 )
+	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
+	!libevent? ( ljr )
+"
+
+for lang in ${KNOTS_LANGS}; do
+	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( ljr )"
+done
 
 src_prepare() {
 	bitcoincore_prepare
@@ -41,7 +56,11 @@ src_prepare() {
 
 	for lan in $LANGS; do
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
-			ewarn "Language '$lan' no longer supported. Ebuild needs update."
+			if has $lan $KNOTS_LANGS && ! use ljr; then
+				# Expected
+				continue
+			fi
+			die "Language '$lan' no longer supported. Ebuild needs update."
 		fi
 	done
 
@@ -76,18 +95,22 @@ src_install() {
 	bitcoincore_src_install
 
 	insinto /usr/share/pixmaps
-	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
+	if use ljr; then
+		newins "src/qt/res/rendered_icons/bitcoin.ico" "${PN}.ico"
+	else
+		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
+	fi
 	insinto /usr/share/applications
 	doins "contrib/debian/bitcoin-qt.desktop"
 
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
-	doman contrib/debian/manpages/bitcoin-qt.1
 
 	use zeromq && dodoc doc/zmq.md
 
 	if use kde; then
 		insinto /usr/share/kde4/services
 		doins contrib/debian/bitcoin-qt.protocol
+		dosym "../kde4/services/bitcoin-qt.protocol" "/usr/share/kservices5/bitcoin-qt.protocol"
 	fi
 }
 
