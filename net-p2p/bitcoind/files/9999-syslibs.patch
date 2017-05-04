@@ -1,21 +1,79 @@
 diff --git a/build-aux/m4/bitcoin_subdir_to_include.m4 b/build-aux/m4/bitcoin_subdir_to_include.m4
-index 66f106c..5f0a3b1 100644
+index 7841042..671a91e 100644
 --- a/build-aux/m4/bitcoin_subdir_to_include.m4
 +++ b/build-aux/m4/bitcoin_subdir_to_include.m4
-@@ -5,7 +5,7 @@ AC_DEFUN([BITCOIN_SUBDIR_TO_INCLUDE],[
+@@ -5,14 +5,48 @@ dnl file COPYING or http://www.opensource.org/licenses/mit-license.php.
+ dnl BITCOIN_SUBDIR_TO_INCLUDE([CPPFLAGS-VARIABLE-NAME],[SUBDIRECTORY-NAME],[HEADER-FILE])
+ dnl SUBDIRECTORY-NAME must end with a path separator
+ AC_DEFUN([BITCOIN_SUBDIR_TO_INCLUDE],[
+-  if test "x$2" = "x"; then
++  m4_pushdef([_result_var],[$1])
++  m4_pushdef([_rel_path],[$2])
++  m4_pushdef([_header_file],[$3.h])
++  if test "x[]_rel_path" = "x"; then
      AC_MSG_RESULT([default])
    else
-     echo "#include <$2$3.h>" >conftest.cpp
+-    echo "#include <$2$3.h>" >conftest.cpp
 -    newinclpath=`${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null | [ tr -d '\\n\\r\\\\' | sed -e 's/^.*[[:space:]:]\(\/[^[:space:]]*\)]$3[\.h[[:space:]].*$/\1/' -e t -e d`]
-+    newinclpath=$(${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null | sed [-E -e ':a' -e '/\\$/!b b' -e N -e 's/\\\n/ /' -e 't a' -e ':b' -e 's/^[^:]*:[[:space:]]*(([^[:space:]\]|\\.)*[[:space:]])*(([^[:space:]\]|\\.)*)]$3\.h[([[:space:]].*)?$/\3/' -e 't' -e d])
++    echo '[#]include <'"_rel_path"'/_header_file>' >conftest.cpp
++    newinclpath=$(
++      ${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null |
++      ${SED} -E m4_bpatsubsts([[
++        :build_line
++# If the line doesn't end with a backslash, it is complete; go on to process it
++        /\\$/!b have_complete_line
++# Otherwise, read the next line, and concatenate it to the current one with a space
++        N
++        s/\\\n/ /
++# Then go back and check for a trailing backslash again.
++        t build_line
++
++# When we get here, we have the completed line, with all continuations collapsed.
++        :have_complete_line
++        s/^[^:]*:[[:space:]]*(([^[:space:]\]|\\.)*[[:space:]])*(([^[:space:]\]|\\.)*)(\\|\\\\|\/)?]]patsubst(]_header_file[,[\.],[\\.])[[([[:space:]].*)?$/\3/
++#         ^^^^^^^ The Make line begins with a target (which we don't care about)
++#                ^^^^^^^^^^^^ Ignore any spaces following it
++#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Match any number of other dependencies
++#                                                              ^^^^^^^^^^^^^^^^^^^^^^ Match any path components for our dependency; note this is reference 3, which we are replacing with
++#                                                                                    ^^^^^^^^^^^^^ Accept the path ending in a backslash, a double-backslash (ie escaped), or a forward slash
++#                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The filename must match exactly (periods are escaped, since a normal period matches any character in regex)
++#                                                                                                                                      ^^^^^^^^^^^^^^^^^ Filename must be followed by a space, but after that we don't care; we still need to match it all so it gets replaced, however
++# Delete the line, but only if we failed to find the directory (t jumps past the d if we matched)
++        t
++        d
++]],[
++\s*\(#.*\)?$],[],[
++        \(.*\)],[ -e '\1'])
++dnl ^^^^^^^^^^^^^^^^^^^^^^^ Deletes comments and processes sed expressions into -e arguments
++    )
++
      AC_MSG_RESULT([${newinclpath}])
      if test "x${newinclpath}" != "x"; then
-       eval "$1=\"\$$1\"' -I${newinclpath}'"
+-      eval "$1=\"\$$1\"' -I${newinclpath}'"
++      eval "_result_var=\"\$_result_var\"' -I${newinclpath}'"
+     fi
+   fi
++  m4_popdef([_result_var],[_rel_path],[_header_file])
+ ])
 diff --git a/configure.ac b/configure.ac
-index 939dfea..6c9acb3 100644
+index 3672700..1ceb010 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -200,6 +200,18 @@ AC_ARG_WITH([utils],
+@@ -166,10 +166,10 @@ AC_ARG_ENABLE([glibc-back-compat],
+   [use_glibc_compat=no])
+ 
+ AC_ARG_WITH([system-univalue],
+-  [AS_HELP_STRING([--with-system-univalue],
+-  [Build with system UniValue (default is no)])],
++  [AS_HELP_STRING([--without-system-univalue],
++  [Build with system UniValue (default is auto)])],
+   [system_univalue=$withval],
+-  [system_univalue=no]
++  [system_univalue=auto]
+ )
+ AC_ARG_ENABLE([zmq],
+   [AS_HELP_STRING([--disable-zmq],
+@@ -244,6 +244,18 @@ AC_ARG_WITH([utils],
    [build_bitcoin_utils=$withval],
    [build_bitcoin_utils=yes])
  
@@ -34,7 +92,7 @@ index 939dfea..6c9acb3 100644
  AC_ARG_WITH([libs],
    [AS_HELP_STRING([--with-libs],
    [build libraries (default=yes)])],
-@@ -531,14 +543,65 @@ if test x$use_reduce_exports = xyes; then
+@@ -632,14 +644,65 @@ if test x$use_reduce_exports = xyes; then
    [AC_MSG_ERROR([Cannot set default symbol visibility. Use --disable-reduce-exports.])])
  fi
  
@@ -101,16 +159,43 @@ index 939dfea..6c9acb3 100644
  if test x$enable_wallet != xno; then
      dnl Check for libdb_cxx only if wallet enabled
      BITCOIN_FIND_BDB48
-@@ -558,7 +621,7 @@ BITCOIN_QT_INIT
+@@ -659,7 +722,7 @@ BITCOIN_QT_INIT
  dnl sets $bitcoin_enable_qt, $bitcoin_enable_qt_test, $bitcoin_enable_qt_dbus
  BITCOIN_QT_CONFIGURE([$use_pkgconfig], [qt5])
  
--if test x$build_bitcoin_utils$build_bitcoind$bitcoin_enable_qt$use_tests = xnononono; then
-+if test x$build_bitcoin_cli$build_bitcoin_tx$build_bitcoind$bitcoin_enable_qt$use_tests = xnonononono; then
+-if test x$build_bitcoin_utils$build_bitcoind$bitcoin_enable_qt$use_tests$use_bench = xnonononono; then
++if test x$build_bitcoin_cli$build_bitcoin_tx$build_bitcoind$bitcoin_enable_qt$use_tests$use_bench = xnononononono; then
      use_boost=no
  else
      use_boost=yes
-@@ -848,9 +911,13 @@ AC_MSG_CHECKING([whether to build bitcoind])
+@@ -845,7 +908,7 @@ if test x$use_pkgconfig = xyes; then
+       if test x$use_qr != xno; then
+         BITCOIN_QT_CHECK([PKG_CHECK_MODULES([QR], [libqrencode], [have_qrencode=yes], [have_qrencode=no])])
+       fi
+-      if test x$build_bitcoin_utils$build_bitcoind$bitcoin_enable_qt$use_tests != xnononono; then
++      if test x$build_bitcoin_cli$build_bitcoin_tx$build_bitcoind$bitcoin_enable_qt$use_tests != xnonononono; then
+         PKG_CHECK_MODULES([EVENT], [libevent],, [AC_MSG_ERROR(libevent not found.)])
+         if test x$TARGET_OS != xwindows; then
+           PKG_CHECK_MODULES([EVENT_PTHREADS], [libevent_pthreads],, [AC_MSG_ERROR(libevent_pthreads not found.)])
+@@ -870,7 +933,7 @@ else
+   AC_CHECK_HEADER([openssl/ssl.h],, AC_MSG_ERROR(libssl headers missing),)
+   AC_CHECK_LIB([ssl],         [main],SSL_LIBS=-lssl, AC_MSG_ERROR(libssl missing))
+ 
+-  if test x$build_bitcoin_utils$build_bitcoind$bitcoin_enable_qt$use_tests != xnononono; then
++  if test x$build_bitcoin_cli$build_bitcoin_tx$build_bitcoind$bitcoin_enable_qt$use_tests != xnonononono; then
+     AC_CHECK_HEADER([event2/event.h],, AC_MSG_ERROR(libevent headers missing),)
+     AC_CHECK_LIB([event],[main],EVENT_LIBS=-levent,AC_MSG_ERROR(libevent missing))
+     if test x$TARGET_OS != xwindows; then
+@@ -919,7 +982,7 @@ dnl univalue check
+ 
+ need_bundled_univalue=yes
+ 
+-if test x$build_bitcoin_utils$build_bitcoind$bitcoin_enable_qt$use_tests$use_bench = xnonononono; then
++if test x$build_bitcoin_cli$build_bitcoin_tx$build_bitcoind$bitcoin_enable_qt$use_tests$use_bench = xnononononono; then
+   need_bundled_univalue=no
+ else
+ 
+@@ -969,9 +1032,13 @@ AC_MSG_CHECKING([whether to build bitcoind])
  AM_CONDITIONAL([BUILD_BITCOIND], [test x$build_bitcoind = xyes])
  AC_MSG_RESULT($build_bitcoind)
  
@@ -127,16 +212,16 @@ index 939dfea..6c9acb3 100644
  
  AC_MSG_CHECKING([whether to build libraries])
  AM_CONDITIONAL([BUILD_BITCOIN_LIBS], [test x$build_bitcoin_libs = xyes])
-@@ -975,7 +1042,7 @@ else
+@@ -1097,7 +1164,7 @@ else
    AC_MSG_RESULT([no])
  fi
  
--if test x$build_bitcoin_utils$build_bitcoin_libs$build_bitcoind$bitcoin_enable_qt$use_tests = xnonononono; then
-+if test x$build_bitcoin_cli$build_bitcoin_tx$build_bitcoin_libs$build_bitcoind$bitcoin_enable_qt$use_tests = xnononononono; then
-   AC_MSG_ERROR([No targets! Please specify at least one of: --with-utils --with-libs --with-daemon --with-gui or --enable-tests])
+-if test x$build_bitcoin_utils$build_bitcoin_libs$build_bitcoind$bitcoin_enable_qt$use_bench$use_tests = xnononononono; then
++if test x$build_bitcoin_cli$build_bitcoin_tx$build_bitcoin_libs$build_bitcoind$bitcoin_enable_qt$use_bench$use_tests = xnonononononono; then
+   AC_MSG_ERROR([No targets! Please specify at least one of: --with-utils --with-libs --with-daemon --with-gui --enable-bench or --enable-tests])
  fi
  
-@@ -1062,8 +1129,10 @@ if test x$system_univalue = xno; then
+@@ -1195,8 +1262,10 @@ if test x$need_bundled_univalue = xyes; then
    AC_CONFIG_SUBDIRS([src/univalue])
  fi
  
@@ -147,66 +232,105 @@ index 939dfea..6c9acb3 100644
  
  AC_OUTPUT
  
-diff --git a/qa/pull-tester/rpc-tests.py b/qa/pull-tester/rpc-tests.py
-index 7649c11..978419b 100755
---- a/qa/pull-tester/rpc-tests.py
-+++ b/qa/pull-tester/rpc-tests.py
-@@ -36,8 +36,8 @@ if not vars().has_key('ENABLE_WALLET'):
-     ENABLE_WALLET=0
- if not vars().has_key('ENABLE_BITCOIND'):
-     ENABLE_BITCOIND=0
--if not vars().has_key('ENABLE_UTILS'):
--    ENABLE_UTILS=0
-+if not vars().has_key('ENABLE_CLI'):
-+    ENABLE_CLI=0
- if not vars().has_key('ENABLE_ZMQ'):
-     ENABLE_ZMQ=0
+diff --git a/contrib/gitian-descriptors/gitian-linux.yml b/contrib/gitian-descriptors/gitian-linux.yml
+index 00af4bd..3da8510 100644
+--- a/contrib/gitian-descriptors/gitian-linux.yml
++++ b/contrib/gitian-descriptors/gitian-linux.yml
+@@ -132,6 +132,7 @@ script: |
+   export PATH=${WRAP_DIR}:${PATH}
  
-@@ -141,7 +141,7 @@ def runtests():
-         coverage = RPCCoverage()
-         print("Initializing coverage directory at %s\n" % coverage.dir)
+   # Create the release tarball using (arbitrarily) the first host
++  export GIT_DIR="$PWD/.git"
+   ./autogen.sh
+   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
+   make dist
+diff --git a/contrib/gitian-descriptors/gitian-osx.yml b/contrib/gitian-descriptors/gitian-osx.yml
+index 05cc654..206db7c 100644
+--- a/contrib/gitian-descriptors/gitian-osx.yml
++++ b/contrib/gitian-descriptors/gitian-osx.yml
+@@ -101,6 +101,7 @@ script: |
+   export PATH=${WRAP_DIR}:${PATH}
  
--    if(ENABLE_WALLET == 1 and ENABLE_UTILS == 1 and ENABLE_BITCOIND == 1):
-+    if(ENABLE_WALLET == 1 and ENABLE_CLI == 1 and ENABLE_BITCOIND == 1):
-         rpcTestDir = buildDir + '/qa/rpc-tests/'
-         run_extended = '-extended' in opts
-         cov_flag = coverage.flag if coverage else ''
-@@ -187,7 +187,7 @@ def runtests():
-             coverage.cleanup()
+   # Create the release tarball using (arbitrarily) the first host
++  export GIT_DIR="$PWD/.git"
+   ./autogen.sh
+   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
+   make dist
+diff --git a/contrib/gitian-descriptors/gitian-win.yml b/contrib/gitian-descriptors/gitian-win.yml
+index 3388977..1d4d704 100644
+--- a/contrib/gitian-descriptors/gitian-win.yml
++++ b/contrib/gitian-descriptors/gitian-win.yml
+@@ -116,6 +116,7 @@ script: |
+   export PATH=${WRAP_DIR}:${PATH}
  
-     else:
--        print "No rpc tests to run. Wallet, utils, and bitcoind must all be enabled"
-+        print "No rpc tests to run. Wallet, cli, and bitcoind must all be enabled"
+   # Create the release tarball using (arbitrarily) the first host
++  export GIT_DIR="$PWD/.git"
+   ./autogen.sh
+   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
+   make dist
+diff --git a/doc/build-unix.md b/doc/build-unix.md
+index b7eae2a..6265401 100644
+--- a/doc/build-unix.md
++++ b/doc/build-unix.md
+@@ -46,7 +46,7 @@ Optional dependencies:
+  qt          | GUI              | GUI toolkit (only needed when GUI enabled)
+  protobuf    | Payments in GUI  | Data interchange format used for payment protocol (only needed when GUI enabled)
+  libqrencode | QR codes in GUI  | Optional for generating QR codes (only needed when GUI enabled)
+- univalue    | Utility          | JSON parsing and encoding (bundled version will be used unless --with-system-univalue passed to configure)
++ univalue    | Utility          | JSON parsing and encoding (if missing, bundled version will be used)
+  libzmq3     | ZMQ notification | Optional, allows generating ZMQ notifications (requires ZMQ version >= 4.x)
  
+ For the versions used in the release, see [release-process.md](release-process.md) under *Fetch and build inputs*.
+diff --git a/doc/man/Makefile.am b/doc/man/Makefile.am
+index 08ff4d6..9b36319 100644
+--- a/doc/man/Makefile.am
++++ b/doc/man/Makefile.am
+@@ -8,6 +8,10 @@ if ENABLE_QT
+   dist_man1_MANS+=bitcoin-qt.1
+ endif
  
- class RPCCoverage(object):
-diff --git a/qa/pull-tester/tests_config.py.in b/qa/pull-tester/tests_config.py.in
-index 937b423..71a917c 100644
---- a/qa/pull-tester/tests_config.py.in
-+++ b/qa/pull-tester/tests_config.py.in
-@@ -8,7 +8,7 @@ EXEEXT="@EXEEXT@"
+-if BUILD_BITCOIN_UTILS
+-  dist_man1_MANS+=bitcoin-cli.1 bitcoin-tx.1
++if BUILD_BITCOIN_CLI
++  dist_man1_MANS+=bitcoin-cli.1
++endif
++
++if BUILD_BITCOIN_TX
++  dist_man1_MANS+=bitcoin-tx.1
+ endif
+diff --git a/share/genbuild.sh b/share/genbuild.sh
+index eecac4b..32ef2a5 100755
+--- a/share/genbuild.sh
++++ b/share/genbuild.sh
+@@ -17,9 +17,13 @@ else
+     exit 1
+ fi
  
- # These will turn into comments if they were disabled when configuring.
- @ENABLE_WALLET_TRUE@ENABLE_WALLET=1
--@BUILD_BITCOIN_UTILS_TRUE@ENABLE_UTILS=1
-+@BUILD_BITCOIN_CLI_TRUE@ENABLE_CLI=1
- @BUILD_BITCOIND_TRUE@ENABLE_BITCOIND=1
- @ENABLE_ZMQ_TRUE@ENABLE_ZMQ=1
++git_check_in_repo() {
++    ! { git status --porcelain -uall --ignored "$@" 2>/dev/null || echo '??'; } | grep -q '?'
++}
++
+ DESC=""
+ SUFFIX=""
+-if [ -e "$(which git 2>/dev/null)" -a "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
++if [ "${BITCOIN_GENBUILD_NO_GIT}" != "1" -a -e "$(which git 2>/dev/null)" -a "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && git_check_in_repo share/genbuild.sh; then
+     # clean 'dirty' status of touched files that haven't been modified
+     git diff >/dev/null 2>/dev/null 
  
 diff --git a/src/Makefile.am b/src/Makefile.am
-index fa7a78f..cc2f2ca 100644
+index c4f933d..2ca5b2c 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -31,7 +31,7 @@ endif
+@@ -21,7 +21,7 @@ endif
  BITCOIN_CONFIG_INCLUDES=-I$(builddir)/config
- BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
+ BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
  
 -BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
 +BITCOIN_INCLUDES += $(libsecp256k1_CFLAGS)
  BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
  
  LIBBITCOIN_SERVER=libbitcoin_server.a
-@@ -42,10 +42,16 @@ LIBBITCOIN_CLI=libbitcoin_cli.a
+@@ -31,7 +31,11 @@ LIBBITCOIN_CLI=libbitcoin_cli.a
  LIBBITCOIN_UTIL=libbitcoin_util.a
  LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
  LIBBITCOINQT=qt/libbitcoinqt.a
@@ -216,6 +340,12 @@ index fa7a78f..cc2f2ca 100644
 +LIBSECP256K1=$(libsecp256k1_LIBS)
 +endif
  
+ if ENABLE_ZMQ
+ LIBBITCOIN_ZMQ=libbitcoin_zmq.a
+@@ -43,8 +47,10 @@ if ENABLE_WALLET
+ LIBBITCOIN_WALLET=libbitcoin_wallet.a
+ endif
+ 
 +if EMBEDDED_LIBSECP256K1
  $(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
  	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
@@ -223,7 +353,7 @@ index fa7a78f..cc2f2ca 100644
  
  # Make is not made aware of per-object dependencies to avoid limiting building parallelization
  # But to build the less dependent modules first, we manually select their order here:
-@@ -79,8 +85,11 @@ if BUILD_BITCOIND
+@@ -69,8 +75,11 @@ if BUILD_BITCOIND
    bin_PROGRAMS += bitcoind
  endif
  
@@ -238,16 +368,52 @@ index fa7a78f..cc2f2ca 100644
  
  .PHONY: FORCE check-symbols check-security
 diff --git a/src/Makefile.test.include b/src/Makefile.test.include
-index 6ef6a69..1b6e759 100644
+index 10cb7e7..c0ef060 100644
 --- a/src/Makefile.test.include
 +++ b/src/Makefile.test.include
-@@ -127,7 +127,9 @@ bitcoin_test_clean : FORCE
+@@ -148,7 +148,9 @@ bitcoin_test_clean : FORCE
  check-local:
- 	@echo "Running test/bitcoin-util-test.py..."
- 	$(AM_V_at)srcdir=$(srcdir) PYTHONPATH=$(builddir)/test $(srcdir)/test/bitcoin-util-test.py
+ 	@echo "Running test/util/bitcoin-util-test.py..."
+ 	$(PYTHON) $(top_builddir)/test/util/bitcoin-util-test.py
 +if EMBEDDED_LIBSECP256K1
  	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C secp256k1 check
 +endif
  if EMBEDDED_UNIVALUE
  	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C univalue check
  endif
+diff --git a/test/functional/config.ini.in b/test/functional/config.ini.in
+index 29586c5..c5bb8aa 100644
+--- a/test/functional/config.ini.in
++++ b/test/functional/config.ini.in
+@@ -13,6 +13,6 @@ EXEEXT=@EXEEXT@
+ [components]
+ # Which components are enabled. These are commented out by `configure` if they were disabled when running config.
+ @ENABLE_WALLET_TRUE@ENABLE_WALLET=true
+-@BUILD_BITCOIN_UTILS_TRUE@ENABLE_UTILS=true
++@BUILD_BITCOIN_CLI_TRUE@ENABLE_CLI=true
+ @BUILD_BITCOIND_TRUE@ENABLE_BITCOIND=true
+ @ENABLE_ZMQ_TRUE@ENABLE_ZMQ=true
+diff --git a/test/functional/test_runner.py b/test/functional/test_runner.py
+index c87010b..a333c33 100755
+--- a/test/functional/test_runner.py
++++ b/test/functional/test_runner.py
+@@ -188,7 +188,7 @@ def main():
+     logging.basicConfig(format='%(message)s', level=logging_level)
+ 
+     enable_wallet = config["components"].getboolean("ENABLE_WALLET")
+-    enable_utils = config["components"].getboolean("ENABLE_UTILS")
++    enable_cli = config["components"].getboolean("ENABLE_CLI")
+     enable_bitcoind = config["components"].getboolean("ENABLE_BITCOIND")
+ 
+     if config["environment"]["EXEEXT"] == ".exe" and not args.force:
+@@ -197,8 +197,8 @@ def main():
+         print("Tests currently disabled on Windows by default. Use --force option to enable")
+         sys.exit(0)
+ 
+-    if not (enable_wallet and enable_utils and enable_bitcoind):
+-        print("No functional tests to run. Wallet, utils, and bitcoind must all be enabled")
++    if not (enable_wallet and enable_cli and enable_bitcoind):
++        print("No functional tests to run. Wallet, cli, and bitcoind must all be enabled")
+         print("Rerun `configure` with -enable-wallet, -with-utils and -with-daemon and rerun make")
+         sys.exit(0)
+ 
