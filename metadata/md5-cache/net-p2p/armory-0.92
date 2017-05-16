@@ -9,5 +9,5 @@ RDEPEND=|| ( >=dev-lang/python-2.7.5-r2:2.7 ) dev-libs/crypto++ dev-libs/leveldb
 SLOT=0
 SRC_URI=https://github.com/etotheipi/BitcoinArmory/archive/v0.92.tar.gz -> armory-0.92.tar.gz
 _eclass_exported_funcs=pkg_postrm:- pkg_postinst:- pkg_setup:python-any-r1 src_prepare:- src_install:-
-_eclasses_=epatch	8233751dc5105a6ae8fcd86ce2bb0247	estack	43ddf5aaffa7a8d0482df54d25a66a1f	eutils	9c113d6a64826c40154cad7be15d95ea	fdo-mime	21ef5adf81836863efa968f2a25cff64	ltprune	2770eed66a9b8ef944714cd0e968182e	multilib	0236be304ee52e7f179ed2f337075515	python-any-r1	be89e882151ba4b847089b860d79729c	python-utils-r1	c11fc374357e6ad9ddfe2e9f931e4d29	toolchain-funcs	6eb35f81556258a4bc9182ad3dfd58ee
+_eclasses_=epatch	8233751dc5105a6ae8fcd86ce2bb0247	estack	43ddf5aaffa7a8d0482df54d25a66a1f	eutils	9c113d6a64826c40154cad7be15d95ea	fdo-mime	21ef5adf81836863efa968f2a25cff64	ltprune	2770eed66a9b8ef944714cd0e968182e	multilib	0236be304ee52e7f179ed2f337075515	python-any-r1	be89e882151ba4b847089b860d79729c	python-utils-r1	fe03cdf15cb0f5eb535ad8a2a71187fb	toolchain-funcs	6eb35f81556258a4bc9182ad3dfd58ee
 _md5_=2aebf5813feede56862753067b0feaff
