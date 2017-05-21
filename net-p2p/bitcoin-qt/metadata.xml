@@ -11,6 +11,7 @@
 	</maintainer>
 	<use>
 		<flag name="1stclassmsg">Enable first-class Bitcoin message tools</flag>
+		<flag name="bip148">Support BIP148 Segwit UASF beginning August 2017</flag>
 		<flag name="bitcoin_policy_cltv">Check LockTime Verify policy: Your node will recognise and assist OP_CHECKLOCKTIMEVERIFY (BIP65) transactions</flag>
 		<flag name="bitcoin_policy_cpfp">Child-Pays-For-Parent policy: If you mine, you will give consideration to child transaction fees to pay for their parents</flag>
 		<flag name="bitcoin_policy_dcmp">Data Carrier Multi-Push policy: Your node will assist transactions with multiple pushes in their data carrier (if any)</flag>
@@ -20,6 +21,7 @@
 		<flag name="libevent">Use dev-libs/libevent</flag>
 		<flag name="ljr">Enable Luke Dashjr's patches</flag>
 		<flag name="ljr-antispam">Enable Luke Dashjr's address-based spam filter</flag>
+		<flag name="no-bip148">DO NOT support BIP148 Segwit UASF beginning August 2017</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
 		<flag name="tor">Enable automatic configuration of a Tor hidden service</flag>
 		<flag name="upnp">Enable Universal Plug and Play</flag>
