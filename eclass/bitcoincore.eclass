@@ -270,6 +270,15 @@ bitcoincore_pkg_pretend() {
 		"Enhanced spam filter policy is enabled: Your node will identify notorious spam scripts and avoid assisting them. This may impact your ability to use some services (see link for a list)." \
 		"Enhanced spam filter policy is disabled: Your node will not be checking for notorious spam scripts, and may assist them."
 	$bitcoincore_policymsg_flag && einfo "For more information on any of the above, see ${LJR_PATCH_DESC}"
+
+	if in_bcc_iuse bip148; then
+		if use bip148; then
+			ewarn "BIP148 is enabled: Your node will enforce Segwit activation beginning no later than August 1st."
+		else
+			ewarn "BIP148 is NOT enabled: Your node may follow blockchains beginning in August which are not BIP148 compliant."
+		fi
+		ewarn "There are risks to running either with or without BIP148! Read http://tiny.cc/bip148-risks for details."
+	fi
 }
 
 bitcoincore_git_apply() {
@@ -370,6 +379,10 @@ bitcoincore_prepare() {
 		esac
 	done
 	
+	if in_bcc_iuse bip148 && use bip148; then
+		epatch "${FILESDIR}/${PV}-$(usex ljr knots core)-bip148.patch"
+	fi
+
 	echo '#!/bin/true' >share/genbuild.sh
 	mkdir -p src/obj
 	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h

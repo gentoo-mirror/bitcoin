@@ -1,0 +1,64 @@
+diff --git a/src/clientversion.cpp b/src/clientversion.cpp
+index 8e6aac9b02..3236c64f4c 100644
+--- a/src/clientversion.cpp
++++ b/src/clientversion.cpp
+@@ -100,6 +100,6 @@ std::string FormatSubVersion(const std::string& name, int nClientVersion, const
+     }
+     ss << "/";
+     if (!fBaseNameOnly)
+-        ss << "Knots:20170420/";
++        ss << "Knots:20170420/UASF-Segwit:0.3(BIP148)/";
+     return ss.str();
+ }
+diff --git a/src/validation.cpp b/src/validation.cpp
+index efe1c5ea7b..a2a2bd7046 100644
+--- a/src/validation.cpp
++++ b/src/validation.cpp
+@@ -2049,6 +2049,20 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
+         flags |= SCRIPT_VERIFY_NULLDUMMY;
+     }
+ 
++    // BIP148 mandatory segwit signalling.
++    int64_t nMedianTimePast = pindex->GetMedianTimePast();
++    if ( (nMedianTimePast >= 1501545600) &&  // Tue 01 Aug 2017 00:00:00 UTC
++         (nMedianTimePast <= 1510704000) &&  // Wed 15 Nov 2017 00:00:00 UTC
++         (!IsWitnessLockedIn(pindex->pprev, chainparams.GetConsensus()) &&  // Segwit is not locked in
++          !IsWitnessEnabled(pindex->pprev, chainparams.GetConsensus())) )   // and is not active.
++    {
++        bool fVersionBits = (pindex->nVersion & VERSIONBITS_TOP_MASK) == VERSIONBITS_TOP_BITS;
++        bool fSegbit = (pindex->nVersion & VersionBitsMask(chainparams.GetConsensus(), Consensus::DEPLOYMENT_SEGWIT)) != 0;
++        if (!(fVersionBits && fSegbit)) {
++            return state.DoS(0, error("ConnectBlock(): relayed block must signal for segwit, please upgrade"), REJECT_INVALID, "bad-no-segwit");
++        }
++    }
++
+     int64_t nTime2 = GetTimeMicros(); nTimeForks += nTime2 - nTime1;
+     LogPrint("bench", "    - Fork checks: %.2fms [%.2fs]\n", 0.001 * (nTime2 - nTime1), nTimeForks * 0.000001);
+ 
+@@ -3122,6 +3136,12 @@ bool IsWitnessEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& pa
+     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_SEGWIT, versionbitscache) == THRESHOLD_ACTIVE);
+ }
+ 
++bool IsWitnessLockedIn(const CBlockIndex* pindexPrev, const Consensus::Params& params)
++{
++    LOCK(cs_main);
++    return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_SEGWIT, versionbitscache) == THRESHOLD_LOCKED_IN);
++}
++
+ // Compute at which vout of the block's coinbase transaction the witness
+ // commitment occurs, or -1 if not found.
+ static int GetWitnessCommitmentIndex(const CBlock& block)
+diff --git a/src/validation.h b/src/validation.h
+index 7394195e0c..5101bf087c 100644
+--- a/src/validation.h
++++ b/src/validation.h
+@@ -544,6 +544,9 @@ bool TestBlockValidity(CValidationState& state, const CChainParams& chainparams,
+ /** Check whether witness commitments are required for block. */
+ bool IsWitnessEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params);
+ 
++/** Check if Segregated Witness is Locked In */
++bool IsWitnessLockedIn(const CBlockIndex* pindexPrev, const Consensus::Params& params);
++
+ /** When there are blocks in the active chain with missing data, rewind the chainstate and remove them from the block index */
+ bool RewindBlockIndex(const CChainParams& params);
+ 
