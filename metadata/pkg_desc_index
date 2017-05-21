@@ -1,7 +1,7 @@
 app-crypt/libwallet 0.4 9999: Wallet related functionality forked from libbitcoin
 app-crypt/opentxs 9999: Financial cryptography library, API, CLI
 app-misc/moneychanger 9999: An intuitive QT/C++ system tray client for Open-Transactions.
-dev-libs/chaiscript 5.2.0 9999: ECMAScript-inspired, embedded functional-like scripting language.
+dev-libs/chaiscript 5.2.0: ECMAScript-inspired, embedded functional-like scripting language.
 dev-libs/libbase58 0.1.0 0.1.1: C implementation of Bitcoin's base58 encoding
 dev-libs/libsecp256k1 0.0.0_pre20141212 0.0.0_pre20150423 0.0.0_pre20151118 0.0.0_pre20161213 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/msgpack 1.2.0: MessagePack is a binary-based efficient data interchange format
