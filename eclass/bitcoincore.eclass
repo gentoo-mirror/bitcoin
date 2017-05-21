@@ -380,7 +380,7 @@ bitcoincore_prepare() {
 	done
 	
 	if in_bcc_iuse bip148 && use bip148; then
-		epatch "${FILESDIR}/${PV}-$(usex ljr knots core)-bip148.patch"
+		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse ljr && use ljr && echo knots || echo core)-bip148.patch"
 	fi
 
 	echo '#!/bin/true' >share/genbuild.sh
