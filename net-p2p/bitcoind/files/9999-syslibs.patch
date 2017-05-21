@@ -1,62 +1,18 @@
 diff --git a/build-aux/m4/bitcoin_subdir_to_include.m4 b/build-aux/m4/bitcoin_subdir_to_include.m4
-index 7841042..671a91e 100644
+index 7841042ac8..e67232a06d 100644
 --- a/build-aux/m4/bitcoin_subdir_to_include.m4
 +++ b/build-aux/m4/bitcoin_subdir_to_include.m4
-@@ -5,14 +5,48 @@ dnl file COPYING or http://www.opensource.org/licenses/mit-license.php.
- dnl BITCOIN_SUBDIR_TO_INCLUDE([CPPFLAGS-VARIABLE-NAME],[SUBDIRECTORY-NAME],[HEADER-FILE])
- dnl SUBDIRECTORY-NAME must end with a path separator
- AC_DEFUN([BITCOIN_SUBDIR_TO_INCLUDE],[
--  if test "x$2" = "x"; then
-+  m4_pushdef([_result_var],[$1])
-+  m4_pushdef([_rel_path],[$2])
-+  m4_pushdef([_header_file],[$3.h])
-+  if test "x[]_rel_path" = "x"; then
+@@ -9,7 +9,7 @@ AC_DEFUN([BITCOIN_SUBDIR_TO_INCLUDE],[
      AC_MSG_RESULT([default])
    else
--    echo "#include <$2$3.h>" >conftest.cpp
+     echo "#include <$2$3.h>" >conftest.cpp
 -    newinclpath=`${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null | [ tr -d '\\n\\r\\\\' | sed -e 's/^.*[[:space:]:]\(\/[^[:space:]]*\)]$3[\.h[[:space:]].*$/\1/' -e t -e d`]
-+    echo '[#]include <'"_rel_path"'/_header_file>' >conftest.cpp
-+    newinclpath=$(
-+      ${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null |
-+      ${SED} -E m4_bpatsubsts([[
-+        :build_line
-+# If the line doesn't end with a backslash, it is complete; go on to process it
-+        /\\$/!b have_complete_line
-+# Otherwise, read the next line, and concatenate it to the current one with a space
-+        N
-+        s/\\\n/ /
-+# Then go back and check for a trailing backslash again.
-+        t build_line
-+
-+# When we get here, we have the completed line, with all continuations collapsed.
-+        :have_complete_line
-+        s/^[^:]*:[[:space:]]*(([^[:space:]\]|\\.)*[[:space:]])*(([^[:space:]\]|\\.)*)(\\|\\\\|\/)?]]patsubst(]_header_file[,[\.],[\\.])[[([[:space:]].*)?$/\3/
-+#         ^^^^^^^ The Make line begins with a target (which we don't care about)
-+#                ^^^^^^^^^^^^ Ignore any spaces following it
-+#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Match any number of other dependencies
-+#                                                              ^^^^^^^^^^^^^^^^^^^^^^ Match any path components for our dependency; note this is reference 3, which we are replacing with
-+#                                                                                    ^^^^^^^^^^^^^ Accept the path ending in a backslash, a double-backslash (ie escaped), or a forward slash
-+#                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The filename must match exactly (periods are escaped, since a normal period matches any character in regex)
-+#                                                                                                                                      ^^^^^^^^^^^^^^^^^ Filename must be followed by a space, but after that we don't care; we still need to match it all so it gets replaced, however
-+# Delete the line, but only if we failed to find the directory (t jumps past the d if we matched)
-+        t
-+        d
-+]],[
-+\s*\(#.*\)?$],[],[
-+        \(.*\)],[ -e '\1'])
-+dnl ^^^^^^^^^^^^^^^^^^^^^^^ Deletes comments and processes sed expressions into -e arguments
-+    )
-+
++    newinclpath=$(${CXXCPP} ${CPPFLAGS} -M conftest.cpp 2>/dev/null | sed [-E -e ':a' -e '/\\$/!b b' -e N -e 's/\\\n/ /' -e 't a' -e ':b' -e 's/^[^:]*:[[:space:]]*(([^[:space:]\]|\\.)*[[:space:]])*(([^[:space:]\]|\\.)*)]$3\.h[([[:space:]].*)?$/\3/' -e 't' -e d])
      AC_MSG_RESULT([${newinclpath}])
      if test "x${newinclpath}" != "x"; then
--      eval "$1=\"\$$1\"' -I${newinclpath}'"
-+      eval "_result_var=\"\$_result_var\"' -I${newinclpath}'"
-     fi
-   fi
-+  m4_popdef([_result_var],[_rel_path],[_header_file])
- ])
+       eval "$1=\"\$$1\"' -I${newinclpath}'"
 diff --git a/configure.ac b/configure.ac
-index 3672700..1ceb010 100644
+index 3672700488..1ceb010827 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -166,10 +166,10 @@ AC_ARG_ENABLE([glibc-back-compat],
@@ -232,44 +188,8 @@ index 3672700..1ceb010 100644
  
  AC_OUTPUT
  
-diff --git a/contrib/gitian-descriptors/gitian-linux.yml b/contrib/gitian-descriptors/gitian-linux.yml
-index 00af4bd..3da8510 100644
---- a/contrib/gitian-descriptors/gitian-linux.yml
-+++ b/contrib/gitian-descriptors/gitian-linux.yml
-@@ -132,6 +132,7 @@ script: |
-   export PATH=${WRAP_DIR}:${PATH}
- 
-   # Create the release tarball using (arbitrarily) the first host
-+  export GIT_DIR="$PWD/.git"
-   ./autogen.sh
-   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
-   make dist
-diff --git a/contrib/gitian-descriptors/gitian-osx.yml b/contrib/gitian-descriptors/gitian-osx.yml
-index 05cc654..206db7c 100644
---- a/contrib/gitian-descriptors/gitian-osx.yml
-+++ b/contrib/gitian-descriptors/gitian-osx.yml
-@@ -101,6 +101,7 @@ script: |
-   export PATH=${WRAP_DIR}:${PATH}
- 
-   # Create the release tarball using (arbitrarily) the first host
-+  export GIT_DIR="$PWD/.git"
-   ./autogen.sh
-   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
-   make dist
-diff --git a/contrib/gitian-descriptors/gitian-win.yml b/contrib/gitian-descriptors/gitian-win.yml
-index 3388977..1d4d704 100644
---- a/contrib/gitian-descriptors/gitian-win.yml
-+++ b/contrib/gitian-descriptors/gitian-win.yml
-@@ -116,6 +116,7 @@ script: |
-   export PATH=${WRAP_DIR}:${PATH}
- 
-   # Create the release tarball using (arbitrarily) the first host
-+  export GIT_DIR="$PWD/.git"
-   ./autogen.sh
-   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
-   make dist
 diff --git a/doc/build-unix.md b/doc/build-unix.md
-index b7eae2a..6265401 100644
+index b7eae2a630..626540191a 100644
 --- a/doc/build-unix.md
 +++ b/doc/build-unix.md
 @@ -46,7 +46,7 @@ Optional dependencies:
@@ -282,7 +202,7 @@ index b7eae2a..6265401 100644
  
  For the versions used in the release, see [release-process.md](release-process.md) under *Fetch and build inputs*.
 diff --git a/doc/man/Makefile.am b/doc/man/Makefile.am
-index 08ff4d6..9b36319 100644
+index 08ff4d6ac1..9b36319e64 100644
 --- a/doc/man/Makefile.am
 +++ b/doc/man/Makefile.am
 @@ -8,6 +8,10 @@ if ENABLE_QT
@@ -298,27 +218,8 @@ index 08ff4d6..9b36319 100644
 +if BUILD_BITCOIN_TX
 +  dist_man1_MANS+=bitcoin-tx.1
  endif
-diff --git a/share/genbuild.sh b/share/genbuild.sh
-index eecac4b..32ef2a5 100755
---- a/share/genbuild.sh
-+++ b/share/genbuild.sh
-@@ -17,9 +17,13 @@ else
-     exit 1
- fi
- 
-+git_check_in_repo() {
-+    ! { git status --porcelain -uall --ignored "$@" 2>/dev/null || echo '??'; } | grep -q '?'
-+}
-+
- DESC=""
- SUFFIX=""
--if [ -e "$(which git 2>/dev/null)" -a "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
-+if [ "${BITCOIN_GENBUILD_NO_GIT}" != "1" -a -e "$(which git 2>/dev/null)" -a "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && git_check_in_repo share/genbuild.sh; then
-     # clean 'dirty' status of touched files that haven't been modified
-     git diff >/dev/null 2>/dev/null 
- 
 diff --git a/src/Makefile.am b/src/Makefile.am
-index c4f933d..2ca5b2c 100644
+index ae2eb29c94..ea2ce67924 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
 @@ -21,7 +21,7 @@ endif
@@ -368,10 +269,10 @@ index c4f933d..2ca5b2c 100644
  
  .PHONY: FORCE check-symbols check-security
 diff --git a/src/Makefile.test.include b/src/Makefile.test.include
-index 10cb7e7..c0ef060 100644
+index ee1c11ff1f..8e19f52b8f 100644
 --- a/src/Makefile.test.include
 +++ b/src/Makefile.test.include
-@@ -148,7 +148,9 @@ bitcoin_test_clean : FORCE
+@@ -149,7 +149,9 @@ bitcoin_test_clean : FORCE
  check-local:
  	@echo "Running test/util/bitcoin-util-test.py..."
  	$(PYTHON) $(top_builddir)/test/util/bitcoin-util-test.py
@@ -382,7 +283,7 @@ index 10cb7e7..c0ef060 100644
  	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C univalue check
  endif
 diff --git a/test/functional/config.ini.in b/test/functional/config.ini.in
-index 29586c5..c5bb8aa 100644
+index 29586c555d..c5bb8aa684 100644
 --- a/test/functional/config.ini.in
 +++ b/test/functional/config.ini.in
 @@ -13,6 +13,6 @@ EXEEXT=@EXEEXT@
@@ -394,7 +295,7 @@ index 29586c5..c5bb8aa 100644
  @BUILD_BITCOIND_TRUE@ENABLE_BITCOIND=true
  @ENABLE_ZMQ_TRUE@ENABLE_ZMQ=true
 diff --git a/test/functional/test_runner.py b/test/functional/test_runner.py
-index c87010b..a333c33 100755
+index 6174ca1d88..317b090ebf 100755
 --- a/test/functional/test_runner.py
 +++ b/test/functional/test_runner.py
 @@ -188,7 +188,7 @@ def main():
