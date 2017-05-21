@@ -6,7 +6,7 @@ EAPI=5
 
 BITCOINCORE_COMMITHASH="964a185cc83af34587194a6ecda3ed9cf6b49263"
 BITCOINCORE_LJR_DATE="20170420"
-BITCOINCORE_IUSE="dbus kde +libevent +ljr +qrcode qt4 qt5 +http test +tor upnp +wallet zeromq"
+BITCOINCORE_IUSE="bip148 dbus kde +libevent +ljr +qrcode qt4 qt5 +http no-bip148 test +tor upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 LANGS="af af_ZA ar be_BY bg bg_BG bs ca ca@valencia ca_ES cs cy da de el el_GR en en_GB eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 KNOTS_LANGS="bs es_419 id si"
@@ -41,6 +41,7 @@ DEPEND="${RDEPEND}
 REQUIRED_USE="^^ ( qt4 qt5 )
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
 	!libevent? ( ljr )
+	^^ ( bip148 no-bip148 )
 "
 
 for lang in ${KNOTS_LANGS}; do
