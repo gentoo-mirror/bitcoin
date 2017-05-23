@@ -9,7 +9,7 @@ COMMIT="03b13711908524f121047f0aef10c8685e4f9e1b"
 
 DESCRIPTION="anynomous secure microblogging platform based on Bitcoin and BitTorrent protocols"
 HOMEPAGE="http://twister.net.co"
-SRC_URI="https://github.com/miguelfreitas/twister-core/archive/${COMMIT}.tar.gz"
+SRC_URI="https://github.com/miguelfreitas/twister-core/archive/${COMMIT}.tar.gz -> ${P}.tgz"
 RESTRICT="mirror"
 
 LICENSE="MIT BSD"

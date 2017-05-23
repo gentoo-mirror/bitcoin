@@ -9,7 +9,7 @@ COMMIT="v2.0"
 
 DESCRIPTION="libbitcoin asynchronous C++ library for Bitcoin"
 HOMEPAGE="http://libbitcoin.org/"
-SRC_URI="https://github.com/spesmilo/libbitcoin/archive/${COMMIT}.tar.gz"
+SRC_URI="https://github.com/libbitcoin/libbitcoin/archive/${COMMIT}.tar.gz"
 RESTRICT="mirror"
 
 LICENSE="AGPL-3"
