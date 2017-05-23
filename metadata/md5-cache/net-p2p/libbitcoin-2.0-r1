@@ -9,7 +9,7 @@ LICENSE=AGPL-3
 RDEPEND=>=dev-libs/boost-1.48.0 >=dev-libs/openssl-0.9 leveldb? ( dev-libs/leveldb )
 RESTRICT=mirror
 SLOT=0
-SRC_URI=https://github.com/spesmilo/libbitcoin/archive/v2.0.tar.gz
+SRC_URI=https://github.com/libbitcoin/libbitcoin/archive/v2.0.tar.gz
 _eclass_exported_funcs=src_prepare:- src_configure:- src_compile:- src_install:-
 _eclasses_=autotools	7027963e8e8cc12c91117bdb9225dc26	libtool	e32ea84bf82cf8987965b574672dba93	multilib	97f470f374f2e94ccab04a2fb21d811e	toolchain-funcs	6eb35f81556258a4bc9182ad3dfd58ee
-_md5_=3f6c5dfdc40588fc0b138e0757976d25
+_md5_=3788284d50568763e0dd29ec35c92e10
