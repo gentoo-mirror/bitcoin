@@ -1,14 +1,12 @@
-# Copyright 2010-2016 Gentoo Foundation
+# Copyright 2010-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=5
 
-BITCOINCORE_COMMITHASH="0d719145b018e28d48d35c2646a5962b87c60436"
-BITCOINCORE_LJR_DATE="20170102"
-BITCOINCORE_IUSE="addrindex bip148 examples +ljr no-bip148 test upnp +wallet zeromq"
-BITCOINCORE_ADDRINDEX_DIFF="b31e13eeb6d9ba5d0add381e86feb3460eb208b0...3ae4ba22a04fc57876c006f9e26095f3fe289a65"
-BITCOINCORE_ADDRINDEX_PATCHFILE="bitcoin-addrindex-v0.13.2.patch"
+BITCOINCORE_COMMITHASH="964a185cc83af34587194a6ecda3ed9cf6b49263"
+BITCOINCORE_LJR_DATE="20170420"
+BITCOINCORE_IUSE="bip148 examples +ljr no-bip148 test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
@@ -19,10 +17,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
 
-REQUIRED_USE="
-	^^ ( bip148 no-bip148 )
-	?? ( addrindex ljr )
-"
+REQUIRED_USE="^^ ( bip148 no-bip148 )"
 
 pkg_setup() {
 	local UG='bitcoin'
@@ -50,7 +45,7 @@ src_install() {
 
 	newconfd "contrib/init/bitcoind.openrcconf" ${PN}
 	newinitd "contrib/init/bitcoind.openrc" ${PN}
-	systemd_dounit "${FILESDIR}/bitcoind.service"
+	systemd_newunit "${FILESDIR}/bitcoind.service-r1" "bitcoind.service"
 
 	keepdir /var/lib/bitcoin/.bitcoin
 	fperms 700 /var/lib/bitcoin
@@ -59,7 +54,7 @@ src_install() {
 	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
-	doman contrib/debian/manpages/{bitcoind.1,bitcoin.conf.5}
+	doman "${FILESDIR}/bitcoin.conf.5"
 
 	use zeromq && dodoc doc/zmq.md
 
@@ -67,7 +62,7 @@ src_install() {
 
 	if use examples; then
 		docinto examples
-		dodoc -r contrib/{qos,spendfrom,tidy_datadir.sh}
+		dodoc -r contrib/{linearize,qos,tidy_datadir.sh}
 		use zeromq && dodoc -r contrib/zmq
 	fi
 

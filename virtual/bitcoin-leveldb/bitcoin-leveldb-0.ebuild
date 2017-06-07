@@ -10,13 +10,13 @@ SRC_URI=""
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="amd64 arm arm64 ~mips ~ppc ~ppc64 x86 amd64-linux x86-linux"
+KEYWORDS="amd64 arm arm64 mips ppc ppc64 x86 amd64-linux x86-linux"
 
 DEPEND=""
 RDEPEND="
 	|| (
-		=dev-libs/leveldb-1.15.0-r1
-		=dev-libs/leveldb-1.17
-		=dev-libs/leveldb-1.18
 		=dev-libs/leveldb-1.18-r1
+		=dev-libs/leveldb-1.18
+		=dev-libs/leveldb-1.17
+		=dev-libs/leveldb-1.15.0-r1
 	)"

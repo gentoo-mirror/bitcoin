@@ -14,7 +14,7 @@ SRC_URI="https://github.com/bitcoin/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 arm arm64 mips ppc x86 amd64-linux x86-linux"
 IUSE="+asm ecdh endomorphism experimental gmp java +recovery test test_openssl"
 
 REQUIRED_USE="
