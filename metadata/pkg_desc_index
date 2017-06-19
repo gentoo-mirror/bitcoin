@@ -17,7 +17,7 @@ net-libs/opendht 9999: A lightweight C++11 Distributed Hash Table implementation
 net-libs/opentxs-proto 9999: Protobuf message library for Open-Transactions
 net-mail/bmwrapper 9999: bmwrapper is a poorly hacked together python script to let Thunderbird and PyBitmessage communicate.
 net-misc/bfgminer 3.10.5 3.10.6 3.10.7 3.10.8 3.10.10 4.4.0 4.5.0 4.6.0 4.7.0 4.7.1 4.7.2 4.8.0 4.9.0 4.10.1 4.10.2 4.10.3 4.10.4 4.10.5 4.10.6 5.0.0 5.1.0 5.2.0 5.3.0 5.4.0 5.4.1 5.4.2: Modular Bitcoin ASIC/FPGA/GPU/CPU miner in C
-net-misc/electrum 2.6.4-r1 2.7.15: User friendly Bitcoin client
+net-misc/electrum 2.8.3: User friendly Bitcoin client
 net-p2p/armory 0.88 0.90-r1 0.91 0.91.1 0.91.2-r1 0.92 0.92.1 0.92.3 0.92.99.1.20150111 0.93.3 0.94.1 0.95.0 0.95.1 9999: Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else.
 net-p2p/bitcoin-cli 0.12.0 0.13.2 0.14.1 9999: Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon
 net-p2p/bitcoin-qt 0.12.1 0.13.2 0.14.1-r1 0.14.2 9999: An end-user Qt GUI for the Bitcoin crypto-currency

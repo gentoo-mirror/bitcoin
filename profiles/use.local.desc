@@ -60,6 +60,16 @@ net-misc/bfgminer:udev-broad-rules - Enable broader udev rules that may match no
 net-misc/bfgminer:x6500 - Enable support for mining with X6500 FPGAs
 net-misc/bfgminer:zeusminer - Enable support for mining with ZeusMiner units
 net-misc/bfgminer:ztex - Enable support for mining with Ztex FPGAs
+net-misc/electrum:audio_modem - Enable plugin to support Audio Modem
+net-misc/electrum:cli - Enables the CLI interface
+net-misc/electrum:cosign - Enable plugin to support multisig wallets between multiple Electrum clients
+net-misc/electrum:digitalbitbox - Enable plugin to support Digital Bitbox hardware wallet
+net-misc/electrum:email - Enable plugin to support emailing invoices
+net-misc/electrum:greenaddress_it - Enable plugin to verify GreenAddress.it instant transactions
+net-misc/electrum:qrcode - Enable QR code scanning with media-gfx/zbar
+net-misc/electrum:sync - Enable plugin to sync wallet metadata across multiple Electrum clients
+net-misc/electrum:trustedcoin_com - Enable plugin to use two-factor service by TrustedCoin.com
+net-misc/electrum:vkb - Enable plugin for virtual keyboard
 net-p2p/bitcoin-cli:ljr - Enable Luke Dashjr's patches
 net-p2p/bitcoin-qt:bip148 - Support BIP148 Segwit UASF beginning August 2017
 net-p2p/bitcoin-qt:bitcoin_policy_rbf - Replace By Fee policy: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order
