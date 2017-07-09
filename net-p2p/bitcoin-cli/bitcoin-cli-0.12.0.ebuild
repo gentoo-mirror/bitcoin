@@ -1,7 +1,7 @@
 # Copyright 2010-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 BITCOINCORE_COMMITHASH="188ca9c305d3dd0fb462b9d6a44048b1d99a05f3"
 BITCOINCORE_LJR_DATE="20160226"
