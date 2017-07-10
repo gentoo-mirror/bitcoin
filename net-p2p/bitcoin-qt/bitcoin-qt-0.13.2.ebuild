@@ -5,7 +5,7 @@ EAPI=6
 
 BITCOINCORE_COMMITHASH="0d719145b018e28d48d35c2646a5962b87c60436"
 BITCOINCORE_LJR_DATE="20170102"
-BITCOINCORE_IUSE="bip148 dbus kde +libevent +knots +qrcode qt4 qt5 +http no-bip148 test +tor upnp +wallet zeromq"
+BITCOINCORE_IUSE="bip148 dbus kde +libevent +knots +qrcode qt5 +http no-bip148 test +tor upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 LANGS="af af_ZA ar be_BY bg bg_BG ca ca@valencia ca_ES cs cs_CZ cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl nl_NL pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 KNOTS_LANGS="et_EE nl_NL"
@@ -23,10 +23,10 @@ RDEPEND="
 	qrcode? (
 		media-gfx/qrencode
 	)
-	qt4? ( dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 )
+	!qt5? ( dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 )
 	qt5? ( dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 )
 	dbus? (
-		qt4? ( dev-qt/qtdbus:4 )
+		!qt5? ( dev-qt/qtdbus:4 )
 		qt5? ( dev-qt/qtdbus:5 )
 	)
 "
@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}
 		media-gfx/imagemagick[png]
 	)
 "
-REQUIRED_USE="^^ ( qt4 qt5 )
+REQUIRED_USE="
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
 	!libevent? ( knots )
 	^^ ( bip148 no-bip148 )
