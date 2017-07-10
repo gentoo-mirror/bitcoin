@@ -11,7 +11,7 @@ LANGS="af af_ZA ar be_BY bg bg_BG ca ca@valencia ca_ES cs cs_CZ cy da de el el_G
 KNOTS_LANGS="et_EE nl_NL"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2
+inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 LICENSE="MIT"
@@ -42,6 +42,10 @@ REQUIRED_USE="^^ ( qt4 qt5 )
 	!libevent? ( ljr )
 	^^ ( bip148 no-bip148 )
 "
+
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
 
 for lang in ${KNOTS_LANGS}; do
 	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( ljr )"

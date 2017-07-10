@@ -7,7 +7,7 @@ BITCOINCORE_IUSE="bip148 dbus kde no-bip148 +qrcode qt4 qt5 test upnp +wallet ze
 LANGS="af af_ZA ar be_BY bg bg_BG ca ca@valencia ca_ES cs cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2 git-2
+inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions git-2
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 LICENSE="MIT"
@@ -32,6 +32,10 @@ DEPEND="${RDEPEND}
 REQUIRED_USE="^^ ( qt4 qt5 )
 	^^ ( bip148 no-bip148 )
 "
+
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
 
 src_prepare() {
 	bitcoincore_prepare
