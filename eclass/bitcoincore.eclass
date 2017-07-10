@@ -379,7 +379,7 @@ bitcoincore_prepare() {
 		esac
 	done
 	
-	if grep -q 'DEFAULT_BIP148 = ' src/validation.h; then
+	if grep -qs 'DEFAULT_BIP148 = ' src/validation.h; then
 		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h
 	elif in_bcc_iuse bip148 && use bip148; then
 		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse knots && use knots && echo knots || echo core)-bip148.patch"
