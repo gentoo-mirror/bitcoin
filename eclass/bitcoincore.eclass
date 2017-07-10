@@ -37,7 +37,13 @@ fi
 
 EXPORT_FUNCTIONS src_prepare src_test src_install
 
-if in_bcc_iuse knots || in_bcc_iuse 1stclassmsg || in_bcc_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
+if in_bcc_iuse ljr; then
+	BITCOINCORE_KNOTS_USE=ljr
+else
+	BITCOINCORE_KNOTS_USE=knots
+fi
+
+if in_bcc_iuse ${BITCOINCORE_KNOTS_USE} || in_bcc_iuse 1stclassmsg || in_bcc_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
 	EXPORT_FUNCTIONS pkg_pretend
 fi
 
@@ -112,7 +118,7 @@ case "${PV}" in
 	UNIVALUE_DEPEND="dev-libs/univalue"
 	BITCOINCORE_LJR_NAME=knots
 	if in_bcc_policy spamfilter; then
-		REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( knots )"
+		REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( ${BITCOINCORE_KNOTS_USE} )"
 	fi
 	;;
 9999*)
@@ -226,11 +232,11 @@ DEPEND="${DEPEND} ${BITCOINCORE_COMMON_DEPEND}
 if [ "${BITCOINCORE_NEED_LEVELDB}" = "1" ]; then
 	RDEPEND="${RDEPEND} virtual/bitcoin-leveldb"
 fi
-if in_bcc_iuse knots; then
+if in_bcc_iuse ${BITCOINCORE_KNOTS_USE}; then
 	if [ "$BITCOINCORE_SERIES" = "0.10.x" ]; then
-		DEPEND="${DEPEND} knots? ( dev-vcs/git )"
+		DEPEND="${DEPEND} ${BITCOINCORE_KNOTS_USE}? ( dev-vcs/git )"
 	elif [ "${BITCOINCORE_LJR_NAME}" = "knots" ]; then
-		DEPEND="${DEPEND} knots? ( dev-lang/perl )"
+		DEPEND="${DEPEND} ${BITCOINCORE_KNOTS_USE}? ( dev-lang/perl )"
 	fi
 fi
 
@@ -247,7 +253,7 @@ bitcoincore_policymsg() {
 
 bitcoincore_pkg_pretend() {
 	bitcoincore_policymsg_flag=false
-	if use_if_iuse knots || use_if_iuse 1stclassmsg || use_if_iuse addrindex || use_if_iuse xt || { use_if_iuse zeromq && [ "${BITCOINCORE_MINOR}" -lt 12 ]; }; then
+	if use_if_iuse ${BITCOINCORE_KNOTS_USE} || use_if_iuse 1stclassmsg || use_if_iuse addrindex || use_if_iuse xt || { use_if_iuse zeromq && [ "${BITCOINCORE_MINOR}" -lt 12 ]; }; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 		bitcoincore_policymsg_flag=true
 		if use_if_iuse addrindex addrindex; then
@@ -321,7 +327,7 @@ bitcoincore_prepare() {
 	else
 		epatch "$(LJR_PATCH syslibs)"
 	fi
-	if use_if_iuse knots; then
+	if use_if_iuse ${BITCOINCORE_KNOTS_USE}; then
 		if [ "${BITCOINCORE_LJR_NAME}" = "knots" ]; then
 			bitcoincore_predelete_patch "$(LJR_PATCH f)"
 			bitcoincore_predelete_patch "$(LJR_PATCH branding)"
@@ -382,7 +388,7 @@ bitcoincore_prepare() {
 	if grep -qs 'DEFAULT_BIP148 = ' src/validation.h; then
 		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h
 	elif in_bcc_iuse bip148 && use bip148; then
-		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse knots && use knots && echo knots || echo core)-bip148.patch"
+		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse ${BITCOINCORE_KNOTS_USE} && use ${BITCOINCORE_KNOTS_USE} && echo knots || echo core)-bip148.patch"
 	fi
 
 	echo '#!/bin/true' >share/genbuild.sh
