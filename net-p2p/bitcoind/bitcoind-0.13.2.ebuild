@@ -1,11 +1,11 @@
 # Copyright 2010-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 BITCOINCORE_COMMITHASH="0d719145b018e28d48d35c2646a5962b87c60436"
 BITCOINCORE_LJR_DATE="20170102"
-BITCOINCORE_IUSE="addrindex bip148 examples +ljr no-bip148 test upnp +wallet zeromq"
+BITCOINCORE_IUSE="addrindex bip148 examples +knots no-bip148 test upnp +wallet zeromq"
 BITCOINCORE_ADDRINDEX_DIFF="b31e13eeb6d9ba5d0add381e86feb3460eb208b0...3ae4ba22a04fc57876c006f9e26095f3fe289a65"
 BITCOINCORE_ADDRINDEX_PATCHFILE="bitcoin-addrindex-v0.13.2.patch"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
@@ -16,11 +16,11 @@ inherit bash-completion-r1 bitcoincore user systemd
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 arm arm64 mips ppc x86 amd64-linux x86-linux"
 
 REQUIRED_USE="
 	^^ ( bip148 no-bip148 )
-	?? ( addrindex ljr )
+	?? ( addrindex knots )
 "
 
 pkg_setup() {

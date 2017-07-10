@@ -1,11 +1,11 @@
 # Copyright 2010-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 BITCOINCORE_COMMITHASH="fc61c8322bd7288f7546d18ad04c36c345be13cd"
 BITCOINCORE_LJR_DATE="20170618"
-BITCOINCORE_IUSE="bip148 examples +ljr no-bip148 test upnp +wallet zeromq"
+BITCOINCORE_IUSE="bip148 examples +knots no-bip148 test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1

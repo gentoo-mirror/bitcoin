@@ -1,17 +1,17 @@
 # Copyright 2010-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 BITCOINCORE_COMMITHASH="964a185cc83af34587194a6ecda3ed9cf6b49263"
 BITCOINCORE_LJR_DATE="20170420"
-BITCOINCORE_IUSE="bip148 dbus kde +libevent +ljr +qrcode qt4 qt5 +http no-bip148 test +tor upnp +wallet zeromq"
+BITCOINCORE_IUSE="bip148 dbus kde +libevent +knots +qrcode qt5 +http no-bip148 test +tor upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 LANGS="af af_ZA ar be_BY bg bg_BG bs ca ca@valencia ca_ES cs cy da de el el_GR en en_GB eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 KNOTS_LANGS="bs es_419 id si"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions qt4-r2
+inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 LICENSE="MIT"
@@ -23,28 +23,32 @@ RDEPEND="
 	qrcode? (
 		media-gfx/qrencode
 	)
-	qt4? ( dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 )
+	!qt5? ( dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 )
 	qt5? ( dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 )
 	dbus? (
-		qt4? ( dev-qt/qtdbus:4 )
+		!qt5? ( dev-qt/qtdbus:4 )
 		qt5? ( dev-qt/qtdbus:5 )
 	)
 "
 DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )
-	ljr? (
+	knots? (
 		gnome-base/librsvg
 		media-gfx/imagemagick[png]
 	)
 "
-REQUIRED_USE="^^ ( qt4 qt5 )
+REQUIRED_USE="
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
-	!libevent? ( ljr )
+	!libevent? ( knots )
 	^^ ( bip148 no-bip148 )
 "
 
+for lang in ${LANGS}; do
+	IUSE+=" linguas_${lang}"
+done
+
 for lang in ${KNOTS_LANGS}; do
-	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( ljr )"
+	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( knots )"
 done
 
 src_prepare() {
@@ -56,7 +60,7 @@ src_prepare() {
 
 	for lan in $LANGS; do
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
-			if has $lan $KNOTS_LANGS && ! use ljr; then
+			if has $lan $KNOTS_LANGS && ! use knots; then
 				# Expected
 				continue
 			fi
@@ -95,7 +99,7 @@ src_install() {
 	bitcoincore_src_install
 
 	insinto /usr/share/pixmaps
-	if use ljr; then
+	if use knots; then
 		newins "src/qt/res/rendered_icons/bitcoin.ico" "${PN}.ico"
 	else
 		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
