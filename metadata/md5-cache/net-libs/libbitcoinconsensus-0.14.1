@@ -4,11 +4,11 @@ DESCRIPTION=Bitcoin Core consensus library
 EAPI=6
 HOMEPAGE=http://bitcoincore.org/
 IUSE=libressl test
-KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux
+KEYWORDS=~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux
 LICENSE=MIT
 RDEPEND=!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl ) >=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery] test? ( dev-libs/univalue >=dev-libs/boost-1.52.0[threads(+)] )
 SLOT=0
 SRC_URI=https://github.com/bitcoin/bitcoin/archive/964a185cc83af34587194a6ecda3ed9cf6b49263.tar.gz -> bitcoin-v0.14.1-g2.tgz http://bitcoinknots.org/files/0.14.x/0.14.1.knots20170420/bitcoin-0.14.1.knots20170420.patches.txz -> bitcoin-0.14.1.knots20170420.patches.tar.xz
 _eclass_exported_funcs=src_prepare:bitcoincore src_configure:- src_test:bitcoincore src_install:-
-_eclasses_=autotools	7027963e8e8cc12c91117bdb9225dc26	bitcoincore	2ad5fe31727eb5ddee55b11c01366089	db-use	582140d1a711279e50ce284fc7b609f5	epatch	8233751dc5105a6ae8fcd86ce2bb0247	estack	43ddf5aaffa7a8d0482df54d25a66a1f	eutils	9c113d6a64826c40154cad7be15d95ea	libtool	e32ea84bf82cf8987965b574672dba93	ltprune	2770eed66a9b8ef944714cd0e968182e	multilib	97f470f374f2e94ccab04a2fb21d811e	toolchain-funcs	8fec6b1eb195836560e70b66d98fb163	versionator	c80ccf29e90adea7c5cae94b42eb76d0
-_md5_=e4d81481c73866fc17fa9c7c225af0f3
+_eclasses_=autotools	7027963e8e8cc12c91117bdb9225dc26	bitcoincore	da5ea6194f4b158e7096a4b2dbb05b28	db-use	582140d1a711279e50ce284fc7b609f5	epatch	8233751dc5105a6ae8fcd86ce2bb0247	estack	43ddf5aaffa7a8d0482df54d25a66a1f	eutils	9c113d6a64826c40154cad7be15d95ea	libtool	e32ea84bf82cf8987965b574672dba93	ltprune	2770eed66a9b8ef944714cd0e968182e	multilib	97f470f374f2e94ccab04a2fb21d811e	toolchain-funcs	8fec6b1eb195836560e70b66d98fb163	versionator	c80ccf29e90adea7c5cae94b42eb76d0
+_md5_=bfc3b2b8c332b89c2a04544f93effe28
