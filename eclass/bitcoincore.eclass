@@ -261,12 +261,6 @@ bitcoincore_pkg_pretend() {
 	fi
 }
 
-bitcoincore_git_apply() {
-	local patchfile="$1"
-	einfo "Applying ${patchfile##*/} ..."
-	git apply --whitespace=nowarn "${patchfile}" || die
-}
-
 bitcoincore_predelete_patch() {
 	local patchfile="$1"
 	mkdir -p "${WORKDIR}/pdp"
