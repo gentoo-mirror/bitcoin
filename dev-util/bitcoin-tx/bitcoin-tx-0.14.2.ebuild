@@ -13,7 +13,7 @@ inherit bitcoincore
 DESCRIPTION="Command-line Bitcoin transaction tool"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 src_configure() {
 	bitcoincore_conf \

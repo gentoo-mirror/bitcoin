@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 #
 # @ECLASS: bitcoincore.eclass
@@ -37,7 +37,13 @@ fi
 
 EXPORT_FUNCTIONS src_prepare src_test src_install
 
-if in_bcc_iuse knots || in_bcc_iuse 1stclassmsg || in_bcc_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
+if in_bcc_iuse ljr; then
+	BITCOINCORE_KNOTS_USE=ljr
+else
+	BITCOINCORE_KNOTS_USE=knots
+fi
+
+if in_bcc_iuse ${BITCOINCORE_KNOTS_USE} || in_bcc_iuse 1stclassmsg || in_bcc_iuse zeromq || [ -n "$BITCOINCORE_POLICY_PATCHES" ]; then
 	EXPORT_FUNCTIONS pkg_pretend
 fi
 
@@ -75,30 +81,6 @@ BITCOINCORE_LJR_NAME=ljr
 [ -n "${BITCOINCORE_LJR_PV}" ] || BITCOINCORE_LJR_PV="${PV}"
 
 case "${PV}" in
-0.10*)
-	BITCOINCORE_MINOR=10
-	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20141212"
-	case "${PVR}" in
-	0.10.2)
-		BITCOINCORE_RBF_DIFF="16f45600c8c372a738ffef544292864256382601...a23678edc70204599299459a206709a00e039db7"
-		BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v0.10.2.patch"
-		;;
-	*)
-		BITCOINCORE_RBF_DIFF="16f45600c8c372a738ffef544292864256382601...4890416cde655559eba09d3fd6f79db7d0d6314a"
-		BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v0.10.2-r1.patch"
-		;;
-	esac
-	BITCOINCORE_XT_DIFF="047a89831760ff124740fe9f58411d57ee087078...d4084b62c42c38bfe302d712b98909ab26ecce2f"
-	;;
-0.11*)
-	BITCOINCORE_MINOR=11
-	LIBSECP256K1_DEPEND="=dev-libs/libsecp256k1-0.0.0_pre20150423"
-	# RBF is bundled with ljr patchset since 0.11.1
-	if [ "${PVR}" = "0.11.0" ]; then
-		BITCOINCORE_RBF_DIFF="5f032c75eefb0fe8ff79ed9595da1112c05f5c4a...660b96d24916b8ef4e0677e5d6162e24e2db447e"
-		BITCOINCORE_RBF_PATCHFILE="${MyPN}-rbf-v0.11.0rc3.patch"
-	fi
-	;;
 0.12* | 0.13* | 0.14*)
 	BITCOINCORE_MINOR=$(get_version_component_range 2)
 	IUSE="${IUSE} libressl"
@@ -112,7 +94,7 @@ case "${PV}" in
 	UNIVALUE_DEPEND="dev-libs/univalue"
 	BITCOINCORE_LJR_NAME=knots
 	if in_bcc_policy spamfilter; then
-		REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( knots )"
+		REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( ${BITCOINCORE_KNOTS_USE} )"
 	fi
 	;;
 9999*)
@@ -226,11 +208,9 @@ DEPEND="${DEPEND} ${BITCOINCORE_COMMON_DEPEND}
 if [ "${BITCOINCORE_NEED_LEVELDB}" = "1" ]; then
 	RDEPEND="${RDEPEND} virtual/bitcoin-leveldb"
 fi
-if in_bcc_iuse knots; then
-	if [ "$BITCOINCORE_SERIES" = "0.10.x" ]; then
-		DEPEND="${DEPEND} knots? ( dev-vcs/git )"
-	elif [ "${BITCOINCORE_LJR_NAME}" = "knots" ]; then
-		DEPEND="${DEPEND} knots? ( dev-lang/perl )"
+if in_bcc_iuse ${BITCOINCORE_KNOTS_USE}; then
+	if [ "${BITCOINCORE_LJR_NAME}" = "knots" ]; then
+		DEPEND="${DEPEND} ${BITCOINCORE_KNOTS_USE}? ( dev-lang/perl )"
 	fi
 fi
 
@@ -247,7 +227,7 @@ bitcoincore_policymsg() {
 
 bitcoincore_pkg_pretend() {
 	bitcoincore_policymsg_flag=false
-	if use_if_iuse knots || use_if_iuse 1stclassmsg || use_if_iuse addrindex || use_if_iuse xt || { use_if_iuse zeromq && [ "${BITCOINCORE_MINOR}" -lt 12 ]; }; then
+	if use_if_iuse ${BITCOINCORE_KNOTS_USE} || use_if_iuse 1stclassmsg || use_if_iuse addrindex || use_if_iuse xt || { use_if_iuse zeromq && [ "${BITCOINCORE_MINOR}" -lt 12 ]; }; then
 		einfo "Extra functionality improvements to Bitcoin Core are enabled."
 		bitcoincore_policymsg_flag=true
 		if use_if_iuse addrindex addrindex; then
@@ -321,14 +301,11 @@ bitcoincore_prepare() {
 	else
 		epatch "$(LJR_PATCH syslibs)"
 	fi
-	if use_if_iuse knots; then
+	if use_if_iuse ${BITCOINCORE_KNOTS_USE}; then
 		if [ "${BITCOINCORE_LJR_NAME}" = "knots" ]; then
 			bitcoincore_predelete_patch "$(LJR_PATCH f)"
 			bitcoincore_predelete_patch "$(LJR_PATCH branding)"
 			epatch "$(LJR_PATCH ts)"
-		elif [ "${BITCOINCORE_SERIES}" = "0.10.x" ]; then
-			# Regular epatch won't work with binary files
-			bitcoincore_git_apply "$(LJR_PATCH ljrF)"
 		else
 			epatch "$(LJR_PATCH ljrF)"
 		fi
@@ -382,7 +359,7 @@ bitcoincore_prepare() {
 	if grep -qs 'DEFAULT_BIP148 = ' src/validation.h; then
 		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h
 	elif in_bcc_iuse bip148 && use bip148; then
-		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse knots && use knots && echo knots || echo core)-bip148.patch"
+		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse ${BITCOINCORE_KNOTS_USE} && use ${BITCOINCORE_KNOTS_USE} && echo knots || echo core)-bip148.patch"
 	fi
 
 	echo '#!/bin/true' >share/genbuild.sh
