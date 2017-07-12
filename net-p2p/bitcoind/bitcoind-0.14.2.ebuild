@@ -9,7 +9,7 @@ BITCOINCORE_IUSE="bip148 examples +knots no-bip148 test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bash-completion-r1 bitcoincore user systemd
+inherit bash-completion-r1 bitcoincore systemd user
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
@@ -19,9 +19,8 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 REQUIRED_USE="^^ ( bip148 no-bip148 )"
 
 pkg_setup() {
-	local UG='bitcoin'
-	enewgroup "${UG}"
-	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
+	enewgroup bitcoin
+	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
 }
 
 src_prepare() {
@@ -50,7 +49,7 @@ src_install() {
 	fperms 700 /var/lib/bitcoin
 	fowners bitcoin:bitcoin /var/lib/bitcoin/
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
-	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
+	dosym ../../../../etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
 	doman "${FILESDIR}/bitcoin.conf.5"

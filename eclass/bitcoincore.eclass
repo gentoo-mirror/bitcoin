@@ -114,7 +114,7 @@ esac
 LJR_PV() {
 	local testsfx=
 	if [ -n "${BITCOINCORE_LJR_PREV}" ]; then
-		if [ "$1" = "dir" ] && [ "${BITCOINCORE_SERIES}" = "0.12.x" ]; then
+		if [[ $1 = dir && ${BITCOINCORE_SERIES} = 0.12.x ]]; then
 			testsfx="/test/${BITCOINCORE_LJR_PREV}"
 		else
 			testsfx=".${BITCOINCORE_LJR_PREV}"
@@ -197,7 +197,7 @@ bitcoincore_common_depend_use() {
 	in_bcc_iuse "$1" || return
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $1? ( $2 )"
 }
-bitcoincore_common_depend_use upnp '>net-libs/miniupnpc-1.9.20150915'
+bitcoincore_common_depend_use upnp '>=net-libs/miniupnpc-1.9.20150916'
 bitcoincore_common_depend_use wallet "${WALLET_DEPEND}"
 bitcoincore_common_depend_use zeromq net-libs/zeromq
 RDEPEND="${RDEPEND} ${BITCOINCORE_COMMON_DEPEND}"
@@ -259,12 +259,6 @@ bitcoincore_pkg_pretend() {
 		fi
 		ewarn "There are risks to running either with or without BIP148! Read http://tiny.cc/bip148-risks for details."
 	fi
-}
-
-bitcoincore_git_apply() {
-	local patchfile="$1"
-	einfo "Applying ${patchfile##*/} ..."
-	git apply --whitespace=nowarn "${patchfile}" || die
 }
 
 bitcoincore_predelete_patch() {
@@ -368,7 +362,7 @@ bitcoincore_prepare() {
 }
 
 bitcoincore_autoreconf() {
-	[ "${EAPI}" != 5 ] && eapply_user
+	[[ ${EAPI} != 5 ]] && eapply_user
 	eautoreconf
 	rm -r src/leveldb || die
 	rm -r src/secp256k1 || die

@@ -11,7 +11,7 @@ BITCOINCORE_ADDRINDEX_PATCHFILE="bitcoin-addrindex-v0.13.2.patch"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bash-completion-r1 bitcoincore user systemd
+inherit bash-completion-r1 bitcoincore systemd user
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
@@ -24,9 +24,8 @@ REQUIRED_USE="
 "
 
 pkg_setup() {
-	local UG='bitcoin'
-	enewgroup "${UG}"
-	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
+	enewgroup bitcoin
+	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
 }
 
 src_prepare() {
