@@ -19,9 +19,8 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 REQUIRED_USE="^^ ( bip148 no-bip148 )"
 
 pkg_setup() {
-	local UG='bitcoin'
-	enewgroup "${UG}"
-	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
+	enewgroup bitcoin
+	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
 }
 
 src_prepare() {

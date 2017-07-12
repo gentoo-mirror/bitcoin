@@ -24,9 +24,8 @@ REQUIRED_USE="
 "
 
 pkg_setup() {
-	local UG='bitcoin'
-	enewgroup "${UG}"
-	enewuser "${UG}" -1 -1 /var/lib/bitcoin "${UG}"
+	enewgroup bitcoin
+	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
 }
 
 src_prepare() {
