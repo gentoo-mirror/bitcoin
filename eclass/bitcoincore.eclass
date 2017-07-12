@@ -114,7 +114,7 @@ esac
 LJR_PV() {
 	local testsfx=
 	if [ -n "${BITCOINCORE_LJR_PREV}" ]; then
-		if [ "$1" = "dir" ] && [ "${BITCOINCORE_SERIES}" = "0.12.x" ]; then
+		if [[ $1 = dir && ${BITCOINCORE_SERIES} = 0.12.x ]]; then
 			testsfx="/test/${BITCOINCORE_LJR_PREV}"
 		else
 			testsfx=".${BITCOINCORE_LJR_PREV}"
@@ -362,7 +362,7 @@ bitcoincore_prepare() {
 }
 
 bitcoincore_autoreconf() {
-	[ "${EAPI}" != 5 ] && eapply_user
+	[[ ${EAPI} != 5 ]] && eapply_user
 	eautoreconf
 	rm -r src/leveldb || die
 	rm -r src/secp256k1 || die
