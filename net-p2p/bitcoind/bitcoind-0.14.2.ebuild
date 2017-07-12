@@ -49,7 +49,7 @@ src_install() {
 	fperms 700 /var/lib/bitcoin
 	fowners bitcoin:bitcoin /var/lib/bitcoin/
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
-	dosym /etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
+	dosym ../../../../etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
 	doman "${FILESDIR}/bitcoin.conf.5"
