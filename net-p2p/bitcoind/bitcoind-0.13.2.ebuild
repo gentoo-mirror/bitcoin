@@ -11,7 +11,7 @@ BITCOINCORE_ADDRINDEX_PATCHFILE="bitcoin-addrindex-v0.13.2.patch"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bash-completion-r1 bitcoincore user systemd
+inherit bash-completion-r1 bitcoincore systemd user
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
