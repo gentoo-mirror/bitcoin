@@ -180,7 +180,7 @@ fi
 if [ "${BITCOINCORE_NEED_LIBSECP256K1}" = "1" ]; then
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND} $LIBSECP256K1_DEPEND"
 fi
-if [ "${PN}" = "libbitcoinconsensus" ]; then
+if [ "${PN}" = "libbitcoinconsensus" ] && in_bcc_iuse test; then
 	BITCOINCORE_COMMON_DEPEND="${BITCOINCORE_COMMON_DEPEND}
 		test? (
 			${UNIVALUE_DEPEND}
@@ -254,8 +254,12 @@ bitcoincore_pkg_pretend() {
 	if in_bcc_iuse bip148; then
 		if use bip148; then
 			ewarn "BIP148 is enabled: Your node will enforce Segwit activation beginning no later than August 1st."
-		else
+		elsif use no-bip148; then
 			ewarn "BIP148 is NOT enabled: Your node may follow blockchains beginning in August which are not BIP148 compliant."
+		else
+			eerror "You must decide whether to build with BIP148 support or not."
+			ewarn "There are risks to running either way! Read http://tiny.cc/bip148-risks for details."
+			die 'Must set USE=bip148 or USE=no-bip148'
 		fi
 		ewarn "There are risks to running either with or without BIP148! Read http://tiny.cc/bip148-risks for details."
 	fi
@@ -324,10 +328,10 @@ bitcoincore_prepare() {
 			fi
 			case "${mypolicy}" in
 			rbf)
-				use bitcoin_policy_rbf || sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' "${sed_target}"
+				use bitcoin_policy_rbf || sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' "${sed_target}" || die
 				;;
 			spamfilter)
-				use bitcoin_policy_spamfilter || sed -i 's/\(DEFAULT_SPAMFILTER = \)true/\1false/' "${sed_target}"
+				use bitcoin_policy_spamfilter || sed -i 's/\(DEFAULT_SPAMFILTER = \)true/\1false/' "${sed_target}" || die
 				;;
 			*)
 				die "Unknown policy ${mypolicy}"
@@ -351,7 +355,7 @@ bitcoincore_prepare() {
 	done
 	
 	if grep -qs 'DEFAULT_BIP148 = ' src/validation.h; then
-		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h
+		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h || die
 	elif in_bcc_iuse bip148 && use bip148; then
 		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse ${BITCOINCORE_KNOTS_USE} && use ${BITCOINCORE_KNOTS_USE} && echo knots || echo core)-bip148.patch"
 	fi
@@ -426,7 +430,7 @@ bitcoincore_src_test() {
 
 bitcoincore_src_install() {
 	default
-	[ "${PN}" = "libbitcoinconsensus" ] || rm "${D}/usr/bin/test_bitcoin"
+	use_if_iuse test || rm "${D}/usr/bin/test_bitcoin"
 }
 
 _BITCOINCORE_ECLASS=1
