@@ -324,10 +324,10 @@ bitcoincore_prepare() {
 			fi
 			case "${mypolicy}" in
 			rbf)
-				use bitcoin_policy_rbf || sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' "${sed_target}"
+				use bitcoin_policy_rbf || sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' "${sed_target}" || die
 				;;
 			spamfilter)
-				use bitcoin_policy_spamfilter || sed -i 's/\(DEFAULT_SPAMFILTER = \)true/\1false/' "${sed_target}"
+				use bitcoin_policy_spamfilter || sed -i 's/\(DEFAULT_SPAMFILTER = \)true/\1false/' "${sed_target}" || die
 				;;
 			*)
 				die "Unknown policy ${mypolicy}"
@@ -351,7 +351,7 @@ bitcoincore_prepare() {
 	done
 	
 	if grep -qs 'DEFAULT_BIP148 = ' src/validation.h; then
-		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h
+		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h || die
 	elif in_bcc_iuse bip148 && use bip148; then
 		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse ${BITCOINCORE_KNOTS_USE} && use ${BITCOINCORE_KNOTS_USE} && echo knots || echo core)-bip148.patch"
 	fi
