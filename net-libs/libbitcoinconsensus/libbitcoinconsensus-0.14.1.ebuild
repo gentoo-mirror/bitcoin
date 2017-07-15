@@ -23,5 +23,5 @@ src_configure() {
 src_install() {
 	bitcoincore_src_install
 	dodoc doc/bips.md
-	prune_libtool_files
+	find "${D}" -name '*.la' -delete || die
 }
