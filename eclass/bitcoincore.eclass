@@ -254,8 +254,12 @@ bitcoincore_pkg_pretend() {
 	if in_bcc_iuse bip148; then
 		if use bip148; then
 			ewarn "BIP148 is enabled: Your node will enforce Segwit activation beginning no later than August 1st."
-		else
+		elsif use no-bip148; then
 			ewarn "BIP148 is NOT enabled: Your node may follow blockchains beginning in August which are not BIP148 compliant."
+		else
+			eerror "You must decide whether to build with BIP148 support or not."
+			ewarn "There are risks to running either way! Read http://tiny.cc/bip148-risks for details."
+			die 'Must set USE=bip148 or USE=no-bip148'
 		fi
 		ewarn "There are risks to running either with or without BIP148! Read http://tiny.cc/bip148-risks for details."
 	fi
