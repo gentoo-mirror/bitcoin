@@ -54,7 +54,7 @@ done
 src_prepare() {
 	bitcoincore_prepare
 
-	sed -i 's/^\(Icon=\).*$/\1bitcoin-qt/;s/^\(Categories=.*\)$/\1P2P;Network;Qt;/' contrib/debian/bitcoin-qt.desktop
+	sed -i 's/^\(Icon=\).*$/\1bitcoin-qt/;s/^\(Categories=.*\)$/\1P2P;Network;Qt;/' contrib/debian/bitcoin-qt.desktop || die
 
 	local filt= yeslang= nolang= lan ts x
 
