@@ -3,7 +3,7 @@
 
 EAPI=5
 
-BITCOINCORE_IUSE="test"
+BITCOINCORE_IUSE=""
 BITCOINCORE_NO_DEPEND="libevent"
 inherit bitcoincore eutils
 
