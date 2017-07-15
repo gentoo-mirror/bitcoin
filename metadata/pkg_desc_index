@@ -10,8 +10,6 @@ dev-python/bitcoinrpc 0.3 9999: Efficient JSON-RPC for Python
 dev-python/pbkdf2 1.3: Implementation of the password-based key derivation function, PBKDF2, specified in RSA PKCS#5 v2.0
 dev-python/pycoin 0.23: Python Bitcoin Utilities
 dev-python/secp256k1-py 0.13.2.4: Python FFI bindings for libsecp256k1
-dev-util/bitcoin-tx 0.14.1 0.14.2 9999: Command-line Bitcoin transaction tool
-net-libs/libbitcoinconsensus 0.14.1 9999: Bitcoin Core consensus library
 net-libs/libblkmaker 0.4.2 0.4.3 0.5.1 0.5.2 0.5.3: C implementation of getblocktemplate (BIP 22)
 net-libs/opendht 9999: A lightweight C++11 Distributed Hash Table implementation
 net-libs/opentxs-proto 9999: Protobuf message library for Open-Transactions
@@ -20,9 +18,6 @@ net-misc/bfgminer 3.10.5 3.10.6 3.10.7 3.10.8 3.10.10 4.4.0 4.5.0 4.6.0 4.7.0 4.
 net-misc/electrum 2.8.3: User friendly Bitcoin client
 net-p2p/Sia 1.2.2 9999: A decentralized cloud storage platform based on blockchain technology
 net-p2p/armory 0.88 0.90-r1 0.91 0.91.1 0.91.2-r1 0.92 0.92.1 0.92.3 0.92.99.1.20150111 0.93.3 0.94.1 0.95.0 0.95.1 9999: Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else.
-net-p2p/bitcoin-cli 0.13.2 0.14.1 9999: Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon
-net-p2p/bitcoin-qt 0.13.2 0.14.1-r1 0.14.2 9999: An end-user Qt GUI for the Bitcoin crypto-currency
-net-p2p/bitcoind 0.13.2 0.14.1 0.14.1-r1 0.14.2 9999: Original Bitcoin crypto-currency wallet for automated services
 net-p2p/libbitcoin 2.0-r1 9999: libbitcoin asynchronous C++ library for Bitcoin
 net-p2p/namecoin 0.3.75 0.3.76 0.3.80 9999: A P2P network based domain name system
 net-p2p/opentxs-sequencer 9999: Sequencing server for Open-Transactions
