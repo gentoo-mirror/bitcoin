@@ -31,6 +31,6 @@ net-p2p/pybitmessage 9999: Bitmessage is a P2P communications protocol used to s
 net-p2p/pybitmessage-daemon 9999: PyBitmessage Daemon Client allows users to interact with Bitmessage through the command line.
 net-p2p/rippled 0.22.0: Ripple P2P payment network reference server
 net-p2p/twisterd 0.9.20-r1 9999: anynomous secure microblogging platform based on Bitcoin and BitTorrent protocols
-virtual/bitcoin-leveldb 0: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
+virtual/bitcoin-leveldb 0 0-r1: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
 virtual/python-serviceproxy 0: Virtual for jsonrpc.proxy.ServiceProxy
 x11-libs/amd-adl-sdk 3.0 4.0: API to access display driver functionality for ATI graphics cards
