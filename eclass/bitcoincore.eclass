@@ -250,19 +250,6 @@ bitcoincore_pkg_pretend() {
 		"Enhanced spam filter policy is enabled: Your node will identify notorious spam scripts and avoid assisting them. This may impact your ability to use some services (see link for a list)." \
 		"Enhanced spam filter policy is disabled: Your node will not be checking for notorious spam scripts, and may assist them."
 	$bitcoincore_policymsg_flag && einfo "For more information on any of the above, see ${LJR_PATCH_DESC}"
-
-	if in_bcc_iuse bip148; then
-		if use bip148; then
-			ewarn "BIP148 is enabled: Your node will enforce Segwit activation beginning no later than August 1st."
-		elif use no-bip148; then
-			ewarn "BIP148 is NOT enabled: Your node may follow blockchains beginning in August which are not BIP148 compliant."
-		else
-			eerror "You must decide whether to build with BIP148 support or not."
-			ewarn "There are risks to running either way! Read http://tiny.cc/bip148-risks for details."
-			die 'Must set USE=bip148 or USE=no-bip148'
-		fi
-		ewarn "There are risks to running either with or without BIP148! Read http://tiny.cc/bip148-risks for details."
-	fi
 }
 
 bitcoincore_predelete_patch() {
@@ -353,12 +340,6 @@ bitcoincore_prepare() {
 			;;
 		esac
 	done
-	
-	if grep -qs 'DEFAULT_BIP148 = ' src/validation.h; then
-		sed -i 's/\(DEFAULT_BIP148 = \).*/\1'"$(in_bcc_iuse bip148 && use bip148 && echo true || echo false)"';/' src/validation.h || die
-	elif in_bcc_iuse bip148 && use bip148; then
-		epatch "${FILESDIR}/${PV}-$(in_bcc_iuse ${BITCOINCORE_KNOTS_USE} && use ${BITCOINCORE_KNOTS_USE} && echo knots || echo core)-bip148.patch"
-	fi
 
 	echo '#!/bin/true' >share/genbuild.sh
 	mkdir -p src/obj

@@ -5,7 +5,7 @@ EAPI=6
 
 BITCOINCORE_COMMITHASH="964a185cc83af34587194a6ecda3ed9cf6b49263"
 BITCOINCORE_LJR_DATE="20170420"
-BITCOINCORE_IUSE="bip148 examples +knots no-bip148 test upnp +wallet zeromq"
+BITCOINCORE_IUSE="examples +knots test upnp +wallet zeromq"
 BITCOINCORE_POLICY_PATCHES="+rbf spamfilter"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
@@ -15,8 +15,6 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
-
-REQUIRED_USE="^^ ( bip148 no-bip148 )"
 
 pkg_setup() {
 	enewgroup bitcoin

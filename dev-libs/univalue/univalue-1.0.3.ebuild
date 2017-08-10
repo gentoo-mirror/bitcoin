@@ -1,19 +1,15 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-
-inherit eutils
+EAPI=6
 
 DESCRIPTION="C++ universal value object and JSON library"
 HOMEPAGE="https://github.com/jgarzik/univalue"
-LICENSE="MIT"
-
 SRC_URI="https://codeload.github.com/jgarzik/${PN}/tar.gz/v${PV} -> ${P}.tgz"
+
+LICENSE="MIT"
 SLOT="0/0"
-
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~x86 ~amd64-linux ~x86-linux"
-
 IUSE=""
 
 DEPEND=""
@@ -28,6 +24,6 @@ src_configure() {
 }
 
 src_install() {
-	default_src_install
-	prune_libtool_files
+	default
+	find "${D}" -name '*.la' -delete || die
 }

@@ -3,7 +3,7 @@
 
 EAPI=5
 
-BITCOINCORE_IUSE="bip148 examples no-bip148 test upnp +wallet zeromq"
+BITCOINCORE_IUSE="examples test upnp +wallet zeromq"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
 inherit bash-completion-r1 bitcoincore systemd user
@@ -12,8 +12,6 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-
-REQUIRED_USE="^^ ( bip148 no-bip148 )"
 
 pkg_setup() {
 	enewgroup bitcoin
