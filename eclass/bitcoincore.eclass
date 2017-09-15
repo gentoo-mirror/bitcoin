@@ -80,8 +80,9 @@ UNIVALUE_DEPEND=""
 BITCOINCORE_LJR_NAME=ljr
 [ -n "${BITCOINCORE_LJR_PV}" ] || BITCOINCORE_LJR_PV="${PV}"
 
+BITCOINCORE_tgz_suffix=".tar.gz"
 case "${PV}" in
-0.12* | 0.13* | 0.14*)
+0.12* | 0.13* | 0.14* | 0.15*)
 	BITCOINCORE_MINOR=$(get_version_component_range 2)
 	IUSE="${IUSE} libressl"
 	OPENSSL_DEPEND="!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )"
@@ -95,6 +96,10 @@ case "${PV}" in
 	BITCOINCORE_LJR_NAME=knots
 	if in_bcc_policy spamfilter; then
 		REQUIRED_USE="${REQUIRED_USE} bitcoin_policy_spamfilter? ( ${BITCOINCORE_KNOTS_USE} )"
+	fi
+	if [ "${BITCOINCORE_MINOR}" -lt 15 ]; then
+		# -g2 because git changed the git-archive substitution of abbreviated hashes; affects up to 0.14.1
+		BITCOINCORE_tgz_suffix="-g2.tgz"
 	fi
 	;;
 9999*)
@@ -135,8 +140,7 @@ if [ -z "$BITCOINCORE_COMMITHASH" ]; then
 	EGIT_PROJECT='bitcoin'
 	EGIT_REPO_URI="git://github.com/bitcoin/bitcoin.git https://github.com/bitcoin/bitcoin.git"
 else
-	# -g2 because git changed the git-archive substitution of abbreviated hashes; affects up to 0.14.1
-	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}${BITCOINCORE_SRC_SUFFIX}-g2.tgz"
+	SRC_URI="https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}${BITCOINCORE_SRC_SUFFIX}${BITCOINCORE_tgz_suffix}"
 	if [ -z "${BITCOINCORE_NO_SYSLIBS}" ]; then
 		SRC_URI="${SRC_URI} http://bitcoinknots.org/files/${BITCOINCORE_SERIES}/$(LJR_PV dir)/${LJR_PATCHDIR}.txz -> ${LJR_PATCHDIR}.tar.xz"
 	fi
@@ -360,6 +364,11 @@ bitcoincore_src_prepare() {
 
 bitcoincore_conf() {
 	local my_econf=
+	if use_if_iuse asm; then
+		my_econf="${my_econf} --enable-experimental-asm"
+	else
+		my_econf="${my_econf} --disable-experimental-asm"
+	fi
 	if use_if_iuse upnp; then
 		my_econf="${my_econf} --with-miniupnpc --enable-upnp-default"
 	else
