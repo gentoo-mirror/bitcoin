@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit autotools eutils
+inherit autotools
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -32,7 +32,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
-	sys-apps/sed
 "
 
 DOCS="doc/README.md doc/release-notes.md"
@@ -42,7 +41,7 @@ S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
 
 src_prepare() {
-	epatch "$(KNOTS_PATCH syslibs)"
+	eapply "$(KNOTS_PATCH syslibs)"
 
 	eapply_user
 
