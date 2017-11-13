@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use eutils systemd user
+inherit autotools bash-completion-r1 db-use systemd user
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -69,12 +69,12 @@ KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
 src_prepare() {
 	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind bitcoind\) bitcoin-cli$/\1/' contrib/${PN}.bash-completion || die
 
-	epatch "$(KNOTS_PATCH syslibs)"
+	eapply "$(KNOTS_PATCH syslibs)"
 
 	if use knots; then
-		epatch "$(KNOTS_PATCH f)"
-		epatch "$(KNOTS_PATCH branding)"
-		epatch "$(KNOTS_PATCH ts)"
+		eapply "$(KNOTS_PATCH f)"
+		eapply "$(KNOTS_PATCH branding)"
+		eapply "$(KNOTS_PATCH ts)"
 	fi
 
 	eapply_user
