@@ -34,7 +34,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
-	sys-apps/sed
 "
 
 DOCS="doc/README.md doc/release-notes.md"
@@ -51,8 +50,6 @@ pkg_pretend() {
 KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
 
 src_prepare() {
-	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind \)bitcoind \(bitcoin-cli\)$/\1\2/' contrib/bitcoind.bash-completion || die
-
 	eapply "$(KNOTS_PATCH syslibs)"
 
 	if use knots; then
@@ -85,5 +82,5 @@ src_configure() {
 src_install() {
 	default
 
-	newbashcomp contrib/bitcoind.bash-completion ${PN}
+	newbashcomp contrib/bitcoin-cli.bash-completion ${PN}
 }
