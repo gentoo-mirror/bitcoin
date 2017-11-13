@@ -15,7 +15,7 @@ KNOTS_P="${MyPN}-${KNOTS_PV}"
 IUSE="+knots libressl"
 
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
-HOMEPAGE="http://bitcoincore.org/"
+HOMEPAGE="http://bitcoincore.org/ http://bitcoinknots.org/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
@@ -24,7 +24,8 @@ SRC_URI="
 	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
 	http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
-KNOTS_PATCH_DESC="http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+CORE_DESC="https://bitcoincore.org/en/2017/09/01/release-${PV}/"
+KNOTS_DESC="http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 RDEPEND="
 	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
@@ -43,7 +44,10 @@ S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 pkg_pretend() {
 	if use knots; then
 		einfo "You are building ${PN} from Bitcoin Knots."
-		einfo "For more information, see ${KNOTS_PATCH_DESC}"
+		einfo "For more information, see ${KNOTS_DESC}"
+	else
+		einfo "You are building ${PN} from Bitcoin Core."
+		einfo "For more information, see ${CORE_DESC}"
 	fi
 }
 
