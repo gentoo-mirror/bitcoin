@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit autotools
+inherit autotools bash-completion-r1
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -78,4 +78,10 @@ src_configure() {
 		--with-system-univalue
 	)
 	econf "${my_econf[@]}"
+}
+
+src_install() {
+	default
+
+	newbashcomp contrib/${PN}.bash-completion ${PN}
 }
