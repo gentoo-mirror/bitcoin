@@ -61,7 +61,6 @@ DEPEND="${RDEPEND}
 "
 REQUIRED_USE="
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
-	!libevent? ( knots )
 "
 
 for lang in ${LANGS}; do
