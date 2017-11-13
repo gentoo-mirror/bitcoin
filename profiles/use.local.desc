@@ -59,6 +59,7 @@ net-misc/bfgminer:zeusminer - Enable support for mining with ZeusMiner units
 net-misc/bfgminer:ztex - Enable support for mining with Ztex FPGAs
 net-p2p/bitcoin-cli:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-p2p/bitcoin-qt:asm - Enable assembly for optimization
+net-p2p/bitcoin-qt:bip70 - Enable support for the BIP70 payment protocol
 net-p2p/bitcoin-qt:bitcoin_policy_rbf - Replace By Fee policy: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order
 net-p2p/bitcoin-qt:bitcoin_policy_spamfilter - Enhanced spam filter policy: Notorious spammers will not be assisted by your node
 net-p2p/bitcoin-qt:http - Enable support for the JSON-RPC and REST HTTP server (builtin net-p2p/bitcoind)
