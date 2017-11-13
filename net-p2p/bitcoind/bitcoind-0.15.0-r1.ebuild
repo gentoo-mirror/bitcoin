@@ -43,7 +43,7 @@ DEPEND="${RDEPEND}
 	sys-apps/sed
 "
 
-DOCS="doc/README.md doc/release-notes.md"
+DOCS="doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md"
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
@@ -130,7 +130,7 @@ src_install() {
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 	dosym ../../../../etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
-	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
+	dodoc doc/REST-interface.md doc/tor.md
 	doman "${FILESDIR}/bitcoin.conf.5"
 
 	use zeromq && dodoc doc/zmq.md
