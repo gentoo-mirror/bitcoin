@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-DOCS="doc/README.md doc/release-notes.md"
+DOCS="doc/bips.md doc/release-notes.md"
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
