@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
-DOCS="doc/README.md doc/release-notes.md"
+DOCS="doc/bips.md doc/release-notes.md doc/shared-libraries.md"
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
@@ -82,6 +82,5 @@ src_install() {
 
 	rm "${D}/usr/bin/test_bitcoin"
 
-	dodoc doc/bips.md
 	find "${D}" -name '*.la' -delete || die
 }
