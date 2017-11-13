@@ -3,22 +3,42 @@
 
 EAPI=6
 
+DB_VER="4.8"
+inherit autotools db-use eutils fdo-mime gnome2-utils kde4-functions
+
+MyPV="${PV/_/}"
+MyPN="bitcoin"
+MyP="${MyPN}-${MyPV}"
 BITCOINCORE_COMMITHASH="3751912e8e044958d5ccea847a3f8eab0b026dc1"
-BITCOINCORE_LJR_DATE="20170914"
-BITCOINCORE_IUSE="+asm dbus kde +libevent +knots +qrcode qt5 +http test +tor upnp +wallet zeromq"
-BITCOINCORE_POLICY_PATCHES="+rbf"
+KNOTS_PV="${PV}.knots20170914"
+KNOTS_P="${MyPN}-${KNOTS_PV}"
+
+IUSE="+asm +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
 LANGS="af af_ZA ar be_BY bg bg_BG bn bs ca ca@valencia ca_ES cs cy da de de_DE el el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he he_IL hi_IN hr hu hu_HU id id_ID is it it_IT ja ja_JP ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY my nb nb_NO ne nl nl_NL pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sn sq sr sr@latin sv ta te th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 KNOTS_LANGS="hu_HU is sn"
-BITCOINCORE_NEED_LEVELDB=1
-BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
+HOMEPAGE="http://bitcoincore.org/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
+SRC_URI="
+	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
+	http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+"
+KNOTS_PATCH_DESC="http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+
 RDEPEND="
+	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
+	libevent? ( dev-libs/libevent )
+	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
+	dev-libs/univalue
+	>=dev-libs/boost-1.52.0[threads(+)]
+	upnp? ( >=net-libs/miniupnpc-1.9.20150916 )
+	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx] )
+	zeromq? ( net-libs/zeromq )
+	virtual/bitcoin-leveldb
 	dev-libs/protobuf
 	qrcode? (
 		media-gfx/qrencode
@@ -31,6 +51,8 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
+	>=app-shells/bash-4.1
+	sys-apps/sed
 	qt5? ( dev-qt/linguist-tools:5 )
 	knots? (
 		gnome-base/librsvg
@@ -50,8 +72,42 @@ for lang in ${KNOTS_LANGS}; do
 	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( knots )"
 done
 
+DOCS="doc/README.md doc/release-notes.md"
+
+S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+
+pkg_pretend() {
+	if use knots; then
+		einfo "You are building ${PN} from Bitcoin Knots."
+		einfo "For more information, see ${KNOTS_PATCH_DESC}"
+	fi
+	if use bitcoin_policy_rbf; then
+		einfo "Replace By Fee policy is enabled: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order."
+	else
+		einfo "Replace By Fee policy is disabled: Your node will only accept the first transaction seen consuming a conflicting input, regardless of fee offered by later ones."
+	fi
+}
+
+KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
+
 src_prepare() {
-	bitcoincore_prepare
+	epatch "$(KNOTS_PATCH syslibs)"
+
+	if use knots; then
+		epatch "$(KNOTS_PATCH f)"
+		epatch "$(KNOTS_PATCH branding)"
+		epatch "$(KNOTS_PATCH ts)"
+	fi
+
+	eapply_user
+
+	if ! use bitcoin_policy_rbf; then
+		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
+	fi
+
+	echo '#!/bin/true' >share/genbuild.sh
+	mkdir -p src/obj
+	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h
 
 	sed -i 's/^\(Icon=\).*$/\1bitcoin-qt/;s/^\(Categories=.*\)$/\1P2P;Network;Qt;/' contrib/debian/bitcoin-qt.desktop || die
 
@@ -84,18 +140,34 @@ src_prepare() {
 	sed "s/locale\/${filt}/bitcoin.qrc/" -i 'src/Makefile.qt.include' || die
 	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 
-	bitcoincore_autoreconf
+	eautoreconf
+	rm -r src/leveldb src/secp256k1 || die
 }
 
 src_configure() {
-	bitcoincore_conf \
-		$(use_with dbus qtdbus)  \
-		$(use_with qrcode qrencode)  \
+	local my_econf=(
+		$(use_enable asm experimental-asm)
+		$(use_with dbus qtdbus)
+		$(use_with libevent)
+		$(use_with qrcode qrencode)
+		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default)
+		$(use_enable test tests)
+		$(use_enable wallet)
+		$(use_enable zeromq zmq)
 		--with-gui=$(usex qt5 qt5 qt4)
+		--disable-util-cli --disable-util-tx --disable-bench --without-libs --without-daemon
+		--disable-ccache --disable-static
+		--with-system-leveldb
+		--with-system-libsecp256k1
+		--with-system-univalue
+	)
+	econf "${my_econf[@]}"
 }
 
 src_install() {
-	bitcoincore_src_install
+	default
+
+	rm "${D}/usr/bin/test_bitcoin"
 
 	insinto /usr/share/pixmaps
 	if use knots; then
