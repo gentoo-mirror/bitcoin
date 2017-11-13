@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools db-use fdo-mime gnome2-utils kde4-functions
+inherit autotools bash-completion-r1 db-use fdo-mime gnome2-utils kde4-functions
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -91,6 +91,8 @@ pkg_pretend() {
 KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
 
 src_prepare() {
+	sed -i 's/^\(complete -F _bitcoind \)bitcoind \(bitcoin-qt\)$/\1\2/' contrib/bitcoind.bash-completion || die
+
 	eapply "$(KNOTS_PATCH syslibs)"
 
 	if use knots; then
@@ -181,6 +183,8 @@ src_install() {
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
 
 	use zeromq && dodoc doc/zmq.md
+
+	newbashcomp contrib/bitcoind.bash-completion ${PN}
 
 	if use kde; then
 		insinto /usr/share/kde4/services
