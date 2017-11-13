@@ -3,36 +3,115 @@
 
 EAPI=6
 
+DB_VER="4.8"
+inherit autotools bash-completion-r1 db-use eutils systemd user
+
+MyPV="${PV/_/}"
+MyPN="bitcoin"
+MyP="${MyPN}-${MyPV}"
 BITCOINCORE_COMMITHASH="3751912e8e044958d5ccea847a3f8eab0b026dc1"
-BITCOINCORE_LJR_DATE="20170914"
-BITCOINCORE_IUSE="+asm examples +knots test upnp +wallet zeromq"
-BITCOINCORE_POLICY_PATCHES="+rbf"
-BITCOINCORE_NEED_LEVELDB=1
-BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bash-completion-r1 bitcoincore systemd user
+KNOTS_PV="${PV}.knots20170914"
+KNOTS_P="${MyPN}-${KNOTS_PV}"
+
+IUSE="+asm +bitcoin_policy_rbf examples +knots libressl test upnp +wallet zeromq"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
+HOMEPAGE="http://bitcoincore.org/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+
+SRC_URI="
+	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
+	http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+"
+KNOTS_PATCH_DESC="http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+
+RDEPEND="
+	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
+	dev-libs/libevent
+	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
+	dev-libs/univalue
+	>=dev-libs/boost-1.52.0[threads(+)]
+	upnp? ( >=net-libs/miniupnpc-1.9.20150916 )
+	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx] )
+	zeromq? ( net-libs/zeromq )
+	virtual/bitcoin-leveldb
+"
+DEPEND="${RDEPEND}
+	>=app-shells/bash-4.1
+	sys-apps/sed
+"
+
+DOCS="doc/README.md doc/release-notes.md"
+
+S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+
+pkg_pretend() {
+	if use knots; then
+		einfo "You are building ${PN} from Bitcoin Knots."
+		einfo "For more information, see ${KNOTS_PATCH_DESC}"
+	fi
+	if use bitcoin_policy_rbf; then
+		einfo "Replace By Fee policy is enabled: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order."
+	else
+		einfo "Replace By Fee policy is disabled: Your node will only accept the first transaction seen consuming a conflicting input, regardless of fee offered by later ones."
+	fi
+}
 
 pkg_setup() {
 	enewgroup bitcoin
 	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
 }
 
+KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
+
 src_prepare() {
 	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind bitcoind\) bitcoin-cli$/\1/' contrib/${PN}.bash-completion || die
-	bitcoincore_src_prepare
+
+	epatch "$(KNOTS_PATCH syslibs)"
+
+	if use knots; then
+		epatch "$(KNOTS_PATCH f)"
+		epatch "$(KNOTS_PATCH branding)"
+		epatch "$(KNOTS_PATCH ts)"
+	fi
+
+	eapply_user
+
+	if ! use bitcoin_policy_rbf; then
+		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
+	fi
+
+	echo '#!/bin/true' >share/genbuild.sh
+	mkdir -p src/obj
+	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h
+
+	eautoreconf
+	rm -r src/leveldb src/secp256k1 || die
 }
 
 src_configure() {
-	bitcoincore_conf \
+	local my_econf=(
+		$(use_enable asm experimental-asm)
+		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default)
+		$(use_enable test tests)
+		$(use_enable wallet)
+		$(use_enable zeromq zmq)
 		--with-daemon
+		--disable-util-cli --disable-util-tx --disable-bench --without-libs --without-gui
+		--disable-ccache --disable-static
+		--with-system-leveldb
+		--with-system-libsecp256k1
+		--with-system-univalue
+	)
+	econf "${my_econf[@]}"
 }
 
 src_install() {
-	bitcoincore_src_install
+	default
+
+	rm "${D}/usr/bin/test_bitcoin"
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
