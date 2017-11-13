@@ -72,7 +72,7 @@ for lang in ${KNOTS_LANGS}; do
 	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( knots )"
 done
 
-DOCS="doc/README.md doc/release-notes.md"
+DOCS="doc/bips.md doc/files.md doc/release-notes.md"
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
@@ -180,7 +180,7 @@ src_install() {
 	insinto /usr/share/applications
 	doins "contrib/debian/bitcoin-qt.desktop"
 
-	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
+	use libevent && dodoc doc/REST-interface.md doc/tor.md
 
 	use zeromq && dodoc doc/zmq.md
 
