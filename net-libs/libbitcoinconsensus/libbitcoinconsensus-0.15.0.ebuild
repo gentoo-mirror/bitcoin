@@ -12,7 +12,7 @@ BITCOINCORE_COMMITHASH="3751912e8e044958d5ccea847a3f8eab0b026dc1"
 KNOTS_PV="${PV}.knots20170914"
 KNOTS_P="${MyPN}-${KNOTS_PV}"
 
-IUSE="+asm libressl"
+IUSE="+asm +knots libressl"
 
 DESCRIPTION="Bitcoin Core consensus library"
 HOMEPAGE="http://bitcoincore.org/"
@@ -38,10 +38,23 @@ DOCS="doc/README.md doc/release-notes.md"
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
+pkg_pretend() {
+	if use knots; then
+		einfo "You are building ${PN} from Bitcoin Knots."
+		einfo "For more information, see ${KNOTS_PATCH_DESC}"
+	fi
+}
+
 KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
 
 src_prepare() {
 	eapply "$(KNOTS_PATCH syslibs)"
+
+	if use knots; then
+		eapply "$(KNOTS_PATCH f)"
+		eapply "$(KNOTS_PATCH branding)"
+		eapply "$(KNOTS_PATCH ts)"
+	fi
 
 	eapply_user
 
