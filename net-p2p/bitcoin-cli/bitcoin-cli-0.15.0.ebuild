@@ -3,28 +3,87 @@
 
 EAPI=6
 
+inherit autotools bash-completion-r1 eutils
+
+MyPV="${PV/_/}"
+MyPN="bitcoin"
+MyP="${MyPN}-${MyPV}"
 BITCOINCORE_COMMITHASH="3751912e8e044958d5ccea847a3f8eab0b026dc1"
-BITCOINCORE_LJR_DATE="20170914"
-BITCOINCORE_IUSE="+knots"
-inherit bash-completion-r1 bitcoincore
+KNOTS_PV="${PV}.knots20170914"
+KNOTS_P="${MyPN}-${KNOTS_PV}"
+
+IUSE="+knots libressl"
 
 DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
+HOMEPAGE="http://bitcoincore.org/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
+SRC_URI="
+	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
+	http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+"
+KNOTS_PATCH_DESC="http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+
+RDEPEND="
+	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
+	dev-libs/libevent
+	dev-libs/univalue
+	>=dev-libs/boost-1.52.0[threads(+)]
+"
+DEPEND="${RDEPEND}
+	>=app-shells/bash-4.1
+	sys-apps/sed
+"
+
+DOCS="doc/README.md doc/release-notes.md"
+
+S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+
+pkg_pretend() {
+	if use knots; then
+		einfo "You are building ${PN} from Bitcoin Knots."
+		einfo "For more information, see ${KNOTS_PATCH_DESC}"
+	fi
+}
+
+KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
+
 src_prepare() {
 	sed -i 's/have bitcoind &&//;s/^\(complete -F _bitcoind \)bitcoind \(bitcoin-cli\)$/\1\2/' contrib/bitcoind.bash-completion || die
-	bitcoincore_src_prepare
+
+	epatch "$(KNOTS_PATCH syslibs)"
+
+	if use knots; then
+		epatch "$(KNOTS_PATCH f)"
+		epatch "$(KNOTS_PATCH branding)"
+		epatch "$(KNOTS_PATCH ts)"
+	fi
+
+	eapply_user
+
+	echo '#!/bin/true' >share/genbuild.sh
+	mkdir -p src/obj
+	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h
+
+	eautoreconf
+	rm -r src/leveldb src/secp256k1 || die
 }
 
 src_configure() {
-	bitcoincore_conf \
+	local my_econf=(
+		--disable-tests
 		--enable-util-cli
+		--disable-util-tx --disable-bench --without-libs --without-daemon --without-gui
+		--disable-ccache --disable-static
+		--with-system-univalue
+	)
+	econf "${my_econf[@]}"
 }
 
 src_install() {
-	bitcoincore_src_install
+	default
 
 	newbashcomp contrib/bitcoind.bash-completion ${PN}
 }
