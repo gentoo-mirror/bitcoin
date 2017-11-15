@@ -100,6 +100,9 @@ src_prepare() {
 src_configure() {
 	local my_econf=(
 		$(use_enable asm experimental-asm)
+		--without-qtdbus
+		--with-libevent
+		--without-qrencode
 		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default)
 		$(use_enable test tests)
 		$(use_enable wallet)
