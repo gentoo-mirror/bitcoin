@@ -72,7 +72,14 @@ src_prepare() {
 
 src_configure() {
 	local my_econf=(
+		$(use_enable asm experimental-asm)
+		--without-qtdbus
+		--without-libevent
+		--without-qrencode
+		--without-miniupnpc
 		--disable-tests
+		--disable-wallet
+		--disable-zmq
 		--with-libs
 		--disable-util-cli --disable-util-tx --disable-bench --without-daemon --without-gui
 		--disable-ccache --disable-static
