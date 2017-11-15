@@ -153,3 +153,9 @@ src_install() {
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}/bitcoind.logrotate-r1" bitcoind
 }
+
+pkg_postinst() {
+	einfo "To have ${PN} automatically use Tor when it's running, be sure your 'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup correctly, and:"
+	einfo "- if using the init script: add the 'bitcoin' user to the 'tor' user group"
+	einfo" - if running bitcoind directly: add that user to the 'tor' user group"
+}
