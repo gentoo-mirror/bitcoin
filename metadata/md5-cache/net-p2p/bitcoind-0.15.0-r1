@@ -10,4 +10,4 @@ RDEPEND=!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libress
 SLOT=0
 SRC_URI=https://github.com/bitcoin/bitcoin/archive/3751912e8e044958d5ccea847a3f8eab0b026dc1.tar.gz -> bitcoin-v0.15.0.tar.gz http://bitcoinknots.org/files/0.15.x/0.15.0.knots20170914/bitcoin-0.15.0.knots20170914.patches.txz -> bitcoin-0.15.0.knots20170914.patches.tar.xz
 _eclasses_=autotools	dc412f38566b91012efd58b9c203e6c3	bash-completion-r1	8e447753aaf658afa609fbf961d80ab7	db-use	582140d1a711279e50ce284fc7b609f5	epatch	8233751dc5105a6ae8fcd86ce2bb0247	estack	43ddf5aaffa7a8d0482df54d25a66a1f	eutils	227b041a120d309fdefbebb3b8c1dfa9	libtool	0081a71a261724730ec4c248494f044d	ltprune	2770eed66a9b8ef944714cd0e968182e	multilib	97f470f374f2e94ccab04a2fb21d811e	systemd	34815d3b76e745c5ca33eec9f95074c2	toolchain-funcs	185a06792159ca143528e7010368e8af	user	e4b567c44272a719fabf53f0f885d3f7	versionator	c80ccf29e90adea7c5cae94b42eb76d0
-_md5_=8c3e076d387f97445fc621eb187992a2
+_md5_=0e97c0cf70bcadd88eb12427d7162ee4
