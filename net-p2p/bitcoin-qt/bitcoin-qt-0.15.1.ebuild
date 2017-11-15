@@ -209,6 +209,10 @@ update_caches() {
 
 pkg_postinst() {
 	update_caches
+
+	if use tor; then
+		einfo "To have ${PN} automatically use Tor when it's running, be sure your 'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup correctly, and add your that user to the 'tor' user group"
+	fi
 }
 
 pkg_postrm() {
