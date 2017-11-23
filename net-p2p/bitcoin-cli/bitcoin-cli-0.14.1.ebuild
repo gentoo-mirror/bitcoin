@@ -8,7 +8,7 @@ BITCOINCORE_LJR_DATE="20170420"
 BITCOINCORE_IUSE="+knots"
 inherit bash-completion-r1 bitcoincore
 
-DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
+DESCRIPTION="Command-line JSON-RPC client specifically for interfacing with bitcoind"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
