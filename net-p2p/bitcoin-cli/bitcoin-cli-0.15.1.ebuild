@@ -14,7 +14,7 @@ KNOTS_P="${MyPN}-${KNOTS_PV}"
 
 IUSE="+knots libressl"
 
-DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
+DESCRIPTION="Command-line JSON-RPC client specifically for interfacing with bitcoind"
 HOMEPAGE="http://bitcoincore.org/ http://bitcoinknots.org/"
 LICENSE="MIT"
 SLOT="0"

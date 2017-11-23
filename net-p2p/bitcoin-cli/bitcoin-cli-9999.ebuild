@@ -7,7 +7,7 @@ BITCOINCORE_NO_SYSLIBS=1
 BITCOINCORE_IUSE=""
 inherit bitcoincore
 
-DESCRIPTION="Command-line JSON-RPC client specifically designed for talking to Bitcoin Core Daemon"
+DESCRIPTION="Command-line JSON-RPC client specifically for interfacing with bitcoind"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""

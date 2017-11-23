@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use fdo-mime gnome2-utils kde4-functions
+inherit autotools bash-completion-r1 db-use gnome2-utils kde4-functions xdg-utils
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -203,7 +203,7 @@ pkg_preinst() {
 
 update_caches() {
 	gnome2_icon_cache_update
-	fdo-mime_desktop_database_update
+	xdg_desktop_database_update
 	buildsycoca
 }
 
