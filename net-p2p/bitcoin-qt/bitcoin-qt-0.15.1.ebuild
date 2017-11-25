@@ -14,7 +14,7 @@ KNOTS_PV="${PV}.knots20171111"
 KNOTS_P="${MyPN}-${KNOTS_PV}"
 
 IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
-LANGS="af af_ZA am ar be_BY bg bg_BG bn bs ca ca@valencia ca_ES cs cy da de de_DE el el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he he_IL hi_IN hr hu hu_HU id id_ID is it it_IT ja ja_JP ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms ms_MY my nb nb_NO ne nl nl_NL pam pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sn sq sr sr@latin sv ta te th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
+LANGS="af af:af_ZA am ar be:be_BY bg bg:bg_BG bn bs ca ca@valencia ca:ca_ES cs cy da de de:de_DE el el:el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et:et_EE eu:eu_ES fa fa:fa_IR fi fr fr_CA fr:fr_FR gl he he:he_IL hi:hi_IN hr hu hu:hu_HU id id:id_ID is it it:it_IT ja ja:ja_JP ka kk:kk_KZ ko:ko_KR ku:ku_IQ ky la lt lv:lv_LV mk:mk_MK mn ms ms:ms_MY my nb nb:nb_NO ne nl nl:nl_NL pam pl pl:pl_PL pt pt_BR pt_PT ro ro:ro_RO ru ru:ru_RU si sk sl:sl_SI sn sq sr sr-Latn:sr@latin sv ta te th th:th_TH tr tr:tr_TR uk ur_PK uz@Cyrl vi vi:vi_VN zh zh_CN zh_HK zh_TW"
 KNOTS_LANGS="am hu_HU is ms pl_PL pt sn"
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
@@ -64,13 +64,40 @@ REQUIRED_USE="
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
 "
 
-for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
-done
+declare -A LANG2USE USE2LANGS
+bitcoin_langs_prep() {
+	local lang l10n
+	for lang in ${LANGS}; do
+		l10n="${lang/:*/}"
+		l10n="${l10n/[@_]/-}"
+		lang="${lang/*:/}"
+		LANG2USE["${lang}"]="${l10n}"
+		USE2LANGS["${l10n}"]+=" ${lang}"
+	done
+}
+bitcoin_langs_prep
 
-for lang in ${KNOTS_LANGS}; do
-	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( knots )"
-done
+bitcoin_lang2use() {
+	local l
+	for l; do
+		echo l10n_${LANG2USE["${l}"]}
+	done
+}
+
+IUSE+=" $(bitcoin_lang2use ${!LANG2USE[@]})"
+
+bitcoin_lang_requireduse() {
+	local lang l10n knots_exclusive
+	for l10n in ${!USE2LANGS[@]}; do
+		for lang in ${USE2LANGS["${l10n}"]}; do
+			if ! has $lang $KNOTS_LANGS; then
+				continue 2
+			fi
+		done
+		echo "l10n_${l10n}? ( knots )"
+	done
+}
+REQUIRED_USE+=" $(bitcoin_lang_requireduse)"
 
 DOCS="doc/bips.md doc/files.md doc/release-notes.md"
 
@@ -119,6 +146,7 @@ src_prepare() {
 	local filt= yeslang= nolang= lan ts x
 
 	for lan in $LANGS; do
+		lan="${lan/*:/}"
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
 			if has $lan $KNOTS_LANGS && ! use knots; then
 				# Expected
@@ -132,7 +160,7 @@ src_prepare() {
 	do
 		x="${ts/*bitcoin_/}"
 		x="${x/.ts/}"
-		if ! use "linguas_$x"; then
+		if ! use "$(bitcoin_lang2use "$x")"; then
 			nolang="$nolang $x"
 			rm "$ts" || die
 			filt="$filt\\|$x"
