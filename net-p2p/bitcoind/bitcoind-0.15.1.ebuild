@@ -29,22 +29,22 @@ CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
 KNOTS_DESC="http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 RDEPEND="
-	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
+	!libressl? ( dev-libs/openssl:0=[-bindist] )
+	libressl? ( dev-libs/libressl:0= )
 	dev-libs/libevent
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
 	dev-libs/univalue
-	>=dev-libs/boost-1.52.0[threads(+)]
+	>=dev-libs/boost-1.52.0:=[threads(+)]
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916 )
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx] )
 	zeromq? ( net-libs/zeromq )
 	virtual/bitcoin-leveldb
 "
 DEPEND="${RDEPEND}
-	>=app-shells/bash-4.1
 	sys-apps/sed
 "
 
-DOCS="doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md"
+DOCS=( doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md )
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
@@ -89,9 +89,9 @@ src_prepare() {
 		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
 	fi
 
-	echo '#!/bin/true' >share/genbuild.sh
-	mkdir -p src/obj
-	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h
+	echo '#!/bin/true' >share/genbuild.sh || die
+	mkdir -p src/obj || die
+	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
 
 	eautoreconf
 	rm -r src/leveldb src/secp256k1 || die
@@ -108,8 +108,13 @@ src_configure() {
 		$(use_enable wallet)
 		$(use_enable zeromq zmq)
 		--with-daemon
-		--disable-util-cli --disable-util-tx --disable-bench --without-libs --without-gui
-		--disable-ccache --disable-static
+		--disable-util-cli
+		--disable-util-tx
+		--disable-bench
+		--without-libs
+		--without-gui
+		--disable-ccache
+		--disable-static
 		--with-system-leveldb
 		--with-system-libsecp256k1
 		--with-system-univalue
@@ -120,7 +125,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm "${D}/usr/bin/test_bitcoin"
+	rm "${ED%/}/usr/bin/test_bitcoin" || die
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf

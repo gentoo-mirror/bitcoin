@@ -31,11 +31,12 @@ CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
 KNOTS_DESC="http://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 RDEPEND="
-	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
+	!libressl? ( dev-libs/openssl:0=[-bindist] )
+	libressl? ( dev-libs/libressl:0= )
 	libevent? ( dev-libs/libevent )
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
 	dev-libs/univalue
-	>=dev-libs/boost-1.52.0[threads(+)]
+	>=dev-libs/boost-1.52.0:=[threads(+)]
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916 )
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx] )
 	zeromq? ( net-libs/zeromq )
@@ -44,15 +45,22 @@ RDEPEND="
 	qrcode? (
 		media-gfx/qrencode
 	)
-	!qt5? ( dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 )
-	qt5? ( dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 )
+	!qt5? (
+		dev-qt/qtcore:4[ssl]
+		dev-qt/qtgui:4
+	)
+	qt5? (
+		dev-qt/qtcore:5
+		dev-qt/qtgui:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtwidgets:5
+	)
 	dbus? (
 		!qt5? ( dev-qt/qtdbus:4 )
 		qt5? ( dev-qt/qtdbus:5 )
 	)
 "
 DEPEND="${RDEPEND}
-	>=app-shells/bash-4.1
 	sys-apps/sed
 	qt5? ( dev-qt/linguist-tools:5 )
 	knots? (
@@ -99,7 +107,7 @@ bitcoin_lang_requireduse() {
 }
 REQUIRED_USE+=" $(bitcoin_lang_requireduse)"
 
-DOCS="doc/bips.md doc/files.md doc/release-notes.md"
+DOCS=( doc/bips.md doc/files.md doc/release-notes.md )
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
@@ -137,9 +145,9 @@ src_prepare() {
 		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
 	fi
 
-	echo '#!/bin/true' >share/genbuild.sh
-	mkdir -p src/obj
-	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h
+	echo '#!/bin/true' >share/genbuild.sh || die
+	mkdir -p src/obj || die
+	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
 
 	sed -i 's/^\(Icon=\).*$/\1bitcoin-qt/;s/^\(Categories=.*\)$/\1P2P;Network;Qt;/' contrib/debian/bitcoin-qt.desktop || die
 
@@ -189,8 +197,13 @@ src_configure() {
 		$(use_enable wallet)
 		$(use_enable zeromq zmq)
 		--with-gui=$(usex qt5 qt5 qt4)
-		--disable-util-cli --disable-util-tx --disable-bench --without-libs --without-daemon
-		--disable-ccache --disable-static
+		--disable-util-cli
+		--disable-util-tx
+		--disable-bench
+		--without-libs
+		--without-daemon
+		--disable-ccache
+		--disable-static
 		--with-system-leveldb
 		--with-system-libsecp256k1
 		--with-system-univalue
@@ -201,7 +214,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm "${D}/usr/bin/test_bitcoin"
+	rm "${ED%/}/usr/bin/test_bitcoin"
 
 	insinto /usr/share/pixmaps
 	if use knots; then
