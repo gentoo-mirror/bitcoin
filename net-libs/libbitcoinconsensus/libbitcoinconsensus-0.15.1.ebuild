@@ -95,7 +95,5 @@ src_configure() {
 src_install() {
 	default
 
-	rm "${ED%/}/usr/bin/test_bitcoin"
-
 	find "${D}" -name '*.la' -delete || die
 }
