@@ -61,7 +61,6 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
-	sys-apps/sed
 	qt5? ( dev-qt/linguist-tools:5 )
 	knots? (
 		gnome-base/librsvg

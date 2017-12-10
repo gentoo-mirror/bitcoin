@@ -40,9 +40,7 @@ RDEPEND="
 	zeromq? ( net-libs/zeromq )
 	virtual/bitcoin-leveldb
 "
-DEPEND="${RDEPEND}
-	sys-apps/sed
-"
+DEPEND="${RDEPEND}"
 
 DOCS=( doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md )
 
