@@ -101,7 +101,8 @@ src_configure() {
 		--without-qtdbus
 		--with-libevent
 		--without-qrencode
-		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default)
+		$(use_with upnp miniupnpc)
+		$(use_enable upnp upnp-default)
 		$(use_enable test tests)
 		$(use_enable wallet)
 		$(use_enable zeromq zmq)
