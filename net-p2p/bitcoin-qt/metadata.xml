@@ -12,8 +12,15 @@
 		<flag name="bitcoin_policy_spamfilter">Enhanced spam filter policy: Notorious spammers will not be assisted by your node</flag>
 		<flag name="http">Enable support for the JSON-RPC and REST HTTP server (builtin net-p2p/bitcoind)</flag>
 		<flag name="knots">Build enhanced Bitcoin Knots version, rather than Bitcoin Core</flag>
+		<flag name="l10n_en-AU">English (Australia)</flag>
+		<flag name="l10n_es-CO">Spanish (Colombia)</flag>
+		<flag name="l10n_es-DO">Spanish (Dominican Republic)</flag>
+		<flag name="l10n_es-UY">Spanish (Uruguay)</flag>
+		<flag name="l10n_es-VE">Spanish (Venezuela)</flag>
+		<flag name="l10n_pam">Kapampangan</flag>
+		<flag name="l10n_sn">Shona</flag>
 		<flag name="libevent">Use dev-libs/libevent</flag>
-		<flag name="linguas_sn">Senegal locale</flag>
+		<flag name="linguas_sn">Shona locale</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
 		<flag name="tor">Enable automatic configuration of a Tor hidden service</flag>
 		<flag name="upnp">Enable Universal Plug and Play</flag>
