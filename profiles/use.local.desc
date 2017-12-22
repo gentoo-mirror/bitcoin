@@ -57,8 +57,15 @@ net-p2p/bitcoin-qt:bitcoin_policy_rbf - Replace By Fee policy: Your node will pr
 net-p2p/bitcoin-qt:bitcoin_policy_spamfilter - Enhanced spam filter policy: Notorious spammers will not be assisted by your node
 net-p2p/bitcoin-qt:http - Enable support for the JSON-RPC and REST HTTP server (builtin net-p2p/bitcoind)
 net-p2p/bitcoin-qt:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
+net-p2p/bitcoin-qt:l10n_en-AU - English (Australia)
+net-p2p/bitcoin-qt:l10n_es-CO - Spanish (Colombia)
+net-p2p/bitcoin-qt:l10n_es-DO - Spanish (Dominican Republic)
+net-p2p/bitcoin-qt:l10n_es-UY - Spanish (Uruguay)
+net-p2p/bitcoin-qt:l10n_es-VE - Spanish (Venezuela)
+net-p2p/bitcoin-qt:l10n_pam - Kapampangan
+net-p2p/bitcoin-qt:l10n_sn - Shona
 net-p2p/bitcoin-qt:libevent - Use dev-libs/libevent
-net-p2p/bitcoin-qt:linguas_sn - Senegal locale
+net-p2p/bitcoin-qt:linguas_sn - Shona locale
 net-p2p/bitcoin-qt:qrcode - Enable generation of QR Codes for receiving payments
 net-p2p/bitcoin-qt:tor - Enable automatic configuration of a Tor hidden service
 net-p2p/bitcoin-qt:upnp - Enable Universal Plug and Play
