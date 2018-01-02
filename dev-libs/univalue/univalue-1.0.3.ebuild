@@ -3,6 +3,8 @@
 
 EAPI=6
 
+inherit autotools
+
 DESCRIPTION="C++ universal value object and JSON library"
 HOMEPAGE="https://github.com/jgarzik/univalue"
 SRC_URI="https://codeload.github.com/jgarzik/${PN}/tar.gz/v${PV} -> ${P}.tgz"
@@ -17,7 +19,7 @@ RDEPEND="${DEPEND}"
 
 src_prepare() {
 	default
-	./autogen.sh || die
+	eautoreconf || die
 }
 
 src_configure() {
