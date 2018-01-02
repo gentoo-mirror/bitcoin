@@ -111,7 +111,7 @@ DEPEND="${DEPEND}
 src_configure() {
 	local CFLAGS="${CFLAGS}"
 	local with_curses
-	use hardened && CFLAGS="${CFLAGS} -nopie"
+	use hardened && CFLAGS="${CFLAGS} -no-pie"
 
 	if use ncurses; then
 		if use unicode; then
