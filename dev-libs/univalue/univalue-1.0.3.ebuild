@@ -16,6 +16,7 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_prepare() {
+	default
 	./autogen.sh || die
 }
 
