@@ -21,21 +21,23 @@ RDEPEND="
 	dev-libs/libbase58
 	dev-libs/libsodium
 	dev-libs/libbacktrace
+	dev-libs/libsecp256k1[ecdh,recovery]
+	net-libs/libwally-core
 "
 DEPEND="${RDEPEND}
 	test? ( dev-python/pytest )
 "
 # FIXME: bundled deps: ccan & jsmn
-# FIXME: system libwally-core and libsecp256k1 (needs zkp libsecp256k1 mess)
 
 src_prepare() {
 	eapply "${FILESDIR}/leave-cflags-alone.patch"
+	rm -r external/libwally-core
 	default
 }
 
 src_configure() {
 	default
-	local BUNDLED_LIBS="external/libwallycore.a external/libsecp256k1.a external/libjsmn.a"
+	local BUNDLED_LIBS="external/libjsmn.a"
 	CLIGHTNING_MAKEOPTS=(
 		NO_VALGRIND=1
 		DEVELOPER=
@@ -45,9 +47,11 @@ src_configure() {
 		CDEBUGFLAGS="${CFLAGS}"
 		LIBSODIUM_HEADERS=
 		LIBBASE58_HEADERS=
+		LIBWALLY_HEADERS=
+		LIBSECP_HEADERS=
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
-		EXTERNAL_INCLUDE_FLAGS="-I external/libwally-core/include/ -I external/libwally-core/src/secp256k1/include/ -I external/jsmn/ $(pkg-config --cflags libbase58 libsodium)"
-		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $(pkg-config --libs libbase58 libsodium) -lbacktrace"
+		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $(pkg-config --cflags libbase58 libsodium wallycore libsecp256k1)"
+		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $(pkg-config --libs libbase58 libsodium wallycore libsecp256k1) -lbacktrace"
 	)
 }
 
