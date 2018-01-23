@@ -131,11 +131,13 @@ src_prepare() {
 	sed -i 's/^\(complete -F _bitcoind \)bitcoind \(bitcoin-qt\)$/\1\2/' contrib/bitcoind.bash-completion || die
 
 	eapply "$(KNOTS_PATCH syslibs)"
+	eapply "${FILESDIR}/0.15.1-test-util-fix.patch"
 
 	if use knots; then
 		eapply "$(KNOTS_PATCH f)"
 		eapply "$(KNOTS_PATCH branding)"
 		eapply "$(KNOTS_PATCH ts)"
+		eapply "${FILESDIR}/0.15.1-test-build-fix.patch"
 	fi
 
 	eapply_user
