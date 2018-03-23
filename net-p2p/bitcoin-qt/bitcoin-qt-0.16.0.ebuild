@@ -122,6 +122,7 @@ src_prepare() {
 		eapply "$(KNOTS_PATCH f)"
 		eapply "$(KNOTS_PATCH branding)"
 		eapply "$(KNOTS_PATCH ts)"
+		eapply "${FILESDIR}/${P}-fix_mempoolstats.patch"
 	fi
 
 	eapply_user
