@@ -1,4 +1,4 @@
-# Copyright 2010-2017 Gentoo Foundation
+# Copyright 2010-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,8 +9,8 @@ inherit autotools bash-completion-r1 db-use systemd user
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-BITCOINCORE_COMMITHASH="7b57bc998f334775b50ebc8ca5e78ca728db4c58"
-KNOTS_PV="${PV}.knots20171111"
+BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
+KNOTS_PV="${PV}.knots20180322"
 KNOTS_P="${MyPN}-${KNOTS_PV}"
 
 IUSE="+asm +bitcoin_policy_rbf examples +knots libressl test upnp +wallet zeromq"
@@ -23,10 +23,10 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 SRC_URI="
 	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
-KNOTS_DESC="https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 RDEPEND="
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
@@ -74,13 +74,11 @@ src_prepare() {
 	sed -i 's/^\(complete -F _bitcoind bitcoind\) bitcoin-qt$/\1/' contrib/${PN}.bash-completion || die
 
 	eapply "$(KNOTS_PATCH syslibs)"
-	eapply "${FILESDIR}/0.15.1-test-util-fix.patch"
 
 	if use knots; then
 		eapply "$(KNOTS_PATCH f)"
 		eapply "$(KNOTS_PATCH branding)"
 		eapply "$(KNOTS_PATCH ts)"
-		eapply "${FILESDIR}/0.15.1-test-build-fix.patch"
 	fi
 
 	eapply_user
@@ -99,7 +97,7 @@ src_prepare() {
 
 src_configure() {
 	local my_econf=(
-		$(use_enable asm experimental-asm)
+		$(use_enable asm)
 		--without-qtdbus
 		--with-libevent
 		--without-qrencode

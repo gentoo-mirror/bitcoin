@@ -1,20 +1,20 @@
-# Copyright 2010-2017 Gentoo Foundation
+# Copyright 2010-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit autotools
+inherit autotools bash-completion-r1
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-BITCOINCORE_COMMITHASH="7b57bc998f334775b50ebc8ca5e78ca728db4c58"
-KNOTS_PV="${PV}.knots20171111"
+BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
+KNOTS_PV="${PV}.knots20180322"
 KNOTS_P="${MyPN}-${KNOTS_PV}"
 
-IUSE="+asm +knots libressl"
+IUSE="+knots libressl"
 
-DESCRIPTION="Bitcoin Core consensus library"
+DESCRIPTION="Command-line JSON-RPC client specifically for interfacing with bitcoind"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 LICENSE="MIT"
 SLOT="0"
@@ -22,19 +22,21 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 SRC_URI="
 	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
-KNOTS_DESC="https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 RDEPEND="
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
-	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
+	dev-libs/libevent
+	dev-libs/univalue
+	>=dev-libs/boost-1.52.0:=[threads(+)]
 "
 DEPEND="${RDEPEND}"
 
-DOCS=( doc/bips.md doc/release-notes.md doc/shared-libraries.md )
+DOCS=( doc/bips.md doc/release-notes.md )
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
@@ -71,23 +73,23 @@ src_prepare() {
 
 src_configure() {
 	local my_econf=(
-		$(use_enable asm experimental-asm)
+		--disable-asm
 		--without-qtdbus
-		--without-libevent
+		--with-libevent
 		--without-qrencode
 		--without-miniupnpc
 		--disable-tests
 		--disable-wallet
 		--disable-zmq
-		--with-libs
-		--disable-util-cli
+		--enable-util-cli
 		--disable-util-tx
 		--disable-bench
+		--without-libs
 		--without-daemon
 		--without-gui
 		--disable-ccache
 		--disable-static
-		--with-system-libsecp256k1
+		--with-system-univalue
 	)
 	econf "${my_econf[@]}"
 }
@@ -95,5 +97,5 @@ src_configure() {
 src_install() {
 	default
 
-	find "${D}" -name '*.la' -delete || die
+	newbashcomp contrib/bitcoin-cli.bash-completion ${PN}
 }

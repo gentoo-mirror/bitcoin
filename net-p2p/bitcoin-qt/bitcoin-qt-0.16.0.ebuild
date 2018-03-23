@@ -1,21 +1,20 @@
-# Copyright 2010-2017 Gentoo Foundation
+# Copyright 2010-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use fdo-mime gnome2-utils kde4-functions
+inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
 MyP="${MyPN}-${MyPV}"
-BITCOINCORE_COMMITHASH="3751912e8e044958d5ccea847a3f8eab0b026dc1"
-KNOTS_PV="${PV}.knots20170914"
+BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
+KNOTS_PV="${PV}.knots20180322"
 KNOTS_P="${MyPN}-${KNOTS_PV}"
 
-IUSE="+asm +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
-LANGS="af af_ZA ar be_BY bg bg_BG bn bs ca ca@valencia ca_ES cs cy da de de_DE el el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he he_IL hi_IN hr hu hu_HU id id_ID is it it_IT ja ja_JP ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY my nb nb_NO ne nl nl_NL pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sn sq sr sr@latin sv ta te th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
-KNOTS_LANGS="hu_HU is sn"
+IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
+LANGS="af af:af_ZA am ar be:be_BY bg bg:bg_BG bn bs ca ca@valencia ca:ca_ES cs cs:cs_CZ cy da de de:de_DE el el:el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et:et_EE eu:eu_ES fa fa:fa_IR fi fr fr_CA fr:fr_FR gl he he:he_IL hi:hi_IN hr hu hu:hu_HU id id:id_ID is it it:it_IT ja ja:ja_JP ka kk:kk_KZ km:km_KH ko ko:ko_KR ku:ku_IQ ky la lt lv:lv_LV mk:mk_MK ml mn mr:mr_IN ms ms:ms_MY my nb nb:nb_NO ne nl nl:nl_NL pam pl pl:pl_PL pt pt_BR pt_PT ro ro:ro_RO ru ru:ru_RU si sk sl:sl_SI sn sq sr sr-Latn:sr@latin sv ta ta:ta_IN te th th:th_TH tr tr:tr_TR uk ur_PK uz@Cyrl vi vi:vi_VN zh zh:zh-Hans zh_CN zh_HK zh_TW"
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
@@ -25,35 +24,42 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 SRC_URI="
 	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
-CORE_DESC="https://bitcoincore.org/en/2017/09/01/release-${PV}/"
-KNOTS_DESC="https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
+KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 RDEPEND="
-	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
+	!libressl? ( dev-libs/openssl:0=[-bindist] )
+	libressl? ( dev-libs/libressl:0= )
 	libevent? ( dev-libs/libevent )
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
 	dev-libs/univalue
-	>=dev-libs/boost-1.52.0[threads(+)]
+	>=dev-libs/boost-1.52.0:=[threads(+)]
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916 )
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx] )
 	zeromq? ( net-libs/zeromq )
 	virtual/bitcoin-leveldb
-	dev-libs/protobuf
+	bip70? ( dev-libs/protobuf )
 	qrcode? (
 		media-gfx/qrencode
 	)
-	!qt5? ( dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 )
-	qt5? ( dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 )
+	!qt5? (
+		dev-qt/qtcore:4[ssl]
+		dev-qt/qtgui:4
+	)
+	qt5? (
+		dev-qt/qtcore:5
+		dev-qt/qtgui:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtwidgets:5
+	)
 	dbus? (
 		!qt5? ( dev-qt/qtdbus:4 )
 		qt5? ( dev-qt/qtdbus:5 )
 	)
 "
 DEPEND="${RDEPEND}
-	>=app-shells/bash-4.1
-	sys-apps/sed
 	qt5? ( dev-qt/linguist-tools:5 )
 	knots? (
 		gnome-base/librsvg
@@ -64,15 +70,29 @@ REQUIRED_USE="
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
 "
 
-for lang in ${LANGS}; do
-	IUSE+=" linguas_${lang}"
-done
+declare -A LANG2USE USE2LANGS
+bitcoin_langs_prep() {
+	local lang l10n
+	for lang in ${LANGS}; do
+		l10n="${lang/:*/}"
+		l10n="${l10n/[@_]/-}"
+		lang="${lang/*:/}"
+		LANG2USE["${lang}"]="${l10n}"
+		USE2LANGS["${l10n}"]+=" ${lang}"
+	done
+}
+bitcoin_langs_prep
 
-for lang in ${KNOTS_LANGS}; do
-	REQUIRED_USE="${REQUIRED_USE} linguas_${lang}? ( knots )"
-done
+bitcoin_lang2use() {
+	local l
+	for l; do
+		echo l10n_${LANG2USE["${l}"]}
+	done
+}
 
-DOCS="doc/bips.md doc/files.md doc/release-notes.md"
+IUSE+=" $(bitcoin_lang2use ${!LANG2USE[@]})"
+
+DOCS=( doc/bips.md doc/files.md doc/release-notes.md )
 
 S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
 
@@ -110,20 +130,17 @@ src_prepare() {
 		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
 	fi
 
-	echo '#!/bin/true' >share/genbuild.sh
-	mkdir -p src/obj
-	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h
+	echo '#!/bin/true' >share/genbuild.sh || die
+	mkdir -p src/obj || die
+	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
 
 	sed -i 's/^\(Icon=\).*$/\1bitcoin-qt/;s/^\(Categories=.*\)$/\1P2P;Network;Qt;/' contrib/debian/bitcoin-qt.desktop || die
 
 	local filt= yeslang= nolang= lan ts x
 
 	for lan in $LANGS; do
+		lan="${lan/*:/}"
 		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
-			if has $lan $KNOTS_LANGS && ! use knots; then
-				# Expected
-				continue
-			fi
 			die "Language '$lan' no longer supported. Ebuild needs update."
 		fi
 	done
@@ -132,7 +149,7 @@ src_prepare() {
 	do
 		x="${ts/*bitcoin_/}"
 		x="${x/.ts/}"
-		if ! use "linguas_$x"; then
+		if ! use "$(bitcoin_lang2use "$x")"; then
 			nolang="$nolang $x"
 			rm "$ts" || die
 			filt="$filt\\|$x"
@@ -151,17 +168,24 @@ src_prepare() {
 
 src_configure() {
 	local my_econf=(
-		$(use_enable asm experimental-asm)
+		$(use_enable asm)
+		$(use_enable bip70)
 		$(use_with dbus qtdbus)
 		$(use_with libevent)
 		$(use_with qrcode qrencode)
-		$(use_with upnp miniupnpc) $(use_enable upnp upnp-default)
+		$(use_with upnp miniupnpc)
+		$(use_enable upnp upnp-default)
 		$(use_enable test tests)
 		$(use_enable wallet)
 		$(use_enable zeromq zmq)
 		--with-gui=$(usex qt5 qt5 qt4)
-		--disable-util-cli --disable-util-tx --disable-bench --without-libs --without-daemon
-		--disable-ccache --disable-static
+		--disable-util-cli
+		--disable-util-tx
+		--disable-bench
+		--without-libs
+		--without-daemon
+		--disable-ccache
+		--disable-static
 		--with-system-leveldb
 		--with-system-libsecp256k1
 		--with-system-univalue
@@ -172,7 +196,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm "${D}/usr/bin/test_bitcoin"
+	rm -f "${ED%/}/usr/bin/test_bitcoin" || die
 
 	insinto /usr/share/pixmaps
 	if use knots; then
@@ -202,12 +226,15 @@ pkg_preinst() {
 
 update_caches() {
 	gnome2_icon_cache_update
-	fdo-mime_desktop_database_update
-	buildsycoca
+	xdg_desktop_database_update
 }
 
 pkg_postinst() {
 	update_caches
+
+	if use tor; then
+		einfo "To have ${PN} automatically use Tor when it's running, be sure your 'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup correctly, and add your that user to the 'tor' user group"
+	fi
 }
 
 pkg_postrm() {
