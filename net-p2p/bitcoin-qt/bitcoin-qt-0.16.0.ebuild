@@ -206,7 +206,7 @@ src_install() {
 		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
 	fi
 	insinto /usr/share/applications
-	newins "contrib/debian/bitcoin-qt.desktop" "org.bitcoinknots.bitcoin_qt.desktop"
+	newins "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
 
 	use libevent && dodoc doc/REST-interface.md doc/tor.md
 
