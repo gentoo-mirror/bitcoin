@@ -8,5 +8,5 @@ KEYWORDS=~x86 ~amd64
 LICENSE=AGPL-3
 RDEPEND=network? ( || ( net-p2p/bitcoind net-p2p/bitcoin-qt ) ) dev-python/psutil dev-libs/crypto++ dev-python/PyQt4[X] dev-lang/swig dev-python/twisted-core x11-misc/xdg-utils
 SLOT=0
-_eclasses_=git-2	195a672bfaf52d868442171c9469bbb6
+_eclasses_=git-2	45ff482316b52b3f96ff6b7309b77f03
 _md5_=e641abc11f5dd9b4fbb2f208320545be
