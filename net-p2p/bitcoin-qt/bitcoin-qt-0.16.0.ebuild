@@ -166,9 +166,9 @@ src_install() {
 	newbashcomp contrib/bitcoind.bash-completion ${PN}
 
 	if use kde; then
-		insinto /usr/share/kde4/services
+		insinto /usr/share/kservices5
 		doins contrib/debian/bitcoin-qt.protocol
-		dosym "../kde4/services/bitcoin-qt.protocol" "/usr/share/kservices5/bitcoin-qt.protocol"
+		dosym "../../kservices5/bitcoin-qt.protocol" "/usr/share/kde4/services/bitcoin-qt.protocol"
 	fi
 }
 
