@@ -30,17 +30,17 @@ REQUIRED_USE="
 RDEPEND="
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
-	libevent? ( dev-libs/libevent )
-	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
-	dev-libs/univalue
+	libevent? ( dev-libs/libevent:= )
+	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
+	dev-libs/univalue:=
 	>=dev-libs/boost-1.52.0:=[threads(+)]
-	upnp? ( >=net-libs/miniupnpc-1.9.20150916 )
-	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx] )
-	zeromq? ( net-libs/zeromq )
+	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
+	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
+	zeromq? ( net-libs/zeromq:= )
 	virtual/bitcoin-leveldb
-	bip70? ( dev-libs/protobuf )
+	bip70? ( dev-libs/protobuf:= )
 	qrcode? (
-		media-gfx/qrencode
+		media-gfx/qrencode:=
 	)
 	!qt5? (
 		dev-qt/qtcore:4[ssl]

@@ -24,7 +24,7 @@ IUSE="+asm +knots libressl"
 DEPEND="
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
-	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
+	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
 "
 RDEPEND="${DEPEND}"
 
