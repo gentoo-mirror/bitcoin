@@ -6,12 +6,9 @@ EAPI=6
 DB_VER="4.8"
 inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
 
-MyPV="${PV/_/}"
-MyPN="bitcoin"
-MyP="${MyPN}-${MyPV}"
 BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
-KNOTS_P="${MyPN}-${KNOTS_PV}"
+KNOTS_P="bitcoin-${KNOTS_PV}"
 
 IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
 LANGS="af af:af_ZA am ar be:be_BY bg bg:bg_BG bn bs ca ca@valencia ca:ca_ES cs cs:cs_CZ cy da de de:de_DE el el:el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et:et_EE eu:eu_ES fa fa:fa_IR fi fr fr_CA fr:fr_FR gl he he:he_IL hi:hi_IN hr hu hu:hu_HU id id:id_ID is it it:it_IT ja ja:ja_JP ka kk:kk_KZ km:km_KH ko ko:ko_KR ku:ku_IQ ky la lt lv:lv_LV mk:mk_MK ml mn mr:mr_IN ms ms:ms_MY my nb nb:nb_NO ne nl nl:nl_NL pam pl pl:pl_PL pt pt_BR pt_PT ro ro:ro_RO ru ru:ru_RU si sk sl:sl_SI sn sq sr sr-Latn:sr@latin sv ta ta:ta_IN te th th:th_TH tr tr:tr_TR uk ur_PK uz@Cyrl vi vi:vi_VN zh zh:zh-Hans zh_CN zh_HK zh_TW"
@@ -23,7 +20,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 SRC_URI="
-	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
+	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
 	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
@@ -94,7 +91,7 @@ IUSE+=" $(bitcoin_lang2use ${!LANG2USE[@]})"
 
 DOCS=( doc/bips.md doc/files.md doc/release-notes.md )
 
-S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
 pkg_pretend() {
 	if use knots; then

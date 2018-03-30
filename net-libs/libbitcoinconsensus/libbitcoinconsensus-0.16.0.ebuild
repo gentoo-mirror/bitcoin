@@ -5,12 +5,9 @@ EAPI=6
 
 inherit autotools
 
-MyPV="${PV/_/}"
-MyPN="bitcoin"
-MyP="${MyPN}-${MyPV}"
 BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
-KNOTS_P="${MyPN}-${KNOTS_PV}"
+KNOTS_P="bitcoin-${KNOTS_PV}"
 
 IUSE="+asm +knots libressl"
 
@@ -21,7 +18,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 SRC_URI="
-	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
+	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
 	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
@@ -36,7 +33,7 @@ DEPEND="${RDEPEND}"
 
 DOCS=( doc/bips.md doc/release-notes.md doc/shared-libraries.md )
 
-S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
 pkg_pretend() {
 	if use knots; then
