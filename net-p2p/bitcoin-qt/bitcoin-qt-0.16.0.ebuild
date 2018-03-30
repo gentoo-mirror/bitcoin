@@ -216,10 +216,6 @@ src_install() {
 	fi
 }
 
-pkg_preinst() {
-	gnome2_icon_savelist
-}
-
 update_caches() {
 	gnome2_icon_cache_update
 	xdg_desktop_database_update
