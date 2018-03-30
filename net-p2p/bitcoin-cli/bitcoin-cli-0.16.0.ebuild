@@ -30,9 +30,6 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
-KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
-
 DOCS=( doc/bips.md doc/release-notes.md )
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
@@ -40,10 +37,10 @@ S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 pkg_pretend() {
 	if use knots; then
 		einfo "You are building ${PN} from Bitcoin Knots."
-		einfo "For more information, see ${KNOTS_DESC}"
+		einfo "For more information, see https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		einfo "You are building ${PN} from Bitcoin Core."
-		einfo "For more information, see ${CORE_DESC}"
+		einfo "For more information, see https://bitcoincore.org/en/2017/11/11/release-${PV}/"
 	fi
 }
 
