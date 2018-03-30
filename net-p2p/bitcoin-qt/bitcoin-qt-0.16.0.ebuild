@@ -106,17 +106,17 @@ pkg_pretend() {
 	fi
 }
 
-KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
-
 src_prepare() {
 	sed -i 's/^\(complete -F _bitcoind \)bitcoind \(bitcoin-qt\)$/\1\2/' contrib/bitcoind.bash-completion || die
 
-	eapply "$(KNOTS_PATCH syslibs)"
+	local knots_patchdir="${WORKDIR}/${KNOTS_P}.patches/"
+
+	eapply "${knots_patchdir}/${KNOTS_P}.syslibs.patch"
 
 	if use knots; then
-		eapply "$(KNOTS_PATCH f)"
-		eapply "$(KNOTS_PATCH branding)"
-		eapply "$(KNOTS_PATCH ts)"
+		eapply "${knots_patchdir}/${KNOTS_P}.f.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}.branding.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}.ts.patch"
 		eapply "${FILESDIR}/${P}-fix_mempoolstats.patch"
 	fi
 
