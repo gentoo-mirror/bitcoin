@@ -43,15 +43,20 @@ S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 pkg_pretend() {
 	if use knots; then
 		elog "You are building ${PN} from Bitcoin Knots."
-		elog "For more information, see https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "For more information, see:"
+		elog "https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		elog "You are building ${PN} from Bitcoin Core."
-		elog "For more information, see https://bitcoincore.org/en/2017/11/11/release-${PV}/"
+		elog "For more information, see:"
+		elog "https://bitcoincore.org/en/2017/11/11/release-${PV}/"
 	fi
 	if use bitcoin_policy_rbf; then
-		elog "Replace By Fee policy is enabled: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order."
+		elog "Replace By Fee policy is enabled: Your node will preferentially mine and"
+		elog "relay transactions paying the highest fee, regardless of receive order."
 	else
-		elog "Replace By Fee policy is disabled: Your node will only accept the first transaction seen consuming a conflicting input, regardless of fee offered by later ones."
+		elog "Replace By Fee policy is disabled: Your node will only accept the first"
+		elog "transaction seen consuming a conflicting input, regardless of fee"
+		elog "offered by later ones."
 	fi
 }
 
@@ -150,7 +155,9 @@ src_install() {
 }
 
 pkg_postinst() {
-	elog "To have ${PN} automatically use Tor when it's running, be sure your 'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup correctly, and:"
-	elog "- if using the init script: add the 'bitcoin' user to the 'tor' user group"
-	elog "- if running bitcoind directly: add that user to the 'tor' user group"
+	elog "To have ${PN} automatically use Tor when it's running, be sure your"
+	elog "'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup"
+	elog "correctly, and:"
+	elog "- Using an init script: add the 'bitcoin' user to the 'tor' user group."
+	elog "- Running bitcoind directly: add that user to the 'tor' user group."
 }
