@@ -9,27 +9,27 @@ BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
-IUSE="+asm +knots libressl"
-
 DESCRIPTION="Bitcoin Core consensus library"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
 	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
-CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
-KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
-RDEPEND="
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+IUSE="+asm +knots libressl"
+
+DEPEND="
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
 "
-DEPEND="${RDEPEND}"
+RDEPEND="${DEPEND}"
+
+CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
+KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 DOCS=( doc/bips.md doc/release-notes.md doc/shared-libraries.md )
 

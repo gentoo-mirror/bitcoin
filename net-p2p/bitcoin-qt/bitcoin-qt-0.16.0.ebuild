@@ -10,22 +10,23 @@ BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
-IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
-LANGS="af af:af_ZA am ar be:be_BY bg bg:bg_BG bn bs ca ca@valencia ca:ca_ES cs cs:cs_CZ cy da de de:de_DE el el:el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et:et_EE eu:eu_ES fa fa:fa_IR fi fr fr_CA fr:fr_FR gl he he:he_IL hi:hi_IN hr hu hu:hu_HU id id:id_ID is it it:it_IT ja ja:ja_JP ka kk:kk_KZ km:km_KH ko ko:ko_KR ku:ku_IQ ky la lt lv:lv_LV mk:mk_MK ml mn mr:mr_IN ms ms:ms_MY my nb nb:nb_NO ne nl nl:nl_NL pam pl pl:pl_PL pt pt_BR pt_PT ro ro:ro_RO ru ru:ru_RU si sk sl:sl_SI sn sq sr sr-Latn:sr@latin sv ta ta:ta_IN te th th:th_TH tr tr:tr_TR uk ur_PK uz@Cyrl vi vi:vi_VN zh zh:zh-Hans zh_CN zh_HK zh_TW"
-
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
 	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
-CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
-KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+
+IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
+LANGS="af af:af_ZA am ar be:be_BY bg bg:bg_BG bn bs ca ca@valencia ca:ca_ES cs cs:cs_CZ cy da de de:de_DE el el:el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et:et_EE eu:eu_ES fa fa:fa_IR fi fr fr_CA fr:fr_FR gl he he:he_IL hi:hi_IN hr hu hu:hu_HU id id:id_ID is it it:it_IT ja ja:ja_JP ka kk:kk_KZ km:km_KH ko ko:ko_KR ku:ku_IQ ky la lt lv:lv_LV mk:mk_MK ml mn mr:mr_IN ms ms:ms_MY my nb nb:nb_NO ne nl nl:nl_NL pam pl pl:pl_PL pt pt_BR pt_PT ro ro:ro_RO ru ru:ru_RU si sk sl:sl_SI sn sq sr sr-Latn:sr@latin sv ta ta:ta_IN te th th:th_TH tr tr:tr_TR uk ur_PK uz@Cyrl vi vi:vi_VN zh zh:zh-Hans zh_CN zh_HK zh_TW"
+
+REQUIRED_USE="
+	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
+"
 RDEPEND="
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
@@ -63,9 +64,9 @@ DEPEND="${RDEPEND}
 		media-gfx/imagemagick[png]
 	)
 "
-REQUIRED_USE="
-	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
-"
+
+CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
+KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
 declare -A LANG2USE USE2LANGS
 bitcoin_langs_prep() {
