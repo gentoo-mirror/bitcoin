@@ -36,7 +36,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-DOCS=( doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md )
+DOCS=( doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/REST-interface.md doc/tor.md )
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
@@ -133,7 +133,6 @@ src_install() {
 	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
 	dosym ../../../../etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
 
-	dodoc doc/REST-interface.md doc/tor.md
 	doman "${FILESDIR}/bitcoin.conf.5"
 
 	use zeromq && dodoc doc/zmq.md
