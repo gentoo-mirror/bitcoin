@@ -23,16 +23,16 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="+asm +bitcoin_policy_rbf examples +knots libressl test upnp +wallet zeromq"
 
 DEPEND="
-	!libressl? ( dev-libs/openssl:0=[-bindist] )
-	libressl? ( dev-libs/libressl:0= )
+	>=dev-libs/boost-1.52.0:=[threads(+)]
 	dev-libs/libevent:=
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
 	dev-libs/univalue:=
-	>=dev-libs/boost-1.52.0:=[threads(+)]
+	virtual/bitcoin-leveldb
+	!libressl? ( dev-libs/openssl:0=[-bindist] )
+	libressl? ( dev-libs/libressl:0= )
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
 	zeromq? ( net-libs/zeromq:= )
-	virtual/bitcoin-leveldb
 "
 RDEPEND="${DEPEND}"
 

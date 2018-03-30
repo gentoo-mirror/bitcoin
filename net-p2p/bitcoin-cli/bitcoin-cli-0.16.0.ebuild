@@ -22,11 +22,11 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="+knots libressl"
 
 DEPEND="
-	!libressl? ( dev-libs/openssl:0=[-bindist] )
-	libressl? ( dev-libs/libressl:0= )
+	>=dev-libs/boost-1.52.0:=[threads(+)]
 	dev-libs/libevent:=
 	dev-libs/univalue:=
-	>=dev-libs/boost-1.52.0:=[threads(+)]
+	!libressl? ( dev-libs/openssl:0=[-bindist] )
+	libressl? ( dev-libs/libressl:0= )
 "
 RDEPEND="${DEPEND}"
 
