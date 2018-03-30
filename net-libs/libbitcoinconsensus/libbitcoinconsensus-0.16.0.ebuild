@@ -34,11 +34,11 @@ S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
 pkg_pretend() {
 	if use knots; then
-		einfo "You are building ${PN} from Bitcoin Knots."
-		einfo "For more information, see https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "You are building ${PN} from Bitcoin Knots."
+		elog "For more information, see https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
-		einfo "You are building ${PN} from Bitcoin Core."
-		einfo "For more information, see https://bitcoincore.org/en/2017/11/11/release-${PV}/"
+		elog "You are building ${PN} from Bitcoin Core."
+		elog "For more information, see https://bitcoincore.org/en/2017/11/11/release-${PV}/"
 	fi
 }
 
