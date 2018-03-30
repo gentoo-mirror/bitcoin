@@ -22,7 +22,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
-LANGS="af af:af_ZA am ar be:be_BY bg bg:bg_BG bn bs ca ca@valencia ca:ca_ES cs cs:cs_CZ cy da de de:de_DE el el:el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et:et_EE eu:eu_ES fa fa:fa_IR fi fr fr_CA fr:fr_FR gl he he:he_IL hi:hi_IN hr hu hu:hu_HU id id:id_ID is it it:it_IT ja ja:ja_JP ka kk:kk_KZ km:km_KH ko ko:ko_KR ku:ku_IQ ky la lt lv:lv_LV mk:mk_MK ml mn mr:mr_IN ms ms:ms_MY my nb nb:nb_NO ne nl nl:nl_NL pam pl pl:pl_PL pt pt_BR pt_PT ro ro:ro_RO ru ru:ru_RU si sk sl:sl_SI sn sq sr sr-Latn:sr@latin sv ta ta:ta_IN te th th:th_TH tr tr:tr_TR uk ur_PK uz@Cyrl vi vi:vi_VN zh zh:zh-Hans zh_CN zh_HK zh_TW"
 
 REQUIRED_USE="
 	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
@@ -64,28 +63,6 @@ DEPEND="${RDEPEND}
 		media-gfx/imagemagick[png]
 	)
 "
-
-declare -A LANG2USE USE2LANGS
-bitcoin_langs_prep() {
-	local lang l10n
-	for lang in ${LANGS}; do
-		l10n="${lang/:*/}"
-		l10n="${l10n/[@_]/-}"
-		lang="${lang/*:/}"
-		LANG2USE["${lang}"]="${l10n}"
-		USE2LANGS["${l10n}"]+=" ${lang}"
-	done
-}
-bitcoin_langs_prep
-
-bitcoin_lang2use() {
-	local l
-	for l; do
-		echo l10n_${LANG2USE["${l}"]}
-	done
-}
-
-IUSE+=" $(bitcoin_lang2use ${!LANG2USE[@]})"
 
 DOCS=( doc/bips.md doc/files.md doc/release-notes.md )
 
@@ -136,32 +113,6 @@ src_prepare() {
 	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
 
 	sed -i 's/^\(Icon=\).*$/\1bitcoin-qt/;s/^\(Categories=.*\)$/\1P2P;Network;Qt;/' contrib/debian/bitcoin-qt.desktop || die
-
-	local filt= yeslang= nolang= lan ts x
-
-	for lan in $LANGS; do
-		lan="${lan/*:/}"
-		if [ ! -e src/qt/locale/bitcoin_$lan.ts ]; then
-			die "Language '$lan' no longer supported. Ebuild needs update."
-		fi
-	done
-
-	for ts in src/qt/locale/*.ts
-	do
-		x="${ts/*bitcoin_/}"
-		x="${x/.ts/}"
-		if ! use "$(bitcoin_lang2use "$x")"; then
-			nolang="$nolang $x"
-			rm "$ts" || die
-			filt="$filt\\|$x"
-		else
-			yeslang="$yeslang $x"
-		fi
-	done
-	filt="bitcoin_\\(${filt:2}\\)\\.\(qm\|ts\)"
-	sed "/${filt}/d" -i 'src/qt/bitcoin_locale.qrc' || die
-	sed "s/locale\/${filt}/bitcoin.qrc/" -i 'src/Makefile.qt.include' || die
-	einfo "Languages -- Enabled:$yeslang -- Disabled:$nolang"
 
 	eautoreconf
 	rm -r src/leveldb src/secp256k1 || die
