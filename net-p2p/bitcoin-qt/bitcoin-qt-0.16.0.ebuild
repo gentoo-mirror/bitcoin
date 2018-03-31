@@ -21,11 +21,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
-IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 +http test +tor upnp +wallet zeromq"
+IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 test upnp +wallet zeromq"
 
-REQUIRED_USE="
-	http? ( libevent ) tor? ( libevent ) libevent? ( http tor )
-"
 RDEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
@@ -180,7 +177,7 @@ update_caches() {
 pkg_postinst() {
 	update_caches
 
-	if use tor; then
+	if use libevent; then
 		elog "To have ${PN} automatically use Tor when it's running, be sure your"
 		elog "'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup"
 		elog "correctly, and add your user to the 'tor' user group."
