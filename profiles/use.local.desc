@@ -65,7 +65,7 @@ net-p2p/bitcoin-qt:l10n_es-UY - Spanish (Uruguay)
 net-p2p/bitcoin-qt:l10n_es-VE - Spanish (Venezuela)
 net-p2p/bitcoin-qt:l10n_pam - Kapampangan
 net-p2p/bitcoin-qt:l10n_sn - Shona
-net-p2p/bitcoin-qt:libevent - Use dev-libs/libevent
+net-p2p/bitcoin-qt:libevent - Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration
 net-p2p/bitcoin-qt:linguas_sn - Shona locale
 net-p2p/bitcoin-qt:qrcode - Enable generation of QR Codes for receiving payments
 net-p2p/bitcoin-qt:tor - Enable automatic configuration of a Tor hidden service
