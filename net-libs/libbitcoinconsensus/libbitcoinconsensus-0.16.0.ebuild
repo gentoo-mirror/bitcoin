@@ -1,62 +1,58 @@
-# Copyright 2010-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 inherit autotools
 
-MyPV="${PV/_/}"
-MyPN="bitcoin"
-MyP="${MyPN}-${MyPV}"
 BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
-KNOTS_P="${MyPN}-${KNOTS_PV}"
-
-IUSE="+asm +knots libressl"
+KNOTS_P="bitcoin-${KNOTS_PV}"
 
 DESCRIPTION="Bitcoin Core consensus library"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
+SRC_URI="
+	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
+	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+"
+
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+IUSE="+asm +knots libressl"
 
-SRC_URI="
-	https://github.com/${MyPN}/${MyPN}/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> ${MyPN}-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
-"
-CORE_DESC="https://bitcoincore.org/en/2017/11/11/release-${PV}/"
-KNOTS_DESC="https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
-
-RDEPEND="
+DEPEND="
+	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
-	>=dev-libs/libsecp256k1-0.0.0_pre20151118[recovery]
 "
-DEPEND="${RDEPEND}"
+RDEPEND="${DEPEND}"
 
 DOCS=( doc/bips.md doc/release-notes.md doc/shared-libraries.md )
 
-S="${WORKDIR}/${MyPN}-${BITCOINCORE_COMMITHASH}"
+S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
 pkg_pretend() {
 	if use knots; then
-		einfo "You are building ${PN} from Bitcoin Knots."
-		einfo "For more information, see ${KNOTS_DESC}"
+		elog "You are building ${PN} from Bitcoin Knots."
+		elog "For more information, see:"
+		elog "https://bitcoinknots.org/files/0.16.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
-		einfo "You are building ${PN} from Bitcoin Core."
-		einfo "For more information, see ${CORE_DESC}"
+		elog "You are building ${PN} from Bitcoin Core."
+		elog "For more information, see:"
+		elog "https://bitcoincore.org/en/2017/11/11/release-${PV}/"
 	fi
 }
 
-KNOTS_PATCH() { echo "${WORKDIR}/${KNOTS_P}.patches/${KNOTS_P}.$@.patch"; }
-
 src_prepare() {
-	eapply "$(KNOTS_PATCH syslibs)"
+	local knots_patchdir="${WORKDIR}/${KNOTS_P}.patches/"
+
+	eapply "${knots_patchdir}/${KNOTS_P}.syslibs.patch"
 
 	if use knots; then
-		eapply "$(KNOTS_PATCH f)"
-		eapply "$(KNOTS_PATCH branding)"
-		eapply "$(KNOTS_PATCH ts)"
+		eapply "${knots_patchdir}/${KNOTS_P}.f.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}.branding.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}.ts.patch"
 	fi
 
 	eapply_user

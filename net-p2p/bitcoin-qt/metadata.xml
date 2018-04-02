@@ -19,7 +19,7 @@
 		<flag name="l10n_es-VE">Spanish (Venezuela)</flag>
 		<flag name="l10n_pam">Kapampangan</flag>
 		<flag name="l10n_sn">Shona</flag>
-		<flag name="libevent">Use dev-libs/libevent</flag>
+		<flag name="libevent">Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration</flag>
 		<flag name="linguas_sn">Shona locale</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
 		<flag name="tor">Enable automatic configuration of a Tor hidden service</flag>

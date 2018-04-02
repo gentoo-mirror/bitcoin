@@ -4,13 +4,13 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use systemd user
+inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
 
 BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
-DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
+DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
@@ -20,23 +20,48 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="+asm +bitcoin_policy_rbf examples +knots libressl test upnp +wallet zeromq"
 
-DEPEND="
+IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 test upnp +wallet zeromq"
+
+RDEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
-	dev-libs/libevent:=
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
 	dev-libs/univalue:=
+	!qt5? (
+		dev-qt/qtcore:4[ssl]
+		dev-qt/qtgui:4
+	)
+	qt5? (
+		dev-qt/qtcore:5
+		dev-qt/qtgui:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtwidgets:5
+	)
 	virtual/bitcoin-leveldb
+	bip70? ( dev-libs/protobuf:= )
+	dbus? (
+		!qt5? ( dev-qt/qtdbus:4 )
+		qt5? ( dev-qt/qtdbus:5 )
+	)
+	libevent? ( dev-libs/libevent:= )
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
+	qrcode? (
+		media-gfx/qrencode:=
+	)
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
 	zeromq? ( net-libs/zeromq:= )
 "
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}
+	qt5? ( dev-qt/linguist-tools:5 )
+	knots? (
+		gnome-base/librsvg
+		media-gfx/imagemagick[png]
+	)
+"
 
-DOCS=( doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/REST-interface.md doc/tor.md )
+DOCS=( doc/bips.md doc/files.md doc/release-notes.md )
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
@@ -60,13 +85,11 @@ pkg_pretend() {
 	fi
 }
 
-pkg_setup() {
-	enewgroup bitcoin
-	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
-}
-
 src_prepare() {
-	sed -i 's/^\(complete -F _bitcoind bitcoind\) bitcoin-qt$/\1/' contrib/${PN}.bash-completion || die
+	sed -i 's/^\(complete -F _bitcoind \)bitcoind \(bitcoin-qt\)$/\1\2/' contrib/bitcoind.bash-completion || die
+
+	# Save the generic icon for later
+	cp src/qt/res/src/bitcoin.svg bitcoin128.svg || die
 
 	local knots_patchdir="${WORKDIR}/${KNOTS_P}.patches/"
 
@@ -76,6 +99,7 @@ src_prepare() {
 		eapply "${knots_patchdir}/${KNOTS_P}.f.patch"
 		eapply "${knots_patchdir}/${KNOTS_P}.branding.patch"
 		eapply "${knots_patchdir}/${KNOTS_P}.ts.patch"
+		eapply "${FILESDIR}/${P}-fix_mempoolstats.patch"
 	fi
 
 	eapply_user
@@ -88,6 +112,11 @@ src_prepare() {
 	mkdir -p src/obj || die
 	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
 
+	if use knots; then
+		sed -i 's/^\(Icon=\).*$/\1bitcoinknots/' contrib/debian/bitcoin-qt.desktop || die
+	fi
+	sed -i 's/^\(Categories=.*\)$/\1P2P;Network;Qt;/' contrib/debian/bitcoin-qt.desktop || die
+
 	eautoreconf
 	rm -r src/leveldb src/secp256k1 || die
 }
@@ -95,20 +124,21 @@ src_prepare() {
 src_configure() {
 	local my_econf=(
 		$(use_enable asm)
-		--without-qtdbus
-		--with-libevent
-		--without-qrencode
+		$(use_enable bip70)
+		$(use_with dbus qtdbus)
+		$(use_with libevent)
+		$(use_with qrcode qrencode)
 		$(use_with upnp miniupnpc)
 		$(use_enable upnp upnp-default)
 		$(use_enable test tests)
 		$(use_enable wallet)
 		$(use_enable zeromq zmq)
-		--with-daemon
+		--with-gui=$(usex qt5 qt5 qt4)
 		--disable-util-cli
 		--disable-util-tx
 		--disable-bench
 		--without-libs
-		--without-gui
+		--without-daemon
 		--disable-ccache
 		--disable-static
 		--with-system-leveldb
@@ -123,41 +153,43 @@ src_install() {
 
 	rm -f "${ED%/}/usr/bin/test_bitcoin" || die
 
-	insinto /etc/bitcoin
-	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
-	fowners bitcoin:bitcoin /etc/bitcoin/bitcoin.conf
-	fperms 600 /etc/bitcoin/bitcoin.conf
+	insinto /usr/share/icons/hicolor/scalable/apps/
+	doins bitcoin128.svg
+	if use knots; then
+		newins src/qt/res/src/bitcoin.svg bitcoinknots.svg
+	fi
 
-	newconfd "contrib/init/bitcoind.openrcconf" ${PN}
-	newinitd "contrib/init/bitcoind.openrc" ${PN}
-	systemd_newunit "${FILESDIR}/bitcoind.service-r1" "bitcoind.service"
+	insinto /usr/share/applications
+	newins "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
 
-	keepdir /var/lib/bitcoin/.bitcoin
-	fperms 700 /var/lib/bitcoin
-	fowners bitcoin:bitcoin /var/lib/bitcoin/
-	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
-	dosym ../../../../etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
-
-	doman "${FILESDIR}/bitcoin.conf.5"
+	use libevent && dodoc doc/REST-interface.md doc/tor.md
 
 	use zeromq && dodoc doc/zmq.md
 
-	newbashcomp contrib/${PN}.bash-completion ${PN}
+	newbashcomp contrib/bitcoind.bash-completion ${PN}
 
-	if use examples; then
-		docinto examples
-		dodoc -r contrib/{linearize,qos,tidy_datadir.sh}
-		use zeromq && dodoc -r contrib/zmq
+	if use kde; then
+		insinto /usr/share/kservices5
+		doins contrib/debian/bitcoin-qt.protocol
+		dosym "../../kservices5/bitcoin-qt.protocol" "/usr/share/kde4/services/bitcoin-qt.protocol"
 	fi
+}
 
-	insinto /etc/logrotate.d
-	newins "${FILESDIR}/bitcoind.logrotate-r1" bitcoind
+update_caches() {
+	gnome2_icon_cache_update
+	xdg_desktop_database_update
 }
 
 pkg_postinst() {
-	elog "To have ${PN} automatically use Tor when it's running, be sure your"
-	elog "'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup"
-	elog "correctly, and:"
-	elog "- Using an init script: add the 'bitcoin' user to the 'tor' user group."
-	elog "- Running bitcoind directly: add that user to the 'tor' user group."
+	update_caches
+
+	if use libevent; then
+		elog "To have ${PN} automatically use Tor when it's running, be sure your"
+		elog "'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup"
+		elog "correctly, and add your user to the 'tor' user group."
+	fi
+}
+
+pkg_postrm() {
+	update_caches
 }
