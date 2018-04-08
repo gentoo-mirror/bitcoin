@@ -1,20 +1,30 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+PYTHON_REQ_USE="ssl"
 
-inherit eutils fdo-mime python-single-r1
+if [[ ${PV} == 9999 ]]; then
+	SRC_URI=""
+	EGIT_REPO_URI="git://github.com/goatpig/BitcoinArmory.git"
+	GIT_SCM=git-r3
+	KEYWORDS=""
+else
+	SRC_URI="https://github.com/goatpig/BitcoinArmory/releases/download/v${PV}/${PN}_${PV}-src.tar.gz"
+	S="${WORKDIR}/${PN}_${PV}-src"
+	KEYWORDS="~x86 ~amd64"
+fi
+
+inherit eutils fdo-mime python-single-r1 ${GIT_SCM}
+unset GIT_SCM
 
 DESCRIPTION="Armory is a Bitcoin client, offering a dozen innovative features not found anywhere else."
 HOMEPAGE="https://github.com/goatpig/BitcoinArmory"
-SRC_URI="https://github.com/goatpig/BitcoinArmory/releases/download/v${PV}/${PN}_${PV}-src.tar.gz"
-S="${WORKDIR}/${PN}_${PV}-src"
 
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 COMMON_DEPEND="${PYTHON_DEPS}
