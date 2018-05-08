@@ -1,0 +1,11 @@
+DEFINED_PHASES=configure install unpack
+DEPEND==dev-libs/jansson-1* dev-libs/libevent dev-libs/libmemcached dev-libs/openssl net-misc/curl sys-libs/zlib longpolling? ( dev-python/pycrypto ) mysql? ( dev-db/mysql ) postgres? ( dev-db/postgresql-server ) sqlite? ( dev-db/sqlite ) dev-vcs/git
+DESCRIPTION=Bitcoin crypto-currency pooled mining proxy
+EAPI=3
+HOMEPAGE=https://github.com/jgarzik/pushpool
+IUSE=+longpolling mysql postgres sqlite
+LICENSE=GPL-2 MIT
+RDEPEND==dev-libs/jansson-1* dev-libs/libevent dev-libs/libmemcached dev-libs/openssl net-misc/curl sys-libs/zlib longpolling? ( dev-python/pycrypto ) mysql? ( dev-db/mysql ) postgres? ( dev-db/postgresql-server ) sqlite? ( dev-db/sqlite )
+SLOT=0
+_eclasses_=git-2	45ff482316b52b3f96ff6b7309b77f03
+_md5_=3eee182887988ec5079ae79dcb9b83af
