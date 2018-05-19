@@ -30,8 +30,7 @@ IUSE=""
 COMMON_DEPEND="${PYTHON_DEPS}
 			   dev-libs/crypto++
 			   dev-libs/leveldb
-			   dev-python/PyQt4[X]
-			   dev-python/twisted-core"
+			   dev-python/PyQt4[X]"
 
 DEPEND="${COMMON_DEPEND}
 		>=dev-lang/swig-3.0.0
