@@ -1,5 +1,5 @@
 DEFINED_PHASES=compile configure install prepare unpack
-DEPEND=dev-libs/protobuf dev-db/sqlite dev-libs/libbase58 dev-libs/libsodium dev-libs/libbacktrace dev-libs/libsecp256k1[ecdh,recovery] net-libs/libwally-core test? ( dev-python/pytest ) >=dev-vcs/git-1.8.2.1
+DEPEND=dev-libs/protobuf dev-db/sqlite dev-libs/libbase58 dev-libs/libsodium dev-libs/libbacktrace dev-libs/libsecp256k1[ecdh,recovery] net-libs/libwally-core test? ( dev-python/pytest ) >=dev-vcs/git-1.8.2.1[curl]
 DESCRIPTION=An implementation of Bitcoin's Lightning Network in C
 EAPI=6
 HOMEPAGE=https://github.com/ElementsProject/lightning
@@ -7,5 +7,5 @@ IUSE=test
 LICENSE=MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3
 RDEPEND=dev-libs/protobuf dev-db/sqlite dev-libs/libbase58 dev-libs/libsodium dev-libs/libbacktrace dev-libs/libsecp256k1[ecdh,recovery] net-libs/libwally-core
 SLOT=0
-_eclasses_=git-r3	af51ccfceeb403ab80f1bf9209d372c8
+_eclasses_=git-r3	8f6de46b0aa318aea0e8cac62ece098b
 _md5_=929870202738c890397f752512efda4f
