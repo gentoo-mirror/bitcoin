@@ -8,5 +8,5 @@ KEYWORDS=~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux
 LICENSE=MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3
 RDEPEND=dev-libs/protobuf dev-db/sqlite dev-libs/libbase58 dev-libs/libsodium dev-libs/libbacktrace dev-libs/libsecp256k1[ecdh,recovery] net-libs/libwally-core
 SLOT=0
-_eclasses_=git-r3	8f6de46b0aa318aea0e8cac62ece098b
+_eclasses_=git-r3	918d6a744039c29af2cadc7317459765
 _md5_=58cf050611190a1615588e62f6f60a70
