@@ -1,7 +1,7 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 inherit autotools eutils
 
@@ -34,6 +34,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
 
 src_prepare() {
+	default
 	eautoreconf
 }
 
