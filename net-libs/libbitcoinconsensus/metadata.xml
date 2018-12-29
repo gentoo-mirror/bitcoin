@@ -5,6 +5,10 @@
 		<email>luke_gentoo_bitcoin@dashjr.org</email>
 		<name>Luke Dashjr</name>
 	</maintainer>
+	<use>
+		<flag name="asm">Enable assembly for optimization</flag>
+		<flag name="knots">Build enhanced Bitcoin Knots version, rather than Bitcoin Core</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">bitcoin/bitcoin</remote-id>
 		<remote-id type="github">bitcoinknots/bitcoin</remote-id>
