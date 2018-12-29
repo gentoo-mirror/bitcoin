@@ -21,6 +21,7 @@
 		<flag name="libevent">Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration</flag>
 		<flag name="linguas_sn">Shona locale</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
+		<flag name="system-leveldb">Use the system-wide dev-libs/leveldb instead of bundled</flag>
 		<flag name="tor">Enable automatic configuration of a Tor hidden service</flag>
 		<flag name="upnp">Enable Universal Plug and Play</flag>
 		<flag name="wallet">Enable wallet support</flag>

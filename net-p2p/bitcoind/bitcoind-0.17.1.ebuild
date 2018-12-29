@@ -20,14 +20,14 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +bitcoin_policy_rbf examples +knots libressl test upnp +wallet zeromq"
+IUSE="+asm +bitcoin_policy_rbf examples +knots libressl system-leveldb test upnp +wallet zeromq"
 
 DEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
 	dev-libs/libevent:=
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
 	>=dev-libs/univalue-1.0.4:=
-	virtual/bitcoin-leveldb
+	system-leveldb? ( virtual/bitcoin-leveldb )
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
@@ -89,7 +89,9 @@ src_prepare() {
 	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
 
 	eautoreconf
-	rm -r src/leveldb src/secp256k1 || die
+	if use system-leveldb; then
+		rm -r src/leveldb src/secp256k1 || die
+	fi
 }
 
 src_configure() {
@@ -110,7 +112,7 @@ src_configure() {
 		--without-gui
 		--disable-ccache
 		--disable-static
-		--with-system-leveldb
+		$(use_with system-leveldb)
 		--with-system-libsecp256k1
 		--with-system-univalue
 	)
