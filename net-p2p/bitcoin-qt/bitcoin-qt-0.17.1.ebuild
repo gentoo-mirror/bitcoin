@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +knots libressl +qrcode test upnp +wallet zeromq"
+IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +knots libressl +qrcode system-leveldb test upnp +wallet zeromq"
 
 RDEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
@@ -31,7 +31,7 @@ RDEPEND="
 	dev-qt/qtgui:5
 	dev-qt/qtnetwork:5
 	dev-qt/qtwidgets:5
-	virtual/bitcoin-leveldb
+	system-leveldb? ( virtual/bitcoin-leveldb )
 	bip70? ( dev-libs/protobuf:= )
 	dbus? ( dev-qt/qtdbus:5 )
 	dev-libs/libevent:=
@@ -103,7 +103,9 @@ src_prepare() {
 	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
 
 	eautoreconf
-	rm -r src/leveldb src/secp256k1 || die
+	if use system-leveldb; then
+		rm -r src/leveldb src/secp256k1 || die
+	fi
 }
 
 src_configure() {
@@ -125,7 +127,7 @@ src_configure() {
 		--without-daemon
 		--disable-ccache
 		--disable-static
-		--with-system-leveldb
+		$(use_with system-leveldb)
 		--with-system-libsecp256k1
 		--with-system-univalue
 	)
