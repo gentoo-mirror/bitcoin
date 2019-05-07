@@ -1,0 +1,6 @@
+LIGHTNINGD_CONF="/etc/lightning/config"
+LIGHTNINGD_HOME="/var/lib/lightning"
+LIGHTNINGD_LOGFILE="/var/log/lightningd.log"
+LIGHTNINGD_PIDFILE="${LIGHTNINGD_HOME}/lightningd.pid"
+LIGHTNINGD_RPCFILE="${LIGHTNINGD_HOME}/lightning-rpc"
+LIGHTNINGD_USER="lightning:lightning"
