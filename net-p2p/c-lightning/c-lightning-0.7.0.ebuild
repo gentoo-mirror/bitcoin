@@ -18,7 +18,7 @@ SRC_URI="https://github.com/ElementsProject/${MyPN}/archive/v${PV}.tar.gz -> ${P
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="python test"
+IUSE="developer python test"
 
 RDEPEND="
 	dev-libs/protobuf
@@ -71,7 +71,6 @@ src_configure() {
 	CLIGHTNING_MAKEOPTS=(
 		VERSION="${PV}"
 		DISTRO=Gentoo
-		DEVELOPER=
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		CWARNFLAGS=
@@ -92,7 +91,7 @@ src_configure() {
 
 	./configure \
 		--prefix="${EPREFIX}"/usr \
-		--disable-developer \
+		$(use_enable developer) \
 		--disable-experimental-features \
 		--disable-compat \
 		--disable-valgrind \
