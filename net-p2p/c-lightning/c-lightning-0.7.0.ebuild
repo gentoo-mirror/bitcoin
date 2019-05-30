@@ -1,9 +1,12 @@
-# Copyright 2010-2017 Gentoo Foundation
+# Copyright 2010-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit toolchain-funcs user
+PYTHON_COMPAT=( python{3_5,3_6,3_7} )
+DISTUTILS_OPTIONAL=1
+
+inherit distutils-r1 toolchain-funcs user
 
 MyPN=lightning
 
@@ -15,7 +18,7 @@ SRC_URI="https://github.com/ElementsProject/${MyPN}/archive/v${PV}.tar.gz -> ${P
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="test"
+IUSE="python test"
 
 RDEPEND="
 	dev-libs/protobuf
@@ -25,10 +28,15 @@ RDEPEND="
 	dev-libs/libbacktrace
 	dev-libs/libsecp256k1[ecdh,recovery]
 	net-libs/libwally-core
+	python? ( ${PYTHON_DEPS} )
 "
 DEPEND="${RDEPEND}
 	test? ( dev-python/pytest )
 	sys-apps/sed
+	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
+"
+REQUIRED_USE="
+	python? ( ${PYTHON_REQUIRED_USE} )
 "
 # FIXME: bundled deps: ccan
 
@@ -50,6 +58,12 @@ src_unpack() {
 src_prepare() {
 	sed -e '/configdir_register_opts(.*&lightning_dir,/a\	lightning_dir = tal_strdup(ctx, "/var/lib/lightning");' -i cli/lightning-cli.c
 	default
+
+	if use python ; then
+		pushd contrib/pylightning >/dev/null || die
+		distutils-r1_src_prepare
+		popd >/dev/null || die
+	fi
 }
 
 src_configure() {
@@ -87,10 +101,22 @@ src_configure() {
 
 	# hack to suppress tools/refresh-submodules.sh
 	mkdir .refresh-submodules
+
+	if use python ; then
+		pushd contrib/pylightning >/dev/null || die
+		distutils-r1_src_configure
+		popd >/dev/null || die
+	fi
 }
 
 src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}"
+
+	if use python ; then
+		pushd contrib/pylightning >/dev/null || die
+		distutils-r1_src_compile
+		popd >/dev/null || die
+	fi
 }
 
 src_install() {
@@ -104,6 +130,12 @@ src_install() {
 
 	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
+
+	if use python ; then
+		pushd contrib/pylightning >/dev/null || die
+		distutils-r1_src_install
+		popd >/dev/null || die
+	fi
 }
 
 pkg_postinst() {
