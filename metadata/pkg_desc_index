@@ -13,4 +13,3 @@ net-p2p/namecoin 0.3.75 0.3.76 0.3.80: A P2P network based domain name system
 net-p2p/pushpool 0.5.1: Bitcoin crypto-currency pooled mining proxy
 virtual/bitcoin-leveldb 0 0-r1: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
 virtual/python-serviceproxy 0: Virtual for jsonrpc.proxy.ServiceProxy
-x11-libs/amd-adl-sdk 4.0: API to access display driver functionality for ATI graphics cards
