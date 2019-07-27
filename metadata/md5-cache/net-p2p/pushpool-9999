@@ -5,7 +5,8 @@ EAPI=3
 HOMEPAGE=https://github.com/jgarzik/pushpool
 IUSE=+longpolling mysql postgres sqlite
 LICENSE=GPL-2 MIT
+PROPERTIES=live
 RDEPEND==dev-libs/jansson-1* dev-libs/libevent dev-libs/libmemcached dev-libs/openssl net-misc/curl sys-libs/zlib longpolling? ( dev-python/pycrypto ) mysql? ( dev-db/mysql ) postgres? ( dev-db/postgresql-server ) sqlite? ( dev-db/sqlite )
 SLOT=0
-_eclasses_=git-2	249c1a0962573f4ce2c28f0d5b6b35d4
+_eclasses_=git-2	3aabf18eba60687bbe6855eba271f688
 _md5_=3eee182887988ec5079ae79dcb9b83af
