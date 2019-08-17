@@ -1,0 +1,18 @@
+diff -Naur a/common/configdir.c b/common/configdir.c
+--- a/common/configdir.c	2019-08-17 04:38:43.000000000 +0000
++++ b/common/configdir.c	2019-08-17 17:48:20.353956120 +0000
+@@ -13,13 +13,7 @@
+ 
+ char *default_configdir(const tal_t *ctx)
+ {
+-	char *path;
+-	const char *env = getenv("HOME");
+-	if (!env)
+-		return ".";
+-
+-	path = path_join(ctx, env, ".lightning");
+-	return path;
++	return tal_strdup(ctx, "/var/lib/lightning");
+ }
+ 
+ char *default_rpcfile(const tal_t *ctx)

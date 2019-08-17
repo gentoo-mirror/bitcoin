@@ -56,7 +56,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	sed -e '/configdir_register_opts(.*&lightning_dir,/a\	lightning_dir = tal_strdup(ctx, "/var/lib/lightning");' -i cli/lightning-cli.c
+	eapply "${FILESDIR}/0.7.2-FHS-lightning_dir.patch"
 	default
 
 	if use python ; then
