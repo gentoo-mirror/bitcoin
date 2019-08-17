@@ -23,7 +23,7 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/${PN}-release_${PV}"
 
 src_prepare() {
-	eapply "${FILESDIR}/0.6.9-sys_libsecp256k1.patch"
+	eapply "${FILESDIR}/0.7.3-sys_libsecp256k1.patch"
 	sed -i 's/\(#[[:space:]]*include[[:space:]]\+\)"secp256k1\/include\/\(.*\)"/\1<\2>/' src/*.{c,h} || die
 	rm -r src/secp256k1
 	default

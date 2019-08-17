@@ -69,8 +69,8 @@ diff -Naur a/configure.ac b/configure.ac
  
  AC_OUTPUT
 diff -Naur a/src/Makefile.am b/src/Makefile.am
---- a/src/Makefile.am	2019-04-19 14:50:31.000000000 +0000
-+++ b/src/Makefile.am	2019-04-23 19:28:38.000000000 +0000
+--- a/src/Makefile.am	2019-07-18 13:46:42.000000000 +0000
++++ b/src/Makefile.am	2019-08-17 17:18:11.350243468 +0000
 @@ -13,7 +13,6 @@
  include_HEADERS += $(top_srcdir)/include/wally_bip39.h
  include_HEADERS += $(top_srcdir)/include/wally_core.h
@@ -79,20 +79,21 @@ diff -Naur a/src/Makefile.am b/src/Makefile.am
  include_HEADERS += $(top_srcdir)/include/wally_script.h
  include_HEADERS += $(top_srcdir)/include/wally_transaction.h
  
-@@ -172,7 +171,6 @@
-     bip38.c \
+@@ -173,7 +172,6 @@
      bip39.c \
      bech32.c \
+     ecdh.c \
 -    elements.c \
      hex.c \
      hmac.c \
      internal.c \
-@@ -197,14 +195,17 @@
+@@ -199,15 +197,18 @@
      include/wally_bip39.h \
      include/wally_core.h \
      include/wally_crypto.h \
 -    include/wally_elements.h \
      include/wally_script.h \
+     include/wally_symmetric.h \
      include/wally_transaction.h
  
 -libwallycore_la_CFLAGS = -I$(top_srcdir) -Iccan -DWALLY_CORE_BUILD=1 $(AM_CFLAGS)
