@@ -115,6 +115,10 @@ bitcoin-datadir=/var/lib/bitcoind
 #commit-fee-min=PERCENT
 #commit-fee-max=PERCENT
 
+# Number of HTLCs one channel can handle concurrently in each direction. Should
+# be between 1 and 483. Default: 30.
+#max-concurrent-htlcs=INTEGER
+
 # The number of blocks between incoming payments and outgoing payments: this
 # needs to be enough to make sure that if we have to, we can close the outgoing
 # payment before the incoming, or redeem the incoming once the outgoing is
