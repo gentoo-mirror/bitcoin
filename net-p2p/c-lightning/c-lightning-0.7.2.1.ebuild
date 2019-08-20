@@ -31,8 +31,8 @@ RDEPEND="
 	python? ( ${PYTHON_DEPS} )
 "
 DEPEND="${RDEPEND}
+	dev-python/mako
 	test? ( dev-python/pytest )
-	sys-apps/sed
 	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
 "
 REQUIRED_USE="
