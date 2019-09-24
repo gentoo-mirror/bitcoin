@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DB_VER="4.8"
 inherit autotools bash-completion-r1 db-use systemd user
@@ -39,6 +39,10 @@ RDEPEND="${DEPEND}"
 DOCS=( doc/bips.md doc/bitcoin-conf.md doc/descriptors.md doc/files.md doc/JSON-RPC-interface.md doc/psbt.md doc/reduce-traffic.md doc/release-notes.md doc/REST-interface.md doc/tor.md )
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
+
+PATCHES=(
+	"${FILESDIR}/${P}-raii_event_tests-always.patch"
+)
 
 pkg_pretend() {
 	if use knots; then
@@ -79,7 +83,7 @@ src_prepare() {
 		eapply "${FILESDIR}/${PV}-daemon-fix.patch"
 	fi
 
-	eapply_user
+	default
 
 	if ! use bitcoin_policy_rbf; then
 		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
