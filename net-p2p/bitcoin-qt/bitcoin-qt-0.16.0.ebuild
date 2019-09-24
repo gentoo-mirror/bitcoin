@@ -147,7 +147,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED%/}/usr/bin/test_bitcoin" || die
+	rm -f "${ED}/usr/bin/test_bitcoin" || die
 
 	insinto /usr/share/pixmaps
 	if use knots; then
