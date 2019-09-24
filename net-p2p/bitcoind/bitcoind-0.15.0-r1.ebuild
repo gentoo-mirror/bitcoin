@@ -28,6 +28,7 @@ SRC_URI="
 CORE_DESC="https://bitcoincore.org/en/2017/09/01/release-${PV}/"
 KNOTS_DESC="https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
+RESTRICT="!test? ( test )"
 RDEPEND="
 	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
 	dev-libs/libevent

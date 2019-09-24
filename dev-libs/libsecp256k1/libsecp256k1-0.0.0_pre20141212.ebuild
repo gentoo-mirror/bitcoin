@@ -15,6 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm x86"
 IUSE="+asm doc endomorphism gmp test"
+RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( amd64 )

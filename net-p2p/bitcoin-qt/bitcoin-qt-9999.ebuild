@@ -14,6 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
 
+RESTRICT="!test? ( test )"
 RDEPEND="
 	dev-libs/protobuf
 	qrcode? (

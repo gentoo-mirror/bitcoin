@@ -12,6 +12,7 @@ DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
+RESTRICT="!test? ( test )"
 
 pkg_setup() {
 	enewgroup bitcoin
