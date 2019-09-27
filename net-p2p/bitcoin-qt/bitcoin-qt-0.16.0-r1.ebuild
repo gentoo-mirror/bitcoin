@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
+inherit autotools bash-completion-r1 db-use desktop gnome2-utils xdg-utils
 
 BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
@@ -162,8 +162,7 @@ src_install() {
 		newins src/qt/res/src/bitcoin.svg bitcoinknots.svg
 	fi
 
-	insinto /usr/share/applications
-	newins "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
+	newmenu "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
 
 	use libevent && dodoc doc/REST-interface.md doc/tor.md
 

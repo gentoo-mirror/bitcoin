@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
+inherit autotools bash-completion-r1 db-use desktop gnome2-utils xdg-utils
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -225,8 +225,7 @@ src_install() {
 	else
 		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
 	fi
-	insinto /usr/share/applications
-	doins "contrib/debian/bitcoin-qt.desktop"
+	domenu "contrib/debian/bitcoin-qt.desktop"
 
 	use libevent && dodoc doc/REST-interface.md doc/tor.md
 

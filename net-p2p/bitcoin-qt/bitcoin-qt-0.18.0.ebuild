@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
+inherit autotools bash-completion-r1 db-use desktop gnome2-utils xdg-utils
 
 BITCOINCORE_COMMITHASH="2472733a24a9364e4c6233ccd04166a26a68cc65"
 KNOTS_PV="${PV}.knots20190502"
@@ -150,11 +150,11 @@ src_install() {
 		newins src/qt/res/src/bitcoin.svg bitcoinknots.svg
 	fi
 
-	insinto /usr/share/applications
-	doins "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop"
+	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}"
 	if ! use knots; then
-		sed -i 's/Knots/Core/;s/^\(Icon=\).*$/\1bitcoin128/' "${D}/usr/share/applications/org.bitcoin.bitcoin-qt.desktop" || die
+		sed -i 's/Knots/Core/;s/^\(Icon=\).*$/\1bitcoin128/' "${T}/org.bitcoin.bitcoin-qt.desktop" || die
 	fi
+	domenu "${T}/org.bitcoin.bitcoin-qt.desktop"
 
 	use zeromq && dodoc doc/zmq.md
 

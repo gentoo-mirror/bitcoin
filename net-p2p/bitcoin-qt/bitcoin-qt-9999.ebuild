@@ -7,7 +7,7 @@ BITCOINCORE_IUSE="dbus kde +qrcode qt5 test upnp +wallet zeromq"
 LANGS="af af_ZA ar be_BY bg bg_BG ca ca@valencia ca_ES cs cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 BITCOINCORE_NEED_LEVELDB=1
 BITCOINCORE_NEED_LIBSECP256K1=1
-inherit bitcoincore eutils fdo-mime gnome2-utils kde4-functions git-2
+inherit bitcoincore desktop eutils fdo-mime gnome2-utils kde4-functions git-2
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 LICENSE="MIT"
@@ -83,8 +83,7 @@ src_install() {
 
 	insinto /usr/share/pixmaps
 	newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
-	insinto /usr/share/applications
-	doins "contrib/debian/bitcoin-qt.desktop"
+	domenu "contrib/debian/bitcoin-qt.desktop"
 
 	dodoc doc/assets-attribution.md doc/bips.md doc/tor.md
 	doman contrib/debian/manpages/bitcoin-qt.1
