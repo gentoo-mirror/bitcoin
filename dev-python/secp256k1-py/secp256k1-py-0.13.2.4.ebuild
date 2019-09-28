@@ -15,6 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 IUSE="ecdh +recovery schnorr test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	dev-libs/libsecp256k1[ecdh=,recovery=,schnorr(-)=]

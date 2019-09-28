@@ -1,13 +1,13 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use systemd user
+inherit autotools bash-completion-r1 db-use systemd
 
-BITCOINCORE_COMMITHASH="2472733a24a9364e4c6233ccd04166a26a68cc65"
-KNOTS_PV="${PV}.knots20190502"
+BITCOINCORE_COMMITHASH="fa27a0760792b251585f2a70eccdd547f915b7e4"
+KNOTS_PV="${PV}.knots20190920"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
@@ -20,10 +20,12 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +bitcoin_policy_rbf examples +knots libressl system-leveldb test upnp +wallet zeromq"
+IUSE="+asm examples +knots libressl system-leveldb test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 DEPEND="
+	acct-group/bitcoin
+	acct-user/bitcoin
 	>=dev-libs/boost-1.52.0:=[threads(+)]
 	dev-libs/libevent:=
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
@@ -51,19 +53,9 @@ pkg_pretend() {
 		elog "For more information, see:"
 		elog "https://bitcoincore.org/en/2019/05/02/release-${PV}/"
 	fi
-	if use bitcoin_policy_rbf; then
-		elog "Replace By Fee policy is enabled: Your node will preferentially mine and"
-		elog "relay transactions paying the highest fee, regardless of receive order."
-	else
-		elog "Replace By Fee policy is disabled: Your node will only accept the first"
-		elog "transaction seen consuming a conflicting input, regardless of fee"
-		elog "offered by later ones."
-	fi
-}
-
-pkg_setup() {
-	enewgroup bitcoin
-	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
+	elog "Replace By Fee policy is now always enabled by default: Your node will"
+	elog "preferentially mine and relay transactions paying the highest fee, regardless"
+	elog "of receive order. To disable RBF, set mempoolreplacement=never in bitcoin.conf"
 }
 
 src_prepare() {
@@ -79,11 +71,7 @@ src_prepare() {
 		eapply "${knots_patchdir}/${KNOTS_P}.ts.patch"
 	fi
 
-	eapply_user
-
-	if ! use bitcoin_policy_rbf; then
-		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
-	fi
+	default
 
 	echo '#!/bin/true' >share/genbuild.sh || die
 	mkdir -p src/obj || die

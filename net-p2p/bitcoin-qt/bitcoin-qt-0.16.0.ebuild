@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
+inherit autotools bash-completion-r1 db-use desktop gnome2-utils xdg-utils
 
 BITCOINCORE_COMMITHASH="4b4d7eb255ca8f9a94b92479e6061d129c91a991"
 KNOTS_PV="${PV}.knots20180322"
@@ -22,6 +22,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 test upnp +wallet zeromq"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
@@ -147,7 +148,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED%/}/usr/bin/test_bitcoin" || die
+	rm -f "${ED}/usr/bin/test_bitcoin" || die
 
 	insinto /usr/share/pixmaps
 	if use knots; then
@@ -155,8 +156,7 @@ src_install() {
 	else
 		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
 	fi
-	insinto /usr/share/applications
-	newins "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
+	newmenu "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
 
 	use libevent && dodoc doc/REST-interface.md doc/tor.md
 

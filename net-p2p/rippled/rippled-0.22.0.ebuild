@@ -16,6 +16,7 @@ LICENSE="ISC MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="test"
+RESTRICT="!test? ( test )"
 
 DEPEND="dev-libs/boost:0/1.55.0
 		dev-libs/openssl

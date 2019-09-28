@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
+inherit autotools bash-completion-r1 db-use desktop gnome2-utils xdg-utils
 
 BITCOINCORE_COMMITHASH="dac5d68fc6cf136e0d7b21b9ed4fa053d54e6059"
 KNOTS_PV="${PV}.knots20180721"
@@ -22,6 +22,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 
 IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +libevent +knots libressl +qrcode qt5 test upnp +wallet zeromq"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
@@ -145,7 +146,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED%/}/usr/bin/test_bitcoin" || die
+	rm -f "${ED}/usr/bin/test_bitcoin" || die
 
 	insinto /usr/share/icons/hicolor/scalable/apps/
 	doins bitcoin128.svg
@@ -153,8 +154,7 @@ src_install() {
 		newins src/qt/res/src/bitcoin.svg bitcoinknots.svg
 	fi
 
-	insinto /usr/share/applications
-	newins "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
+	newmenu "contrib/debian/bitcoin-qt.desktop" "org.bitcoin.bitcoin-qt.desktop"
 
 	use libevent && dodoc doc/REST-interface.md doc/tor.md
 

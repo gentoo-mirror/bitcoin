@@ -21,6 +21,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="+asm +bitcoin_policy_rbf examples +knots libressl test upnp +wallet zeromq"
+RESTRICT="!test? ( test )"
 
 DEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
@@ -121,7 +122,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED%/}/usr/bin/test_bitcoin" || die
+	rm -f "${ED}/usr/bin/test_bitcoin" || die
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf

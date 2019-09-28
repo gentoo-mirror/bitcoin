@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use gnome2-utils xdg-utils
+inherit autotools bash-completion-r1 db-use desktop gnome2-utils xdg-utils
 
 BITCOINCORE_COMMITHASH="ef70f9b52b851c7997a9f1a0834714e3eebc1fd8"
 KNOTS_PV="${PV}.knots20181229"
@@ -22,6 +22,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
 IUSE="+asm +bip70 +bitcoin_policy_rbf dbus kde +knots libressl +qrcode system-leveldb test upnp +wallet zeromq"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-libs/boost-1.52.0:=[threads(+)]
@@ -137,7 +138,7 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED%/}/usr/bin/test_bitcoin" || die
+	rm -f "${ED}/usr/bin/test_bitcoin" || die
 
 	insinto /usr/share/icons/hicolor/scalable/apps/
 	doins bitcoin128.svg
@@ -145,11 +146,11 @@ src_install() {
 		newins src/qt/res/src/bitcoin.svg bitcoinknots.svg
 	fi
 
-	insinto /usr/share/applications
-	doins "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop"
+	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}"
 	if ! use knots; then
-		sed -i 's/Knots/Core/;s/^\(Icon=\).*$/\1bitcoin128/' "${D}/usr/share/applications/org.bitcoin.bitcoin-qt.desktop" || die
+		sed -i 's/Knots/Core/;s/^\(Icon=\).*$/\1bitcoin128/' "${T}/org.bitcoin.bitcoin-qt.desktop" || die
 	fi
+	domenu "${T}/org.bitcoin.bitcoin-qt.desktop"
 
 	use zeromq && dodoc doc/zmq.md
 

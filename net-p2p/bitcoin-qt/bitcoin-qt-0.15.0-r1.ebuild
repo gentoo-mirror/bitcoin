@@ -4,7 +4,7 @@
 EAPI=6
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use fdo-mime gnome2-utils kde4-functions
+inherit autotools bash-completion-r1 db-use desktop fdo-mime gnome2-utils kde4-functions
 
 MyPV="${PV/_/}"
 MyPN="bitcoin"
@@ -30,6 +30,7 @@ SRC_URI="
 CORE_DESC="https://bitcoincore.org/en/2017/09/01/release-${PV}/"
 KNOTS_DESC="https://bitcoinknots.org/files/0.15.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 
+RESTRICT="!test? ( test )"
 RDEPEND="
 	!libressl? ( dev-libs/openssl:0[-bindist] ) libressl? ( dev-libs/libressl )
 	libevent? ( dev-libs/libevent )
@@ -180,8 +181,7 @@ src_install() {
 	else
 		newins "share/pixmaps/bitcoin.ico" "${PN}.ico"
 	fi
-	insinto /usr/share/applications
-	doins "contrib/debian/bitcoin-qt.desktop"
+	domenu "contrib/debian/bitcoin-qt.desktop"
 
 	use libevent && dodoc doc/REST-interface.md doc/tor.md
 
