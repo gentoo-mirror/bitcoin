@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use systemd user
+inherit autotools bash-completion-r1 db-use systemd
 
 BITCOINCORE_COMMITHASH="fa27a0760792b251585f2a70eccdd547f915b7e4"
 KNOTS_PV="${PV}.knots20190920"
@@ -24,6 +24,8 @@ IUSE="+asm examples +knots libressl system-leveldb test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 DEPEND="
+	acct-group/bitcoin
+	acct-user/bitcoin
 	>=dev-libs/boost-1.52.0:=[threads(+)]
 	dev-libs/libevent:=
 	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
@@ -54,11 +56,6 @@ pkg_pretend() {
 	elog "Replace By Fee policy is now always enabled by default: Your node will"
 	elog "preferentially mine and relay transactions paying the highest fee, regardless"
 	elog "of receive order. To disable RBF, set mempoolreplacement=never in bitcoin.conf"
-}
-
-pkg_setup() {
-	enewgroup bitcoin
-	enewuser bitcoin -1 -1 /var/lib/bitcoin bitcoin
 }
 
 src_prepare() {
