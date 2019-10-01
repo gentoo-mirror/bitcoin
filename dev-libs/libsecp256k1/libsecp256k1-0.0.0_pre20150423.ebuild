@@ -50,5 +50,5 @@ src_install() {
 	fi
 
 	emake DESTDIR="${D}" install
-	prune_libtool_files
+	find "${D}" -name '*.la' -delete || die
 }

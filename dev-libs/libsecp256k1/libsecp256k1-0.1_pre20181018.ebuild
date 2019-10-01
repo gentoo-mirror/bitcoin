@@ -67,5 +67,5 @@ src_configure() {
 src_install() {
 	dodoc README.md
 	emake DESTDIR="${D}" install
-	prune_libtool_files
+	find "${D}" -name '*.la' -delete || die
 }
