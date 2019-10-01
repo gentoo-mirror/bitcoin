@@ -1,19 +1,19 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit autotools eutils
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
-HOMEPAGE="https://github.com/bitcoin/${MyPN}"
-COMMITHASH="8225239f490f79842a5a3b82ad6cc8aa11d5208e"
-SRC_URI="https://github.com/bitcoin/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
+HOMEPAGE="https://github.com/bitcoin-core/${MyPN}"
+COMMITHASH="b19c000063be11018b4d1a6b0a85871ab9d0bdcf"
+SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 mips ppc x86 amd64-linux x86-linux"
+KEYWORDS=""
 IUSE="+asm ecdh endomorphism experimental gmp java +recovery test test-openssl"
 RESTRICT="!test? ( test )"
 
@@ -35,6 +35,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
 
 src_prepare() {
+	default
 	eautoreconf
 }
 
