@@ -18,7 +18,7 @@ IUSE=""
 
 # TODO: python, java, js, elements (needs libsecp256k1-zkp)
 
-DEPEND=">dev-libs/libsecp256k1-0.1_pre20181017"
+DEPEND=">dev-libs/libsecp256k1-0.1_pre20181017[ecdh]"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}-release_${PV}"
