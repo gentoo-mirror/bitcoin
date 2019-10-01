@@ -37,5 +37,4 @@ src_configure() {
 
 src_install() {
 	default
-	find "${D}" -name 'libsecp256k1*' -delete
 }
