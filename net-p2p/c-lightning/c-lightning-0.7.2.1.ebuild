@@ -27,7 +27,7 @@ RDEPEND="
 	dev-libs/libsodium
 	dev-libs/libbacktrace
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
-	net-libs/libwally-core
+	>=net-libs/libwally-core-0.7.4
 	python? ( ${PYTHON_DEPS} )
 "
 DEPEND="${RDEPEND}
