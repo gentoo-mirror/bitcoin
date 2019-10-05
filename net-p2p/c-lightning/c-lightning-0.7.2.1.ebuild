@@ -56,7 +56,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	eapply "${FILESDIR}/0.7.2-FHS-lightning_dir.patch"
 	default
 
 	if use python ; then
@@ -138,6 +137,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	elog "You must add your user(s) to the 'lightning' group to use lightning-cli"
-	elog "with the /etc/init.d/lightningd service."
+	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
+	elog " - Add your user(s) to the 'lightning' group."
+	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
 }
