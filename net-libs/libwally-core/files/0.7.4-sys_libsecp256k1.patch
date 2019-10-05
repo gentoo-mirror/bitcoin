@@ -1,7 +1,7 @@
 diff -Naur a/configure.ac b/configure.ac
---- a/configure.ac	2019-04-19 14:50:31.000000000 +0000
-+++ b/configure.ac	2019-04-23 19:27:17.000000000 +0000
-@@ -235,29 +235,37 @@
+--- a/configure.ac	2019-08-21 07:42:10.000000000 +0000
++++ b/configure.ac	2019-10-04 21:00:33.322141080 +0000
+@@ -246,29 +246,37 @@
      AC_CHECK_HEADERS([asm/page.h])
  fi
  
@@ -60,17 +60,17 @@ diff -Naur a/configure.ac b/configure.ac
  
  #
  # Python facilities
-@@ -396,7 +404,6 @@
+@@ -407,7 +415,6 @@
  export LD
  export LDFLAGS
- ac_configure_args="${ac_configure_args} --disable-shared ${secp_jni} --with-pic --with-bignum=no --enable-experimental --enable-module-ecdh --enable-module-rangeproof --enable-module-surjectionproof --enable-module-whitelist --enable-module-generator --enable-openssl-tests=no --enable-tests=no --enable-exhaustive-tests=no --enable-benchmark=no --disable-dependency-tracking"
+ ac_configure_args="${ac_configure_args} --disable-shared ${secp_jni} --with-pic --with-bignum=no --enable-experimental --enable-module-ecdh --enable-module-recovery --enable-module-rangeproof --enable-module-surjectionproof --enable-module-whitelist --enable-module-generator --enable-openssl-tests=no --enable-tests=no --enable-exhaustive-tests=no --enable-benchmark=no --disable-dependency-tracking"
 -AC_CONFIG_SUBDIRS([src/secp256k1])
  
  
  AC_OUTPUT
 diff -Naur a/src/Makefile.am b/src/Makefile.am
---- a/src/Makefile.am	2019-07-18 13:46:42.000000000 +0000
-+++ b/src/Makefile.am	2019-08-17 17:18:11.350243468 +0000
+--- a/src/Makefile.am	2019-08-21 07:42:10.000000000 +0000
++++ b/src/Makefile.am	2019-10-04 20:59:36.138670592 +0000
 @@ -13,7 +13,6 @@
  include_HEADERS += $(top_srcdir)/include/wally_bip39.h
  include_HEADERS += $(top_srcdir)/include/wally_core.h
@@ -110,8 +110,8 @@ diff -Naur a/src/Makefile.am b/src/Makefile.am
  TESTS =
  noinst_PROGRAMS =
 diff -Naur a/src/wrap_js/binding.gyp.tmpl b/src/wrap_js/binding.gyp.tmpl
---- a/src/wrap_js/binding.gyp.tmpl	2019-04-19 14:50:31.000000000 +0000
-+++ b/src/wrap_js/binding.gyp.tmpl	2019-04-23 19:29:16.000000000 +0000
+--- a/src/wrap_js/binding.gyp.tmpl	2019-08-21 07:42:10.000000000 +0000
++++ b/src/wrap_js/binding.gyp.tmpl	2019-10-04 20:59:36.138670592 +0000
 @@ -4,7 +4,7 @@
        "target_name": "deps",
        "sources": [ "src/combined.c", "src/combined_ccan.c", "src/combined_ccan2.c" ],
