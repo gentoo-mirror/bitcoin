@@ -21,6 +21,8 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer python test"
 
 RDEPEND="
+	acct-group/lightning
+	acct-user/lightning
 	dev-libs/protobuf
 	dev-db/sqlite
 	dev-libs/libbase58
@@ -41,11 +43,6 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 S=${WORKDIR}/${MyPN}-${PV}
-
-pkg_setup() {
-	enewgroup lightning
-	enewuser lightning -1 /sbin/nologin /var/lib/lightning lightning
-}
 
 src_unpack() {
 	unpack "${P}.tar.gz"
@@ -119,9 +116,6 @@ src_compile() {
 
 src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
-
-	keepdir /var/lib/lightning
-	fowners lightning:lightning /var/lib/lightning
 
 	insinto /etc/lightning
 	doins "${FILESDIR}/config"
