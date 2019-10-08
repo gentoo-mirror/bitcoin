@@ -1,0 +1,34 @@
+#!/sbin/openrc-run
+
+name="C-Lightning Daemon"
+description="Bitcoin Lightning Network node daemon"
+
+: ${LIGHTNINGD_CONF:=/etc/lightning/config}
+: ${LIGHTNINGD_HOME:=/var/lib/lightning}
+: ${LIGHTNINGD_LOGFILE=/var/log/${SVCNAME}.log}
+: ${LIGHTNINGD_PIDFILE:=${LIGHTNINGD_HOME}/${SVCNAME}.pid}
+: ${LIGHTNINGD_RPCFILE:=${LIGHTNINGD_HOME}/lightning-rpc}
+: ${LIGHTNINGD_USER:=lightning:lightning}
+
+command="/usr/bin/lightningd"
+command_args="
+	--conf=${LIGHTNINGD_CONF} --lightning-dir=${LIGHTNINGD_HOME}
+	${LIGHTNINGD_LOGFILE:+--log-file=${LIGHTNINGD_LOGFILE}}
+	--pid-file=${LIGHTNINGD_PIDFILE} --rpc-file=${LIGHTNINGD_RPCFILE}
+	--daemon"
+command_user="${LIGHTNINGD_USER}"
+directory="${LIGHTNINGD_HOME}"
+pidfile="${LIGHTNINGD_PIDFILE}"
+
+depend() {
+	need localmount net
+	use bitcoind dns
+}
+
+start_pre() {
+	[ -z "${LIGHTNINGD_LOGFILE}" ] || checkpath --file --owner="${LIGHTNINGD_USER}" --mode=0644 "${LIGHTNINGD_LOGFILE}"
+}
+
+start_post() {
+	[ -S "${LIGHTNINGD_RPCFILE}" ] && chmod g+rw "${LIGHTNINGD_RPCFILE}"
+}
