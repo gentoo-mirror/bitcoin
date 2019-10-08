@@ -87,3 +87,5 @@ net-p2p/bitcoind:system-leveldb - Use the system-wide dev-libs/leveldb instead o
 net-p2p/bitcoind:upnp - Enable Universal Plug and Play
 net-p2p/bitcoind:wallet - Enable wallet support
 net-p2p/bitcoind:zeromq - Report blocks and transactions via zeromq
+net-p2p/c-lightning:developer - Enable dangerous commands intended for developer use only.
+net-p2p/c-lightning:experimental - Enable dangerous experimental features.
