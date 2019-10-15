@@ -9,20 +9,23 @@ DISTUTILS_OPTIONAL=1
 inherit distutils-r1 toolchain-funcs user
 
 MyPN=lightning
+MyPV=${PV//_}
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="https://github.com/ElementsProject/${MyPN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
+SRC_URI="https://github.com/ElementsProject/${MyPN}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="developer experimental python test"
+#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+KEYWORDS=""
+IUSE="developer experimental postgres python test"
 
 RDEPEND="
 	acct-group/lightning
 	acct-user/lightning
+	postgres? ( dev-db/postgresql:* )
 	dev-db/sqlite
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
@@ -40,7 +43,7 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
-S=${WORKDIR}/${MyPN}-${PV}
+S=${WORKDIR}/${MyPN}-${MyPV}
 
 src_unpack() {
 	unpack "${P}.tar.gz"
@@ -52,6 +55,8 @@ src_unpack() {
 
 src_prepare() {
 	default
+
+	use postgres || sed -e $'/^var=HAVE_POSTGRES$/,/\bEND\b/{/^code=/a#error\n}' -i configure || die
 
 	if use python ; then
 		pushd contrib/pylightning >/dev/null || die
