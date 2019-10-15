@@ -23,12 +23,10 @@ IUSE="developer experimental python test"
 RDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	dev-libs/protobuf
 	dev-db/sqlite
-	dev-libs/libbase58
-	dev-libs/libsodium
-	dev-libs/libbacktrace
+	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
+	>=dev-libs/libsodium-1.0.16
 	>=net-libs/libwally-core-0.7.4
 	python? ( ${PYTHON_DEPS} )
 "
@@ -72,15 +70,14 @@ src_configure() {
 		CWARNFLAGS=
 		CDEBUGFLAGS="${CFLAGS}"
 		LIBSODIUM_HEADERS=
-		LIBBASE58_HEADERS=
 		LIBWALLY_HEADERS=
 		LIBSECP_HEADERS=
 		SUBMODULES=none
 		CC="$(tc-getCC)"
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)"
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
-		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $("$(tc-getPKG_CONFIG)" --cflags libbase58 libsodium wallycore libsecp256k1)"
-		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libbase58 libsodium wallycore libsecp256k1) -lbacktrace"
+		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
+		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
 		docdir="/usr/share/doc/${P}"
 	)
 	use test || CLIGHTNING_MAKEOPTS+=( all-programs )
