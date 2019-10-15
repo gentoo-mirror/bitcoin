@@ -67,14 +67,10 @@ src_configure() {
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
-		CWARNFLAGS=
-		CDEBUGFLAGS="${CFLAGS}"
 		LIBSODIUM_HEADERS=
 		LIBWALLY_HEADERS=
 		LIBSECP_HEADERS=
 		SUBMODULES=none
-		CC="$(tc-getCC)"
-		CONFIGURATOR_CC="$(tc-getBUILD_CC)"
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
 		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
@@ -83,6 +79,11 @@ src_configure() {
 	use test || CLIGHTNING_MAKEOPTS+=( all-programs )
 
 	./configure \
+		CC="$(tc-getCC)" \
+		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
+		CWARNFLAGS= \
+		CDEBUGFLAGS='-std=gnu11' \
+		COPTFLAGS="${CFLAGS}" \
 		--prefix="${EPREFIX}"/usr \
 		$(use_enable developer) \
 		$(use_enable experimental{,-features}) \
