@@ -14,25 +14,30 @@ SLOT="0"
 
 # Needs >libsecp256k1-0.1_pre20181017 keyworded first
 KEYWORDS=""
-IUSE=""
+IUSE="elements"
 
 # TODO: python, java, js, elements (needs libsecp256k1-zkp)
 
-DEPEND=">dev-libs/libsecp256k1-0.1_pre20181017[ecdh]"
+DEPEND="
+	|| ( >=dev-libs/libsecp256k1-0.1_pre20181018[ecdh] >=dev-libs/libsecp256k1-zkp-0.1_pre20190625[ecdh] )
+	elements? ( dev-libs/libsecp256k1-zkp[generator,rangeproof,surjectionproof] )
+"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}-release_${PV}"
 
 src_prepare() {
 	eapply "${FILESDIR}/0.7.4-sys_libsecp256k1.patch"
-	sed -i 's/\(#[[:space:]]*include[[:space:]]\+\)"secp256k1\/include\/\(.*\)"/\1<\2>/' src/*.{c,h} || die
+	sed -i 's|\(#[[:space:]]*include[[:space:]]\+\)"\(src/\)\?secp256k1/include/\(.*\)"|\1<\3>|' src/*.{c,h} || die
 	rm -r src/secp256k1
 	default
 	eautoreconf
 }
 
 src_configure() {
-	econf --includedir="${EPREFIX}"/usr/include/libwally/ --enable-export-all
+	econf --includedir="${EPREFIX}"/usr/include/libwally/ \
+		--enable-export-all \
+		$(use_enable elements)
 }
 
 src_install() {
