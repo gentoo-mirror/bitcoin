@@ -15,9 +15,21 @@ dev-libs/libsecp256k1:experimental - Allow experimental USE flags
 dev-libs/libsecp256k1:recovery - Enable ECDSA pubkey recovery module
 dev-libs/libsecp256k1:schnorr - Enable Schnorr signature module
 dev-libs/libsecp256k1:test-openssl - Enable OpenSSL comparison tests
+dev-libs/libsecp256k1-zkp:asm - Enable x86_64 assembly optimisation
+dev-libs/libsecp256k1-zkp:ecdh - Enable ECDH shared secret computation
+dev-libs/libsecp256k1-zkp:endomorphism - Enable endomorphism
+dev-libs/libsecp256k1-zkp:experimental - Allow experimental USE flags
+dev-libs/libsecp256k1-zkp:generator - Enable NUMS generator module
+dev-libs/libsecp256k1-zkp:musig - Enable MuSig module
+dev-libs/libsecp256k1-zkp:rangeproof - Enable Pedersen / zero-knowledge range proofs module
+dev-libs/libsecp256k1-zkp:recovery - Enable ECDSA pubkey recovery module
+dev-libs/libsecp256k1-zkp:schnorrsig - Enable Schnorr signature module
+dev-libs/libsecp256k1-zkp:surjectionproof - Enable surjection proof module
+dev-libs/libsecp256k1-zkp:test-openssl - Enable OpenSSL comparison tests
 dev-util/bitcoin-tx:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-libs/libbitcoinconsensus:asm - Enable assembly for optimization
 net-libs/libbitcoinconsensus:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
+net-libs/libwally-core:elements - Enable support for Elements assets
 net-misc/bfgminer:adl - Enable support for controlling fans and overclocking on AMD cards with AMD Display Library
 net-misc/bfgminer:antminer - Enable support for mining with AntMiner U1 sticks
 net-misc/bfgminer:avalon - Enable support for mining with Avalon 1 ASIC modules
