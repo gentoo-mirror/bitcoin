@@ -30,7 +30,7 @@ RDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
-	>=net-libs/libwally-core-0.7.4
+	>=net-libs/libwally-core-0.7.4[elements]
 	python? ( ${PYTHON_DEPS} )
 "
 DEPEND="${RDEPEND}
