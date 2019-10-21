@@ -68,7 +68,7 @@ src_prepare() {
 src_configure() {
 	local BUNDLED_LIBS="external/libjsmn.a"
 	CLIGHTNING_MAKEOPTS=(
-		VERSION="${PV}"
+		VERSION="${MyPV}"
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
