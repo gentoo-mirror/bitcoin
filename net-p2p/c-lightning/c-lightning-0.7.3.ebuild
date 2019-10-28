@@ -18,8 +18,7 @@ SRC_URI="https://github.com/ElementsProject/${MyPN}/archive/v${MyPV}.tar.gz -> $
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python test"
 
 RDEPEND="
