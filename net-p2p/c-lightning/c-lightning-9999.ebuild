@@ -116,6 +116,8 @@ src_compile() {
 src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
 
+	dobin tools/hsmtool
+
 	insinto /etc/lightning
 	doins "${FILESDIR}/config"
 
