@@ -50,6 +50,11 @@ bitcoin-datadir=/var/lib/bitcoind
 # Set JSON-RPC socket (or /dev/tty), such as for lightning-cli(1).
 #rpc-file=PATH
 
+# Identify the location of the wallet. This is a fully qualified data source
+# name, including a scheme such as sqlite3 or postgres followed by the
+# connection parameters.
+#wallet=DSN
+
 
 ## Lightning node customization options
 

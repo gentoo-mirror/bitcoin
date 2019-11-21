@@ -4,6 +4,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
+PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
 inherit distutils-r1 git-r3 toolchain-funcs user
@@ -43,6 +44,15 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
+do_python_phase() {
+	local subdir
+	for subdir in "${PYTHON_SUBDIRS[@]}" ; do
+		pushd "${subdir}" >/dev/null || die
+		"${@}"
+		popd >/dev/null || die
+	done
+}
+
 src_unpack() {
 	git-r3_src_unpack
 	rm -r "${S}/external"/*/
@@ -56,11 +66,7 @@ src_prepare() {
 
 	use postgres || sed -e $'/^var=HAVE_POSTGRES$/,/\bEND\b/{/^code=/a#error\n}' -i configure || die
 
-	if use python ; then
-		pushd contrib/pylightning >/dev/null || die
-		distutils-r1_src_prepare
-		popd >/dev/null || die
-	fi
+	use python && do_python_phase distutils-r1_src_prepare
 }
 
 src_configure() {
@@ -98,25 +104,19 @@ src_configure() {
 	# hack to suppress tools/refresh-submodules.sh
 	mkdir .refresh-submodules
 
-	if use python ; then
-		pushd contrib/pylightning >/dev/null || die
-		distutils-r1_src_configure
-		popd >/dev/null || die
-	fi
+	use python && do_python_phase distutils-r1_src_configure
 }
 
 src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
-	if use python ; then
-		pushd contrib/pylightning >/dev/null || die
-		distutils-r1_src_compile
-		popd >/dev/null || die
-	fi
+	use python && do_python_phase distutils-r1_src_compile
 }
 
 src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
+
+	dobin tools/hsmtool
 
 	insinto /etc/lightning
 	doins "${FILESDIR}/config"
@@ -124,11 +124,7 @@ src_install() {
 	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
 
-	if use python ; then
-		pushd contrib/pylightning >/dev/null || die
-		distutils-r1_src_install
-		popd >/dev/null || die
-	fi
+	use python && do_python_phase distutils-r1_src_install
 }
 
 pkg_postinst() {
