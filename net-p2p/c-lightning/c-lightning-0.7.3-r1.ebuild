@@ -11,11 +11,18 @@ inherit distutils-r1 toolchain-funcs user
 
 MyPN=lightning
 MyPV=${PV//_}
+PATCH_HASHES=(
+	fe4a25a7800934ba03c8b3322581999bd8275da2	# wallet: fix skipping tx dups memory corruption
+	d119758b09deda047db802805b4d773ec3e8777f	# gossipd: don't crash if we have > 7000 stale short_channel_ids.
+)
+PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
+PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="https://github.com/ElementsProject/${MyPN}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
-	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
+SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
