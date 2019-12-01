@@ -91,7 +91,7 @@ src_configure() {
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
 		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
-		docdir="/usr/share/doc/${P}"
+		docdir="/usr/share/doc/${PF}"
 	)
 	use test || CLIGHTNING_MAKEOPTS+=( all-programs )
 
@@ -119,6 +119,12 @@ src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
 	use python && do_python_phase distutils-r1_src_compile
+}
+
+python_install_all() {
+	DOCS= distutils-r1_python_install_all
+	docinto "${PWD##*/}"
+	dodoc README*
 }
 
 src_install() {
