@@ -1,7 +1,6 @@
 acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/lightning 0: System-wide Lightning services user
 app-crypt/opentxs 9999: Financial cryptography library, API, CLI
-app-misc/moneychanger 9999: An intuitive QT/C++ system tray client for Open-Transactions.
 dev-libs/libbacktrace 0.0.0_pre20180606: A C library that may be linked into a C/C++ program to produce symbolic backtraces
 dev-libs/libbase58 0.1.0 0.1.1: C implementation of Bitcoin's base58 encoding
 dev-libs/libsecp256k1 0.0.0_pre20141212 0.0.0_pre20150423 0.0.0_pre20151118 0.0.0_pre20161213 0.1_pre20170928 0.1_pre20181018 0.1_pre20191012 9999: Optimized C library for EC operations on curve secp256k1
