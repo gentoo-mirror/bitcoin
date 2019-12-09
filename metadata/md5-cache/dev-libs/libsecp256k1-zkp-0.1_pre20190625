@@ -4,12 +4,13 @@ DEPEND=gmp? ( dev-libs/gmp:0= ) virtual/pkgconfig java? ( virtual/jdk ) test-ope
 DESCRIPTION=Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
 EAPI=7
 HOMEPAGE=https://github.com/ElementsProject/secp256k1-zkp
-IUSE=+asm ecdh endomorphism experimental generator gmp java musig rangeproof +recovery schnorrsig surjectionproof test test-openssl
+IUSE=+asm ecdh endomorphism experimental generator gmp java musig rangeproof +recovery schnorrsig surjectionproof test test-openssl whitelist
+KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux
 LICENSE=MIT
 RDEPEND=gmp? ( dev-libs/gmp:0= )
-REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ecdh? ( experimental ) generator? ( experimental ) java? ( ecdh ) musig? ( experimental schnorrsig ) rangeproof? ( experimental generator ) schnorrsig? ( experimental ) surjectionproof? ( experimental rangeproof ) test-openssl? ( test )
+REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ecdh? ( experimental ) generator? ( experimental ) java? ( ecdh ) musig? ( experimental schnorrsig ) rangeproof? ( experimental generator ) schnorrsig? ( experimental ) surjectionproof? ( experimental rangeproof ) test-openssl? ( test ) whitelist? ( experimental rangeproof )
 RESTRICT=!test? ( test )
 SLOT=0
 SRC_URI=https://github.com/ElementsProject/secp256k1-zkp/archive/11af7015de624b010424273be3d91f117f172c82.tar.gz -> libsecp256k1-zkp-v0.1_pre20190625.tgz
 _eclasses_=autotools	ea7865c8fba1ea8d3639f355fffe1a3c	eutils	fcb2aa98e1948b835b5ae66ca52868c5	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	1d91b03d42ab6308b5f4f6b598ed110e	toolchain-funcs	512eb3367f507ebaa1d1d43ab7d66e6c
-_md5_=a536e5163735997a66cb30d76aca9221
+_md5_=d395f04c1729a11a3db3d726e4a615d9

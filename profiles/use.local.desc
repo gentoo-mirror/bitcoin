@@ -26,6 +26,7 @@ dev-libs/libsecp256k1-zkp:recovery - Enable ECDSA pubkey recovery module
 dev-libs/libsecp256k1-zkp:schnorrsig - Enable Schnorr signature module
 dev-libs/libsecp256k1-zkp:surjectionproof - Enable surjection proof module
 dev-libs/libsecp256k1-zkp:test-openssl - Enable OpenSSL comparison tests
+dev-libs/libsecp256k1-zkp:whitelist - Enable key whitelisting module
 dev-util/bitcoin-tx:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-libs/libbitcoinconsensus:asm - Enable assembly for optimization
 net-libs/libbitcoinconsensus:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
