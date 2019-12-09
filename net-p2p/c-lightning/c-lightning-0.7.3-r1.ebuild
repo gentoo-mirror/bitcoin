@@ -44,6 +44,7 @@ DEPEND="${RDEPEND}
 	dev-python/mako
 	test? ( dev-python/pytest )
 	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
+	sys-devel/gettext
 "
 REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
