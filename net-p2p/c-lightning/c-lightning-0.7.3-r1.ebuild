@@ -1,13 +1,13 @@
 # Copyright 2010-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 PYTHON_SUBDIRS=( contrib/pylightning )
 DISTUTILS_OPTIONAL=1
 
-inherit distutils-r1 toolchain-funcs user
+inherit distutils-r1 toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV//_}
@@ -29,9 +29,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python test"
 
-RDEPEND="
-	acct-group/lightning
-	acct-user/lightning
+CDEPEND="
 	postgres? ( dev-db/postgresql:* )
 	dev-db/sqlite
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
@@ -40,7 +38,13 @@ RDEPEND="
 	>=net-libs/libwally-core-0.7.4[elements]
 	python? ( ${PYTHON_DEPS} )
 "
-DEPEND="${RDEPEND}
+RDEPEND="${CDEPEND}
+	acct-group/lightning
+	acct-user/lightning
+"
+DEPEND="${CDEPEND}
+"
+BDEPEND="
 	dev-python/mako
 	test? ( dev-python/pytest )
 	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
