@@ -7,15 +7,20 @@ PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
-inherit distutils-r1 git-r3 toolchain-funcs
+inherit distutils-r1 toolchain-funcs
 
 MyPN=lightning
+MyPV=${PV//_}
+PATCH_HASHES=(
+)
+PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
+PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
-EGIT_REPO_URI="${HOMEPAGE}.git"
-EGIT_SUBMODULES=( '-*' )
+SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -49,6 +54,8 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
+S=${WORKDIR}/${MyPN}-${MyPV}
+
 do_python_phase() {
 	local subdir
 	for subdir in "${PYTHON_SUBDIRS[@]}" ; do
@@ -59,7 +66,7 @@ do_python_phase() {
 }
 
 src_unpack() {
-	git-r3_src_unpack
+	unpack "${P}.tar.gz"
 	rm -r "${S}/external"/*/
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
@@ -77,7 +84,7 @@ src_prepare() {
 src_configure() {
 	local BUNDLED_LIBS="external/libjsmn.a"
 	CLIGHTNING_MAKEOPTS=(
-		VERSION="$(git describe --always)"
+		VERSION="${MyPV}"
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
@@ -138,8 +145,19 @@ src_install() {
 	use python && do_python_phase distutils-r1_src_install
 }
 
+pkg_preinst() {
+	has_version '<=net-p2p/c-lightning-0.7.9999' && had_pre_0_8_0=1
+}
+
 pkg_postinst() {
 	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
 	elog " - Add your user(s) to the 'lightning' group."
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
+
+	# warn when upgrading from pre-0.8.0
+	if [[ ${had_pre_0_8_0} || -e /var/lib/lightning/hsm_secret ]] ; then
+		ewarn 'This version of C-Lightning maintains its data files in network-specific'
+		ewarn 'subdirectories of its base directory. Your existing data files will be'
+		ewarn 'migrated automatically upon first startup of the new version.'
+	fi
 }
