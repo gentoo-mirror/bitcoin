@@ -8,5 +8,5 @@ LICENSE=AGPL-3
 PROPERTIES=live
 RDEPEND=>=dev-libs/boost-1.48.0 >=dev-libs/openssl-0.9 dev-libs/secp256k1 leveldb? ( dev-libs/leveldb )
 SLOT=0
-_eclasses_=autotools	ea7865c8fba1ea8d3639f355fffe1a3c	git-2	3aabf18eba60687bbe6855eba271f688	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	1d91b03d42ab6308b5f4f6b598ed110e	toolchain-funcs	512eb3367f507ebaa1d1d43ab7d66e6c
+_eclasses_=autotools	ea7865c8fba1ea8d3639f355fffe1a3c	git-2	ff0c6913068da64bb51417d8eceff36a	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	1d91b03d42ab6308b5f4f6b598ed110e	toolchain-funcs	512eb3367f507ebaa1d1d43ab7d66e6c
 _md5_=153906b63815f96b04400ae85c952b6f
