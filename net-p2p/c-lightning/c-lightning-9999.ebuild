@@ -132,7 +132,7 @@ src_install() {
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
-	doins "${FILESDIR}/config"
+	doins "${FILESDIR}/lightningd.conf"
 
 	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
