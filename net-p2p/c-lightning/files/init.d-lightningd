@@ -3,11 +3,11 @@
 name="C-Lightning Daemon"
 description="Bitcoin Lightning Network node daemon"
 
-: ${LIGHTNINGD_CONF:=/etc/lightning/config}
+: ${LIGHTNINGD_CONF:=/etc/lightning/${SVCNAME}.conf}
 : ${LIGHTNINGD_HOME:=/var/lib/lightning}
 : ${LIGHTNINGD_LOGFILE=/var/log/${SVCNAME}.log}
 : ${LIGHTNINGD_PIDFILE:=${LIGHTNINGD_HOME}/${SVCNAME}.pid}
-: ${LIGHTNINGD_RPCFILE:=${LIGHTNINGD_HOME}/lightning-rpc}
+: ${LIGHTNINGD_RPCFILE:=${LIGHTNINGD_HOME}/${SVCNAME}.rpc}
 : ${LIGHTNINGD_USER:=lightning:lightning}
 
 command="/usr/bin/lightningd"
@@ -23,12 +23,41 @@ pidfile="${LIGHTNINGD_PIDFILE}"
 depend() {
 	need localmount net
 	use bitcoind dns
+	after postgresql
+}
+
+find_network() {
+	if [ ! "${network}" ] ; then
+		network=$(sed -e 's/^\s*network=\(.*\)$/\1/;t;d' "${LIGHTNINGD_CONF}")
+		if [ ! "${network}" ] ; then
+			eerror "You must set the 'network' option in ${LIGHTNINGD_CONF}!"
+			exit 1
+		fi
+	fi
+}
+
+migrate_data_files() {
+	find_network
+	if [ -e "${LIGHTNINGD_HOME}/hsm_secret" -a ! -e "${LIGHTNINGD_HOME}/${network}/hsm_secret" ] ; then
+		ewarn "Migrating data files to ${LIGHTNINGD_HOME}/${network}"
+		checkpath --directory --owner="${LIGHTNINGD_USER}" --mode=0750 -- "${LIGHTNINGD_HOME}/${network}"
+		local each ; for each in hsm_secret lightningd.sqlite3 gossip_store ; do
+			[ -e "${LIGHTNINGD_HOME}/${each}" ] &&
+				mv --verbose --no-clobber -- "${LIGHTNINGD_HOME}/${each}" "${LIGHTNINGD_HOME}/${network}/${each}"
+		done
+	fi
 }
 
 start_pre() {
-	[ -z "${LIGHTNINGD_LOGFILE}" ] || checkpath --file --owner="${LIGHTNINGD_USER}" --mode=0644 "${LIGHTNINGD_LOGFILE}"
+	migrate_data_files
+	[ -z "${LIGHTNINGD_LOGFILE}" ] || checkpath --file --owner="${LIGHTNINGD_USER}" --mode=0644 -- "${LIGHTNINGD_LOGFILE}"
 }
 
 start_post() {
-	[ -S "${LIGHTNINGD_RPCFILE}" ] && chmod g+rw "${LIGHTNINGD_RPCFILE}"
+	if [ -S "${LIGHTNINGD_RPCFILE}" ] ; then
+		chmod g+rw -- "${LIGHTNINGD_RPCFILE}"
+		find_network
+		[ -e "${LIGHTNINGD_HOME}/${network}/lightning-rpc" ] ||
+			ln --symbolic --relative --force --no-dereference -- "${LIGHTNINGD_RPCFILE}" "${LIGHTNINGD_HOME}/${network}/lightning-rpc"
+	fi
 }
