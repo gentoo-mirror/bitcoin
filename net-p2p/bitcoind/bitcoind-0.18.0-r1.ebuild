@@ -10,11 +10,18 @@ BITCOINCORE_COMMITHASH="2472733a24a9364e4c6233ccd04166a26a68cc65"
 KNOTS_PV="${PV}.knots20190502"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
+PATCH_HASHES=(
+	a5929130223973636f3fd25fbfaf2953f2ec96a9	# http: add missing header bootlegged by boost < 1.72
+)
+PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
+PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
+
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
 	https://bitcoinknots.org/files/0.18.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	${PATCH_FILES[@]/#/https://github.com/bitcoin/bitcoin/commit/}
 "
 
 LICENSE="MIT"
@@ -41,7 +48,7 @@ DOCS=( doc/bips.md doc/bitcoin-conf.md doc/descriptors.md doc/files.md doc/JSON-
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
-PATCHES=(
+PATCHES+=(
 	"${FILESDIR}/${P}-raii_event_tests-always.patch"
 )
 
