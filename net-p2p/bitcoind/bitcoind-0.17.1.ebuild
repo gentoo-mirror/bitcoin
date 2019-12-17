@@ -10,11 +10,18 @@ BITCOINCORE_COMMITHASH="ef70f9b52b851c7997a9f1a0834714e3eebc1fd8"
 KNOTS_PV="${PV}.knots20181229"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
+PATCH_HASHES=(
+	a5929130223973636f3fd25fbfaf2953f2ec96a9	# http: add missing header bootlegged by boost < 1.72
+)
+PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
+PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
+
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
 	https://bitcoinknots.org/files/0.17.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	${PATCH_FILES[@]/#/https://github.com/bitcoin/bitcoin/commit/}
 "
 
 LICENSE="MIT"
@@ -79,7 +86,7 @@ src_prepare() {
 		eapply "${knots_patchdir}/${KNOTS_P}.ts.patch"
 	fi
 
-	eapply_user
+	default
 
 	if ! use bitcoin_policy_rbf; then
 		sed -i 's/\(DEFAULT_ENABLE_REPLACEMENT = \)true/\1false/' src/validation.h || die
