@@ -4,7 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
-PYTHON_SUBDIRS=( contrib/pylightning )
+PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
 inherit distutils-r1 toolchain-funcs
@@ -12,8 +12,6 @@ inherit distutils-r1 toolchain-funcs
 MyPN=lightning
 MyPV=${PV//_}
 PATCH_HASHES=(
-	fe4a25a7800934ba03c8b3322581999bd8275da2	# wallet: fix skipping tx dups memory corruption
-	d119758b09deda047db802805b4d773ec3e8777f	# gossipd: don't crash if we have > 7000 stale short_channel_ids.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
@@ -135,8 +133,12 @@ python_install_all() {
 src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
 
+	dobin tools/hsmtool
+
+	dodoc doc/{PLUGINS.md,TOR.md}
+
 	insinto /etc/lightning
-	doins "${FILESDIR}/config"
+	doins "${FILESDIR}/lightningd.conf"
 
 	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
@@ -144,8 +146,24 @@ src_install() {
 	use python && do_python_phase distutils-r1_src_install
 }
 
+pkg_preinst() {
+	has_version '<=net-p2p/c-lightning-0.7.9999' && had_pre_0_8_0=1
+
+	if [[ -e ${EROOT%/}/etc/lightning/config && ! -e ${EROOT%/}/etc/lightning/lightningd.conf ]] ; then
+		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
+		mv --no-clobber -- "${EROOT%/}/etc/lightning/"{config,lightningd.conf}
+	fi
+}
+
 pkg_postinst() {
 	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
 	elog " - Add your user(s) to the 'lightning' group."
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
+
+	# warn when upgrading from pre-0.8.0
+	if [[ ${had_pre_0_8_0} || -e ${EROOT%/}/var/lib/lightning/hsm_secret ]] ; then
+		ewarn 'This version of C-Lightning maintains its data files in network-specific'
+		ewarn 'subdirectories of its base directory. Your existing data files will be'
+		ewarn 'migrated automatically upon first startup of the new version.'
+	fi
 }

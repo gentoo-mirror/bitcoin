@@ -129,6 +129,8 @@ src_install() {
 
 	dobin tools/hsmtool
 
+	dodoc doc/{PLUGINS.md,TOR.md}
+
 	insinto /etc/lightning
 	doins "${FILESDIR}/config"
 
@@ -136,6 +138,13 @@ src_install() {
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
 
 	use python && do_python_phase distutils-r1_src_install
+}
+
+pkg_preinst() {
+	if [[ -e ${EROOT%/}/etc/lightning/config && ! -e ${EROOT%/}/etc/lightning/lightningd.conf ]] ; then
+		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
+		mv --no-clobber -- "${EROOT%/}/etc/lightning/"{config,lightningd.conf}
+	fi
 }
 
 pkg_postinst() {
