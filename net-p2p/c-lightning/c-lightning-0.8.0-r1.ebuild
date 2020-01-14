@@ -12,6 +12,7 @@ inherit distutils-r1 toolchain-funcs
 MyPN=lightning
 MyPV=${PV//_}
 PATCH_HASHES=(
+	b9cf19175bacaa7579764114b663ecf58b675729	# pay: Fix a use-after-free bug
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
