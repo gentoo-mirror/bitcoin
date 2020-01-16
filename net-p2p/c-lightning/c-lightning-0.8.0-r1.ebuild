@@ -97,7 +97,6 @@ src_configure() {
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
 		docdir="/usr/share/doc/${PF}"
 	)
-	use test || CLIGHTNING_MAKEOPTS+=( all-programs )
 
 	./configure \
 		CC="$(tc-getCC)" \
@@ -120,7 +119,10 @@ src_configure() {
 }
 
 src_compile() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}"
+	emake "${CLIGHTNING_MAKEOPTS[@]}" \
+		all-programs \
+		$(usex test 'all-test-programs' '') \
+		doc-all
 
 	use python && do_python_phase distutils-r1_src_compile
 }
