@@ -39,7 +39,18 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-DOCS=( doc/bips.md doc/bitcoin-conf.md doc/descriptors.md doc/files.md doc/JSON-RPC-interface.md doc/psbt.md doc/reduce-traffic.md doc/release-notes.md doc/REST-interface.md doc/tor.md )
+DOCS=(
+	doc/bips.md
+	doc/bitcoin-conf.md
+	doc/descriptors.md
+	doc/files.md
+	doc/JSON-RPC-interface.md
+	doc/psbt.md
+	doc/reduce-traffic.md
+	doc/release-notes.md
+	doc/REST-interface.md
+	doc/tor.md
+)
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 

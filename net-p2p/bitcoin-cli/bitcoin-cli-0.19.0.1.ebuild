@@ -30,7 +30,9 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-DOCS=( doc/release-notes.md )
+DOCS=(
+	doc/release-notes.md
+)
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
