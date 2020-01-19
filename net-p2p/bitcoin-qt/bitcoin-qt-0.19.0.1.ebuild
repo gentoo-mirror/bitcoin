@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use desktop gnome2-utils xdg-utils
+inherit autotools bash-completion-r1 db-use desktop xdg-utils
 
 BITCOINCORE_COMMITHASH="1bc9988993ee84bc814e5a7f33cc90f670a19f6a"
 KNOTS_PV="${PV}.knots20200104"
@@ -159,7 +159,7 @@ src_install() {
 }
 
 update_caches() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 	xdg_desktop_database_update
 }
 
