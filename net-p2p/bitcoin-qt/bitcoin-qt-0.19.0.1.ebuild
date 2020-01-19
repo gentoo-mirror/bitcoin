@@ -45,7 +45,8 @@ RDEPEND="
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
 	zeromq? ( net-libs/zeromq:= )
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	dev-qt/linguist-tools:5
 	knots? (
 		gnome-base/librsvg
