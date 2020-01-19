@@ -153,7 +153,7 @@ src_install() {
 		newins src/qt/res/src/bitcoin.svg bitcoinknots.svg
 	fi
 
-	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}"
+	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}" || die
 	if ! use knots; then
 		sed -i 's/Knots/Core/;s/^\(Icon=\).*$/\1bitcoin128/' "${T}/org.bitcoin.bitcoin-qt.desktop" || die
 	fi
