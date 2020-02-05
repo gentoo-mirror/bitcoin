@@ -22,7 +22,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="+asm +knots libressl"
 
 DEPEND="
-	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
+	>dev-libs/libsecp256k1-0.1_pre20170321:=[recovery]
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
 	libressl? ( dev-libs/libressl:0= )
 "
