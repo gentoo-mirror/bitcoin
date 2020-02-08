@@ -8,7 +8,7 @@ inherit git-r3 autotools eutils
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
-HOMEPAGE="https://github.com/bitcoin/${MyPN}"
+HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 
 LICENSE="MIT"
 SLOT="0"

@@ -7,7 +7,7 @@ inherit autotools eutils
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
-HOMEPAGE="https://github.com/bitcoin-core/${MyPN}"
+HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 COMMITHASH="1086fda4c1975d0cad8d3cad96794a64ec12dca4"
 SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
