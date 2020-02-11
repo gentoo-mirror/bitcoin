@@ -20,31 +20,31 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+client daemon"
 
-RDEPEND="
-	>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
-	dev-python/future[${PYTHON_USEDEP}]
-	dev-python/service_identity[${PYTHON_USEDEP}]
-	>=dev-python/twisted-19.7.0[${PYTHON_USEDEP}]
+RDEPEND="$(python_gen_cond_dep '
+	>=dev-python/chromalog-1.0.5[${PYTHON_MULTI_USEDEP}]
+	dev-python/future[${PYTHON_MULTI_USEDEP}]
+	dev-python/service_identity[${PYTHON_MULTI_USEDEP}]
+	>=dev-python/twisted-19.7.0[${PYTHON_MULTI_USEDEP}]
 
 	client? (
-		dev-python/argon2_cffi[${PYTHON_USEDEP}]
-		dev-python/bencoder-pyx[${PYTHON_USEDEP}]
-		dev-python/coincurve[${PYTHON_USEDEP}]
-		dev-python/mnemonic[${PYTHON_USEDEP}]
-		dev-python/pyaes[${PYTHON_USEDEP}]
+		dev-python/argon2_cffi[${PYTHON_MULTI_USEDEP}]
+		dev-python/bencoder-pyx[${PYTHON_MULTI_USEDEP}]
+		dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
+		dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
+		dev-python/pyaes[${PYTHON_MULTI_USEDEP}]
 	)
 
 	daemon? (
-		dev-python/libnacl[${PYTHON_USEDEP}]
-		dev-python/pyopenssl[${PYTHON_USEDEP}]
-		dev-python/txtorcon[${PYTHON_USEDEP}]
+		dev-python/libnacl[${PYTHON_MULTI_USEDEP}]
+		dev-python/pyopenssl[${PYTHON_MULTI_USEDEP}]
+		dev-python/txtorcon[${PYTHON_MULTI_USEDEP}]
 	)
-"
+')"
 DEPEND="
 "
-BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
-"
+BDEPEND="$(python_gen_cond_dep '
+	dev-python/setuptools[${PYTHON_MULTI_USEDEP}]
+')"
 
 S="${WORKDIR}/${MyPN}-${PV}"
 
