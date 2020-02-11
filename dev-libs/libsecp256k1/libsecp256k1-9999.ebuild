@@ -1,10 +1,10 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
 
 EGIT_REPO_URI="https://github.com/bitcoin/secp256k1.git"
-inherit git-2 autotools eutils
+inherit git-r3 autotools eutils
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
