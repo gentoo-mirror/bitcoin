@@ -1,4 +1,4 @@
-# Copyright 2010-2019 Gentoo Authors
+# Copyright 2010-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -95,6 +95,7 @@ src_configure() {
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
 		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
+		CHANGED_FROM_GIT=false
 		docdir="/usr/share/doc/${PF}"
 	)
 
