@@ -4,7 +4,7 @@
 EAPI=5
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 
-inherit git-2 python-r1
+inherit git-r3 python-r1
 
 DESCRIPTION="Efficient JSON-RPC for Python"
 HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"

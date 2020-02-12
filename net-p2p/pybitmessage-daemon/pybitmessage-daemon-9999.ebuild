@@ -5,7 +5,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit python-single-r1 git-2
+inherit python-single-r1 git-r3
 
 DESCRIPTION="PyBitmessage Daemon Client allows users to interact with Bitmessage through the command line."
 HOMEPAGE="https://github.com/Dokument/PyBitmessage-Daemon"

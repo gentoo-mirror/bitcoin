@@ -3,7 +3,7 @@
 
 EAPI=3
 
-inherit git-2
+inherit git-r3
 
 DESCRIPTION="Bitcoin crypto-currency pooled mining proxy"
 HOMEPAGE="https://github.com/jgarzik/pushpool"

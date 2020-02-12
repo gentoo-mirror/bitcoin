@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit git-2 eutils
+inherit git-r3 eutils
 
 EGIT_REPO_URI="https://github.com/miguelfreitas/twister-core.git"
 

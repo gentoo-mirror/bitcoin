@@ -4,7 +4,7 @@
 EAPI=5
 
 EGIT_REPO_URI="https://github.com/libbitcoin/libbitcoin.git"
-inherit git-2 autotools
+inherit git-r3 autotools
 
 DESCRIPTION="libbitcoin asynchronous C++ library for Bitcoin"
 HOMEPAGE="http://libbitcoin.org/"
