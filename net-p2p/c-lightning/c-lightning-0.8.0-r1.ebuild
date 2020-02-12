@@ -76,7 +76,7 @@ src_unpack() {
 src_prepare() {
 	default
 
-	use postgres || sed -e $'/^var=HAVE_POSTGRES$/,/\bEND\b/{/^code=/a#error\n}' -i configure || die
+	use postgres || sed -e $'/^var=HAVE_POSTGRES$/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
 	use python && do_python_phase distutils-r1_src_prepare
 }
