@@ -6,7 +6,7 @@ EAPI=5
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="sqlite"
 
-inherit user eutils fdo-mime python-single-r1 gnome2-utils git-2
+inherit user eutils fdo-mime python-single-r1 gnome2-utils git-r3
 
 DESCRIPTION="Bitmessage is a P2P communications protocol used to send encrypted messages to another person or to many subscribers."
 HOMEPAGE="https://bitmessage.org"

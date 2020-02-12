@@ -5,7 +5,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit eutils python-single-r1 git-2
+inherit eutils python-single-r1 git-r3
 
 DESCRIPTION="bmwrapper is a poorly hacked together python script to let Thunderbird and PyBitmessage communicate."
 HOMEPAGE="https://github.com/Arceliar/bmwrapper"
