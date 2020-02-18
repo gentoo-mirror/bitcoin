@@ -12,7 +12,6 @@ inherit distutils-r1 toolchain-funcs
 MyPN=lightning
 MyPV=${PV//_}
 PATCH_HASHES=(
-	b9cf19175bacaa7579764114b663ecf58b675729	# pay: Fix a use-after-free bug
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
@@ -34,7 +33,7 @@ CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
-	>=net-libs/libwally-core-0.7.4[elements]
+	>=net-libs/libwally-core-0.7.5[elements]
 	python? ( ${PYTHON_DEPS} )
 "
 RDEPEND="${CDEPEND}

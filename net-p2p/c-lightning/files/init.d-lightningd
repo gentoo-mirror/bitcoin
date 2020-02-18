@@ -55,7 +55,6 @@ start_pre() {
 
 start_post() {
 	if [ -S "${LIGHTNINGD_RPCFILE}" ] ; then
-		chmod g+rw -- "${LIGHTNINGD_RPCFILE}"
 		find_network
 		[ -e "${LIGHTNINGD_HOME}/${network}/lightning-rpc" ] ||
 			ln --symbolic --relative --force --no-dereference -- "${LIGHTNINGD_RPCFILE}" "${LIGHTNINGD_HOME}/${network}/lightning-rpc"
