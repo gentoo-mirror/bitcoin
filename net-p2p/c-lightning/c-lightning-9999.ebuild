@@ -135,9 +135,9 @@ src_install() {
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.8.1.conf" lightningd.conf
+	doins "${FILESDIR}/lightningd.conf"
 
-	newinitd "${FILESDIR}/init.d-lightningd-0.8.1" lightningd
+	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
 
 	use python && do_python_phase distutils-r1_src_install
