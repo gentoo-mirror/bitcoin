@@ -15,6 +15,9 @@ PATCH_HASHES=(
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
+PATCHES+=(
+	"${FILESDIR}/0.8.1-txprepare-crash-unconfirmed-utxos.patch"
+)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
