@@ -65,7 +65,7 @@ pkg_pretend() {
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2019/05/02/release-${PV}/"
+		elog "https://bitcoincore.org/en/2019/08/09/release-${PV}/"
 	fi
 	elog "Replace By Fee policy is now always enabled by default: Your node will"
 	elog "preferentially mine and relay transactions paying the highest fee, regardless"

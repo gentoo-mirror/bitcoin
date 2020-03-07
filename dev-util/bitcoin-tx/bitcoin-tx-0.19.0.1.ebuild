@@ -41,11 +41,11 @@ pkg_pretend() {
 	if use knots; then
 		elog "You are building ${PN} from Bitcoin Knots."
 		elog "For more information, see:"
-		elog "https://bitcoinknots.org/files/0.18.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "https://bitcoinknots.org/files/0.19.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2019/05/02/release-${PV}/"
+		elog "https://bitcoincore.org/en/2019/11/24/release-0.19.0/"
 	fi
 }
 
