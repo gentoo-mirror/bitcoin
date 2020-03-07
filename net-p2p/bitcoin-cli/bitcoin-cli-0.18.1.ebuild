@@ -42,7 +42,7 @@ pkg_pretend() {
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2019/05/02/release-${PV}/"
+		elog "https://bitcoincore.org/en/2019/08/09/release-${PV}/"
 	fi
 }
 

@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,20 +6,20 @@ EAPI=7
 DB_VER="4.8"
 inherit autotools bash-completion-r1 db-use systemd
 
-BITCOINCORE_COMMITHASH="fa27a0760792b251585f2a70eccdd547f915b7e4"
-KNOTS_PV="${PV}.knots20190920"
+BITCOINCORE_COMMITHASH="58ba7c314d552cea8cb024960a8504577aee586f"
+KNOTS_PV="${PV}.knots20200304"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.18.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://bitcoinknots.org/files/0.19.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 ~mips ~ppc ~ppc64 x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="+asm examples +knots libressl system-leveldb test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
@@ -28,7 +28,7 @@ DEPEND="
 	acct-user/bitcoin
 	>=dev-libs/boost-1.52.0:=[threads(+)]
 	dev-libs/libevent:=
-	>=dev-libs/libsecp256k1-0.0.0_pre20151118:=[recovery]
+	>dev-libs/libsecp256k1-0.1_pre20170321:=[recovery]
 	>=dev-libs/univalue-1.0.4:=
 	system-leveldb? ( virtual/bitcoin-leveldb )
 	!libressl? ( dev-libs/openssl:0=[-bindist] )
@@ -39,7 +39,18 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-DOCS=( doc/bips.md doc/bitcoin-conf.md doc/descriptors.md doc/files.md doc/JSON-RPC-interface.md doc/psbt.md doc/reduce-traffic.md doc/release-notes.md doc/REST-interface.md doc/tor.md )
+DOCS=(
+	doc/bips.md
+	doc/bitcoin-conf.md
+	doc/descriptors.md
+	doc/files.md
+	doc/JSON-RPC-interface.md
+	doc/psbt.md
+	doc/reduce-traffic.md
+	doc/release-notes.md
+	doc/REST-interface.md
+	doc/tor.md
+)
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
@@ -47,11 +58,11 @@ pkg_pretend() {
 	if use knots; then
 		elog "You are building ${PN} from Bitcoin Knots."
 		elog "For more information, see:"
-		elog "https://bitcoinknots.org/files/0.18.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "https://bitcoinknots.org/files/0.19.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2019/08/09/release-${PV}/"
+		elog "https://bitcoincore.org/en/2020/03/04/release-${PV}/"
 	fi
 	elog "Replace By Fee policy is now always enabled by default: Your node will"
 	elog "preferentially mine and relay transactions paying the highest fee, regardless"
@@ -63,7 +74,6 @@ src_prepare() {
 
 	local knots_patchdir="${WORKDIR}/${KNOTS_P}.patches/"
 
-	eapply "${FILESDIR}/0.16.3-boost-1.72-missing-include.patch"
 	eapply "${knots_patchdir}/${KNOTS_P}.syslibs.patch"
 
 	if use knots; then
