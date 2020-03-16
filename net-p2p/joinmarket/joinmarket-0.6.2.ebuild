@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{3_5,3_6,3_7,3_8} )
+PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_REQ_USE="sqlite"
 DISTUTILS_SINGLE_IMPL=1
 
@@ -28,7 +28,7 @@ RDEPEND="$(python_gen_cond_dep '
 
 	client? (
 		dev-python/argon2_cffi[${PYTHON_MULTI_USEDEP}]
-		dev-python/bencoder-pyx[${PYTHON_MULTI_USEDEP}]
+		>=dev-python/bencoder-pyx-2.0.0[${PYTHON_MULTI_USEDEP}]
 		dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
 		dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
 		dev-python/pyaes[${PYTHON_MULTI_USEDEP}]
@@ -79,4 +79,17 @@ src_install() {
 	do_python_phase distutils-r1_src_install
 
 	python_doscript scripts/*.py
+}
+
+pkg_preinst() {
+	has_version '<net-p2p/joinmarket-0.6.2' && had_pre_0_6_2=1
+}
+
+pkg_postinst() {
+	# warn when upgrading from pre-0.6.2
+	if [[ ${had_pre_0_6_2} ]] ; then
+		ewarn 'This release of JoinMarket moves the user data directory to ~/.joinmarket.'
+		ewarn 'You must manually move any existing data files. See the release notes:'
+		ewarn 'https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory'
+	fi
 }
