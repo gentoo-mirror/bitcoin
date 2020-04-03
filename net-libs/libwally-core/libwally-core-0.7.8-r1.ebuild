@@ -34,6 +34,8 @@ src_prepare() {
 }
 
 src_configure() {
+	# configure.ac uses 'test .. == ..' bashism
+	CONFIG_SHELL=/bin/bash \
 	econf --includedir="${EPREFIX}"/usr/include/libwally/ \
 		--enable-export-all \
 		$(use_enable elements)
