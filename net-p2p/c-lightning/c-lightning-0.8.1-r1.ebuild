@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{3_5,3_6,3_7} )
+PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
@@ -46,8 +46,10 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 "
 BDEPEND="
-	dev-python/mako
-	test? ( dev-python/pytest )
+	$(python_gen_any_dep '
+		dev-python/mako[${PYTHON_USEDEP}]
+		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
+	' -3)
 	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
 	sys-devel/gettext
 "
@@ -57,6 +59,11 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 S=${WORKDIR}/${MyPN}-${MyPV}
+
+python_check_deps() {
+	has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
+		{ ! use test || has_version "dev-python/pytest[${PYTHON_USEDEP}]" ; }
+}
 
 do_python_phase() {
 	local subdir
@@ -101,6 +108,7 @@ src_configure() {
 		docdir="/usr/share/doc/${PF}"
 	)
 
+	python_setup
 	./configure \
 		CC="$(tc-getCC)" \
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
@@ -122,6 +130,7 @@ src_configure() {
 }
 
 src_compile() {
+	python_setup
 	emake "${CLIGHTNING_MAKEOPTS[@]}" \
 		all-programs \
 		$(usex test 'all-test-programs' '') \
