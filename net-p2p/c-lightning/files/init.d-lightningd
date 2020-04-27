@@ -44,7 +44,7 @@ depend() {
 		# be blank, and that will be detected as localhost. This would
 		# only cause us to "need postgresql" when we shouldn't and not
 		# vice versa, so it's safe.
-		grep -Eq 'postgres(ql)?://((([-A-Za-z0-9._~!$&'\''()*+,:;=]|%[[:xdigit:]]{2})*@)?((localhost|127\.0\.0\.1|\[::1\])(:[0-9]*)?|%2[Ff]([-A-Za-z0-9._~!$&'\''()*+,;=]|%[[:xdigit:]]{2})*))?(/|$)'
+		grep -Eqx 'postgres(ql)?://((([-A-Za-z0-9._~!$&'\''()*+,:;=]|%[[:xdigit:]]{2})*@)?((localhost|127\.0\.0\.1|\[::1\])(:[0-9]*)?|%2[Ff]([-A-Za-z0-9._~!$&'\''()*+,;=]|%[[:xdigit:]]{2})*))?(/|$)'
 	then
 		need postgresql
 	else # just in case the above auto-detection didn't work
