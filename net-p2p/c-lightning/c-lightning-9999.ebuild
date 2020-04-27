@@ -145,6 +145,8 @@ src_install() {
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.8.2.conf" lightningd.conf
+	fowners :lightning /etc/lightning/lightningd.conf
+	fperms 0640 /etc/lightning/lightningd.conf
 
 	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
