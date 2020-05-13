@@ -19,6 +19,7 @@ command_args="
 command_user="${LIGHTNINGD_USER}"
 directory="${LIGHTNINGD_HOME}"
 pidfile="${LIGHTNINGD_PIDFILE}"
+start_stop_daemon_args="${LIGHTNINGD_NICE:+--nicelevel=${LIGHTNINGD_NICE}}"
 
 depend() {
 	config "${LIGHTNINGD_CONF}"
