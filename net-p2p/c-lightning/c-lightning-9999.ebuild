@@ -84,6 +84,7 @@ src_prepare() {
 src_configure() {
 	local BUNDLED_LIBS="external/libjsmn.a"
 	CLIGHTNING_MAKEOPTS=(
+		V=1
 		VERSION="$(git describe --always)"
 		DISTRO=Gentoo
 		COVERAGE=
