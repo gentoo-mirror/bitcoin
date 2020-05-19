@@ -13,6 +13,7 @@ MyPN=lightning
 MyPV=${PV//_}
 PATCH_HASHES=(
 	3cfafa81ebdf133d5c30f2ee60da19c4d95ac89f	# bcli-bugfix: pass along entire script
+	632b42da40c5ff57391cb892192dd47f297f5c7c	# hsmd: fix missing return bug
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
