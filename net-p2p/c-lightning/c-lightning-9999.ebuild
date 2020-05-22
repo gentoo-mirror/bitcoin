@@ -145,7 +145,7 @@ src_install() {
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.8.2.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-${PV}.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
