@@ -8,7 +8,7 @@ inherit autotools
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
 
-COMMIT_HASH="5642664b6159b0fe3940a1276f23998dcfce5481"
+COMMIT_HASH="e0d0634aea716d813744326ea6c7590eb9fc381c"
 SRC_URI="https://github.com/ElementsProject/${PN}/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz"
 LICENSE="MIT CC0-1.0"
 SLOT="0"
