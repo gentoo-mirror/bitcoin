@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
-inherit distutils-r1 toolchain-funcs
+inherit bash-completion-r1 distutils-r1 toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV//_}
 PATCH_HASHES=(
+	3cfafa81ebdf133d5c30f2ee60da19c4d95ac89f	# bcli-bugfix: pass along entire script
+	632b42da40c5ff57391cb892192dd47f297f5c7c	# hsmd: fix missing return bug
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
@@ -24,8 +26,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python test"
 
 CDEPEND="
@@ -157,6 +158,8 @@ src_install() {
 
 	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
+
+	newbashcomp contrib/lightning-cli.bash-completion lightning-cli
 
 	use python && do_python_phase distutils-r1_src_install
 }

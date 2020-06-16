@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
-inherit distutils-r1 git-r3 toolchain-funcs
+inherit bash-completion-r1 distutils-r1 git-r3 toolchain-funcs
 
 MyPN=lightning
 
@@ -29,7 +29,7 @@ CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
-	>=net-libs/libwally-core-0.7.5[elements]
+	>=net-libs/libwally-core-0.7.9_pre20200530[elements]
 	python? ( ${PYTHON_DEPS} )
 "
 RDEPEND="${CDEPEND}
@@ -84,6 +84,7 @@ src_prepare() {
 src_configure() {
 	local BUNDLED_LIBS="external/libjsmn.a"
 	CLIGHTNING_MAKEOPTS=(
+		V=1
 		VERSION="$(git describe --always)"
 		DISTRO=Gentoo
 		COVERAGE=
@@ -144,12 +145,14 @@ src_install() {
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.8.2.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-${PV}.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
 	newinitd "${FILESDIR}/init.d-lightningd" lightningd
 	newconfd "${FILESDIR}/conf.d-lightningd" lightningd
+
+	newbashcomp contrib/lightning-cli.bash-completion lightning-cli
 
 	use python && do_python_phase distutils-r1_src_install
 }
