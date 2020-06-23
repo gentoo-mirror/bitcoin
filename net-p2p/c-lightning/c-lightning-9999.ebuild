@@ -29,7 +29,7 @@ CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
-	>=net-libs/libwally-core-0.7.9_pre20200530[elements]
+	>=net-libs/libwally-core-0.7.9_pre20200619[elements]
 	python? ( ${PYTHON_DEPS} )
 "
 RDEPEND="${CDEPEND}
