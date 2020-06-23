@@ -17,6 +17,9 @@ PATCH_HASHES=(
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
+PATCHES+=(
+	"${FILESDIR}/0.8.2.1-handle-NULL-taken-pointer-in-tal_dup_talarr.patch"
+)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
