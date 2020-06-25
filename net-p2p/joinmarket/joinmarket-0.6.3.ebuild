@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -25,6 +25,7 @@ RDEPEND="$(python_gen_cond_dep '
 	dev-python/future[${PYTHON_MULTI_USEDEP}]
 	dev-python/service_identity[${PYTHON_MULTI_USEDEP}]
 	>=dev-python/twisted-19.7.0[${PYTHON_MULTI_USEDEP}]
+	dev-python/urldecode[${PYTHON_MULTI_USEDEP}]
 
 	client? (
 		dev-python/argon2_cffi[${PYTHON_MULTI_USEDEP}]
