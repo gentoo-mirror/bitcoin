@@ -28,7 +28,7 @@ RDEPEND="$(python_gen_cond_dep '
 	dev-python/urldecode[${PYTHON_MULTI_USEDEP}]
 
 	client? (
-		dev-python/argon2_cffi[${PYTHON_MULTI_USEDEP}]
+		dev-python/argon2-cffi[${PYTHON_MULTI_USEDEP}]
 		>=dev-python/bencoder-pyx-2.0.0[${PYTHON_MULTI_USEDEP}]
 		dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
 		dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
