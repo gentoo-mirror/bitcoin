@@ -140,8 +140,6 @@ python_install_all() {
 src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
 
-	dobin tools/hsmtool
-
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
@@ -162,10 +160,17 @@ pkg_preinst() {
 		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
 		mv --no-clobber -- "${EROOT%/}/etc/lightning/"{config,lightningd.conf}
 	fi
+
+	[[ -e ${EROOT%/}/usr/bin/hsmtool ]] && had_hsmtool=1
 }
 
 pkg_postinst() {
 	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
 	elog " - Add your user(s) to the 'lightning' group."
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
+
+	if [[ ${had_hsmtool} ]] ; then
+		ewarn "Upstream has renamed the ${HILITE}hsmtool${NORMAL} executable to ${HILITE}lightning-hsmtool${NORMAL}."
+		ewarn 'Please adjust your scripts and workflows accordingly.'
+	fi
 }
