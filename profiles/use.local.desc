@@ -31,6 +31,7 @@ dev-util/bitcoin-tx:knots - Build enhanced Bitcoin Knots version, rather than Bi
 net-libs/libbitcoinconsensus:asm - Enable assembly for optimization
 net-libs/libbitcoinconsensus:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-libs/libwally-core:elements - Enable support for Elements assets
+net-libs/libwally-core-niftynei:elements - Enable support for Elements assets
 net-misc/bfgminer:adl - Enable support for controlling fans and overclocking on AMD cards with AMD Display Library
 net-misc/bfgminer:antminer - Enable support for mining with AntMiner U1 sticks
 net-misc/bfgminer:avalon - Enable support for mining with Avalon 1 ASIC modules
