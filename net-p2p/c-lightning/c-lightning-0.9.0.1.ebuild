@@ -10,7 +10,7 @@ DISTUTILS_OPTIONAL=1
 inherit bash-completion-r1 distutils-r1 toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV//_}
+MyPV=$(ver_rs 3 - "${PV//_}")
 PATCH_HASHES=(
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
