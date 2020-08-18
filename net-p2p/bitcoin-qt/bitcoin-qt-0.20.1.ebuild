@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+asm dbus kde +knots libressl +qrcode system-leveldb test upnp +wallet zeromq"
+IUSE="+asm dbus kde +knots +qrcode system-leveldb test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
