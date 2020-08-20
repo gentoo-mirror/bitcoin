@@ -21,34 +21,40 @@ KEYWORDS="~amd64 ~x86"
 IUSE="+client daemon qt5"
 REQUIRED_USE="qt5? ( client )"
 
-RDEPEND="$(python_gen_cond_dep '
-	>=dev-python/chromalog-1.0.5[${PYTHON_MULTI_USEDEP}]
-	dev-python/future[${PYTHON_MULTI_USEDEP}]
-	dev-python/service_identity[${PYTHON_MULTI_USEDEP}]
-	>=dev-python/twisted-19.7.0[${PYTHON_MULTI_USEDEP}]
-	dev-python/urldecode[${PYTHON_MULTI_USEDEP}]
+RDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-python/chromalog-1.0.5[${PYTHON_MULTI_USEDEP}]
+		dev-python/service_identity[${PYTHON_MULTI_USEDEP}]
+		>=dev-python/twisted-20.3.0[${PYTHON_MULTI_USEDEP}]
+
+		client? (
+			dev-python/argon2-cffi[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/bencoder-pyx-2.0.0[${PYTHON_MULTI_USEDEP}]
+			dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
+			dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
+			dev-python/pyaes[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/python-bitcointx-1.1.0[${PYTHON_MULTI_USEDEP}]
+			dev-python/urldecode[${PYTHON_MULTI_USEDEP}]
+		)
+
+		daemon? (
+			dev-python/libnacl[${PYTHON_MULTI_USEDEP}]
+			dev-python/pyopenssl[${PYTHON_MULTI_USEDEP}]
+			dev-python/txtorcon[${PYTHON_MULTI_USEDEP}]
+		)
+
+		qt5? (
+			dev-python/pillow[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/pyside2-5.14.2[gui,widgets,${PYTHON_MULTI_USEDEP}]
+			dev-python/qrcode[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/qt5reactor-0.6_pre20181201[${PYTHON_MULTI_USEDEP}]
+		)
+	')
 
 	client? (
-		dev-python/argon2-cffi[${PYTHON_MULTI_USEDEP}]
-		>=dev-python/bencoder-pyx-2.0.0[${PYTHON_MULTI_USEDEP}]
-		dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
-		dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
-		dev-python/pyaes[${PYTHON_MULTI_USEDEP}]
+		dev-libs/libsecp256k1[ecdh,recovery]
 	)
-
-	daemon? (
-		dev-python/libnacl[${PYTHON_MULTI_USEDEP}]
-		dev-python/pyopenssl[${PYTHON_MULTI_USEDEP}]
-		dev-python/txtorcon[${PYTHON_MULTI_USEDEP}]
-	)
-
-	qt5? (
-		dev-python/pillow[${PYTHON_MULTI_USEDEP}]
-		>=dev-python/pyside2-5.14.2[gui,widgets,${PYTHON_MULTI_USEDEP}]
-		dev-python/qrcode[${PYTHON_MULTI_USEDEP}]
-		>=dev-python/qt5reactor-0.6_pre20181201[${PYTHON_MULTI_USEDEP}]
-	)
-')"
+"
 DEPEND="
 "
 BDEPEND="$(python_gen_cond_dep '
