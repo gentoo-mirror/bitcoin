@@ -1,0 +1,13 @@
+DEFINED_PHASES=prepare
+DEPEND=>=dev-libs/jansson-2.0.0 dev-libs/libbase58 test? ( dev-libs/libgcrypt )
+DESCRIPTION=C implementation of Bitcoin's getblocktemplate interface
+EAPI=6
+HOMEPAGE=https://github.com/bitcoin/libblkmaker
+IUSE=test
+KEYWORDS=~amd64 ~arm ~mips ~ppc ~ppc64 ~x86
+LICENSE=MIT
+RDEPEND=>=dev-libs/jansson-2.0.0 dev-libs/libbase58
+RESTRICT=!test? ( test )
+SLOT=0/7
+SRC_URI=https://github.com/bitcoin/libblkmaker/archive/v0.6.0.tar.gz -> libblkmaker-0.6.0-github.tgz
+_md5_=a1b5bf9d89f5a7b68eec6ad8fb8d104d
