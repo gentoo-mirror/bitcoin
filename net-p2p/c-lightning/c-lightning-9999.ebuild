@@ -3,19 +3,24 @@
 
 EAPI=7
 
+POSTGRES_COMPAT=( 9.5 9.6 10 11 12 13 )
+
 PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
-inherit bash-completion-r1 distutils-r1 git-r3 toolchain-funcs
+inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
+PATCHES=(
+	"${FILESDIR}/support-slotted-postgresql.patch"
+)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
 EGIT_REPO_URI="${HOMEPAGE}.git"
-EGIT_SUBMODULES=( '-*' )
+EGIT_SUBMODULES=( '-*' 'external/gheap' )
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -24,12 +29,12 @@ KEYWORDS=""
 IUSE="developer experimental postgres python test"
 
 CDEPEND="
-	postgres? ( dev-db/postgresql:* )
 	dev-db/sqlite
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
 	>=net-libs/libwally-core-0.7.9_pre20200814[elements]
+	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 "
 RDEPEND="${CDEPEND}
@@ -47,6 +52,7 @@ BDEPEND="
 	sys-devel/gettext
 "
 REQUIRED_USE="
+	postgres? ( ${POSTGRES_REQ_USE} )
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 # FIXME: bundled deps: ccan
@@ -65,9 +71,17 @@ do_python_phase() {
 	done
 }
 
+pkg_setup() {
+	if use postgres ; then
+		postgres_pkg_setup
+	else
+		export PG_CONFIG=
+	fi
+}
+
 src_unpack() {
 	git-r3_src_unpack
-	rm -r "${S}/external"/*/
+	find "${S}/external" -depth -mindepth 1 -maxdepth 1 -type d ! -name 'gheap' -delete || die
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,}
@@ -75,8 +89,6 @@ src_unpack() {
 
 src_prepare() {
 	default
-
-	use postgres || sed -e $'/^var=HAVE_POSTGRES$/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
 	use python && do_python_phase distutils-r1_src_prepare
 }
@@ -94,7 +106,7 @@ src_configure() {
 		LIBSECP_HEADERS=
 		SUBMODULES=none
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
-		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
+		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ -I external/gheap/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
 		CHANGED_FROM_GIT=false
 		docdir="/usr/share/doc/${PF}"
@@ -113,7 +125,8 @@ src_configure() {
 		--disable-compat \
 		--disable-valgrind \
 		--disable-static \
-		--disable-address-sanitizer
+		--disable-address-sanitizer \
+		|| die
 
 	# hack to suppress tools/refresh-submodules.sh
 	mkdir .refresh-submodules
