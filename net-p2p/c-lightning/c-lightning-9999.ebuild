@@ -113,7 +113,8 @@ src_configure() {
 		--disable-compat \
 		--disable-valgrind \
 		--disable-static \
-		--disable-address-sanitizer
+		--disable-address-sanitizer \
+		|| die
 
 	# hack to suppress tools/refresh-submodules.sh
 	mkdir .refresh-submodules
