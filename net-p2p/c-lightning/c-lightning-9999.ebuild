@@ -15,7 +15,7 @@ DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
 EGIT_REPO_URI="${HOMEPAGE}.git"
-EGIT_SUBMODULES=( '-*' )
+EGIT_SUBMODULES=( '-*' 'external/gheap' )
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -67,7 +67,7 @@ do_python_phase() {
 
 src_unpack() {
 	git-r3_src_unpack
-	rm -r "${S}/external"/*/
+	find "${S}/external" -depth -mindepth 1 -maxdepth 1 -type d ! -name 'gheap' -delete || die
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,}
@@ -94,7 +94,7 @@ src_configure() {
 		LIBSECP_HEADERS=
 		SUBMODULES=none
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
-		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
+		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ -I external/gheap/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
 		CHANGED_FROM_GIT=false
 		docdir="/usr/share/doc/${PF}"
