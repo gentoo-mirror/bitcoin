@@ -3,6 +3,8 @@
 
 EAPI=6
 
+inherit autotools multilib-minimal
+
 DESCRIPTION="C implementation of Bitcoin's getblocktemplate interface"
 HOMEPAGE="https://github.com/bitcoin/libblkmaker"
 LICENSE="MIT"
@@ -21,7 +23,9 @@ DEPEND="${RDEPEND}
 	test? ( dev-libs/libgcrypt )
 "
 
+ECONF_SOURCE="${S}"
+
 src_prepare() {
 	default
-	./autogen.sh || die
+	eautoreconf
 }
