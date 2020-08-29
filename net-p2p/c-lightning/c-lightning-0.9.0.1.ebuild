@@ -3,23 +3,30 @@
 
 EAPI=7
 
+POSTGRES_COMPAT=( 9.5 9.6 10 11 12 13 )
+
 PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
-inherit bash-completion-r1 distutils-r1 toolchain-funcs
+inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=$(ver_rs 3 - "${PV//_}")
 PATCH_HASHES=(
+	0a501b3646d298f11420a9cdd8892742f7bad498	# configure: Use pg_config to locate the header location
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
-PATCHES=( "${PATCH_FILES[@]/#/${DISTDIR%/}/}" )
+PATCHES=(
+	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
+	"${DISTDIR}/${PN}-support-slotted-postgresql.patch"
+)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	${HOMEPAGE}/pull/3995.patch -> ${PN}-support-slotted-postgresql.patch
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
@@ -28,12 +35,12 @@ KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python test"
 
 CDEPEND="
-	postgres? ( dev-db/postgresql:* )
 	dev-db/sqlite
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
 	>=net-libs/libwally-core-niftynei-0.7.9_pre20200713[elements]
+	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 "
 RDEPEND="${CDEPEND}
@@ -51,6 +58,7 @@ BDEPEND="
 	sys-devel/gettext
 "
 REQUIRED_USE="
+	postgres? ( ${POSTGRES_REQ_USE} )
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 # FIXME: bundled deps: ccan
@@ -71,6 +79,14 @@ do_python_phase() {
 	done
 }
 
+pkg_setup() {
+	if use postgres ; then
+		postgres_pkg_setup
+	else
+		export PG_CONFIG=
+	fi
+}
+
 src_unpack() {
 	unpack "${P}.tar.gz"
 	rm -r "${S}/external"/*/
@@ -81,8 +97,6 @@ src_unpack() {
 
 src_prepare() {
 	default
-
-	use postgres || sed -e $'/^var=HAVE_POSTGRES$/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
 	use python && do_python_phase distutils-r1_src_prepare
 }
