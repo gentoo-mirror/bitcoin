@@ -54,7 +54,7 @@ BDEPEND="
 "
 REQUIRED_USE="
 	postgres? ( ${POSTGRES_REQ_USE} )
-	python? ( ${PYTHON_REQUIRED_USE} )
+	${PYTHON_REQUIRED_USE}
 "
 # FIXME: bundled deps: ccan
 
