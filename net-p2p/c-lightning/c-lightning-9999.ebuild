@@ -13,12 +13,13 @@ inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
 PATCHES=(
-	"${FILESDIR}/support-slotted-postgresql.patch"
+	"${DISTDIR}/${PN}-support-slotted-postgresql.patch"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
+SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	${HOMEPAGE}/pull/3995.patch -> ${PN}-support-slotted-postgresql.patch"
 EGIT_REPO_URI="${HOMEPAGE}.git"
 EGIT_SUBMODULES=( '-*' 'external/gheap' )
 
