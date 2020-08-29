@@ -19,29 +19,28 @@ PATCH_HASHES=(
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
 	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
-	"${DISTDIR}/${PN}-support-slotted-postgresql.patch"
+	"${FILESDIR}/${PV}-configure-database-support.patch"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
-	${HOMEPAGE}/pull/3995.patch -> ${PN}-support-slotted-postgresql.patch
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="developer experimental postgres python test"
+IUSE="developer experimental postgres python sqlite test"
 
 CDEPEND="
-	dev-db/sqlite
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
 	>=net-libs/libwally-core-niftynei-0.7.9_pre20200713[elements]
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
+	sqlite? ( dev-db/sqlite:= )
 "
 RDEPEND="${CDEPEND}
 	acct-group/lightning
@@ -58,6 +57,7 @@ BDEPEND="
 	sys-devel/gettext
 "
 REQUIRED_USE="
+	|| ( postgres sqlite )
 	postgres? ( ${POSTGRES_REQ_USE} )
 	${PYTHON_REQUIRED_USE}
 "
@@ -97,6 +97,8 @@ src_unpack() {
 
 src_prepare() {
 	default
+
+	use sqlite || sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
 	use python && do_python_phase distutils-r1_src_prepare
 }
