@@ -1,0 +1,221 @@
+diff -Naur lightning-0.9.0-1~/Makefile lightning-0.9.0-1/Makefile
+--- lightning-0.9.0-1~/Makefile	2020-08-29 07:22:45.047424078 +0000
++++ lightning-0.9.0-1/Makefile	2020-08-29 07:18:22.000000000 +0000
+@@ -207,7 +207,7 @@
+ ALL_PROGRAMS =
+ 
+ CPPFLAGS += -DBINTOPKGLIBEXECDIR="\"$(shell sh tools/rel.sh $(bindir) $(pkglibexecdir))\""
+-CFLAGS = $(CPPFLAGS) $(CWARNFLAGS) $(CDEBUGFLAGS) $(COPTFLAGS) -I $(CCANDIR) $(EXTERNAL_INCLUDE_FLAGS) -I . -I/usr/local/include $(POSTGRES_INCLUDE) $(FEATURES) $(COVFLAGS) $(DEV_CFLAGS) -DSHACHAIN_BITS=48 -DJSMN_PARENT_LINKS $(PIE_CFLAGS) $(COMPAT_CFLAGS) -DBUILD_ELEMENTS=1
++CFLAGS = $(CPPFLAGS) $(CWARNFLAGS) $(CDEBUGFLAGS) $(COPTFLAGS) -I $(CCANDIR) $(EXTERNAL_INCLUDE_FLAGS) -I . -I/usr/local/include $(SQLITE3_CFLAGS) $(POSTGRES_INCLUDE) $(FEATURES) $(COVFLAGS) $(DEV_CFLAGS) -DSHACHAIN_BITS=48 -DJSMN_PARENT_LINKS $(PIE_CFLAGS) $(COMPAT_CFLAGS) -DBUILD_ELEMENTS=1
+ # If CFLAGS is already set in the environment of make (to whatever value, it
+ # does not matter) then it would export it to subprocesses with the above value
+ # we set, including CWARNFLAGS which by default contains -Wall -Werror. This
+@@ -223,14 +223,14 @@
+ # For MacOS, Jacob Rapoport <jacob@rumblemonkey.com> changed this to:
+ #  -L/usr/local/lib -Wl,-lgmp -lsqlite3 -lz -Wl,-lm -lpthread -ldl $(COVFLAGS)
+ # But that doesn't static link.
+-LDLIBS = -L/usr/local/lib -Wl,-dn -lgmp -lsqlite3 -lz -Wl,-dy -lm -lpthread -ldl $(COVFLAGS)
++LDLIBS = -L/usr/local/lib -Wl,-dn -lgmp $(SQLITE3_LDLIBS) -lz -Wl,-dy -lm -lpthread -ldl $(COVFLAGS)
+ else
+-LDLIBS = -L/usr/local/lib -lm -lgmp -lsqlite3 -lz $(COVFLAGS)
++LDLIBS = -L/usr/local/lib -lm -lgmp $(SQLITE3_LDLIBS) -lz $(COVFLAGS)
+ endif
+ 
+ # If we have the postgres client library we need to link against it as well
+ ifeq ($(HAVE_POSTGRES),1)
+-LDLIBS += -lpq
++LDLIBS += $(POSTGRES_LDLIBS)
+ endif
+ 
+ default: show-flags all-programs all-test-programs doc-all
+diff -Naur lightning-0.9.0-1~/configure lightning-0.9.0-1/configure
+--- lightning-0.9.0-1~/configure	2020-08-29 07:22:45.047424078 +0000
++++ lightning-0.9.0-1/configure	2020-08-29 07:18:22.000000000 +0000
+@@ -8,6 +8,15 @@
+ CONFIG_HEADER=ccan/config.h
+ BASE_WARNFLAGS="-Wall -Wundef -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition -Werror"
+ 
++: ${PKG_CONFIG=pkg-config}
++
++# You can set PG_CONFIG in the environment to direct configure to call
++# a specific 'pg_config' binary. If you set it to an empty string, then
++# PostgreSQL support will be explicitly disabled, even if a 'pg_config'
++# binary exists in your PATH. If you leave it unset, then the following
++# line enables the automagic detection that most users want.
++: ${PG_CONFIG=pg_config}
++
+ usage_with_default()
+ {
+     if [ $# = 4 ]; then
+@@ -229,13 +238,22 @@
+ # Doesn't set a var, but makes sure it exists
+ require 'python3-mako' "You need the mako module for python3: see doc/INSTALL.md" python3 -c 'import mako'
+ 
++SQLITE3_CFLAGS=""
++SQLITE3_LDLIBS="-lsqlite3"
++if command -v "${PKG_CONFIG}" >/dev/null; then
++    SQLITE3_CFLAGS="$("${PKG_CONFIG}" --silence-errors --cflags sqlite3 || :)"
++    SQLITE3_LDLIBS="$("${PKG_CONFIG}" --silence-errors --libs sqlite3 || :)"
++fi
++
+ POSTGRES_INCLUDE=""
+-if command -v pg_config 2> /dev/null; then
+-    POSTGRES_INCLUDE="-I$(pg_config --includedir)"
++POSTGRES_LDLIBS=""
++if command -v "${PG_CONFIG}" >/dev/null; then
++    POSTGRES_INCLUDE="-I$("${PG_CONFIG}" --includedir)"
++    POSTGRES_LDLIBS="-L$("${PG_CONFIG}" --libdir) -lpq"
+ fi
+ 
+ rm -f $CONFIG_VAR_FILE.$$
+-$CONFIGURATOR --extra-tests --autotools-style --var-file=$CONFIG_VAR_FILE.$$ --header-file=$CONFIG_HEADER --configurator-cc="$CONFIGURATOR_CC" --wrapper="$CONFIGURATOR_WRAPPER" "$CC" ${CWARNFLAGS-$BASE_WARNFLAGS} $CDEBUGFLAGS $COPTFLAGS -I/usr/local/include -L/usr/local/lib $POSTGRES_INCLUDE <<EOF
++$CONFIGURATOR --extra-tests --autotools-style --var-file=$CONFIG_VAR_FILE.$$ --header-file=$CONFIG_HEADER --configurator-cc="$CONFIGURATOR_CC" --wrapper="$CONFIGURATOR_WRAPPER" "$CC" ${CWARNFLAGS-$BASE_WARNFLAGS} $CDEBUGFLAGS $COPTFLAGS -I/usr/local/include -L/usr/local/lib $SQLITE3_CFLAGS $POSTGRES_INCLUDE <<EOF
+ 
+ var=HAVE_GOOD_LIBSODIUM
+ desc=libsodium with IETF chacha20 variants
+@@ -262,7 +280,7 @@
+ var=HAVE_SQLITE3_EXPANDED_SQL
+ desc=sqlite3_expanded_sql
+ style=DEFINES_EVERYTHING|EXECUTE|MAY_NOT_COMPILE
+-link=-lsqlite3
++link=$SQLITE3_LDLIBS
+ code=
+ #include <sqlite3.h>
+ #include <stdio.h>
+@@ -276,7 +294,7 @@
+ var=HAVE_SQLITE3
+ desc=sqlite3
+ style=DEFINES_EVERYTHING|EXECUTE|MAY_NOT_COMPILE
+-link=-lsqlite3
++link=$SQLITE3_LDLIBS
+ code=
+ #include <sqlite3.h>
+ #include <stdio.h>
+@@ -290,7 +308,7 @@
+ var=HAVE_POSTGRES
+ desc=postgres
+ style=DEFINES_EVERYTHING|EXECUTE|MAY_NOT_COMPILE
+-link=-lpq
++link=$POSTGRES_LDLIBS
+ code=
+ #include <libpq-fe.h>
+ #include <stdio.h>
+@@ -359,7 +377,10 @@
+ add_var CWARNFLAGS "$CWARNFLAGS"
+ add_var CDEBUGFLAGS "$CDEBUGFLAGS"
+ add_var COPTFLAGS "$COPTFLAGS"
++add_var SQLITE3_CFLAGS "$SQLITE3_CFLAGS"
++add_var SQLITE3_LDLIBS "$SQLITE3_LDLIBS"
+ add_var POSTGRES_INCLUDE "$POSTGRES_INCLUDE"
++add_var POSTGRES_LDLIBS "$POSTGRES_LDLIBS"
+ add_var VALGRIND "$VALGRIND"
+ add_var DEVELOPER "$DEVELOPER" $CONFIG_HEADER
+ add_var EXPERIMENTAL_FEATURES "$EXPERIMENTAL_FEATURES" $CONFIG_HEADER
+diff -Naur lightning-0.9.0-1~/devtools/Makefile lightning-0.9.0-1/devtools/Makefile
+--- lightning-0.9.0-1~/devtools/Makefile	2020-08-12 17:18:37.000000000 +0000
++++ lightning-0.9.0-1/devtools/Makefile	2020-08-29 07:18:22.000000000 +0000
+@@ -1,6 +1,9 @@
+ DEVTOOLS_SRC := devtools/gen_print_wire.c devtools/gen_print_onion_wire.c devtools/print_wire.c
+ DEVTOOLS_OBJS := $(DEVTOOLS_SRC:.c=.o)
+-DEVTOOLS := devtools/bolt11-cli devtools/decodemsg devtools/onion devtools/dump-gossipstore devtools/gossipwith devtools/create-gossipstore devtools/mkcommit devtools/mkfunding devtools/mkclose devtools/mkgossip devtools/mkencoded devtools/checkchannels devtools/mkquery devtools/lightning-checkmessage
++DEVTOOLS := devtools/bolt11-cli devtools/decodemsg devtools/onion devtools/dump-gossipstore devtools/gossipwith devtools/create-gossipstore devtools/mkcommit devtools/mkfunding devtools/mkclose devtools/mkgossip devtools/mkencoded devtools/mkquery devtools/lightning-checkmessage
++ifeq ($(HAVE_SQLITE3),1)
++DEVTOOLS += devtools/checkchannels
++endif
+ ifeq ($(EXPERIMENTAL_FEATURES),1)
+ DEVTOOLS += devtools/blindedpath
+ endif
+diff -Naur lightning-0.9.0-1~/tools/headerversions.c lightning-0.9.0-1/tools/headerversions.c
+--- lightning-0.9.0-1~/tools/headerversions.c	2020-08-12 17:18:37.000000000 +0000
++++ lightning-0.9.0-1/tools/headerversions.c	2020-08-29 07:18:22.000000000 +0000
+@@ -1,5 +1,6 @@
+ /* Updates the given file if any library versions have changed.  This
+  * is important for systemwide updates, such as sqlite3. */
++#include "config.h"
+ #include <ccan/err/err.h>
+ #include <ccan/read_write_all/read_write_all.h>
+ #include <ccan/tal/grab_file/grab_file.h>
+@@ -7,7 +8,12 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <gmp.h>
+-#include <sqlite3.h>
++#if HAVE_SQLITE3
++# include <sqlite3.h>
++# define IF_SQLITE3(...) __VA_ARGS__
++#else
++# define IF_SQLITE3(...)
++#endif
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+@@ -16,19 +22,21 @@
+ static const char template[] =
+ 	"/* Generated file by tools/headerversions, do not edit! */\n"
+ 	"/* GMP version: %s */\n"
+-	"/* SQLITE3 version: %u */\n"
++	IF_SQLITE3("/* SQLITE3 version: %u */\n")
+ 	"/* ZLIB version: %s */\n"
+ 	"#include <ccan/err/err.h>\n"
+ 	"#include <gmp.h>\n"
+-	"#include <sqlite3.h>\n"
++	IF_SQLITE3("#include <sqlite3.h>\n")
+ 	"#include <zlib.h>\n"
+ 	"\n"
+ 	"static inline void check_linked_library_versions(void)\n"
+ 	"{\n"
+ 	"	char compiled_gmp_version[100];\n"
++	IF_SQLITE3(
+ 	"	if (SQLITE_VERSION_NUMBER != sqlite3_libversion_number())\n"
+ 	"		errx(1, \"SQLITE version mismatch: compiled %%u, now %%u\",\n"
+ 	"		     SQLITE_VERSION_NUMBER, sqlite3_libversion_number());\n"
++	)
+ 	"	/* zlib documents that first char alters ABI. Kudos! */\n"
+ 	"	if (zlibVersion()[0] != ZLIB_VERSION[0])\n"
+ 	"		errx(1, \"zlib version mismatch: compiled %%s, now %%s\",\n"
+@@ -60,7 +68,7 @@
+ 
+ 	new = tal_fmt(NULL, template,
+ 		      gmp_version,
+-		      sqlite3_libversion_number(),
++		      IF_SQLITE3(sqlite3_libversion_number(),)
+ 		      zlibVersion());
+ 	if (!file || !streq(new, file)) {
+ 		int fd = open(argv[1], O_TRUNC|O_WRONLY|O_CREAT, 0666);
+diff -Naur lightning-0.9.0-1~/wallet/db_common.h lightning-0.9.0-1/wallet/db_common.h
+--- lightning-0.9.0-1~/wallet/db_common.h	2020-08-12 17:18:37.000000000 +0000
++++ lightning-0.9.0-1/wallet/db_common.h	2020-08-29 07:18:22.000000000 +0000
+@@ -4,7 +4,6 @@
+ #include <ccan/autodata/autodata.h>
+ #include <ccan/list/list.h>
+ #include <ccan/short_types/short_types.h>
+-#include <sqlite3.h>
+ #include <stdbool.h>
+ 
+ /* For testing, we want to catch fatal messages. */
+diff -Naur lightning-0.9.0-1~/wallet/db_postgres.c lightning-0.9.0-1/wallet/db_postgres.c
+--- lightning-0.9.0-1~/wallet/db_postgres.c	2020-08-29 07:22:45.048424088 +0000
++++ lightning-0.9.0-1/wallet/db_postgres.c	2020-08-29 07:18:22.000000000 +0000
+@@ -3,7 +3,6 @@
+ #include <ccan/ccan/tal/str/str.h>
+ #include <ccan/endian/endian.h>
+ #include <lightningd/log.h>
+-#include <sqlite3.h>
+ #include <stdio.h>
+ 
+ #if HAVE_POSTGRES
+diff -Naur lightning-0.9.0-1~/wallet/db_sqlite3.c lightning-0.9.0-1/wallet/db_sqlite3.c
+--- lightning-0.9.0-1~/wallet/db_sqlite3.c	2020-08-12 17:18:37.000000000 +0000
++++ lightning-0.9.0-1/wallet/db_sqlite3.c	2020-08-29 07:18:22.000000000 +0000
+@@ -2,10 +2,10 @@
+ #include "gen_db_sqlite3.c"
+ #include <ccan/ccan/tal/str/str.h>
+ #include <lightningd/log.h>
+-#include <sqlite3.h>
+ #include <stdio.h>
+ 
+ #if HAVE_SQLITE3
++#include <sqlite3.h>
+ 
+ #if !HAVE_SQLITE3_EXPANDED_SQL
+ /* Prior to sqlite3 v3.14, we have to use tracing to dump statements */
