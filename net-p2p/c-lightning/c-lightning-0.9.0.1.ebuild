@@ -21,13 +21,14 @@ PATCH_HASHES=(
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
 	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
-	"${FILESDIR}/${PV}-configure-database-support.patch"
+	"${T}/${PV}-allow-building-without-sqlite3.patch"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	${HOMEPAGE}/commit/abbc712afbf331fa262c424bef4338b75a92bba0.patch
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
@@ -95,6 +96,9 @@ src_unpack() {
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,}
+
+	sed -e 's| devtools/topology devtools/route||' \
+		"${DISTDIR}/abbc712afbf331fa262c424bef4338b75a92bba0.patch" >"${T}/${PV}-allow-building-without-sqlite3.patch"
 }
 
 src_prepare() {
