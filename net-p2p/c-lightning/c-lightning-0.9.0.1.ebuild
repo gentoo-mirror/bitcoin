@@ -15,6 +15,8 @@ MyPN=lightning
 MyPV=$(ver_rs 3 - "${PV//_}")
 PATCH_HASHES=(
 	0a501b3646d298f11420a9cdd8892742f7bad498	# configure: Use pg_config to locate the header location
+	94472f67c57e42828ede308898c795b82cdb5c4d	# configure: Use pg_config to locate the library location too
+	c1aa33a62a82a630fa8ab773d252745ccc8da574	# configure: hoist defaulting of PG_CONFIG var to top of script
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -120,6 +122,11 @@ src_configure() {
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
 		CHANGED_FROM_GIT=false
 		docdir="/usr/share/doc/${PF}"
+	)
+
+	use sqlite || CLIGHTNING_MAKEOPTS+=(
+		SQLITE3_CFLAGS=
+		SQLITE3_LDLIBS=
 	)
 
 	python_setup
