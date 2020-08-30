@@ -12,9 +12,6 @@ DISTUTILS_OPTIONAL=1
 inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
-PATCHES=(
-	"${T}/${PV}-configure-database-support.patch"
-)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
@@ -86,9 +83,6 @@ src_unpack() {
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,}
-
-	sed -e 's|^[-+]DEVTOOLS := .*lightning-checkmessage$|\0 devtools/topology devtools/route|' \
-		"${FILESDIR}/0.9.0.1-configure-database-support.patch" >"${T}/9999-configure-database-support.patch"
 }
 
 src_prepare() {
