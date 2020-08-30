@@ -1,6 +1,6 @@
-diff -Naur lightning-0.9.0-1~/Makefile lightning-0.9.0-1/Makefile
---- lightning-0.9.0-1~/Makefile	2020-08-29 07:22:45.047424078 +0000
-+++ lightning-0.9.0-1/Makefile	2020-08-29 07:18:22.000000000 +0000
+diff -Naur a/Makefile b/Makefile
+--- a/Makefile	2020-08-30 03:50:22.083359840 +0000
++++ b/Makefile	2020-08-30 03:52:37.755790374 +0000
 @@ -207,7 +207,7 @@
  ALL_PROGRAMS =
  
@@ -10,44 +10,31 @@ diff -Naur lightning-0.9.0-1~/Makefile lightning-0.9.0-1/Makefile
  # If CFLAGS is already set in the environment of make (to whatever value, it
  # does not matter) then it would export it to subprocesses with the above value
  # we set, including CWARNFLAGS which by default contains -Wall -Werror. This
-@@ -223,14 +223,14 @@
+@@ -223,9 +223,9 @@
  # For MacOS, Jacob Rapoport <jacob@rumblemonkey.com> changed this to:
  #  -L/usr/local/lib -Wl,-lgmp -lsqlite3 -lz -Wl,-lm -lpthread -ldl $(COVFLAGS)
  # But that doesn't static link.
 -LDLIBS = -L/usr/local/lib -Wl,-dn -lgmp -lsqlite3 -lz -Wl,-dy -lm -lpthread -ldl $(COVFLAGS)
-+LDLIBS = -L/usr/local/lib -Wl,-dn -lgmp $(SQLITE3_LDLIBS) -lz -Wl,-dy -lm -lpthread -ldl $(COVFLAGS)
++LDLIBS = -L/usr/local/lib -Wl,-dn -lgmp $(SQLITE3_LBLIBS) -lz -Wl,-dy -lm -lpthread -ldl $(COVFLAGS)
  else
 -LDLIBS = -L/usr/local/lib -lm -lgmp -lsqlite3 -lz $(COVFLAGS)
 +LDLIBS = -L/usr/local/lib -lm -lgmp $(SQLITE3_LDLIBS) -lz $(COVFLAGS)
  endif
  
  # If we have the postgres client library we need to link against it as well
- ifeq ($(HAVE_POSTGRES),1)
--LDLIBS += -lpq
-+LDLIBS += $(POSTGRES_LDLIBS)
- endif
- 
- default: show-flags all-programs all-test-programs doc-all
-diff -Naur lightning-0.9.0-1~/configure lightning-0.9.0-1/configure
---- lightning-0.9.0-1~/configure	2020-08-29 07:22:45.047424078 +0000
-+++ lightning-0.9.0-1/configure	2020-08-29 07:18:22.000000000 +0000
-@@ -8,6 +8,15 @@
+diff -Naur a/configure b/configure
+--- a/configure	2020-08-30 03:50:22.097359988 +0000
++++ b/configure	2020-08-30 03:50:52.416679676 +0000
+@@ -8,6 +8,8 @@
  CONFIG_HEADER=ccan/config.h
  BASE_WARNFLAGS="-Wall -Wundef -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes -Wold-style-definition -Werror"
  
 +: ${PKG_CONFIG=pkg-config}
 +
-+# You can set PG_CONFIG in the environment to direct configure to call
-+# a specific 'pg_config' binary. If you set it to an empty string, then
-+# PostgreSQL support will be explicitly disabled, even if a 'pg_config'
-+# binary exists in your PATH. If you leave it unset, then the following
-+# line enables the automagic detection that most users want.
-+: ${PG_CONFIG=pg_config}
-+
- usage_with_default()
- {
-     if [ $# = 4 ]; then
-@@ -229,13 +238,22 @@
+ # You can set PG_CONFIG in the environment to direct configure to call
+ # a specific 'pg_config' binary. If you set it to an empty string, then
+ # PostgreSQL support will be explicitly disabled, even if a 'pg_config'
+@@ -236,6 +238,13 @@
  # Doesn't set a var, but makes sure it exists
  require 'python3-mako' "You need the mako module for python3: see doc/INSTALL.md" python3 -c 'import mako'
  
@@ -59,12 +46,9 @@ diff -Naur lightning-0.9.0-1~/configure lightning-0.9.0-1/configure
 +fi
 +
  POSTGRES_INCLUDE=""
--if command -v pg_config 2> /dev/null; then
--    POSTGRES_INCLUDE="-I$(pg_config --includedir)"
-+POSTGRES_LDLIBS=""
-+if command -v "${PG_CONFIG}" >/dev/null; then
-+    POSTGRES_INCLUDE="-I$("${PG_CONFIG}" --includedir)"
-+    POSTGRES_LDLIBS="-L$("${PG_CONFIG}" --libdir) -lpq"
+ POSTGRES_LDLIBS=""
+ if command -v "${PG_CONFIG}" >/dev/null; then
+@@ -244,7 +253,7 @@
  fi
  
  rm -f $CONFIG_VAR_FILE.$$
@@ -73,7 +57,7 @@ diff -Naur lightning-0.9.0-1~/configure lightning-0.9.0-1/configure
  
  var=HAVE_GOOD_LIBSODIUM
  desc=libsodium with IETF chacha20 variants
-@@ -262,7 +280,7 @@
+@@ -271,7 +280,7 @@
  var=HAVE_SQLITE3_EXPANDED_SQL
  desc=sqlite3_expanded_sql
  style=DEFINES_EVERYTHING|EXECUTE|MAY_NOT_COMPILE
@@ -82,7 +66,7 @@ diff -Naur lightning-0.9.0-1~/configure lightning-0.9.0-1/configure
  code=
  #include <sqlite3.h>
  #include <stdio.h>
-@@ -276,7 +294,7 @@
+@@ -285,7 +294,7 @@
  var=HAVE_SQLITE3
  desc=sqlite3
  style=DEFINES_EVERYTHING|EXECUTE|MAY_NOT_COMPILE
@@ -91,29 +75,18 @@ diff -Naur lightning-0.9.0-1~/configure lightning-0.9.0-1/configure
  code=
  #include <sqlite3.h>
  #include <stdio.h>
-@@ -290,7 +308,7 @@
- var=HAVE_POSTGRES
- desc=postgres
- style=DEFINES_EVERYTHING|EXECUTE|MAY_NOT_COMPILE
--link=-lpq
-+link=$POSTGRES_LDLIBS
- code=
- #include <libpq-fe.h>
- #include <stdio.h>
-@@ -359,7 +377,10 @@
+@@ -368,6 +377,8 @@
  add_var CWARNFLAGS "$CWARNFLAGS"
  add_var CDEBUGFLAGS "$CDEBUGFLAGS"
  add_var COPTFLAGS "$COPTFLAGS"
 +add_var SQLITE3_CFLAGS "$SQLITE3_CFLAGS"
 +add_var SQLITE3_LDLIBS "$SQLITE3_LDLIBS"
  add_var POSTGRES_INCLUDE "$POSTGRES_INCLUDE"
-+add_var POSTGRES_LDLIBS "$POSTGRES_LDLIBS"
+ add_var POSTGRES_LDLIBS "$POSTGRES_LDLIBS"
  add_var VALGRIND "$VALGRIND"
- add_var DEVELOPER "$DEVELOPER" $CONFIG_HEADER
- add_var EXPERIMENTAL_FEATURES "$EXPERIMENTAL_FEATURES" $CONFIG_HEADER
-diff -Naur lightning-0.9.0-1~/devtools/Makefile lightning-0.9.0-1/devtools/Makefile
---- lightning-0.9.0-1~/devtools/Makefile	2020-08-12 17:18:37.000000000 +0000
-+++ lightning-0.9.0-1/devtools/Makefile	2020-08-29 07:18:22.000000000 +0000
+diff -Naur a/devtools/Makefile b/devtools/Makefile
+--- a/devtools/Makefile	2020-08-12 17:18:37.000000000 +0000
++++ b/devtools/Makefile	2020-08-30 03:50:52.432679845 +0000
 @@ -1,6 +1,9 @@
  DEVTOOLS_SRC := devtools/gen_print_wire.c devtools/gen_print_onion_wire.c devtools/print_wire.c
  DEVTOOLS_OBJS := $(DEVTOOLS_SRC:.c=.o)
@@ -125,9 +98,9 @@ diff -Naur lightning-0.9.0-1~/devtools/Makefile lightning-0.9.0-1/devtools/Makef
  ifeq ($(EXPERIMENTAL_FEATURES),1)
  DEVTOOLS += devtools/blindedpath
  endif
-diff -Naur lightning-0.9.0-1~/tools/headerversions.c lightning-0.9.0-1/tools/headerversions.c
---- lightning-0.9.0-1~/tools/headerversions.c	2020-08-12 17:18:37.000000000 +0000
-+++ lightning-0.9.0-1/tools/headerversions.c	2020-08-29 07:18:22.000000000 +0000
+diff -Naur a/tools/headerversions.c b/tools/headerversions.c
+--- a/tools/headerversions.c	2020-08-12 17:18:37.000000000 +0000
++++ b/tools/headerversions.c	2020-08-30 03:50:52.432679845 +0000
 @@ -1,5 +1,6 @@
  /* Updates the given file if any library versions have changed.  This
   * is important for systemwide updates, such as sqlite3. */
@@ -182,9 +155,9 @@ diff -Naur lightning-0.9.0-1~/tools/headerversions.c lightning-0.9.0-1/tools/hea
  		      zlibVersion());
  	if (!file || !streq(new, file)) {
  		int fd = open(argv[1], O_TRUNC|O_WRONLY|O_CREAT, 0666);
-diff -Naur lightning-0.9.0-1~/wallet/db_common.h lightning-0.9.0-1/wallet/db_common.h
---- lightning-0.9.0-1~/wallet/db_common.h	2020-08-12 17:18:37.000000000 +0000
-+++ lightning-0.9.0-1/wallet/db_common.h	2020-08-29 07:18:22.000000000 +0000
+diff -Naur a/wallet/db_common.h b/wallet/db_common.h
+--- a/wallet/db_common.h	2020-08-12 17:18:37.000000000 +0000
++++ b/wallet/db_common.h	2020-08-30 03:50:52.449680024 +0000
 @@ -4,7 +4,6 @@
  #include <ccan/autodata/autodata.h>
  #include <ccan/list/list.h>
@@ -193,9 +166,9 @@ diff -Naur lightning-0.9.0-1~/wallet/db_common.h lightning-0.9.0-1/wallet/db_com
  #include <stdbool.h>
  
  /* For testing, we want to catch fatal messages. */
-diff -Naur lightning-0.9.0-1~/wallet/db_postgres.c lightning-0.9.0-1/wallet/db_postgres.c
---- lightning-0.9.0-1~/wallet/db_postgres.c	2020-08-29 07:22:45.048424088 +0000
-+++ lightning-0.9.0-1/wallet/db_postgres.c	2020-08-29 07:18:22.000000000 +0000
+diff -Naur a/wallet/db_postgres.c b/wallet/db_postgres.c
+--- a/wallet/db_postgres.c	2020-08-30 03:50:22.069359693 +0000
++++ b/wallet/db_postgres.c	2020-08-30 03:50:52.449680024 +0000
 @@ -3,7 +3,6 @@
  #include <ccan/ccan/tal/str/str.h>
  #include <ccan/endian/endian.h>
@@ -204,9 +177,9 @@ diff -Naur lightning-0.9.0-1~/wallet/db_postgres.c lightning-0.9.0-1/wallet/db_p
  #include <stdio.h>
  
  #if HAVE_POSTGRES
-diff -Naur lightning-0.9.0-1~/wallet/db_sqlite3.c lightning-0.9.0-1/wallet/db_sqlite3.c
---- lightning-0.9.0-1~/wallet/db_sqlite3.c	2020-08-12 17:18:37.000000000 +0000
-+++ lightning-0.9.0-1/wallet/db_sqlite3.c	2020-08-29 07:18:22.000000000 +0000
+diff -Naur a/wallet/db_sqlite3.c b/wallet/db_sqlite3.c
+--- a/wallet/db_sqlite3.c	2020-08-12 17:18:37.000000000 +0000
++++ b/wallet/db_sqlite3.c	2020-08-30 03:50:52.449680024 +0000
 @@ -2,10 +2,10 @@
  #include "gen_db_sqlite3.c"
  #include <ccan/ccan/tal/str/str.h>

@@ -13,13 +13,12 @@ inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
 PATCHES=(
-	"${DISTDIR}/${PN}-support-slotted-postgresql.patch"
+	"${T}/${PV}-configure-database-support.patch"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
-	${HOMEPAGE}/pull/3995.patch -> ${PN}-support-slotted-postgresql.patch"
+SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
 EGIT_REPO_URI="${HOMEPAGE}.git"
 EGIT_SUBMODULES=( '-*' 'external/gheap' )
 
@@ -27,16 +26,16 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer experimental postgres python test"
+IUSE="developer experimental postgres python sqlite test"
 
 CDEPEND="
-	dev-db/sqlite
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
 	>=dev-libs/libsodium-1.0.16
 	>=net-libs/libwally-core-0.7.9_pre20200814[elements]
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
+	sqlite? ( dev-db/sqlite:= )
 "
 RDEPEND="${CDEPEND}
 	acct-group/lightning
@@ -53,6 +52,7 @@ BDEPEND="
 	sys-devel/gettext
 "
 REQUIRED_USE="
+	|| ( postgres sqlite )
 	postgres? ( ${POSTGRES_REQ_USE} )
 	${PYTHON_REQUIRED_USE}
 "
@@ -86,10 +86,15 @@ src_unpack() {
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,}
+
+	sed -e 's|^[-+]DEVTOOLS := .*lightning-checkmessage$|\0 devtools/topology devtools/route|' \
+		"${FILESDIR}/0.9.0.1-configure-database-support.patch" >"${T}/9999-configure-database-support.patch"
 }
 
 src_prepare() {
 	default
+
+	use sqlite || sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
 	use python && do_python_phase distutils-r1_src_prepare
 }
@@ -111,6 +116,11 @@ src_configure() {
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
 		CHANGED_FROM_GIT=false
 		docdir="/usr/share/doc/${PF}"
+	)
+
+	use sqlite || CLIGHTNING_MAKEOPTS+=(
+		SQLITE3_CFLAGS=
+		SQLITE3_LDLIBS=
 	)
 
 	python_setup
