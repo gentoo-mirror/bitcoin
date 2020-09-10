@@ -8,13 +8,11 @@ inherit autotools
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
 
-COMMIT_HASH="b8d7ea91049c3d5522768c77c8bfe4936cbabbd7"
-SRC_URI="${HOMEPAGE}/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz"
+SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="MIT CC0-1.0"
 SLOT="0"
 
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="elements"
 
 # TODO: python, java, js
@@ -25,7 +23,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/${PN}-${COMMIT_HASH}"
+S="${WORKDIR}/${PN}-release_${PV}"
 
 src_prepare() {
 	eapply "${FILESDIR}/0.7.5-sys_libsecp256k1.patch"
