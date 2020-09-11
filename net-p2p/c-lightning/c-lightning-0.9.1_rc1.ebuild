@@ -9,15 +9,23 @@ PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
-inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
+inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
+MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
+PATCH_HASHES=(
+)
+PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
+PATCHES=(
+	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
+)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz"
-EGIT_REPO_URI="${HOMEPAGE}.git"
-EGIT_SUBMODULES=( '-*' 'external/gheap' )
+SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
+	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -55,6 +63,8 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
+S=${WORKDIR}/${MyPN}-${MyPV}
+
 python_check_deps() {
 	has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
 		{ ! use test || has_version "dev-python/pytest[${PYTHON_USEDEP}]" ; }
@@ -78,11 +88,13 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_src_unpack
-	find "${S}/external" -depth -mindepth 1 -maxdepth 1 -type d ! -name 'gheap' -delete || die
+	unpack "${P}.tar.gz"
+	rm -r "${S}/external"/*/
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,} || die
+	unpack gheap-67fc83b.tar.gz
+	mv gheap{-*,} || die
 }
 
 src_prepare() {
@@ -97,7 +109,7 @@ src_configure() {
 	local BUNDLED_LIBS="external/${CHOST}/libjsmn.a"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="$(git describe --always)"
+		VERSION="${MyPV}"
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
@@ -161,7 +173,7 @@ src_install() {
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-${PV}.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-$(ver_cut 1-3).conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
@@ -174,6 +186,8 @@ src_install() {
 }
 
 pkg_preinst() {
+	has_version '<net-p2p/c-lightning-0.8' && had_pre_0_8_0=1
+
 	if [[ -e ${EROOT%/}/etc/lightning/config && ! -e ${EROOT%/}/etc/lightning/lightningd.conf ]] ; then
 		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
 		mv --no-clobber -- "${EROOT%/}/etc/lightning/"{config,lightningd.conf}
@@ -186,6 +200,13 @@ pkg_postinst() {
 	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
 	elog " - Add your user(s) to the 'lightning' group."
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
+
+	# warn when upgrading from pre-0.8.0
+	if [[ ${had_pre_0_8_0} || -e ${EROOT%/}/var/lib/lightning/hsm_secret ]] ; then
+		ewarn 'This version of C-Lightning maintains its data files in network-specific'
+		ewarn 'subdirectories of its base directory. Your existing data files will be'
+		ewarn 'migrated automatically upon first startup of the new version.'
+	fi
 
 	if [[ ${had_hsmtool} ]] ; then
 		ewarn "Upstream has renamed the ${HILITE}hsmtool${NORMAL} executable to ${HILITE}lightning-hsmtool${NORMAL}."
