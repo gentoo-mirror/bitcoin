@@ -49,10 +49,10 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 "
 BDEPEND="
-	$(python_gen_any_dep '
+	test? ( $(python_gen_any_dep '
 		dev-python/mako[${PYTHON_USEDEP}]
-		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
-	' -3)
+		dev-python/pytest[${PYTHON_USEDEP}]
+	' -3) )
 	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
 	sys-devel/gettext
 "
