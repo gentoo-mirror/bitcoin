@@ -66,8 +66,9 @@ REQUIRED_USE="
 S=${WORKDIR}/${MyPN}-${MyPV}
 
 python_check_deps() {
-	has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
-		{ ! use test || has_version "dev-python/pytest[${PYTHON_USEDEP}]" ; }
+	! use test || {
+		has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
+		has_version "dev-python/pytest[${PYTHON_USEDEP}]" ; }
 }
 
 do_python_phase() {
@@ -129,7 +130,7 @@ src_configure() {
 		SQLITE3_LDLIBS=
 	)
 
-	python_setup
+	use test && python_setup
 	./configure \
 		CC="$(tc-getCC)" \
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
@@ -152,7 +153,7 @@ src_configure() {
 }
 
 src_compile() {
-	python_setup
+	use test && python_setup
 	emake "${CLIGHTNING_MAKEOPTS[@]}" \
 		all-programs \
 		$(usex test 'all-test-programs' '') \
