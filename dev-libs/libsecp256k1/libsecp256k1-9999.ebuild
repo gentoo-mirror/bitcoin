@@ -1,9 +1,9 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-EGIT_REPO_URI="https://github.com/bitcoin/secp256k1.git"
+EGIT_REPO_URI="https://github.com/bitcoin-core/secp256k1.git"
 inherit git-r3 autotools eutils
 
 MyPN=secp256k1
@@ -13,13 +13,13 @@ HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+asm ecdh endomorphism experimental gmp java +recovery test test-openssl"
+IUSE="+asm ecdh endomorphism experimental extrakeys gmp lowmem precompute-ecmult schnorr +recovery test test-openssl"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	ecdh? ( experimental )
-	java? ( ecdh )
+	schnorr? ( extrakeys )
 	test-openssl? ( test )
 "
 RDEPEND="
@@ -27,11 +27,11 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	java? ( virtual/jdk )
 	test-openssl? ( dev-libs/openssl:0 )
 "
 
 src_prepare() {
+	default
 	eautoreconf
 }
 
@@ -49,14 +49,18 @@ src_configure() {
 	econf \
 		--disable-benchmark \
 		$(use_enable experimental) \
-		$(use_enable java jni) \
 		$(use_enable test tests) \
+		$(use_enable test exhaustive-tests) \
 		$(use_enable test-openssl openssl-tests) \
 		$(use_enable ecdh module-ecdh) \
+		$(use_enable extrakeys module-extrakeys) \
 		$(use_enable endomorphism)  \
 		--with-asm=$asm_opt \
 		--with-bignum=$(usex gmp gmp no) \
 		$(use_enable recovery module-recovery) \
+		$(use_enable schnorr module-schnorrsig) \
+		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '') \
+		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '') \
 		--disable-static
 }
 
