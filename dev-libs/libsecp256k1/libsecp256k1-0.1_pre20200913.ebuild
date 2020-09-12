@@ -3,17 +3,18 @@
 
 EAPI=7
 
-EGIT_REPO_URI="https://github.com/bitcoin-core/secp256k1.git"
-inherit git-r3 autotools eutils
+inherit autotools eutils
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
+COMMITHASH="c9939ba55d552d1b2cb5be5655bc0f3198b788d1"
+SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+asm ecdh endomorphism experimental extrakeys gmp lowmem precompute-ecmult schnorr +recovery test test-openssl"
+IUSE="+asm ecdh endomorphism experimental extrakeys gmp lowmem precompute-ecmult schnorr +recovery test test-openssl valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -30,7 +31,10 @@ DEPEND="${RDEPEND}
 	test-openssl? ( dev-libs/openssl:0 )
 "
 
+S="${WORKDIR}/${MyPN}-${COMMITHASH}"
+
 src_prepare() {
+	eapply "${FILESDIR}/20200913-valgrind-opt.patch"
 	default
 	eautoreconf
 }
@@ -61,6 +65,7 @@ src_configure() {
 		$(use_enable schnorr module-schnorrsig) \
 		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '') \
 		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '') \
+		$(use_with valgrind) \
 		--disable-static
 }
 
