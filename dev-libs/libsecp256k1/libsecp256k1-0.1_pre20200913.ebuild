@@ -29,6 +29,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	test-openssl? ( dev-libs/openssl:0 )
+	valgrind? ( dev-util/valgrind )
 "
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
