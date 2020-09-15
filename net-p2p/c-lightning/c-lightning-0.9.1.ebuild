@@ -29,8 +29,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python sqlite test"
 
 CDEPEND="
@@ -108,12 +107,14 @@ src_prepare() {
 
 src_configure() {
 	local BUNDLED_LIBS="external/${CHOST}/libjsmn.a"
+	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
 		VERSION="${MyPV}"
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
+		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
 		LIBSODIUM_HEADERS=
 		LIBWALLY_HEADERS=
 		LIBSECP_HEADERS=
@@ -184,6 +185,9 @@ src_install() {
 	newbashcomp contrib/lightning-cli.bash-completion lightning-cli
 
 	use python && do_python_phase distutils-r1_src_install
+
+	insinto "/etc/portage/savedconfig/${CATEGORY}"
+	newins compat.vars "${PN}"
 }
 
 pkg_preinst() {
