@@ -96,12 +96,14 @@ src_prepare() {
 
 src_configure() {
 	local BUNDLED_LIBS="external/${CHOST}/libjsmn.a"
+	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
 		VERSION="$(git describe --always)"
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
+		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
 		LIBSODIUM_HEADERS=
 		LIBWALLY_HEADERS=
 		LIBSECP_HEADERS=
@@ -172,6 +174,9 @@ src_install() {
 	newbashcomp contrib/lightning-cli.bash-completion lightning-cli
 
 	use python && do_python_phase distutils-r1_src_install
+
+	insinto "/etc/portage/savedconfig/${CATEGORY}"
+	newins compat.vars "${PN}"
 }
 
 pkg_preinst() {
