@@ -89,6 +89,9 @@ src_unpack() {
 src_prepare() {
 	default
 
+	# hack to suppress tools/refresh-submodules.sh
+	sed -e '/^submodcheck:/{n;d}' -i external/Makefile
+
 	use sqlite || sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
 	use python && do_python_phase distutils-r1_src_prepare
@@ -99,16 +102,15 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="$(git describe --always)"
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
+		SHA256STAMP_CHANGED=false
 		LIBSODIUM_HEADERS=
 		LIBWALLY_HEADERS=
 		LIBSECP_HEADERS=
 		LIBBACKTRACE_HEADERS=
-		SUBMODULES=none
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
 		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ -I external/gheap/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
@@ -135,9 +137,6 @@ src_configure() {
 		--disable-static \
 		--disable-address-sanitizer \
 		|| die
-
-	# hack to suppress tools/refresh-submodules.sh
-	mkdir .refresh-submodules
 
 	use python && do_python_phase distutils-r1_src_configure
 }
