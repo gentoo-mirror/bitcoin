@@ -20,7 +20,8 @@ RESTRICT="!test? ( test )"
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	ecdh? ( experimental )
-	schnorr? ( extrakeys )
+	extrakeys? ( experimental )
+	schnorr? ( extrakeys experimental )
 	test-openssl? ( test )
 "
 RDEPEND="
