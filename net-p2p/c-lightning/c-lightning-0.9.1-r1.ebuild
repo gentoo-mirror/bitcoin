@@ -14,6 +14,7 @@ inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
+	de7b41695f1f1abdfe3b247fc9f4e1fcf9393de3	# db: Fix size mismatch on postgres in a migration
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -77,6 +78,22 @@ do_python_phase() {
 		"${@}"
 		popd >/dev/null || die
 	done
+}
+
+pkg_pretend() {
+	if [[ ! "${REPLACE_RUNNING_CLIGHTNING}" ]] &&
+		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
+		{ has_version "<${CATEGORY}/${PN}-$(ver_cut 1-3)" ||
+			has_version ">=${CATEGORY}/${PN}-$(ver_cut 1-2).$(($(ver_cut 3)+1))" ; } &&
+		find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*"
+	then
+		eerror "A potentially incompatible version of the lightningd daemon is currently" \
+			'\n'"running. Installing version ${PV} would likely cause the running daemon" \
+			'\n'"to fail when it next spawns a subdaemon process. Please stop the running" \
+			'\n'"daemon and reattempt this installation, or set REPLACE_RUNNING_CLIGHTNING=1" \
+			'\n'"if you are certain you know what you are doing."
+		die 'lightningd is running'
+	fi
 }
 
 pkg_setup() {
