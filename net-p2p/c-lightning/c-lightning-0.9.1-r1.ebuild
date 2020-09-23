@@ -80,6 +80,22 @@ do_python_phase() {
 	done
 }
 
+pkg_pretend() {
+	if [[ ! "${REPLACE_RUNNING_CLIGHTNING}" ]] &&
+		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
+		{ has_version "<${CATEGORY}/${PN}-$(ver_cut 1-3)" ||
+			has_version ">=${CATEGORY}/${PN}-$(ver_cut 1-2).$(($(ver_cut 3)+1))" ; } &&
+		find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*"
+	then
+		eerror "A potentially incompatible version of the lightningd daemon is currently" \
+			'\n'"running. Installing version ${PV} would likely cause the running daemon" \
+			'\n'"to fail when it next spawns a subdaemon process. Please stop the running" \
+			'\n'"daemon and reattempt this installation, or set REPLACE_RUNNING_CLIGHTNING=1" \
+			'\n'"if you are certain you know what you are doing."
+		die 'lightningd is running'
+	fi
+}
+
 pkg_setup() {
 	if use postgres ; then
 		postgres_pkg_setup
