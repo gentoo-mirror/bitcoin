@@ -8,7 +8,7 @@ inherit autotools eutils
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
-COMMITHASH="c9939ba55d552d1b2cb5be5655bc0f3198b788d1"
+COMMITHASH="d7838ba6a6ac77cec173080f20efcd0e311ebfaa"
 SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
@@ -36,7 +36,6 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
 
 src_prepare() {
-	eapply "${FILESDIR}/20200913-valgrind-opt.patch"
 	default
 	eautoreconf
 }
