@@ -10,6 +10,6 @@ RDEPEND=gmp? ( dev-libs/gmp:0= )
 REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ecdh? ( experimental ) extrakeys? ( experimental ) schnorr? ( extrakeys experimental ) test-openssl? ( test )
 RESTRICT=!test? ( test )
 SLOT=0
-SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/c9939ba55d552d1b2cb5be5655bc0f3198b788d1.tar.gz -> libsecp256k1-v0.1_pre20200913.tgz
+SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/d7838ba6a6ac77cec173080f20efcd0e311ebfaa.tar.gz -> libsecp256k1-v0.1_pre20200920.tgz
 _eclasses_=autotools	7d999b62b8749fad43fff00620cedf47	edos2unix	33e347e171066657f91f8b0c72ec8773	eutils	2d5b3f4b315094768576b6799e4f926e	l10n	8cdd85e169b835d518bc2fd59f780d8e	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	98584e405e2b0264d37e8f728327fed1	toolchain-funcs	605c126bed8d87e4378d5ff1645330cb	wrapper	4251d4c84c25f59094fd557e0063a974
-_md5_=a77f4e4ac0f717846b605c563c3b1e11
+_md5_=5ffef0ed3b5390ee3c0a95b63921bf9d
