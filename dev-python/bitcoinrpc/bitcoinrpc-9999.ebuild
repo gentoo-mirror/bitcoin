@@ -8,6 +8,7 @@ inherit git-r3 python-r1
 
 DESCRIPTION="Efficient JSON-RPC for Python"
 HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"
+LICENSE="LGPL-2.1"
 EGIT_REPO_URI="git://github.com/jgarzik/python-${PN}.git"
 MyPy="jsonrpc/authproxy.py"
 

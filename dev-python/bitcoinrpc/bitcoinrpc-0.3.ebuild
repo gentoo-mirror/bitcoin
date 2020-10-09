@@ -8,6 +8,7 @@ inherit python-r1
 
 DESCRIPTION="Efficient JSON-RPC for Python"
 HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"
+LICENSE="LGPL-2.1"
 MyP="python-${PN}-${PV}"
 SRC_URI="https://github.com/jgarzik/python-bitcoinrpc/archive/v${PV}.tar.gz -> ${MyP}.tar.gz"
 MyPy="jsonrpc/authproxy.py"
