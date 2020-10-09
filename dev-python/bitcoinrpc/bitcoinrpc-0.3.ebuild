@@ -14,7 +14,7 @@ SRC_URI="https://github.com/jgarzik/python-bitcoinrpc/archive/v${PV}.tar.gz -> $
 MyPy="jsonrpc/authproxy.py"
 
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="x86 amd64"
 IUSE="+jsonrpc-compat"
 
 DEPEND="jsonrpc-compat? ( !dev-python/jsonrpc )
