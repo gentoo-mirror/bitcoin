@@ -10,7 +10,7 @@ dev-libs/univalue 1.0.2 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON l
 dev-python/amodem 1.9: Transmit data between two computers using audio
 dev-python/anynumber 9999: Python module for working with arbitrary rational numbers, in any radix
 dev-python/bencoder-pyx 2.0.1: A fast bencode implementation in Cython
-dev-python/bitcoinrpc 0.3 9999: Efficient JSON-RPC for Python
+dev-python/bitcoinrpc 0.3 1.0 9999: Efficient JSON-RPC for Python
 dev-python/chromalog 1.0.5: Enhance Python with colored logging
 dev-python/coincurve 13.0.0: Cross-platform Python CFFI bindings for libsecp256k1
 dev-python/mnemonic 0.19: Mnemonic code for generating deterministic keys, BIP39
