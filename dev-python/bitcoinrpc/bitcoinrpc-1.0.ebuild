@@ -1,19 +1,20 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 
-inherit git-r3 python-r1
+inherit python-r1
 
 DESCRIPTION="Efficient JSON-RPC for Python"
 HOMEPAGE="https://github.com/jgarzik/python-bitcoinrpc"
 LICENSE="LGPL-2.1"
-EGIT_REPO_URI="git://github.com/jgarzik/python-${PN}.git"
+MyP="python-${PN}-${PV}"
+SRC_URI="https://github.com/jgarzik/python-bitcoinrpc/archive/v${PV}.tar.gz -> ${MyP}.tar.gz"
 MyPy="jsonrpc/authproxy.py"
 
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE="+jsonrpc-compat"
 
 DEPEND="jsonrpc-compat? ( !dev-python/jsonrpc )
@@ -21,6 +22,8 @@ DEPEND="jsonrpc-compat? ( !dev-python/jsonrpc )
 "
 RDEPEND="${DEPEND}"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
+S="${WORKDIR}/${MyP}"
 
 MyPy() {
 	if use jsonrpc-compat; then
