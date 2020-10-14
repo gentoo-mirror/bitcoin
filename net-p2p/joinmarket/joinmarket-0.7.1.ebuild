@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{3_6,3_7,3_8} )
+PYTHON_COMPAT=( python3_{6..9} )
 PYTHON_REQ_USE="sqlite"
 DISTUTILS_SINGLE_IMPL=1
 
@@ -33,7 +33,7 @@ RDEPEND="
 			dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
 			dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
 			dev-python/pyaes[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/python-bitcointx-1.1.0[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/python-bitcointx-1.1.1_p0[${PYTHON_MULTI_USEDEP}]
 			dev-python/urldecode[${PYTHON_MULTI_USEDEP}]
 		)
 
