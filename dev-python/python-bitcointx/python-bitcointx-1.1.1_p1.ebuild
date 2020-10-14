@@ -7,9 +7,11 @@ PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 
 inherit distutils-r1
 
+MyPV=${PV/_p/.post}
+
 DESCRIPTION="A python3 library providing an easy interface to the Bitcoin data structures"
 HOMEPAGE="https://github.com/Simplexum/python-bitcointx"
-SRC_URI="${HOMEPAGE}/archive/${PN}-v${PV}.tar.gz"
+SRC_URI="${HOMEPAGE}/archive/${PN}-v${MyPV}.tar.gz"
 
 LICENSE="LGPL-3+"
 SLOT="0"
@@ -24,4 +26,4 @@ BDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 
-S="${WORKDIR}/${PN}-${PN}-v${PV}"
+S="${WORKDIR}/${PN}-${PN}-v${MyPV}"
