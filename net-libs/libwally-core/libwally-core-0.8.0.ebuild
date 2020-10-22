@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools
 
@@ -25,17 +25,19 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}-release_${PV}"
 
+PATCHES=(
+	"${FILESDIR}/0.8.0-sys_libsecp256k1.patch"
+)
+
 src_prepare() {
-	eapply "${FILESDIR}/0.7.5-sys_libsecp256k1.patch"
 	sed -i 's|\(#[[:space:]]*include[[:space:]]\+\)"\(src/\)\?secp256k1/include/\(.*\)"|\1<\3>|' src/*.{c,h} || die
 	rm -r src/secp256k1
 	default
+	sed -e 's/==/=/g' -i configure.ac || die
 	eautoreconf
 }
 
 src_configure() {
-	# configure.ac uses 'test .. == ..' bashism
-	CONFIG_SHELL=/bin/bash \
 	econf --includedir="${EPREFIX}"/usr/include/libwally/ \
 		--enable-export-all \
 		$(use_enable elements)

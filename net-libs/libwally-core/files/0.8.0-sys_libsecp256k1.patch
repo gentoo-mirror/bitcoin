@@ -1,7 +1,7 @@
 diff -Naur a/configure.ac b/configure.ac
---- a/configure.ac	2019-11-06 12:00:11.000000000 +0000
-+++ b/configure.ac	2019-12-09 17:06:01.000000000 +0000
-@@ -253,29 +253,37 @@
+--- a/configure.ac	2020-10-20 08:04:26.000000000 +0000
++++ b/configure.ac	2020-10-22 19:45:47.195916479 +0000
+@@ -252,29 +252,37 @@
      AC_CHECK_HEADERS([asm/page.h])
  fi
  
@@ -61,17 +61,17 @@ diff -Naur a/configure.ac b/configure.ac
  
  #
  # Python facilities
-@@ -414,7 +422,6 @@
+@@ -417,7 +425,6 @@
  export LD
  export LDFLAGS
- ac_configure_args="${ac_configure_args} --disable-shared ${secp_jni} --with-pic --with-bignum=no --enable-experimental --enable-module-ecdh --enable-module-recovery --enable-module-rangeproof --enable-module-surjectionproof --enable-module-whitelist --enable-module-generator --enable-openssl-tests=no --enable-tests=no --enable-exhaustive-tests=no --enable-benchmark=no --disable-dependency-tracking"
+ ac_configure_args="${ac_configure_args} --disable-shared ${secp_jni} --with-pic --with-bignum=no --enable-experimental --enable-module-ecdh --enable-module-recovery --enable-module-rangeproof --enable-module-surjectionproof --enable-module-whitelist --enable-module-generator --enable-openssl-tests=no --enable-tests=no --enable-exhaustive-tests=no --enable-benchmark=no --disable-dependency-tracking ${secp_asm}"
 -AC_CONFIG_SUBDIRS([src/secp256k1])
  
  
  AC_OUTPUT
 diff -Naur a/src/Makefile.am b/src/Makefile.am
---- a/src/Makefile.am	2019-11-06 12:00:11.000000000 +0000
-+++ b/src/Makefile.am	2019-12-09 17:09:46.000000000 +0000
+--- a/src/Makefile.am	2020-10-20 08:04:26.000000000 +0000
++++ b/src/Makefile.am	2020-10-22 19:44:51.232364799 +0000
 @@ -13,7 +13,6 @@
  include_HEADERS += $(top_srcdir)/include/wally_bip39.h
  include_HEADERS += $(top_srcdir)/include/wally_core.h
@@ -79,8 +79,8 @@ diff -Naur a/src/Makefile.am b/src/Makefile.am
 -include_HEADERS += $(top_srcdir)/include/wally_elements.h
  include_HEADERS += $(top_srcdir)/include/wally_psbt.h
  include_HEADERS += $(top_srcdir)/include/wally_script.h
- include_HEADERS += $(top_srcdir)/include/wally_transaction.h
-@@ -175,7 +174,6 @@
+ include_HEADERS += $(top_srcdir)/include/wally_symmetric.h
+@@ -178,7 +177,6 @@
      bip39.c \
      bech32.c \
      ecdh.c \
@@ -88,7 +88,7 @@ diff -Naur a/src/Makefile.am b/src/Makefile.am
      blech32.c \
      hex.c \
      hmac.c \
-@@ -204,16 +202,19 @@
+@@ -208,16 +206,19 @@
      include/wally_bip39.h \
      include/wally_core.h \
      include/wally_crypto.h \
@@ -112,8 +112,8 @@ diff -Naur a/src/Makefile.am b/src/Makefile.am
  TESTS =
  noinst_PROGRAMS =
 diff -Naur a/src/wrap_js/binding.gyp.tmpl b/src/wrap_js/binding.gyp.tmpl
---- a/src/wrap_js/binding.gyp.tmpl	2019-08-21 07:42:10.000000000 +0000
-+++ b/src/wrap_js/binding.gyp.tmpl	2019-10-04 20:59:36.138670592 +0000
+--- a/src/wrap_js/binding.gyp.tmpl	2020-10-20 08:04:26.000000000 +0000
++++ b/src/wrap_js/binding.gyp.tmpl	2020-10-22 19:44:51.232364799 +0000
 @@ -4,7 +4,7 @@
        "target_name": "deps",
        "sources": [ "src/combined.c", "src/combined_ccan.c", "src/combined_ccan2.c" ],
