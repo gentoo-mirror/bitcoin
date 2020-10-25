@@ -1,0 +1,15 @@
+BDEPEND=>=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.1:1.16 >=sys-devel/automake-1.15.1:1.15 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
+DEFINED_PHASES=configure install prepare
+DEPEND=gmp? ( dev-libs/gmp:0= ) virtual/pkgconfig test-openssl? ( dev-libs/openssl:0 ) valgrind? ( dev-util/valgrind )
+DESCRIPTION=Optimized C library for EC operations on curve secp256k1
+EAPI=7
+HOMEPAGE=https://github.com/bitcoin-core/secp256k1
+IUSE=+asm ecdh +experimental +extrakeys gmp lowmem precompute-ecmult +schnorr +recovery test test-openssl valgrind
+LICENSE=MIT
+RDEPEND=gmp? ( dev-libs/gmp:0= )
+REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ecdh? ( experimental ) extrakeys? ( experimental ) ?? ( lowmem precompute-ecmult ) schnorr? ( experimental extrakeys ) test-openssl? ( test )
+RESTRICT=!test? ( test )
+SLOT=0
+SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/c6b6b8f1bb044d7d1aa065ebb674adde98a36a8e.tar.gz -> libsecp256k1-v0.1_pre20201015.tgz
+_eclasses_=autotools	7d999b62b8749fad43fff00620cedf47	edos2unix	33e347e171066657f91f8b0c72ec8773	eutils	2d5b3f4b315094768576b6799e4f926e	l10n	8cdd85e169b835d518bc2fd59f780d8e	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	98584e405e2b0264d37e8f728327fed1	toolchain-funcs	605c126bed8d87e4378d5ff1645330cb	wrapper	4251d4c84c25f59094fd557e0063a974
+_md5_=b4f60b20da528af6c21f1c98063d1b72
