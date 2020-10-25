@@ -13,13 +13,14 @@ HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+asm ecdh endomorphism experimental extrakeys gmp lowmem precompute-ecmult schnorr +recovery test test-openssl"
+IUSE="+asm ecdh +experimental +extrakeys gmp lowmem precompute-ecmult +schnorr +recovery test test-openssl valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	ecdh? ( experimental )
-	schnorr? ( extrakeys )
+	extrakeys? ( experimental )
+	?? ( lowmem precompute-ecmult )
+	schnorr? ( experimental extrakeys )
 	test-openssl? ( test )
 "
 RDEPEND="
@@ -28,6 +29,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	test-openssl? ( dev-libs/openssl:0 )
+	valgrind? ( dev-util/valgrind )
 "
 
 src_prepare() {
@@ -54,13 +56,13 @@ src_configure() {
 		$(use_enable test-openssl openssl-tests) \
 		$(use_enable ecdh module-ecdh) \
 		$(use_enable extrakeys module-extrakeys) \
-		$(use_enable endomorphism)  \
 		--with-asm=$asm_opt \
 		--with-bignum=$(usex gmp gmp no) \
 		$(use_enable recovery module-recovery) \
 		$(use_enable schnorr module-schnorrsig) \
 		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '') \
 		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '') \
+		$(use_with valgrind) \
 		--disable-static
 }
 

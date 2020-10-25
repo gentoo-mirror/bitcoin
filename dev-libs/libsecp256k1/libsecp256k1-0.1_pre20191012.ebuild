@@ -19,7 +19,6 @@ RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	ecdh? ( experimental )
 	java? ( ecdh )
 	test-openssl? ( test )
 "
@@ -52,7 +51,7 @@ src_configure() {
 	fi
 	econf \
 		--disable-benchmark \
-		$(use_enable experimental) \
+		--enable-experimental \
 		$(use_enable java jni) \
 		$(use_enable test tests) \
 		$(use_enable test-openssl openssl-tests) \
