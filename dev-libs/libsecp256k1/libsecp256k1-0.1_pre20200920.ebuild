@@ -19,7 +19,6 @@ RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	ecdh? ( experimental )
 	extrakeys? ( experimental )
 	?? ( lowmem precompute-ecmult )
 	schnorr? ( experimental extrakeys )
@@ -54,7 +53,7 @@ src_configure() {
 	fi
 	econf \
 		--disable-benchmark \
-		$(use_enable experimental) \
+		--enable-experimental \
 		$(use_enable test tests) \
 		$(use_enable test exhaustive-tests) \
 		$(use_enable test-openssl openssl-tests) \
