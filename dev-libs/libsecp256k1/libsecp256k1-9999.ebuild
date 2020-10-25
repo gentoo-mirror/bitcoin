@@ -18,7 +18,6 @@ RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	ecdh? ( experimental )
 	extrakeys? ( experimental )
 	?? ( lowmem precompute-ecmult )
 	schnorr? ( experimental extrakeys )
