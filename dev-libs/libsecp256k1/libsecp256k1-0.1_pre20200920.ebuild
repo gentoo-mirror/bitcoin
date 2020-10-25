@@ -14,14 +14,15 @@ SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+asm ecdh +endomorphism experimental extrakeys gmp lowmem precompute-ecmult schnorr +recovery test test-openssl valgrind"
+IUSE="+asm ecdh +endomorphism +experimental +extrakeys gmp lowmem precompute-ecmult +schnorr +recovery test test-openssl valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	ecdh? ( experimental )
 	extrakeys? ( experimental )
-	schnorr? ( extrakeys experimental )
+	?? ( lowmem precompute-ecmult )
+	schnorr? ( experimental extrakeys )
 	test-openssl? ( test )
 "
 RDEPEND="
