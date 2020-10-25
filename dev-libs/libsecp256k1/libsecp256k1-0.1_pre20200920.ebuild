@@ -21,7 +21,8 @@ REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	ecdh? ( experimental )
 	extrakeys? ( experimental )
-	schnorr? ( extrakeys experimental )
+	?? ( lowmem precompute-ecmult )
+	schnorr? ( experimental extrakeys )
 	test-openssl? ( test )
 "
 RDEPEND="
