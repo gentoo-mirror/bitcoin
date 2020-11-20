@@ -84,7 +84,7 @@ pkg_pretend() {
 		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
 		{ has_version "<${CATEGORY}/${PN}-$(ver_cut 1-3)" ||
 			has_version ">=${CATEGORY}/${PN}-$(ver_cut 1-2).$(($(ver_cut 3)+1))" ; } &&
-		find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*"
+		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ]]
 	then
 		eerror "A potentially incompatible version of the lightningd daemon is currently" \
 			'\n'"running. Installing version ${PV} would likely cause the running daemon" \
