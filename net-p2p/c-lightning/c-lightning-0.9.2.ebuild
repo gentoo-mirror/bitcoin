@@ -14,8 +14,6 @@ inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
-	eab14768a829b3b526a2f1bdad0eb6c24f1a9723	# update SHA256STAMPs using sorted dependencies
-	de7b41695f1f1abdfe3b247fc9f4e1fcf9393de3	# db: Fix size mismatch on postgres in a migration
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
