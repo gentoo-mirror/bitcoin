@@ -119,13 +119,18 @@ src_install() {
 
 pkg_preinst() {
 	has_version '<net-p2p/joinmarket-0.6.2' && had_pre_0_6_2=1
+	has_version '<net-p2p/joinmarket-0.8.0' && had_pre_0_8_0=1
 }
 
 pkg_postinst() {
-	# warn when upgrading from pre-0.6.2
 	if [[ ${had_pre_0_6_2} ]] ; then
 		ewarn 'This release of JoinMarket moves the user data directory to ~/.joinmarket.'
 		ewarn 'You must manually move any existing data files. See the release notes:'
-		ewarn 'https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory'
+		ewarn "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory"
+	fi
+	if [[ ${had_pre_0_8_0} ]] ; then
+		ewarn 'JoinMarket is migrating to native SegWit wallets and transactions.'
+		ewarn 'Please follow the upgrade guide at:'
+		ewarn "${HOMEPAGE}/blob/master/docs/NATIVE-SEGWIT-UPGRADE.md"
 	fi
 }
