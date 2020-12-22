@@ -26,7 +26,7 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/${PN}-release_${PV}"
 
 PATCHES=(
-	"${FILESDIR}/0.8.0-sys_libsecp256k1.patch"
+	"${FILESDIR}/0.8.1-sys_libsecp256k1.patch"
 )
 
 src_prepare() {
