@@ -1,4 +1,4 @@
-# Copyright 2010-2020 Gentoo Authors
+# Copyright 2010-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -34,9 +34,9 @@ IUSE="developer experimental postgres python sqlite test"
 
 CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
-	>=dev-libs/libsecp256k1-0.1_pre20181017[ecdh,recovery]
+	>=dev-libs/libsecp256k1-0.1_pre20200907[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16
-	>=net-libs/libwally-core-0.7.9_pre20200814[elements]
+	>=net-libs/libwally-core-0.8.1_pre20201125[elements]
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( dev-db/sqlite:= )
