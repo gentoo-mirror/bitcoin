@@ -6,8 +6,8 @@ description="Bitcoin Lightning Network node daemon"
 : ${LIGHTNINGD_CONF:=/etc/lightning/${SVCNAME}.conf}
 : ${LIGHTNINGD_HOME:=/var/lib/lightning}
 : ${LIGHTNINGD_LOGFILE=/var/log/${SVCNAME}.log}
-: ${LIGHTNINGD_PIDFILE:=${LIGHTNINGD_HOME}/${SVCNAME}.pid}
-: ${LIGHTNINGD_RPCFILE:=${LIGHTNINGD_HOME}/${SVCNAME}.rpc}
+: ${LIGHTNINGD_PIDFILE:=/run/lightning/${SVCNAME}.pid}
+: ${LIGHTNINGD_RPCFILE:=/run/lightning/${SVCNAME}.rpc}
 : ${LIGHTNINGD_USER:=lightning:lightning}
 
 command="/usr/bin/lightningd"
@@ -82,6 +82,12 @@ migrate_data_files() {
 start_pre() {
 	migrate_data_files
 	[ -z "${LIGHTNINGD_LOGFILE}" ] || checkpath --file --owner="${LIGHTNINGD_USER}" --mode=0644 -- "${LIGHTNINGD_LOGFILE}"
+	checkpath --directory --owner="${LIGHTNINGD_USER}" --mode=0755 -- "$(dirname -- "${LIGHTNINGD_PIDFILE}")" "$(dirname -- "${LIGHTNINGD_RPCFILE}")"
+	if [ "${LIGHTNINGD_RPCFILE}" != "${LIGHTNINGD_HOME}/${SVCNAME}.rpc" -a -S "${LIGHTNINGD_HOME}/${SVCNAME}.rpc" ] ; then
+		ebegin "Removing obsolete ${LIGHTNINGD_HOME}/${SVCNAME}.rpc"
+		rm -- "${LIGHTNINGD_HOME}/${SVCNAME}.rpc"
+		eend $?
+	fi
 }
 
 start_post() {
