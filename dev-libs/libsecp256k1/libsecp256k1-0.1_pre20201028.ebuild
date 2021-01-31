@@ -13,7 +13,7 @@ SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="+asm ecdh +experimental +extrakeys gmp lowmem precompute-ecmult +schnorr +recovery test test-openssl valgrind"
 RESTRICT="!test? ( test )"
 
