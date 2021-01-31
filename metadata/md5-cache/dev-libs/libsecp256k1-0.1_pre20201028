@@ -5,6 +5,7 @@ DESCRIPTION=Optimized C library for EC operations on curve secp256k1
 EAPI=7
 HOMEPAGE=https://github.com/bitcoin-core/secp256k1
 IUSE=+asm ecdh +experimental +extrakeys gmp lowmem precompute-ecmult +schnorr +recovery test test-openssl valgrind
+KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux
 LICENSE=MIT
 RDEPEND=gmp? ( dev-libs/gmp:0= )
 REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) extrakeys? ( experimental ) ?? ( lowmem precompute-ecmult ) schnorr? ( experimental extrakeys ) test-openssl? ( test )
@@ -12,4 +13,4 @@ RESTRICT=!test? ( test )
 SLOT=0
 SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/3967d96bf184519eb98b766af665b4d4b072563e.tar.gz -> libsecp256k1-v0.1_pre20201028.tgz
 _eclasses_=autotools	9988ecbe04129214297a7bbf3d253710	edos2unix	33e347e171066657f91f8b0c72ec8773	eutils	2d5b3f4b315094768576b6799e4f926e	l10n	8cdd85e169b835d518bc2fd59f780d8e	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	d410501a125f99ffb560b0c523cd3d1e	toolchain-funcs	24921b57d6561d87cbef4916a296ada4	wrapper	4251d4c84c25f59094fd557e0063a974
-_md5_=1ee02d05cde3ea9ec57c6abf10bd4f8c
+_md5_=e068f187c3abb9f331adeec5c201edb2
