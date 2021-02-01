@@ -1,14 +1,14 @@
 BDEPEND=>=sys-devel/autoconf-2.69 >=sys-devel/automake-1.13 >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
 DEFINED_PHASES=configure install prepare pretend
-DEPEND=>=dev-libs/boost-1.52.0:=[threads(+)] dev-libs/libevent:= >=dev-libs/univalue-1.0.4:=
+DEPEND=>=dev-libs/boost-1.58.0:=[threads(+)] dev-libs/libevent:= >=dev-libs/univalue-1.0.4:=
 DESCRIPTION=Command-line JSON-RPC client specifically for interfacing with bitcoind
 EAPI=7
 HOMEPAGE=https://bitcoincore.org/ https://bitcoinknots.org/
 IUSE=+knots
-KEYWORDS=amd64 arm arm64 mips ppc ppc64 x86 amd64-linux x86-linux
+KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux
 LICENSE=MIT
-RDEPEND=>=dev-libs/boost-1.52.0:=[threads(+)] dev-libs/libevent:= >=dev-libs/univalue-1.0.4:=
+RDEPEND=>=dev-libs/boost-1.58.0:=[threads(+)] dev-libs/libevent:= >=dev-libs/univalue-1.0.4:=
 SLOT=0
-SRC_URI=https://github.com/bitcoin/bitcoin/archive/bf0dc356ac4a2bdeda1908af021dea2de0dfb35a.tar.gz -> bitcoin-v0.20.1.tar.gz https://bitcoinknots.org/files/0.20.x/0.20.1.knots20200815/bitcoin-0.20.1.knots20200815.patches.txz -> bitcoin-0.20.1.knots20200815.patches.tar.xz
+SRC_URI=https://github.com/bitcoin/bitcoin/archive/95ea54ba089610019a74c1176a2c7c0dba144b1c.tar.gz -> bitcoin-v0.21.0.tar.gz https://bitcoinknots.org/files/0.21.x/0.21.0.knots20210130/bitcoin-0.21.0.knots20210130.patches.txz -> bitcoin-0.21.0.knots20210130.patches.tar.xz
 _eclasses_=autotools	9988ecbe04129214297a7bbf3d253710	bash-completion-r1	be99724bde4274de21e581204e9d164a	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	d410501a125f99ffb560b0c523cd3d1e	toolchain-funcs	24921b57d6561d87cbef4916a296ada4
-_md5_=bc056833b4f8181271843c4f963af4ad
+_md5_=d797ab428d8534f937d0952f9e394309
