@@ -1,56 +1,45 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use desktop xdg-utils
+inherit autotools bash-completion-r1 db-use systemd
 
-BITCOINCORE_COMMITHASH="bf0dc356ac4a2bdeda1908af021dea2de0dfb35a"
-KNOTS_PV="${PV}.knots20200815"
+BITCOINCORE_COMMITHASH="95ea54ba089610019a74c1176a2c7c0dba144b1c"
+KNOTS_PV="${PV}.knots20210130"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
-DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
+DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.20.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://bitcoinknots.org/files/0.21.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 mips ppc ppc64 x86 amd64-linux x86-linux"
-
-IUSE="+asm dbus kde +knots +qrcode system-leveldb test upnp +wallet zeromq"
+KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
+IUSE="+asm examples +knots sqlite system-leveldb test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
-RDEPEND="
-	>=dev-libs/boost-1.52.0:=[threads(+)]
-	>dev-libs/libsecp256k1-0.1_pre20170321:=[recovery]
-	>=dev-libs/univalue-1.0.4:=
-	dev-qt/qtcore:5
-	dev-qt/qtgui:5
-	dev-qt/qtnetwork:5
-	dev-qt/qtwidgets:5
-	system-leveldb? ( virtual/bitcoin-leveldb )
-	dbus? ( dev-qt/qtdbus:5 )
+DEPEND="
+	acct-group/bitcoin
+	acct-user/bitcoin
+	>=dev-libs/boost-1.58.0:=[threads(+)]
 	dev-libs/libevent:=
-	qrcode? (
-		media-gfx/qrencode:=
-	)
+	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
+	>=dev-libs/univalue-1.0.4:=
+	system-leveldb? ( virtual/bitcoin-leveldb )
+	sqlite? ( >=dev-db/sqlite-3.7.17:= )
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
 	zeromq? ( net-libs/zeromq:= )
 "
-DEPEND="${RDEPEND}"
+RDEPEND="${DEPEND}"
 BDEPEND="
 	>=sys-devel/autoconf-2.69
 	>=sys-devel/automake-1.13
-	dev-qt/linguist-tools:5
-	knots? (
-		gnome-base/librsvg
-		media-gfx/imagemagick[png]
-	)
 "
 
 DOCS=(
@@ -72,11 +61,11 @@ pkg_pretend() {
 	if use knots; then
 		elog "You are building ${PN} from Bitcoin Knots."
 		elog "For more information, see:"
-		elog "https://bitcoinknots.org/files/0.20.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "https://bitcoinknots.org/files/0.21.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2020/08/01/release-${PV}/"
+		elog "https://bitcoincore.org/en/2021/01/14/release-${PV}/"
 	fi
 	elog "Replace By Fee policy is now always enabled by default: Your node will"
 	elog "preferentially mine and relay transactions paying the highest fee, regardless"
@@ -84,10 +73,7 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	sed -i 's/^\(complete -F _bitcoind \)bitcoind \(bitcoin-qt\)$/\1\2/' contrib/bitcoind.bash-completion || die
-
-	# Save the generic icon for later
-	cp src/qt/res/src/bitcoin.svg bitcoin128.svg || die
+	sed -i 's/^\(complete -F _bitcoind bitcoind\) bitcoin-qt$/\1/' contrib/${PN}.bash-completion || die
 
 	local knots_patchdir="${WORKDIR}/${KNOTS_P}.patches/"
 
@@ -99,7 +85,7 @@ src_prepare() {
 		eapply "${knots_patchdir}/${KNOTS_P}.ts.patch"
 	fi
 
-	eapply_user
+	default
 
 	echo '#!/bin/true' >share/genbuild.sh || die
 	mkdir -p src/obj || die
@@ -115,23 +101,24 @@ src_prepare() {
 src_configure() {
 	local my_econf=(
 		$(use_enable asm)
-		$(use_with dbus qtdbus)
-		$(use_with qrcode qrencode)
+		--without-qtdbus
+		--without-qrencode
 		$(use_with upnp miniupnpc)
 		$(use_enable upnp upnp-default)
 		$(use_enable test tests)
 		$(use_enable wallet)
 		$(use_enable zeromq zmq)
-		--with-gui=qt5
+		--with-daemon
 		--disable-util-cli
 		--disable-util-tx
 		--disable-util-wallet
 		--disable-bench
 		--without-libs
-		--without-daemon
+		--without-gui
 		--disable-fuzz
 		--disable-ccache
 		--disable-static
+		$(use_with sqlite)
 		$(use_with system-leveldb)
 		--with-system-libsecp256k1
 		--with-system-univalue
@@ -144,42 +131,41 @@ src_install() {
 
 	rm -f "${ED}/usr/bin/test_bitcoin" || die
 
-	insinto /usr/share/icons/hicolor/scalable/apps/
-	doins bitcoin128.svg
-	if use knots; then
-		newins src/qt/res/src/bitcoin.svg bitcoinknots.svg
-	fi
+	insinto /etc/bitcoin
+	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf
+	fowners bitcoin:bitcoin /etc/bitcoin/bitcoin.conf
+	fperms 600 /etc/bitcoin/bitcoin.conf
 
-	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}" || die
-	if ! use knots; then
-		sed -i 's/Knots/Core/;s/^\(Icon=\).*$/\1bitcoin128/' "${T}/org.bitcoin.bitcoin-qt.desktop" || die
-	fi
-	domenu "${T}/org.bitcoin.bitcoin-qt.desktop"
+	newconfd "contrib/init/bitcoind.openrcconf" ${PN}
+	newinitd "contrib/init/bitcoind.openrc" ${PN}
+	systemd_newunit "contrib/init/bitcoind.service" "bitcoind.service"
+
+	keepdir /var/lib/bitcoin/.bitcoin
+	fperms 700 /var/lib/bitcoin
+	fowners bitcoin:bitcoin /var/lib/bitcoin/
+	fowners bitcoin:bitcoin /var/lib/bitcoin/.bitcoin
+	dosym ../../../../etc/bitcoin/bitcoin.conf /var/lib/bitcoin/.bitcoin/bitcoin.conf
+
+	doman "${FILESDIR}/bitcoin.conf.5"
 
 	use zeromq && dodoc doc/zmq.md
 
-	newbashcomp contrib/bitcoind.bash-completion ${PN}
+	newbashcomp contrib/${PN}.bash-completion ${PN}
 
-	if use kde; then
-		insinto /usr/share/kservices5
-		doins "${FILESDIR}/bitcoin-qt.protocol"
-		dosym "../../kservices5/bitcoin-qt.protocol" "/usr/share/kde4/services/bitcoin-qt.protocol"
+	if use examples; then
+		docinto examples
+		dodoc -r contrib/{linearize,qos}
+		use zeromq && dodoc -r contrib/zmq
 	fi
-}
 
-update_caches() {
-	xdg_icon_cache_update
-	xdg_desktop_database_update
+	insinto /etc/logrotate.d
+	newins "${FILESDIR}/bitcoind.logrotate-r1" bitcoind
 }
 
 pkg_postinst() {
-	update_caches
-
 	elog "To have ${PN} automatically use Tor when it's running, be sure your"
 	elog "'torrc' config file has 'ControlPort' and 'CookieAuthentication' setup"
-	elog "correctly, and add your user to the 'tor' user group."
-}
-
-pkg_postrm() {
-	update_caches
+	elog "correctly, and:"
+	elog "- Using an init script: add the 'bitcoin' user to the 'tor' user group."
+	elog "- Running bitcoind directly: add that user to the 'tor' user group."
 }

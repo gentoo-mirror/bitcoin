@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,27 +6,27 @@ EAPI=7
 DB_VER="4.8"
 inherit autotools bash-completion-r1 db-use desktop xdg-utils
 
-BITCOINCORE_COMMITHASH="bf0dc356ac4a2bdeda1908af021dea2de0dfb35a"
-KNOTS_PV="${PV}.knots20200815"
+BITCOINCORE_COMMITHASH="95ea54ba089610019a74c1176a2c7c0dba144b1c"
+KNOTS_PV="${PV}.knots20210130"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.20.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://bitcoinknots.org/files/0.21.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 mips ppc ppc64 x86 amd64-linux x86-linux"
+KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+asm dbus kde +knots +qrcode system-leveldb test upnp +wallet zeromq"
+IUSE="+asm dbus kde +knots +qrcode sqlite system-leveldb test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-libs/boost-1.52.0:=[threads(+)]
-	>dev-libs/libsecp256k1-0.1_pre20170321:=[recovery]
+	>=dev-libs/boost-1.58.0:=[threads(+)]
+	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
 	>=dev-libs/univalue-1.0.4:=
 	dev-qt/qtcore:5
 	dev-qt/qtgui:5
@@ -38,6 +38,7 @@ RDEPEND="
 	qrcode? (
 		media-gfx/qrencode:=
 	)
+	sqlite? ( >=dev-db/sqlite-3.7.17:= )
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	wallet? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
 	zeromq? ( net-libs/zeromq:= )
@@ -72,11 +73,11 @@ pkg_pretend() {
 	if use knots; then
 		elog "You are building ${PN} from Bitcoin Knots."
 		elog "For more information, see:"
-		elog "https://bitcoinknots.org/files/0.20.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "https://bitcoinknots.org/files/0.21.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2020/08/01/release-${PV}/"
+		elog "https://bitcoincore.org/en/2021/01/14/release-${PV}/"
 	fi
 	elog "Replace By Fee policy is now always enabled by default: Your node will"
 	elog "preferentially mine and relay transactions paying the highest fee, regardless"
@@ -132,6 +133,7 @@ src_configure() {
 		--disable-fuzz
 		--disable-ccache
 		--disable-static
+		$(use_with sqlite)
 		$(use_with system-leveldb)
 		--with-system-libsecp256k1
 		--with-system-univalue
