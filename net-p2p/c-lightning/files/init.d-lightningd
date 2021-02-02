@@ -5,7 +5,7 @@ description="Bitcoin Lightning Network node daemon"
 
 : ${LIGHTNINGD_CONF:=/etc/lightning/${SVCNAME}.conf}
 : ${LIGHTNINGD_HOME:=/var/lib/lightning}
-: ${LIGHTNINGD_LOGFILE=/var/log/${SVCNAME}.log}
+: ${LIGHTNINGD_LOGFILE:=/var/log/${SVCNAME}.log}
 : ${LIGHTNINGD_PIDFILE:=/run/lightning/${SVCNAME}.pid}
 : ${LIGHTNINGD_RPCFILE:=/run/lightning/${SVCNAME}.rpc}
 : ${LIGHTNINGD_USER:=lightning:lightning}
@@ -13,7 +13,7 @@ description="Bitcoin Lightning Network node daemon"
 command="/usr/bin/lightningd"
 command_args="
 	--conf=${LIGHTNINGD_CONF} --lightning-dir=${LIGHTNINGD_HOME}
-	${LIGHTNINGD_LOGFILE:+--log-file=${LIGHTNINGD_LOGFILE}}
+	--log-file=${LIGHTNINGD_LOGFILE}
 	--pid-file=${LIGHTNINGD_PIDFILE} --rpc-file=${LIGHTNINGD_RPCFILE}
 	--daemon"
 command_user="${LIGHTNINGD_USER}"
