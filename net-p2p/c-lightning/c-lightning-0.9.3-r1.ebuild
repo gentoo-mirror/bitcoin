@@ -14,6 +14,7 @@ inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
+	82ed71d621c1f88f9c059cf0cc83cd00ffa6b11e	# connectd: don't crash if connect() fails immediately.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
