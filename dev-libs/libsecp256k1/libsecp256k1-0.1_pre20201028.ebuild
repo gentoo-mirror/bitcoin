@@ -70,7 +70,6 @@ src_configure() {
 }
 
 src_install() {
-	dodoc README.md
-	emake DESTDIR="${D}" install
+	default
 	find "${D}" -name '*.la' -delete || die
 }
