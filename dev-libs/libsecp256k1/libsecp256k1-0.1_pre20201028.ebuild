@@ -53,7 +53,7 @@ src_configure() {
 	fi
 	econf \
 		--disable-benchmark \
-		--enable-experimental \
+		$(use_enable experimental) \
 		$(use_enable test tests) \
 		$(use_enable test exhaustive-tests) \
 		$(use_enable test-openssl openssl-tests) \
