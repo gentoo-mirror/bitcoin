@@ -9,7 +9,7 @@ MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 COMMITHASH="3967d96bf184519eb98b766af665b4d4b072563e"
-SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
+SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0"
