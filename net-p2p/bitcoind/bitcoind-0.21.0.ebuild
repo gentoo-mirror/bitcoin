@@ -129,7 +129,9 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED}/usr/bin/test_bitcoin" || die
+	if use test; then
+		rm -f "${ED}/usr/bin/test_bitcoin" || die
+	fi
 
 	insinto /etc/bitcoin
 	newins "${FILESDIR}/bitcoin.conf" bitcoin.conf

@@ -1,15 +1,15 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools eutils
+inherit autotools
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 COMMITHASH="3967d96bf184519eb98b766af665b4d4b072563e"
-SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
+SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -53,7 +53,7 @@ src_configure() {
 	fi
 	econf \
 		--disable-benchmark \
-		--enable-experimental \
+		$(use_enable experimental) \
 		$(use_enable test tests) \
 		$(use_enable test exhaustive-tests) \
 		$(use_enable test-openssl openssl-tests) \
@@ -70,7 +70,6 @@ src_configure() {
 }
 
 src_install() {
-	dodoc README.md
-	emake DESTDIR="${D}" install
+	default
 	find "${D}" -name '*.la' -delete || die
 }

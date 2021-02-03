@@ -144,7 +144,9 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED}/usr/bin/test_bitcoin" || die
+	if use test; then
+		rm -f "${ED}/usr/bin/test_bitcoin" || die
+	fi
 
 	insinto /usr/share/icons/hicolor/scalable/apps/
 	doins bitcoin128.svg
