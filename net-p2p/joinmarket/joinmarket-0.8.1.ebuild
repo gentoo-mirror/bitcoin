@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE="sqlite"
 DISTUTILS_SINGLE_IMPL=1
 
@@ -127,6 +127,12 @@ pkg_postinst() {
 		ewarn 'This release of JoinMarket moves the user data directory to ~/.joinmarket.'
 		ewarn 'You must manually move any existing data files. See the release notes:'
 		ewarn "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory"
+	else
+		elog "It is always a good idea to back up your ${HILITE}joinmarket.cfg${NORMAL}, re-create a"
+		elog 'default one, and then reapply your changes, as this will populate any'
+		elog 'newly introduced config settings and update any default values. Please'
+		elog 'see the release notes for more information and important announcements:'
+		elog "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-${PV}.md"
 	fi
 	if [[ ${had_pre_0_8_0} ]] ; then
 		ewarn 'JoinMarket is migrating to native SegWit wallets and transactions.'
