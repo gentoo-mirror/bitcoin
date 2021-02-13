@@ -15,10 +15,12 @@ MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
 	82ed71d621c1f88f9c059cf0cc83cd00ffa6b11e	# connectd: don't crash if connect() fails immediately.
+	06a54606a341125962f406c1fb0d2ad72ec98c71	# check-includes: allow redundant "config.h"
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
 	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
+	"${FILESDIR}/0.9.3-libwally-core-0.8.2-compatibility.patch"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -37,7 +39,7 @@ CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20200907[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16
-	>=net-libs/libwally-core-0.8.1_pre20201125[elements]
+	>=net-libs/libwally-core-0.8.1_pre20201125:=[elements]
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( dev-db/sqlite:= )
