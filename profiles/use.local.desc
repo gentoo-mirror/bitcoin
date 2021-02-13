@@ -21,8 +21,10 @@ dev-libs/libsecp256k1:test-openssl - Enable OpenSSL comparison tests
 dev-libs/libsecp256k1:valgrind - Compile in valgrind memory hints
 dev-libs/libsecp256k1-zkp:asm - Enable x86_64 assembly optimisation
 dev-libs/libsecp256k1-zkp:ecdh - Enable ECDH shared secret computation
-dev-libs/libsecp256k1-zkp:endomorphism - Enable endomorphism
+dev-libs/libsecp256k1-zkp:ecdsa-s2c - Enable ECDSA sign-to-contract module
 dev-libs/libsecp256k1-zkp:experimental - Allow experimental USE flags
+dev-libs/libsecp256k1-zkp:external-default-callbacks - Enable external default callback functions
+dev-libs/libsecp256k1-zkp:extrakeys - Enable extrakeys module
 dev-libs/libsecp256k1-zkp:generator - Enable NUMS generator module
 dev-libs/libsecp256k1-zkp:musig - Enable MuSig module
 dev-libs/libsecp256k1-zkp:rangeproof - Enable Pedersen / zero-knowledge range proofs module

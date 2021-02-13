@@ -4,7 +4,7 @@ app-crypt/opentxs 9999: Financial cryptography library, API, CLI
 dev-libs/libbacktrace 0.0.0_pre20180606: A C library that may be linked into a C/C++ program to produce symbolic backtraces
 dev-libs/libbase58 0.1.0 0.1.1: C implementation of Bitcoin's base58 encoding
 dev-libs/libsecp256k1 0.0.0_pre20141212 0.0.0_pre20150423 0.0.0_pre20151118 0.0.0_pre20161213 0.1_pre20170928 0.1_pre20181018 0.1_pre20190401 0.1_pre20191012 0.1_pre20200920 0.1_pre20201015 0.1_pre20201028 9999: Optimized C library for EC operations on curve secp256k1
-dev-libs/libsecp256k1-zkp 0.1_pre20190625: Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
+dev-libs/libsecp256k1-zkp 0.1_pre20210211: Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
 dev-libs/univalue 1.0.2 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON library
 dev-python/amodem 1.9: Transmit data between two computers using audio
 dev-python/bencoder-pyx 2.0.1: A fast bencode implementation in Cython
@@ -20,7 +20,7 @@ dev-python/urldecode 0.1: A simple function to decode an encoded URL
 dev-util/bitcoin-tx 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0: Command-line Bitcoin transaction tool
 net-libs/libbitcoinconsensus 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0: Bitcoin Core consensus library
 net-libs/libblkmaker 0.4.2 0.4.3 0.5.1 0.5.2 0.5.3 0.6.0: C implementation of Bitcoin's getblocktemplate interface
-net-libs/libwally-core 0.8.1: Collection of useful primitives for cryptocurrency wallets
+net-libs/libwally-core 0.8.1 0.8.2: Collection of useful primitives for cryptocurrency wallets
 net-libs/libwally-core-niftynei 0.7.9_pre20200713: Collection of useful primitives for cryptocurrency wallets
 net-libs/opendht 9999: A lightweight C++11 Distributed Hash Table implementation
 net-libs/opentxs-proto 9999: Protobuf message library for Open-Transactions
@@ -29,7 +29,7 @@ net-p2p/Sia 1.2.2 9999: A decentralized cloud storage platform based on blockcha
 net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0: Command-line JSON-RPC client specifically for interfacing with bitcoind
 net-p2p/bitcoin-qt 0.16.3 0.17.1 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0: An end-user Qt GUI for the Bitcoin crypto-currency
 net-p2p/bitcoind 0.16.3 0.17.1 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0: Original Bitcoin crypto-currency wallet for automated services
-net-p2p/c-lightning 0.9.3-r1 9999: An implementation of Bitcoin's Lightning Network in C
+net-p2p/c-lightning 0.9.3-r2 9999-r1: An implementation of Bitcoin's Lightning Network in C
 net-p2p/joinmarket 0.8.1: JoinMarket CoinJoin client and daemon
 net-p2p/libbitcoin 2.0-r1 9999: libbitcoin asynchronous C++ library for Bitcoin
 net-p2p/namecoin 0.3.75 0.3.76 0.3.80 9999: A P2P network based domain name system

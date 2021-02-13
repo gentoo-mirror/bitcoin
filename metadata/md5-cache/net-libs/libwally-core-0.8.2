@@ -1,0 +1,14 @@
+BDEPEND=>=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
+DEFINED_PHASES=configure prepare pretend
+DEPEND=>=dev-libs/libsecp256k1-zkp-0.1_pre20210211[ecdh,ecdsa-s2c,recovery] elements? ( dev-libs/libsecp256k1-zkp[generator,rangeproof,surjectionproof,whitelist] )
+DESCRIPTION=Collection of useful primitives for cryptocurrency wallets
+EAPI=7
+HOMEPAGE=https://github.com/ElementsProject/libwally-core
+IUSE=elements
+KEYWORDS=~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux
+LICENSE=MIT CC0-1.0
+RDEPEND=>=dev-libs/libsecp256k1-zkp-0.1_pre20210211[ecdh,ecdsa-s2c,recovery] elements? ( dev-libs/libsecp256k1-zkp[generator,rangeproof,surjectionproof,whitelist] ) !<net-p2p/c-lightning-0.9.3-r2 !=net-p2p/c-lightning-9999
+SLOT=0/0.8.2
+SRC_URI=https://github.com/ElementsProject/libwally-core/archive/release_0.8.2.tar.gz -> libwally-core-0.8.2.tar.gz
+_eclasses_=autotools	9988ecbe04129214297a7bbf3d253710	libtool	f143db5a74ccd9ca28c1234deffede96	multilib	d410501a125f99ffb560b0c523cd3d1e	toolchain-funcs	24921b57d6561d87cbef4916a296ada4
+_md5_=909e1203ee164b408bab707cf07dabf1
