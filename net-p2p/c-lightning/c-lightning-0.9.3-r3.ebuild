@@ -16,6 +16,7 @@ MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
 	82ed71d621c1f88f9c059cf0cc83cd00ffa6b11e	# connectd: don't crash if connect() fails immediately.
 	06a54606a341125962f406c1fb0d2ad72ec98c71	# check-includes: allow redundant "config.h"
+	b689d33e97f80254058b8cee52abf682741efa13	# gossipd: fix rolling corruption.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
