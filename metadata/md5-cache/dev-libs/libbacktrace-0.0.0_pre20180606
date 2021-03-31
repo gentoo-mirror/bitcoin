@@ -9,5 +9,5 @@ LICENSE=BSD
 RDEPEND=sys-libs/libunwind
 SLOT=0
 SRC_URI=https://github.com/ianlancetaylor/libbacktrace/archive/5a99ff7fed66b8ea8f09c9805c138524a7035ece.tar.gz -> libbacktrace-0.0.0_pre20180606.tar.gz
-_eclasses_=toolchain-funcs	24921b57d6561d87cbef4916a296ada4	multilib	d410501a125f99ffb560b0c523cd3d1e	libtool	f143db5a74ccd9ca28c1234deffede96	autotools	4ba6c345bf49883c84d5fa5c9bf40c0b
+_eclasses_=toolchain-funcs	24921b57d6561d87cbef4916a296ada4	multilib	d410501a125f99ffb560b0c523cd3d1e	libtool	f143db5a74ccd9ca28c1234deffede96	autotools	6ff8412ccf96444868b310b0a28973ba
 _md5_=4e55aed7a7a1c38d59c3add67cd4f8b9
