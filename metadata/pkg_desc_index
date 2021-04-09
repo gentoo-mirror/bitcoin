@@ -5,12 +5,10 @@ dev-libs/libbacktrace 0.0.0_pre20180606: A C library that may be linked into a C
 dev-libs/libsecp256k1 0.0.0_pre20141212 0.0.0_pre20150423 0.0.0_pre20151118 0.0.0_pre20161213 0.1_pre20170928 0.1_pre20181018 0.1_pre20190401 0.1_pre20191012 0.1_pre20200920 0.1_pre20201015 0.1_pre20201028 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/libsecp256k1-zkp 0.1_pre20210211: Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
 dev-libs/univalue 1.0.2 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON library
-dev-python/amodem 1.9: Transmit data between two computers using audio
 dev-python/bencoder-pyx 2.0.1: A fast bencode implementation in Cython
 dev-python/chromalog 1.0.5: Enhance Python with colored logging
 dev-python/coincurve 13.0.0: Cross-platform Python CFFI bindings for libsecp256k1
 dev-python/mnemonic 0.19: Mnemonic code for generating deterministic keys, BIP39
-dev-python/pbkdf2 1.3: Implementation of the password-based key derivation function, PBKDF2, specified in RSA PKCS#5 v2.0
 dev-python/pycoin 0.90.20201031: Utilities for Bitcoin addresses and transaction manipulation
 dev-python/python-bitcointx 1.1.1_p1: A python3 library providing an easy interface to the Bitcoin data structures
 dev-python/qt5reactor 0.6.1: Twisted and PyQt5 eventloop integration
