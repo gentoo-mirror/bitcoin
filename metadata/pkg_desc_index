@@ -9,7 +9,6 @@ dev-python/bencoder-pyx 2.0.1: A fast bencode implementation in Cython
 dev-python/chromalog 1.0.5: Enhance Python with colored logging
 dev-python/coincurve 13.0.0: Cross-platform Python CFFI bindings for libsecp256k1
 dev-python/mnemonic 0.19: Mnemonic code for generating deterministic keys, BIP39
-dev-python/pycoin 0.90.20201031: Utilities for Bitcoin addresses and transaction manipulation
 dev-python/python-bitcointx 1.1.1_p1: A python3 library providing an easy interface to the Bitcoin data structures
 dev-python/qt5reactor 0.6.1: Twisted and PyQt5 eventloop integration
 dev-python/txtorcon 20.0.0: Twisted-based Tor controller client, with state-tracking and config abstractions
