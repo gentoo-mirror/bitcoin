@@ -46,7 +46,3 @@ src_install() {
 		dodoc -r recipes
 	fi
 }
-
-python_test() {
-        pytest --deselect 'tests/services/services_test.py::ServicesTest::test_InsightProvider' || die "Tests failed with ${EPYTHON}"
-}
