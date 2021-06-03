@@ -21,6 +21,8 @@ IUSE="examples"
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 RDEPEND=""
 
+distutils_enable_tests pytest
+
 DOCS=(
 	BIP32.txt
 	CHANGES
@@ -43,4 +45,8 @@ src_install() {
 	if use examples; then
 		dodoc -r recipes
 	fi
+}
+
+python_test() {
+        pytest --deselect 'tests/services/services_test.py::ServicesTest::test_InsightProvider' || die "Tests failed with ${EPYTHON}"
 }
