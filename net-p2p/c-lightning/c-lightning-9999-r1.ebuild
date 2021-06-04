@@ -13,7 +13,6 @@ inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
 PATCHES=(
-	"${FILESDIR}/0.9.3-libwally-core-0.8.2-compatibility.patch"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -32,7 +31,7 @@ CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
 	>=dev-libs/libsecp256k1-0.1_pre20200907[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16
-	>=net-libs/libwally-core-0.8.1_pre20201125:=[elements]
+	>=net-libs/libwally-core-0.8.3:=[elements]
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( dev-db/sqlite:= )
