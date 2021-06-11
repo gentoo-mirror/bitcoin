@@ -19,6 +19,7 @@ PATCH_HASHES=(
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
 	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
+	"${FILESDIR}/0.10.0-lightning-pay-fix-null-deref.patch"
 	"${FILESDIR}/0.9.3-libwally-core-0.8.2-compatibility.patch"
 )
 
