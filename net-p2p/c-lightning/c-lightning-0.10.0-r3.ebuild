@@ -15,6 +15,7 @@ MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
 	05a3be15a3a479e3f5f40ed36eefea5664fd40ba	# pay: Fix use-after-free issue with routehints in shortlived payments
+	40544b74f984057abd2f8e2018c84c4be4601f51	# plugins/bcli: fix uninitialized variable.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
