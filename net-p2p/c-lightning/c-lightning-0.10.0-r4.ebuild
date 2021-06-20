@@ -14,7 +14,10 @@ inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
+	96bd0961a4d02054fc5f69e1ca801af060940b06	# pay: fix corner case where we eliminate our own hint.
 	05a3be15a3a479e3f5f40ed36eefea5664fd40ba	# pay: Fix use-after-free issue with routehints in shortlived payments
+	eeba75ca7c63c418043045fcf54eb57fba42da60	# pay: Do not attempt to filter routehints if we can't find outselves
+	5473d669932514d8b955418b30e551c63404b27b	# onchaind: limp along if we cheat.
 	40544b74f984057abd2f8e2018c84c4be4601f51	# plugins/bcli: fix uninitialized variable.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
