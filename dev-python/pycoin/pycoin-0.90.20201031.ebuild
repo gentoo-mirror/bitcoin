@@ -19,7 +19,10 @@ KEYWORDS="~amd64 ~x86"
 IUSE="examples"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
-RDEPEND=""
+RDEPEND="
+	!app-i18n/transifex-client
+	!net-misc/keychain
+"
 
 distutils_enable_tests pytest
 
