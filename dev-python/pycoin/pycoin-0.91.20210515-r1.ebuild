@@ -16,12 +16,14 @@ SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="examples"
+IUSE="examples symlink"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 RDEPEND="
-	!app-i18n/transifex-client
-	!net-misc/keychain
+	symlink? (
+		!app-i18n/transifex-client
+		!net-misc/keychain
+	)
 "
 
 distutils_enable_tests pytest
@@ -37,7 +39,7 @@ DOCS=(
 )
 
 src_prepare() {
-	sed 's/\(packages=\[\)/version="'"$PV"'",\n\1/' -i setup.py || die
+	sed 's/\(packages=\[\)/version="'"$PV"'",\n\1/;s/'\''\(.* = \)/'\'"${PN}"'-\1/' -i setup.py || die
 
 	distutils-r1_src_prepare
 }
@@ -48,8 +50,11 @@ src_install() {
 	if use examples; then
 		dodoc -r recipes
 	fi
-}
 
-python_test() {
-        pytest --deselect 'tests/services/services_test.py::ServicesTest::test_InsightProvider' || die "Tests failed with ${EPYTHON}"
+	if use symlink; then
+		local pgm
+		for pgm in block tx msg coinc b58 keychain ku; do
+			dosym "${PN}-$pgm" "/usr/bin/$pgm"
+		done
+	fi
 }
