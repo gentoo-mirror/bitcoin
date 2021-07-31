@@ -81,6 +81,11 @@ src_prepare() {
 			-e '/^Name=/a Categories=Network;P2P;Qt;' \
 			-i joinmarket-qt.desktop || die
 
+	# Gentoo is not affected by https://bugreports.qt.io/browse/QTBUG-88688
+	sed -e 's/^\(PySide2\|PyQt5\)!=5\.15\.0,!=5\.15\.1,!=5\.15\.2,!=6\.0$/\1/' \
+			-e '/QTBUG-88688$/d' \
+			-i requirements/gui.txt || die
+
 	do_python_phase distutils-r1_src_prepare
 }
 
@@ -120,6 +125,7 @@ src_install() {
 pkg_preinst() {
 	has_version '<net-p2p/joinmarket-0.6.2' && had_pre_0_6_2=1
 	has_version '<net-p2p/joinmarket-0.8.0' && had_pre_0_8_0=1
+	has_version '<net-p2p/joinmarket-0.9.0' && had_pre_0_9_0=1
 }
 
 pkg_postinst() {
@@ -138,5 +144,11 @@ pkg_postinst() {
 		ewarn 'JoinMarket is migrating to native SegWit wallets and transactions.'
 		ewarn 'Please follow the upgrade guide at:'
 		ewarn "${HOMEPAGE}/blob/master/docs/NATIVE-SEGWIT-UPGRADE.md"
+	fi
+	if [[ ${had_pre_0_9_0} ]] ; then
+		ewarn 'JoinMarket has introduced fidelity bonds as a means of improving Sybil attack'
+		ewarn 'resistance. You must manually update your wallet to a fidelity bond wallet if'
+		ewarn 'you wish to take advantage of this new privacy-enhancing feature. See the'
+		ewarn 'release notes for more information.'
 	fi
 }
