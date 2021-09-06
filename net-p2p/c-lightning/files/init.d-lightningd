@@ -24,7 +24,7 @@ start_stop_daemon_args="${LIGHTNINGD_NICE:+--nicelevel=${LIGHTNINGD_NICE}}"
 depend() {
 	config "${LIGHTNINGD_CONF}"
 	need localmount net
-	use bitcoind dns
+	use dns
 
 	local wallet
 	if wallet=$(get_wallet_uri) && echo "${wallet}" |
@@ -51,10 +51,23 @@ depend() {
 	else # just in case the above auto-detection didn't work
 		after postgresql
 	fi
+
+	local rpchost
+	if rpchost=$(get_bitcoin_rpchost) && { [ -z "${rpchost}" ] ||
+		echo "${rpchost}" | grep -Eqx '(localhost|127\.0\.0\.1|\[::1\])' ; }
+	then
+		need bitcoind
+	else # just in case rpchost is a host name that resolves to the local host
+		after bitcoind
+	fi
 }
 
 get_wallet_uri() {
-	sed -e 's/^\s*wallet=\(.*\)$/\1/;t;d' "${LIGHTNINGD_CONF}"
+	sed -ne 's/^\s*wallet=\(.*\)$/\1/p' "${LIGHTNINGD_CONF}"
+}
+
+get_bitcoin_rpchost() {
+	sed -ne 's/^\s*bitcoin-rpcconnect=\(.*\)$/\1/p' "${LIGHTNINGD_CONF}"
 }
 
 find_network() {
