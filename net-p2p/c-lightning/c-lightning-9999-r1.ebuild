@@ -43,17 +43,18 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 "
 BDEPEND="
-	test? ( $(python_gen_any_dep '
+	dev-python/mrkd
+	$(python_gen_any_dep '
 		dev-python/mako[${PYTHON_USEDEP}]
-		dev-python/pytest[${PYTHON_USEDEP}]
-	' -3) )
+		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
+	')
 	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
 	sys-devel/gettext
 "
 REQUIRED_USE="
 	|| ( postgres sqlite )
 	postgres? ( ${POSTGRES_REQ_USE} )
-	${PYTHON_REQUIRED_USE}
+	python? ( ${PYTHON_REQUIRED_USE} )
 "
 # FIXME: bundled deps: ccan
 
@@ -108,7 +109,6 @@ src_configure() {
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
-		SHA256STAMP_CHANGED=false
 		LIBSODIUM_HEADERS=
 		LIBWALLY_HEADERS=
 		LIBSECP_HEADERS=
@@ -124,7 +124,7 @@ src_configure() {
 		SQLITE3_LDLIBS=
 	)
 
-	use test && python_setup
+	python_setup
 	./configure \
 		CC="$(tc-getCC)" \
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
@@ -144,7 +144,7 @@ src_configure() {
 }
 
 src_compile() {
-	use test && python_setup
+	python_setup
 	emake "${CLIGHTNING_MAKEOPTS[@]}" \
 		all-programs \
 		$(usex test 'all-test-programs' '') \
