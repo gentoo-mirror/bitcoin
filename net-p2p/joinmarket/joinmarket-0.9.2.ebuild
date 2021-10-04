@@ -38,6 +38,7 @@ RDEPEND="
 		)
 
 		daemon? (
+			>=dev-python/cryptography-3.3.2[${PYTHON_MULTI_USEDEP}]
 			dev-python/libnacl[${PYTHON_MULTI_USEDEP}]
 			dev-python/pyopenssl[${PYTHON_MULTI_USEDEP}]
 			dev-python/txtorcon[${PYTHON_MULTI_USEDEP}]
