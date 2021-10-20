@@ -13,12 +13,12 @@ LICENSE="MIT CC0-1.0"
 SLOT="0/0.8.2"
 
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="elements"
+IUSE="elements minimal"
 
 # TODO: python, java, js
 
 DEPEND="
-	>=dev-libs/libsecp256k1-zkp-0.1_pre20210211[ecdh,ecdsa-s2c,recovery]
+	>=dev-libs/libsecp256k1-zkp-0.1_pre20210918[ecdh,ecdsa-s2c,recovery]
 	elements? ( dev-libs/libsecp256k1-zkp[generator,rangeproof,surjectionproof,whitelist] )
 "
 RDEPEND="${DEPEND}
@@ -29,7 +29,7 @@ RDEPEND="${DEPEND}
 S="${WORKDIR}/${PN}-release_${PV}"
 
 PATCHES=(
-	"${FILESDIR}/0.8.2-sys_libsecp256k1_zkp.patch"
+	"${FILESDIR}/0.8.4-sys_libsecp256k1_zkp.patch"
 )
 
 pkg_pretend() {
@@ -59,5 +59,6 @@ src_prepare() {
 src_configure() {
 	econf --includedir="${EPREFIX}"/usr/include/libwally/ \
 		--enable-export-all \
-		$(use_enable elements)
+		$(use_enable elements) \
+		$(use_enable minimal)
 }
