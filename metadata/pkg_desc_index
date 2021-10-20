@@ -3,7 +3,7 @@ acct-user/lightning 0: System-wide Lightning services user
 app-crypt/opentxs 9999: Financial cryptography library, API, CLI
 dev-libs/libbacktrace 0.0.0_pre20180606: A C library that may be linked into a C/C++ program to produce symbolic backtraces
 dev-libs/libsecp256k1 0.0.0_pre20141212 0.0.0_pre20150423 0.0.0_pre20151118 0.0.0_pre20161213 0.1_pre20170928 0.1_pre20181018 0.1_pre20190401 0.1_pre20191012 0.1_pre20200920 0.1_pre20201015 0.1_pre20201028 9999: Optimized C library for EC operations on curve secp256k1
-dev-libs/libsecp256k1-zkp 0.1_pre20210211: Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
+dev-libs/libsecp256k1-zkp 0.1_pre20210918: Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
 dev-libs/univalue 1.0.2 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON library
 dev-python/bencoder-pyx 2.0.1: A fast bencode implementation in Cython
 dev-python/chromalog 1.0.5: Enhance Python with colored logging
@@ -18,7 +18,7 @@ dev-python/urldecode 0.1: A simple function to decode an encoded URL
 dev-util/bitcoin-tx 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1: Command-line Bitcoin transaction tool
 net-libs/libbitcoinconsensus 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1: Bitcoin Core consensus library
 net-libs/libblkmaker 0.4.2 0.4.3 0.5.1 0.5.2 0.5.3 0.6.0: C implementation of Bitcoin's getblocktemplate interface
-net-libs/libwally-core 0.8.3: Collection of useful primitives for cryptocurrency wallets
+net-libs/libwally-core 0.8.4: Collection of useful primitives for cryptocurrency wallets
 net-libs/opendht 9999: A lightweight C++11 Distributed Hash Table implementation
 net-libs/opentxs-proto 9999: Protobuf message library for Open-Transactions
 net-misc/bfgminer 3.10.5 3.10.6 3.10.7 3.10.8 3.10.10 4.4.0 4.5.0 4.6.0 4.7.0 4.7.1 4.7.2 4.8.0 4.9.0 4.10.1 4.10.2 4.10.3 4.10.4 4.10.5 4.10.6 5.0.0 5.1.0 5.2.0 5.3.0 5.4.0 5.4.1 5.4.2 5.5.0: Modular Bitcoin ASIC/FPGA/GPU/CPU miner in C
