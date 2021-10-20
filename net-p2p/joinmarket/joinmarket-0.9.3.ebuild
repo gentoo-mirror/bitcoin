@@ -28,11 +28,14 @@ RDEPEND="
 		>=dev-python/twisted-20.3.0[${PYTHON_MULTI_USEDEP}]
 
 		client? (
+			>=dev-python/autobahn-20.12.3[${PYTHON_MULTI_USEDEP}]
 			dev-python/argon2-cffi[${PYTHON_MULTI_USEDEP}]
 			>=dev-python/bencoder-pyx-2.0.0[${PYTHON_MULTI_USEDEP}]
 			dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/klein-20.6.0[${PYTHON_MULTI_USEDEP}]
 			dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
 			dev-python/pyaes[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/pyjwt-2.1.0[${PYTHON_MULTI_USEDEP}]
 			>=dev-python/python-bitcointx-1.1.1_p0[${PYTHON_MULTI_USEDEP}]
 			dev-python/urldecode[${PYTHON_MULTI_USEDEP}]
 		)
