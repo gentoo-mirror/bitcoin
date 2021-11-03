@@ -6,7 +6,7 @@ EAPI=7
 POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 
 PYTHON_COMPAT=( python3_{6..9} )
-PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
+PYTHON_SUBDIRS=( contrib/pyln-client )
 DISTUTILS_OPTIONAL=1
 
 inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
@@ -48,7 +48,10 @@ BDEPEND="
 		dev-python/mako[${PYTHON_USEDEP}]
 		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 	')
-	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
+	python? (
+		dev-python/setuptools[${PYTHON_USEDEP}]
+		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
+	)
 	sys-devel/gettext
 "
 REQUIRED_USE="
