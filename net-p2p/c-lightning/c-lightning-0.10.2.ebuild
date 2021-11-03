@@ -54,7 +54,10 @@ BDEPEND="
 		dev-python/mako[${PYTHON_USEDEP}]
 		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 	')
-	python? ( dev-python/setuptools[${PYTHON_USEDEP}] )
+	python? (
+		dev-python/setuptools[${PYTHON_USEDEP}]
+		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
+	)
 	sys-devel/gettext
 "
 REQUIRED_USE="
@@ -120,6 +123,14 @@ src_prepare() {
 
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile
+
+	# setuptools-scm can't find version from Git
+	sed -e '/^[[:space:]]*"local_scheme":/a"fallback_version": "'"${MyPV}"'",' \
+		-i contrib/pyln-{client,proto}/setup.py || die
+
+	# don't instantiate lightning module during installation
+	sed -e '/^import lightning$/d' -e 's/\(version=\)lightning\.__version__/\1"'"${MyPV}"'"/' \
+		-i contrib/pylightning/setup.py || die
 
 	use sqlite || sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
