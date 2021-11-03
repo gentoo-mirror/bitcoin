@@ -29,8 +29,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python sqlite test"
 RESTRICT="test"	# does anyone want to help with this?
 
@@ -132,7 +131,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}-gentoo${PR:+-${PR}}"
+		VERSION="${MyPV}-gentoo-${PR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		BOLTDIR="${WORKDIR}/does_not_exist"
