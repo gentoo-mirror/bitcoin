@@ -3,12 +3,12 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{5..9} )
+PYTHON_COMPAT=( python3_{5..10} )
 
 inherit distutils-r1
 
 DESCRIPTION="Twisted and PyQt5 eventloop integration"
-HOMEPAGE="https://github.com/sunu/qt5reactor"
+HOMEPAGE="https://github.com/twisted/qt5reactor"
 SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
@@ -25,5 +25,11 @@ RDEPEND="
 "
 DEPEND=""
 BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	test? (
+		dev-python/coverage[${PYTHON_USEDEP}]
+		dev-python/pytest-cov[${PYTHON_USEDEP}]
+		dev-python/pytest-twisted[${PYTHON_USEDEP}]
+	)
 "
+
+distutils_enable_tests pytest
