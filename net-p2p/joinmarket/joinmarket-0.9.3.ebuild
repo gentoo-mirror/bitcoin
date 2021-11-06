@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE="sqlite"
@@ -23,35 +23,35 @@ REQUIRED_USE="qt5? ( client )"
 
 RDEPEND="
 	$(python_gen_cond_dep '
-		>=dev-python/chromalog-1.0.5[${PYTHON_MULTI_USEDEP}]
-		dev-python/service_identity[${PYTHON_MULTI_USEDEP}]
-		>=dev-python/twisted-20.3.0[${PYTHON_MULTI_USEDEP}]
+		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
+		dev-python/service_identity[${PYTHON_USEDEP}]
+		>=dev-python/twisted-20.3.0[${PYTHON_USEDEP}]
 
 		client? (
-			>=dev-python/autobahn-20.12.3[${PYTHON_MULTI_USEDEP}]
-			dev-python/argon2-cffi[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/bencoder-pyx-2.0.0[${PYTHON_MULTI_USEDEP}]
-			dev-python/coincurve[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/klein-20.6.0[${PYTHON_MULTI_USEDEP}]
-			dev-python/mnemonic[${PYTHON_MULTI_USEDEP}]
-			dev-python/pyaes[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/pyjwt-2.1.0[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/python-bitcointx-1.1.1_p0[${PYTHON_MULTI_USEDEP}]
-			dev-python/urldecode[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
+			dev-python/argon2-cffi[${PYTHON_USEDEP}]
+			>=dev-python/bencoder-pyx-2.0.0[${PYTHON_USEDEP}]
+			dev-python/coincurve[${PYTHON_USEDEP}]
+			>=dev-python/klein-20.6.0[${PYTHON_USEDEP}]
+			dev-python/mnemonic[${PYTHON_USEDEP}]
+			dev-python/pyaes[${PYTHON_USEDEP}]
+			>=dev-python/pyjwt-2.1.0[${PYTHON_USEDEP}]
+			>=dev-python/python-bitcointx-1.1.1_p0[${PYTHON_USEDEP}]
+			dev-python/urldecode[${PYTHON_USEDEP}]
 		)
 
 		daemon? (
-			>=dev-python/cryptography-3.3.2[${PYTHON_MULTI_USEDEP}]
-			dev-python/libnacl[${PYTHON_MULTI_USEDEP}]
-			dev-python/pyopenssl[${PYTHON_MULTI_USEDEP}]
-			dev-python/txtorcon[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/cryptography-3.3.2[${PYTHON_USEDEP}]
+			dev-python/libnacl[${PYTHON_USEDEP}]
+			dev-python/pyopenssl[${PYTHON_USEDEP}]
+			dev-python/txtorcon[${PYTHON_USEDEP}]
 		)
 
 		qt5? (
-			dev-python/pillow[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/pyside2-5.14.2[gui,widgets,${PYTHON_MULTI_USEDEP}]
-			dev-python/qrcode[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/qt5reactor-0.6_pre20181201[${PYTHON_MULTI_USEDEP}]
+			dev-python/pillow[${PYTHON_USEDEP}]
+			>=dev-python/pyside2-5.14.2[gui,widgets,${PYTHON_USEDEP}]
+			dev-python/qrcode[${PYTHON_USEDEP}]
+			>=dev-python/qt5reactor-0.6_pre20181201[${PYTHON_USEDEP}]
 		)
 	')
 
@@ -59,11 +59,8 @@ RDEPEND="
 		dev-libs/libsecp256k1[ecdh,recovery]
 	)
 "
-DEPEND="
-"
-BDEPEND="$(python_gen_cond_dep '
-	dev-python/setuptools[${PYTHON_MULTI_USEDEP}]
-')"
+DEPEND=""
+BDEPEND=""
 
 S="${WORKDIR}/${MyPN}-${PV}"
 

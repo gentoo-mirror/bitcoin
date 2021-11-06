@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{5..9}} )
+PYTHON_COMPAT=( python{2_7,3_{5..10}} )
 
 inherit distutils-r1
 
@@ -22,6 +22,4 @@ RDEPEND="
 	>=dev-python/six-1.9.0[${PYTHON_USEDEP}]
 "
 DEPEND=""
-BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
-"
+BDEPEND=""

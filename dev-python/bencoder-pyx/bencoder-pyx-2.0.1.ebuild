@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{5..9} )
+PYTHON_COMPAT=( python3_{5..10} )
 
 inherit distutils-r1
 
@@ -22,7 +22,6 @@ RDEPEND=""
 DEPEND=""
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 
 S="${WORKDIR}/${MyPN}-${PV}"
