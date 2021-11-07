@@ -6,7 +6,7 @@ EAPI=7
 POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 
 PYTHON_COMPAT=( python3_{6..9} )
-PYTHON_SUBDIRS=( contrib/pyln-client )
+PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 
 inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
@@ -39,6 +39,16 @@ CDEPEND="
 RDEPEND="${CDEPEND}
 	acct-group/lightning
 	acct-user/lightning
+	python? (
+		>=dev-python/base58-2.0.1[${PYTHON_USEDEP}]
+		>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
+		>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
+		>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
+		>=dev-python/mypy-0.790[${PYTHON_USEDEP}]
+		>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
+		>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
+		>=dev-python/recommonmark-0.7[${PYTHON_USEDEP}]
+	)
 "
 DEPEND="${CDEPEND}
 "
@@ -49,7 +59,6 @@ BDEPEND="
 		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 	')
 	python? (
-		dev-python/setuptools[${PYTHON_USEDEP}]
 		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
 	)
 	sys-devel/gettext
@@ -157,8 +166,14 @@ src_compile() {
 
 python_install_all() {
 	DOCS= distutils-r1_python_install_all
-	docinto "${PWD##*/}"
-	dodoc README*
+
+	shopt -s nullglob
+	local -a docs=( README* )
+	shopt -u nullglob
+	if (( ${#docs[@]} )) ; then
+		docinto "${PWD##*/}"
+		dodoc "${docs[@]}"
+	fi
 }
 
 src_install() {

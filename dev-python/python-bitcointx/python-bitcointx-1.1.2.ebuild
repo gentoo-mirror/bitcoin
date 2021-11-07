@@ -3,7 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{6..10} )
+PYTHON_REQ_USE="ssl" # for ripemd160
 
 inherit distutils-r1
 
@@ -22,8 +23,8 @@ RDEPEND="
 	dev-libs/libsecp256k1
 "
 DEPEND=""
-BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
-"
+BDEPEND=""
 
 S="${WORKDIR}/${PN}-${PN}-v${MyPV}"
+
+distutils_enable_tests unittest

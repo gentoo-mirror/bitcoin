@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{6..10} )
 
 inherit distutils-r1
 
@@ -17,23 +17,17 @@ IUSE="examples test" # doc removed due to deficient dependencies
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	$(python_gen_cond_dep '
-		dev-python/automat[${PYTHON_USEDEP}]
-		dev-python/incremental[${PYTHON_USEDEP}]
-		>=dev-python/twisted-15.5.0[${PYTHON_USEDEP},crypt]
-		>=dev-python/zope-interface-3.6.1[${PYTHON_USEDEP}]
-	')
+	dev-python/automat[${PYTHON_USEDEP}]
+	dev-python/incremental[${PYTHON_USEDEP}]
+	>=dev-python/twisted-15.5.0[${PYTHON_USEDEP},crypt]
+	>=dev-python/zope-interface-3.6.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	$(python_gen_cond_dep '
-		test? ( dev-python/mock[${PYTHON_USEDEP}] )
-	')
+	test? ( dev-python/mock[${PYTHON_USEDEP}] )
 "
 BDEPEND="
-	$(python_gen_cond_dep '
-		>=dev-python/setuptools-36.2[${PYTHON_USEDEP}]
-	')
+	>=dev-python/setuptools-36.2[${PYTHON_USEDEP}]
 "
 # some of these dependencies don't support python{3_7,3_8}
 #		doc? (
@@ -71,4 +65,13 @@ python_install_all() {
 #		dodoc -r "${S}/docs/_build/html/"*
 #	fi
 	distutils-r1_python_install_all
+	rm -f "${D}"/usr/lib*/python*/site-packages/twisted/plugins/dropin.cache
+}
+
+pkg_postinst() {
+	python_foreach_impl twisted-regen-cache || die
+}
+
+pkg_postrm() {
+	python_foreach_impl twisted-regen-cache || die
 }
