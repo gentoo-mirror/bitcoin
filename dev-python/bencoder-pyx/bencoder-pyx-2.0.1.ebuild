@@ -21,7 +21,13 @@ IUSE=""
 RDEPEND=""
 DEPEND=""
 BDEPEND="
-	dev-python/cython[${PYTHON_USEDEP}]
+	>=dev-python/cython-0.29.21[${PYTHON_USEDEP}]
+	test? (
+		>=dev-python/coverage-4.5.4[${PYTHON_USEDEP}]
+		>=dev-python/pytest-4.6.2[${PYTHON_USEDEP}]
+	)
 "
 
 S="${WORKDIR}/${MyPN}-${PV}"
+
+distutils_enable_tests pytest
