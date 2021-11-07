@@ -6,7 +6,7 @@ EAPI=7
 POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 
 PYTHON_COMPAT=( python3_{6..9} )
-PYTHON_SUBDIRS=( contrib/{pyln-client,pylightning} )
+PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
 inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
@@ -45,6 +45,16 @@ CDEPEND="
 RDEPEND="${CDEPEND}
 	acct-group/lightning
 	acct-user/lightning
+	python? (
+		>=dev-python/base58-2.0.1[${PYTHON_USEDEP}]
+		>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
+		>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
+		>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
+		>=dev-python/mypy-0.790[${PYTHON_USEDEP}]
+		>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
+		>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
+		>=dev-python/recommonmark-0.7[${PYTHON_USEDEP}]
+	)
 "
 DEPEND="${CDEPEND}
 "
@@ -55,7 +65,6 @@ BDEPEND="
 		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 	')
 	python? (
-		dev-python/setuptools[${PYTHON_USEDEP}]
 		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
 	)
 	sys-devel/gettext
@@ -106,6 +115,7 @@ pkg_setup() {
 	else
 		export PG_CONFIG=
 	fi
+	use python && export SETUPTOOLS_SCM_PRETEND_VERSION=${MyPV}
 }
 
 src_unpack() {
@@ -123,10 +133,6 @@ src_prepare() {
 
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile
-
-	# setuptools-scm can't find version from Git
-	sed -e '/^[[:space:]]*"local_scheme":/a"fallback_version": "'"${MyPV}"'",' \
-		-i contrib/pyln-{client,proto}/setup.py || die
 
 	# don't instantiate lightning module during installation
 	sed -e '/^import lightning$/d' -e 's/\(version=\)lightning\.__version__/\1"'"${MyPV}"'"/' \
@@ -193,8 +199,14 @@ src_compile() {
 
 python_install_all() {
 	DOCS= distutils-r1_python_install_all
-	docinto "${PWD##*/}"
-	dodoc README*
+
+	shopt -s nullglob
+	local -a docs=( README* )
+	shopt -u nullglob
+	if (( ${#docs[@]} )) ; then
+		docinto "${PWD##*/}"
+		dodoc "${docs[@]}"
+	fi
 }
 
 src_install() {
