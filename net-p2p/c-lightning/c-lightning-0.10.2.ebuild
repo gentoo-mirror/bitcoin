@@ -31,7 +31,6 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python sqlite test"
-RESTRICT="test"	# does anyone want to help with this?
 
 CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606
@@ -42,19 +41,20 @@ CDEPEND="
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( dev-db/sqlite:= )
 "
+PYTHON_DEPEND="
+	>=dev-python/base58-2.0.1[${PYTHON_USEDEP}]
+	>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
+	>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
+	>=dev-python/mypy-0.790[${PYTHON_USEDEP}]
+	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
+	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
+	>=dev-python/recommonmark-0.7[${PYTHON_USEDEP}]
+"
 RDEPEND="${CDEPEND}
 	acct-group/lightning
 	acct-user/lightning
-	python? (
-		>=dev-python/base58-2.0.1[${PYTHON_USEDEP}]
-		>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
-		>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
-		>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
-		>=dev-python/mypy-0.790[${PYTHON_USEDEP}]
-		>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
-		>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
-		>=dev-python/recommonmark-0.7[${PYTHON_USEDEP}]
-	)
+	python? ( ${PYTHON_DEPEND} )
 "
 DEPEND="${CDEPEND}
 "
@@ -62,7 +62,6 @@ BDEPEND="
 	dev-python/mrkd
 	$(python_gen_any_dep '
 		dev-python/mako[${PYTHON_USEDEP}]
-		test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 	')
 	python? (
 		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
@@ -79,8 +78,7 @@ REQUIRED_USE="
 S=${WORKDIR}/${MyPN}-${MyPV}
 
 python_check_deps() {
-	has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
-		{ ! use test || has_version "dev-python/pytest[${PYTHON_USEDEP}]" ; }
+	has_version "dev-python/mako[${PYTHON_USEDEP}]"
 }
 
 do_python_phase() {
@@ -116,6 +114,7 @@ pkg_setup() {
 		export PG_CONFIG=
 	fi
 	use python && export SETUPTOOLS_SCM_PRETEND_VERSION=${MyPV}
+	use test && tc-ld-disable-gold	# mock magic doesn't support gold
 }
 
 src_unpack() {
@@ -195,6 +194,14 @@ src_compile() {
 		doc-all
 
 	use python && do_python_phase distutils-r1_src_compile
+}
+
+src_test() {
+	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
+}
+
+python_test() {
+	:
 }
 
 python_install_all() {
