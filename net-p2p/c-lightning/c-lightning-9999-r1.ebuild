@@ -139,6 +139,9 @@ src_prepare() {
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile
 
+	# hack to eliminate build-time dependency on app-misc/jq if not installed
+	has_version -b 'app-misc/jq' || sed -e '/^doc-all:/s/\bfmt-schema\b//' -i doc/Makefile || die
+
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
