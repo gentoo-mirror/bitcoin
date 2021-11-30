@@ -139,6 +139,9 @@ src_prepare() {
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile
 
+	# hack to eliminate build-time dependency on app-misc/jq if not installed
+	has_version -b 'app-misc/jq' || sed -e '/^doc-all:/s/\bfmt-schema\b//' -i doc/Makefile || die
+
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 
@@ -233,7 +236,7 @@ src_install() {
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.10.1.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-0.10.2.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
