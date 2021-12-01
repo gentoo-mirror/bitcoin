@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{7..10} )
 PYTHON_REQ_USE="sqlite"
 DISTUTILS_SINGLE_IMPL=1
 
@@ -13,19 +13,23 @@ MyPN=${PN}-clientserver
 
 DESCRIPTION="JoinMarket CoinJoin client and daemon"
 HOMEPAGE="https://github.com/JoinMarket-Org/joinmarket-clientserver"
-SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	test? (
+		https://github.com/JoinMarket-Org/miniircd/archive/20a391f490a58ba9ef295b0d813a95a7e9337382.tar.gz -> ${PN}-miniircd.tar.gz
+	)"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+client daemon qt5"
 REQUIRED_USE="qt5? ( client )"
+RESTRICT="test"  # I've wasted enough time trying to get these tests to pass.
 
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
 		dev-python/service_identity[${PYTHON_USEDEP}]
-		>=dev-python/twisted-20.3.0[${PYTHON_USEDEP}]
+		>=dev-python/twisted-21.7.0[${PYTHON_USEDEP}]
 
 		client? (
 			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
@@ -60,9 +64,30 @@ RDEPEND="
 	)
 "
 DEPEND=""
-BDEPEND=""
+BDEPEND="
+	$(python_gen_cond_dep '
+		test? (
+			>=dev-python/coverage-5.2.1[${PYTHON_USEDEP}]
+			dev-python/flake8[${PYTHON_USEDEP}]
+			dev-python/freezegun[${PYTHON_USEDEP}]
+			dev-python/mock[${PYTHON_USEDEP}]
+			dev-python/pexpect[${PYTHON_USEDEP}]
+			>=dev-python/pytest-5.3.5[${PYTHON_USEDEP}]
+			>=dev-python/pytest-cov-2.4.0[${PYTHON_USEDEP}]
+		)
+	')
+
+	test? (
+		>=net-p2p/bitcoind-0.20
+	)
+"
 
 S="${WORKDIR}/${MyPN}-${PV}"
+
+EPYTEST_IGNORE=(
+	'test/test_full_coinjoin.py'	# ignored by upstream run_test.sh
+)
+distutils_enable_tests pytest
 
 do_python_phase() {
 	local subdir
@@ -73,11 +98,21 @@ do_python_phase() {
 	done
 }
 
-src_prepare() {
+pkg_setup() {
 	PYTHON_SUBDIRS=( jmbase )
 	use client && PYTHON_SUBDIRS+=( jmbitcoin jmclient )
 	use daemon && PYTHON_SUBDIRS+=( jmdaemon )
+	use qt5 && PYTHON_SUBDIRS+=( jmqtui )
 
+	python-single-r1_pkg_setup
+}
+
+src_unpack() {
+	default
+	use !test || mv miniircd-* "${S}/miniircd" || die
+}
+
+src_prepare() {
 	sed -e 's|^\(Exec=\).*$|\1joinmarket-qt.py|' \
 			-e '/^Name=/a Categories=Network;P2P;Qt;' \
 			-i joinmarket-qt.desktop || die
@@ -85,7 +120,13 @@ src_prepare() {
 	# Gentoo is not affected by https://bugreports.qt.io/browse/QTBUG-88688
 	sed -e 's/^\(PySide2\|PyQt5\)!=5\.15\.0,!=5\.15\.1,!=5\.15\.2,!=6\.0$/\1/' \
 			-e '/QTBUG-88688$/d' \
-			-i requirements/gui.txt || die
+			-i requirements/gui.txt \
+			-i jmqtui/setup.py || die
+
+	# PySide2 no longer ships pyside2-uic in favor of 'uic -g python'
+	# https://bugreports.qt.io/browse/PYSIDE-1098
+	sed -e 's/pyside2-uic/uic -g python/' \
+			-i jmqtui/setup.py || die
 
 	do_python_phase distutils-r1_src_prepare
 }
@@ -96,6 +137,28 @@ src_configure() {
 
 src_compile() {
 	do_python_phase distutils-r1_src_compile
+}
+
+python_test() {
+	do_python_phase distutils_install_for_testing
+
+	ln -sfn test/regtest_joinmarket.cfg joinmarket.cfg || die
+
+	jm_test_datadir=${T}/jm_test_home/.bitcoin
+	rm -rf -- "${jm_test_datadir}" || die
+	mkdir -p -- "${jm_test_datadir}" || die
+
+	btcconf=${jm_test_datadir}/bitcoin.conf
+	cp -f -- test/bitcoin.conf "${btcconf}" || die
+	echo "datadir=${jm_test_datadir}" >>"${btcconf}" || die
+
+	epytest "${PYTHON_SUBDIRS[@]}" $(usev client test) \
+		--nirc=2 \
+		--btcconf="${btcconf}" \
+		$(sed -n \
+			-e 's/^rpcuser=\(.*\)$/--btcuser=\1/p' \
+			-e 's/^rpcpassword=\(.*\)$/--btcpwd=\1/p' \
+			"${btcconf}")
 }
 
 src_install() {
