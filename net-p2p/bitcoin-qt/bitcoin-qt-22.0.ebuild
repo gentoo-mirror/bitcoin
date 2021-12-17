@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+asm +berkdb dbus +external-signer kde +knots nat-pmp +qrcode sqlite +system-leveldb systemtap bitcoin_protocol_taproot test upnp +wallet zeromq"
+IUSE="+asm +berkdb dbus +external-signer kde +knots nat-pmp +qrcode sqlite systemtap bitcoin_protocol_taproot test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -37,7 +37,7 @@ RDEPEND="
 	dev-qt/qtgui:5
 	dev-qt/qtnetwork:5
 	dev-qt/qtwidgets:5
-	system-leveldb? ( virtual/bitcoin-leveldb )
+	virtual/bitcoin-leveldb
 	dbus? ( dev-qt/qtdbus:5 )
 	dev-libs/libevent:=
 	nat-pmp? ( net-libs/libnatpmp )
@@ -138,10 +138,7 @@ src_prepare() {
 	eapply_user
 
 	eautoreconf
-	rm -r src/secp256k1 || die
-	if use system-leveldb; then
-		rm -r src/leveldb || die
-	fi
+	rm -r src/leveldb src/secp256k1 || die
 }
 
 src_configure() {
@@ -172,7 +169,7 @@ src_configure() {
 		--disable-static
 		$(use_with berkdb bdb)
 		$(use_with sqlite)
-		$(use_with system-leveldb)
+		--with-system-leveldb
 		--with-system-libsecp256k1
 		--with-system-univalue
 	)

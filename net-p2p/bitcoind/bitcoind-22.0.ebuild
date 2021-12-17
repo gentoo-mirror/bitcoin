@@ -20,7 +20,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +berkdb examples +external-signer +knots nat-pmp sqlite +system-leveldb systemtap bitcoin_protocol_taproot test upnp +wallet zeromq"
+IUSE="+asm +berkdb examples +external-signer +knots nat-pmp sqlite systemtap bitcoin_protocol_taproot test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -36,7 +36,7 @@ RDEPEND="
 	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
 	>=dev-libs/univalue-1.0.4:=
 	nat-pmp? ( net-libs/libnatpmp )
-	system-leveldb? ( virtual/bitcoin-leveldb )
+	virtual/bitcoin-leveldb
 	sqlite? ( >=dev-db/sqlite-3.7.17:= )
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	berkdb? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
@@ -123,10 +123,7 @@ src_prepare() {
 	default
 
 	eautoreconf
-	rm -r src/secp256k1 || die
-	if use system-leveldb; then
-		rm -r src/leveldb || die
-	fi
+	rm -r src/leveldb src/secp256k1 || die
 }
 
 src_configure() {
@@ -157,7 +154,7 @@ src_configure() {
 		--disable-static
 		$(use_with berkdb bdb)
 		$(use_with sqlite)
-		$(use_with system-leveldb)
+		--with-system-leveldb
 		--with-system-libsecp256k1
 		--with-system-univalue
 	)
