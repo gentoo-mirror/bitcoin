@@ -10,13 +10,13 @@
 		<flag name="bip70">Enable support for the BIP70 payment protocol</flag>
 		<flag name="bitcoin_policy_rbf">Replace By Fee policy: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order</flag>
 		<flag name="bitcoin_protocol_taproot">Enforces the "Taproot" Bitcoin protocol change beginning in 2021 November</flag>
-		<flag name="bpf">Enable eBPF (enhanced Berkley Packet Filter) tracing</flag>
 		<flag name="external-signer">Include support for external wallet signer programs</flag>
 		<flag name="knots">Build enhanced Bitcoin Knots version, rather than Bitcoin Core</flag>
 		<flag name="libevent">Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration</flag>
 		<flag name="nat-pmp">Enable NAT-PMP port forwarding</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
 		<flag name="system-leveldb">Use the system-wide dev-libs/leveldb instead of bundled</flag>
+		<flag name="systemtap">Enable SystemTAP/DTrace tracing</flag>
 		<flag name="upnp">Enable Universal Plug and Play</flag>
 		<flag name="wallet">Enable wallet support</flag>
 		<flag name="zeromq">Report blocks and transactions via zeromq</flag>
