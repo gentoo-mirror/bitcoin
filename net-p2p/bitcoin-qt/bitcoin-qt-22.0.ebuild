@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+asm +berkdb bpf dbus +external-signer kde +knots nat-pmp +qrcode sqlite +system-leveldb bitcoin_protocol_taproot test upnp +wallet zeromq"
+IUSE="+asm +berkdb dbus +external-signer kde +knots nat-pmp +qrcode sqlite +system-leveldb systemtap bitcoin_protocol_taproot test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -50,7 +50,7 @@ RDEPEND="
 	zeromq? ( net-libs/zeromq:= )
 "
 DEPEND="${RDEPEND}
-	bpf? ( dev-util/systemtap )
+	systemtap? ( dev-util/systemtap )
 "
 BDEPEND="
 	>=sys-devel/automake-1.13
@@ -148,7 +148,7 @@ src_configure() {
 	local my_econf=(
 		$(use_enable asm)
 		$(use_with dbus qtdbus)
-		$(use_enable bpf ebpf)
+		$(use_enable systemtap ebpf)
 		$(use_enable external-signer)
 		$(use_with nat-pmp natpmp)
 		$(use_with nat-pmp natpmp-default)
