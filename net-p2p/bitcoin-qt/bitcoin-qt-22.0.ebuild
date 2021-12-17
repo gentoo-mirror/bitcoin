@@ -149,6 +149,7 @@ src_configure() {
 		$(use_enable asm)
 		$(use_with dbus qtdbus)
 		$(use_enable bpf ebpf)
+		$(use_enable external-signer)
 		$(use_with nat-pmp natpmp)
 		$(use_with nat-pmp natpmp-default)
 		$(use_with qrcode qrencode)

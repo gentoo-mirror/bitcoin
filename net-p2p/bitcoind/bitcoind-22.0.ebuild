@@ -134,6 +134,7 @@ src_configure() {
 		$(use_enable asm)
 		--without-qtdbus
 		$(use_enable bpf ebpf)
+		$(use_enable external-signer)
 		$(use_with nat-pmp natpmp)
 		$(use_with nat-pmp natpmp-default)
 		--without-qrencode
