@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -26,8 +26,10 @@ BDEPEND=""
 
 distutils_enable_tests --install pytest
 
-python_test() {
-	# tests fail on Python 3.10 due to deprecation of threading.currentThread()
+src_prepare() {
 	# https://github.com/pytest-dev/pytest-twisted/issues/146
-	[[ ${EPYTHON} == python3.10 ]] || distutils-r1_python_test
+	use python_targets_python3_10 &&
+		eapply "${FILESDIR}/1.13.4-python3_10-ignore-deprecated-currentThread.patch"
+
+	default
 }
