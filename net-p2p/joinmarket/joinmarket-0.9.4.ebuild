@@ -67,13 +67,10 @@ DEPEND=""
 BDEPEND="
 	$(python_gen_cond_dep '
 		test? (
-			>=dev-python/coverage-5.2.1[${PYTHON_USEDEP}]
-			dev-python/flake8[${PYTHON_USEDEP}]
 			dev-python/freezegun[${PYTHON_USEDEP}]
 			dev-python/mock[${PYTHON_USEDEP}]
 			dev-python/pexpect[${PYTHON_USEDEP}]
 			>=dev-python/pytest-5.3.5[${PYTHON_USEDEP}]
-			>=dev-python/pytest-cov-2.4.0[${PYTHON_USEDEP}]
 		)
 	')
 

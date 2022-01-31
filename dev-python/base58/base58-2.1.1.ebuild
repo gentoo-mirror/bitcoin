@@ -25,8 +25,6 @@ BDEPEND="
 	test? (
 		>=dev-python/pyhamcrest-2.0.2[${PYTHON_USEDEP}]
 		>=dev-python/pytest-4.6[${PYTHON_USEDEP}]
-		dev-python/pytest-cov[${PYTHON_USEDEP}]
-		dev-python/pytest-flake8[${PYTHON_USEDEP}]
 	)
 "
 
