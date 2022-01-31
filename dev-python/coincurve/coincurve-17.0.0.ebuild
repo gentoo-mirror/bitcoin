@@ -37,11 +37,17 @@ src_prepare() {
 	mkdir -p libsecp256k1
 }
 
+src_test() {
+	# awkward hack to help Python find the shared library in ${BUILD_DIR}/lib/coincurve
+	# instead of trying and failing to find it in ${S}/coincurve
+	mv -T coincurve{,~} || die
+	distutils-r1_src_test
+	mv -T coincurve{~,} || die
+}
+
 python_test() {
 	local EPYTEST_IGNORE=(
-		test_bench.py
+		tests/test_bench.py
 	)
-	# awkward hack to help Python find the shared library
-	cd tests || die
-	epytest --import-mode=append
+	distutils-r1_python_test
 }
