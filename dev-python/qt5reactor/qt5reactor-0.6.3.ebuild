@@ -26,8 +26,6 @@ RDEPEND="
 DEPEND=""
 BDEPEND="
 	test? (
-		dev-python/coverage[${PYTHON_USEDEP}]
-		dev-python/pytest-cov[${PYTHON_USEDEP}]
 		dev-python/pytest-twisted[${PYTHON_USEDEP}]
 	)
 "

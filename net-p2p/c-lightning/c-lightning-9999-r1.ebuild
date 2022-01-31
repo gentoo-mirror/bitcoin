@@ -57,7 +57,6 @@ PYTEST_DEPEND='
 	>=dev-python/pytest-6.1[${PYTHON_USEDEP}]
 	>=dev-python/pytest-rerunfailures-9.1.1[${PYTHON_USEDEP}]
 	>=dev-python/pytest-timeout-1.4.2[${PYTHON_USEDEP}]
-	>=dev-python/pytest-xdist-2.2.0[${PYTHON_USEDEP}]
 	>=dev-python/python-bitcoinlib-0.11[${PYTHON_USEDEP}]
 	dev-python/websocket-client[${PYTHON_USEDEP}]
 '
