@@ -87,6 +87,7 @@ net-p2p/bitcoin-qt:knots - Build enhanced Bitcoin Knots version, rather than Bit
 net-p2p/bitcoin-qt:libevent - Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration
 net-p2p/bitcoin-qt:nat-pmp - Enable NAT-PMP port forwarding
 net-p2p/bitcoin-qt:qrcode - Enable generation of QR Codes for receiving payments
+net-p2p/bitcoin-qt:recent-libsecp256k1 - Support recent versions of dev-libs/libsecp256k1
 net-p2p/bitcoin-qt:system-leveldb - Use the system-wide dev-libs/leveldb instead of bundled
 net-p2p/bitcoin-qt:systemtap - Enable SystemTAP/DTrace tracing
 net-p2p/bitcoin-qt:upnp - Enable Universal Plug and Play
@@ -98,6 +99,7 @@ net-p2p/bitcoind:bitcoin_protocol_taproot - Enforces the "Taproot" Bitcoin proto
 net-p2p/bitcoind:external-signer - Include support for external wallet signer programs
 net-p2p/bitcoind:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-p2p/bitcoind:nat-pmp - Enable NAT-PMP port forwarding
+net-p2p/bitcoind:recent-libsecp256k1 - Support recent versions of dev-libs/libsecp256k1
 net-p2p/bitcoind:system-leveldb - Use the system-wide dev-libs/leveldb instead of bundled
 net-p2p/bitcoind:systemtap - Enable SystemTAP/DTrace tracing
 net-p2p/bitcoind:upnp - Enable Universal Plug and Play
