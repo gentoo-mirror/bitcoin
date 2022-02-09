@@ -7,6 +7,7 @@
 	</maintainer>
 	<use>
 		<flag name="knots">Build enhanced Bitcoin Knots version, rather than Bitcoin Core</flag>
+		<flag name="recent-libsecp256k1">Support recent versions of dev-libs/libsecp256k1</flag>
 	</use>
 	<upstream>
 		<remote-id type="github">bitcoin/bitcoin</remote-id>
