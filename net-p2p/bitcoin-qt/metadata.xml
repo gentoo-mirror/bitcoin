@@ -15,6 +15,7 @@
 		<flag name="libevent">Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration</flag>
 		<flag name="nat-pmp">Enable NAT-PMP port forwarding</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
+		<flag name="recent-libsecp256k1">Support recent versions of dev-libs/libsecp256k1</flag>
 		<flag name="system-leveldb">Use the system-wide dev-libs/leveldb instead of bundled</flag>
 		<flag name="systemtap">Enable SystemTAP/DTrace tracing</flag>
 		<flag name="upnp">Enable Universal Plug and Play</flag>

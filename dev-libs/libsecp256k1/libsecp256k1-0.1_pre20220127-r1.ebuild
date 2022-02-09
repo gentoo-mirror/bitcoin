@@ -24,6 +24,8 @@ REQUIRED_USE="
 	schnorr? ( experimental extrakeys )
 "
 RDEPEND="
+	!net-p2p/bitcoind[-recent-libsecp256k1(-)]
+	!net-p2p/bitcoin-qt[-recent-libsecp256k1(-)]
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
