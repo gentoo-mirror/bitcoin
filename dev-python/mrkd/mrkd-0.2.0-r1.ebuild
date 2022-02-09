@@ -18,7 +18,7 @@ IUSE=""
 
 RDEPEND="
 	>=dev-python/jinja-2[${PYTHON_USEDEP}]
-	dev-python/mistune[${PYTHON_USEDEP}]
+	<dev-python/mistune-2[${PYTHON_USEDEP}]
 	dev-python/pygments[${PYTHON_USEDEP}]
 "
 DEPEND=""

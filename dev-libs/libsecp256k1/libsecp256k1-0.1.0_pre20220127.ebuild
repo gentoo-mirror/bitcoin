@@ -12,7 +12,7 @@ COMMITHASH="d8a246324650c3df8d54d133a8ac3c1b857a7a4e"
 SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/20210628"  # subslot is date of last ABI change
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +schnorr +recovery test valgrind"
 RESTRICT="!test? ( test )"
@@ -24,8 +24,10 @@ REQUIRED_USE="
 	schnorr? ( experimental extrakeys )
 "
 RDEPEND="
+	!dev-util/bitcoin-tx[-recent-libsecp256k1(-)]
 	!net-p2p/bitcoind[-recent-libsecp256k1(-)]
 	!net-p2p/bitcoin-qt[-recent-libsecp256k1(-)]
+	!net-p2p/c-lightning[-recent-libsecp256k1(-)]
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig

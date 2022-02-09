@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 CDEPEND="
-	>=dev-libs/libsecp256k1-0.1_pre20220127[ecdh,recovery]
+	>=dev-libs/libsecp256k1-0.1.0_pre20220127[ecdh,recovery]
 	>=dev-python/cffi-1.3.0[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}

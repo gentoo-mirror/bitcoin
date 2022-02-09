@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -19,7 +19,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+knots"
+IUSE="+knots +recent-libsecp256k1"
 
 RDEPEND="
 	>=dev-libs/boost-1.64.0:=[threads(+)]
@@ -67,6 +67,10 @@ src_prepare() {
 		eapply "${knots_patchdir}/${KNOTS_P}_p3-features.patch"
 		eapply "${knots_patchdir}/${KNOTS_P}_p4-branding.patch"
 		eapply "${knots_patchdir}/${KNOTS_P}_p5-ts.patch"
+	fi
+
+	if use recent-libsecp256k1 ; then
+		eapply "${FILESDIR}/22.0-compat-libsecp256k1-0.1_pre20210628.patch"
 	fi
 
 	default
