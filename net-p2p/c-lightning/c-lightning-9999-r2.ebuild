@@ -133,8 +133,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	default
-
 	if use recent-libsecp256k1 ; then
 		eapply "${FILESDIR}/0.10.2-support-recent-libsecp256k1.patch"
 	fi
@@ -151,6 +149,8 @@ src_prepare() {
 		sed -e 's|^\(WALLET_TEST_SRC := \)\(.*\)$|\1$(filter-out %/run-db.c %/run-wallet.c,\2)|' \
 			-i wallet/test/Makefile || die
 	fi
+
+	default
 
 	use python && do_python_phase distutils-r1_src_prepare
 }
