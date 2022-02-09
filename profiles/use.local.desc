@@ -33,6 +33,7 @@ dev-libs/libsecp256k1-zkp:surjectionproof - Enable surjection proof module
 dev-libs/libsecp256k1-zkp:test-openssl - Enable OpenSSL comparison tests
 dev-libs/libsecp256k1-zkp:whitelist - Enable key whitelisting module
 dev-util/bitcoin-tx:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
+dev-util/bitcoin-tx:recent-libsecp256k1 - Support recent versions of dev-libs/libsecp256k1
 net-libs/libbitcoinconsensus:asm - Enable assembly for optimization
 net-libs/libbitcoinconsensus:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-libs/libwally-core:elements - Enable support for Elements assets
@@ -107,5 +108,6 @@ net-p2p/bitcoind:wallet - Enable wallet support
 net-p2p/bitcoind:zeromq - Report blocks and transactions via zeromq
 net-p2p/c-lightning:developer - Enable dangerous commands intended for developer use only.
 net-p2p/c-lightning:experimental - Enable dangerous experimental features.
+net-p2p/c-lightning:recent-libsecp256k1 - Support recent versions of dev-libs/libsecp256k1
 net-p2p/joinmarket:client - Installs jmclient and jmbitcoin packages
 net-p2p/joinmarket:daemon - Installs jmdaemon package
