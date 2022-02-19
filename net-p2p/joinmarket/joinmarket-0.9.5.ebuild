@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{7..10} )
+PYTHON_COMPAT=( python3_{8..10} )
 PYTHON_REQ_USE="sqlite"
 DISTUTILS_SINGLE_IMPL=1
 
@@ -35,12 +35,11 @@ RDEPEND="
 			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
 			dev-python/argon2-cffi[${PYTHON_USEDEP}]
 			>=dev-python/bencoder-pyx-2.0.0[${PYTHON_USEDEP}]
-			dev-python/coincurve[${PYTHON_USEDEP}]
 			>=dev-python/klein-20.6.0[${PYTHON_USEDEP}]
 			dev-python/mnemonic[${PYTHON_USEDEP}]
 			dev-python/pyaes[${PYTHON_USEDEP}]
 			>=dev-python/pyjwt-2.1.0[${PYTHON_USEDEP}]
-			>=dev-python/python-bitcointx-1.1.1_p0[${PYTHON_USEDEP}]
+			>=dev-python/python-bitcointx-1.1.3[${PYTHON_USEDEP}]
 			dev-python/urldecode[${PYTHON_USEDEP}]
 		)
 
@@ -54,13 +53,13 @@ RDEPEND="
 		qt5? (
 			dev-python/pillow[${PYTHON_USEDEP}]
 			>=dev-python/pyside2-5.14.2[gui,widgets,${PYTHON_USEDEP}]
-			dev-python/qrcode[${PYTHON_USEDEP}]
+			>=dev-python/qrcode-7.3.1[${PYTHON_USEDEP}]
 			>=dev-python/qt5reactor-0.6_pre20181201[${PYTHON_USEDEP}]
 		)
 	')
 
 	client? (
-		dev-libs/libsecp256k1[ecdh,recovery]
+		>=dev-libs/libsecp256k1-0.1_pre20211204[ecdh,recovery]
 	)
 "
 DEPEND=""
@@ -115,14 +114,15 @@ src_prepare() {
 			-i joinmarket-qt.desktop || die
 
 	# Gentoo is not affected by https://bugreports.qt.io/browse/QTBUG-88688
-	sed -e 's/^\(PySide2\|PyQt5\)!=5\.15\.0,!=5\.15\.1,!=5\.15\.2,!=6\.0$/\1/' \
+	sed -e 's/\(PySide2\|PyQt5\)!=5\.15\.0,!=5\.15\.1,!=5\.15\.2,!=6\.0/\1/' \
 			-e '/QTBUG-88688$/d' \
 			-i requirements/gui.txt \
 			-i jmqtui/setup.py || die
 
 	# PySide2 no longer ships pyside2-uic in favor of 'uic -g python'
 	# https://bugreports.qt.io/browse/PYSIDE-1098
-	sed -e 's/pyside2-uic/uic -g python/' \
+	sed -e 's/^#\(import os\)$/\1/' \
+			-e 's/^#\?\(os\.system('\''\)pyside2-uic/\1uic -g python/' \
 			-i jmqtui/setup.py || die
 
 	do_python_phase distutils-r1_src_prepare
