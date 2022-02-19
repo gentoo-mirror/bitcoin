@@ -1,7 +1,28 @@
-diff -Naur a/configure.ac b/configure.ac
---- a/configure.ac	2022-02-09 04:27:18.879052050 +0000
-+++ b/configure.ac	2022-02-09 04:39:37.840034923 +0000
-@@ -1324,6 +1324,13 @@
+From 14d45f26b45e6362439c24f87cffb7dd70d09719 Mon Sep 17 00:00:00 2001
+From: Matt Whitlock <bitcoin@mattwhitlock.name>
+Date: Sat, 19 Feb 2022 17:18:45 -0500
+Subject: [PATCH] support libsecp256k1 schnorrsig ABI changes from 2021-06-27
+
+Some schnorrsig function prototypes changed in June 2021, thus breaking
+the builds of Bitcoin Knots (and Core). This commit introduces an
+Autoconf check for the introduced secp256k1_schnorrsig_sign_custom
+symbol and adds some preprocessor conditional directives to fix up the
+call sites of the affected functions to maintain compatibility.
+
+See: https://github.com/bitcoin-core/secp256k1/commit/b6c0b72fb06e3c31121f1ef4403d2a229a31ec1c
+See: https://github.com/bitcoin-core/secp256k1/commit/a0c3fc177f7f435e593962504182c3861c47d1be
+Signed-off-by: Matt Whitlock <bitcoin@mattwhitlock.name>
+---
+ configure.ac   |  7 +++++++
+ src/key.cpp    | 11 ++++++++++-
+ src/pubkey.cpp | 10 +++++++++-
+ 3 files changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 3b2edd1b13..0d6f021cde 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1324,6 +1324,13 @@ AC_ARG_WITH([system-libsecp256k1],
  )
  if test x$system_libsecp256k1 != xno; then
    PKG_CHECK_MODULES([libsecp256k1],[libsecp256k1],,[true])
@@ -15,9 +36,10 @@ diff -Naur a/configure.ac b/configure.ac
  else
    libsecp256k1_CFLAGS='-I$(srcdir)/secp256k1/include'
    libsecp256k1_LIBS='secp256k1/libsecp256k1.la'
-diff -Naur a/src/key.cpp b/src/key.cpp
---- a/src/key.cpp	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/key.cpp	2022-02-09 04:28:35.876642987 +0000
+diff --git a/src/key.cpp b/src/key.cpp
+index dcad386e77..9fffd36a05 100644
+--- a/src/key.cpp
++++ b/src/key.cpp
 @@ -3,6 +3,10 @@
  // Distributed under the MIT software license, see the accompanying
  // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -29,7 +51,7 @@ diff -Naur a/src/key.cpp b/src/key.cpp
  #include <key.h>
  
  #include <crypto/common.h>
-@@ -274,7 +278,12 @@
+@@ -274,7 +278,12 @@ bool CKey::SignSchnorr(const uint256& hash, Span<unsigned char> sig, const uint2
          uint256 tweak = XOnlyPubKey(pubkey_bytes).ComputeTapTweakHash(merkle_root->IsNull() ? nullptr : merkle_root);
          if (!secp256k1_keypair_xonly_tweak_add(GetVerifyContext(), &keypair, tweak.data())) return false;
      }
@@ -43,9 +65,10 @@ diff -Naur a/src/key.cpp b/src/key.cpp
      memory_cleanse(&keypair, sizeof(keypair));
      return ret;
  }
-diff -Naur a/src/pubkey.cpp b/src/pubkey.cpp
---- a/src/pubkey.cpp	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/pubkey.cpp	2022-02-09 04:28:35.877642995 +0000
+diff --git a/src/pubkey.cpp b/src/pubkey.cpp
+index 175a39b805..6bf938a1fd 100644
+--- a/src/pubkey.cpp
++++ b/src/pubkey.cpp
 @@ -3,6 +3,10 @@
  // Distributed under the MIT software license, see the accompanying
  // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -57,7 +80,7 @@ diff -Naur a/src/pubkey.cpp b/src/pubkey.cpp
  #include <pubkey.h>
  
  #include <hash.h>
-@@ -191,7 +195,11 @@
+@@ -191,7 +195,11 @@ bool XOnlyPubKey::VerifySchnorr(const uint256& msg, Span<const unsigned char> si
      assert(sigbytes.size() == 64);
      secp256k1_xonly_pubkey pubkey;
      if (!secp256k1_xonly_pubkey_parse(secp256k1_context_verify, &pubkey, m_keydata.data())) return false;
@@ -70,3 +93,6 @@ diff -Naur a/src/pubkey.cpp b/src/pubkey.cpp
  }
  
  static const CHashWriter HASHER_TAPTWEAK = TaggedHash("TapTweak");
+-- 
+2.35.1
+
