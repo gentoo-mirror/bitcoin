@@ -125,6 +125,10 @@ src_prepare() {
 			-e 's/^#\?\(os\.system('\''\)pyside2-uic/\1uic -g python/' \
 			-i jmqtui/setup.py || die
 
+	default
+
+	# avoid running the default src_prepare() in each subdir
+	local DISTUTILS_OPTIONAL=1
 	do_python_phase distutils-r1_src_prepare
 }
 
