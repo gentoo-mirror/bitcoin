@@ -5,7 +5,7 @@ EAPI=7
 
 POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client,pylightning} )
 DISTUTILS_OPTIONAL=1
 
@@ -14,6 +14,7 @@ inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
+	ff84b3f77327c1ea6a733261256f17587d66d440	# json_add_invoice: fix crash if missing invstring
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -46,10 +47,8 @@ PYTHON_DEPEND="
 	>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
 	>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
-	>=dev-python/mypy-0.790[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
-	>=dev-python/recommonmark-0.7[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
 	acct-group/lightning
@@ -65,6 +64,9 @@ BDEPEND="
 	')
 	python? (
 		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
+		test? (
+			>=dev-python/pytest-6.1.2[${PYTHON_USEDEP}]
+		)
 	)
 	sys-devel/gettext
 "
@@ -210,10 +212,12 @@ src_compile() {
 
 src_test() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
+
+	use python && do_python_phase distutils-r1_src_test
 }
 
 python_test() {
-	:
+	[[ ! -d tests ]] || epytest
 }
 
 python_install_all() {

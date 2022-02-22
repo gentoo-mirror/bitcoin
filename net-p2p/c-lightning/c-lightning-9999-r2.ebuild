@@ -5,7 +5,7 @@ EAPI=7
 
 POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 
@@ -41,25 +41,9 @@ PYTHON_DEPEND="
 	>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
 	>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
-	>=dev-python/mypy-0.790[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
-	>=dev-python/recommonmark-0.7[${PYTHON_USEDEP}]
 "
-PYTEST_DEPEND='
-	>=dev-python/cheroot-8.5[${PYTHON_USEDEP}]
-	>=dev-python/ephemeral-port-reserve-1.1.1[${PYTHON_SINGLE_USEDEP}]
-	>=dev-python/flaky-3.7.0[${PYTHON_USEDEP}]
-	>=dev-python/flask-1.1[${PYTHON_USEDEP}]
-	>=dev-python/jsonschema-3.2[${PYTHON_USEDEP}]
-	>=dev-python/psutil-5.7[${PYTHON_USEDEP}]
-	>=dev-python/psycopg-2.8[${PYTHON_USEDEP}]
-	>=dev-python/pytest-6.1[${PYTHON_USEDEP}]
-	>=dev-python/pytest-rerunfailures-9.1.1[${PYTHON_USEDEP}]
-	>=dev-python/pytest-timeout-1.4.2[${PYTHON_USEDEP}]
-	>=dev-python/python-bitcoinlib-0.11[${PYTHON_USEDEP}]
-	dev-python/websocket-client[${PYTHON_USEDEP}]
-'
 RDEPEND="${CDEPEND}
 	acct-group/lightning
 	acct-user/lightning
@@ -74,19 +58,12 @@ BDEPEND="
 	')
 	python? (
 		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
+		test? (
+			>=dev-python/pytest-6.1.2[${PYTHON_USEDEP}]
+		)
 	)
 	sys-devel/gettext
 "
-#BDEPEND+="
-#	$(python_gen_any_dep '
-#		test? ( '"${PYTEST_DEPEND}"' )
-#	')
-#	test? (
-#		app-misc/jq
-#		$(python_gen_impl_dep sqlite)
-#		${PYTHON_DEPEND}
-#	)
-#"
 REQUIRED_USE="
 	|| ( postgres sqlite )
 	postgres? ( ${POSTGRES_REQ_USE} )
@@ -95,12 +72,7 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 python_check_deps() {
-	has_version "dev-python/mako[${PYTHON_USEDEP}]" || return 1
-#	if use test ; then
-#		local dep ; for dep in ${PYTEST_DEPEND} ; do
-#			eval "has_version \"${dep}\"" || return 1
-#		done
-#	fi
+	has_version "dev-python/mako[${PYTHON_USEDEP}]"
 }
 
 do_python_phase() {
@@ -118,10 +90,7 @@ pkg_setup() {
 	else
 		export PG_CONFIG=
 	fi
-	if use test ; then
-		tc-ld-disable-gold	# mock magic doesn't support gold
-#		PYTHON_SUBDIRS+=( contrib/pyln-testing )
-	fi
+	use test && tc-ld-disable-gold	# mock magic doesn't support gold
 }
 
 src_unpack() {
@@ -209,13 +178,13 @@ src_compile() {
 }
 
 src_test() {
-	# FIXME: full 'check' target doesn't pass
-	#emake "${CLIGHTNING_MAKEOPTS[@]}" $(usex python check check-units)
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
+
+	use python && do_python_phase distutils-r1_src_test
 }
 
 python_test() {
-	:
+	epytest
 }
 
 python_install_all() {
