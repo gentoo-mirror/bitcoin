@@ -14,10 +14,20 @@ LICENSE="BSD"
 SLOT="0"
 
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE=""
+IUSE="static-libs"
 RESTRICT="test"
 
 DEPEND="sys-libs/libunwind"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}-${COMMITHASH}"
+
+src_configure() {
+	econf --enable-shared \
+		$(use_enable static{-libs,})
+}
+
+src_install() {
+	default
+	find "${D}" -name '*.la' -delete || die
+}

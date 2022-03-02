@@ -28,7 +28,7 @@ KEYWORDS=""
 IUSE="developer experimental postgres python +recent-libsecp256k1 sqlite test"
 
 CDEPEND="
-	>=dev-libs/libbacktrace-0.0.0_pre20220318
+	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
 	>=dev-libs/libsecp256k1-0.1_pre20200907:=[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16
 	>=net-libs/libwally-core-0.8.3:=[elements]
