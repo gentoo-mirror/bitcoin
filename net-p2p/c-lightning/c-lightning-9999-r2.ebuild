@@ -8,6 +8,7 @@ POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 PYTHON_COMPAT=( python3_{8..10} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
+DISTUTILS_USE_PEP517=poetry
 
 inherit bash-completion-r1 distutils-r1 git-r3 postgres toolchain-funcs
 
@@ -37,10 +38,10 @@ CDEPEND="
 	sqlite? ( dev-db/sqlite:= )
 "
 PYTHON_DEPEND="
-	>=dev-python/base58-2.0.1[${PYTHON_USEDEP}]
-	>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
-	>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
-	>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
+	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
+	>=dev-python/bitstring-3.1.9[${PYTHON_USEDEP}]
+	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
 "
@@ -52,14 +53,16 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 "
 BDEPEND="
-	dev-python/mrkd
+	>=dev-python/mrkd-0.2.0
 	$(python_gen_any_dep '
-		dev-python/mako[${PYTHON_USEDEP}]
+		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
 	python? (
-		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
+		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
+		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
+		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 		test? (
-			>=dev-python/pytest-6.1.2[${PYTHON_USEDEP}]
+			>=dev-python/pytest-7.0.1[${PYTHON_USEDEP}]
 		)
 	)
 	sys-devel/gettext
@@ -177,6 +180,14 @@ src_compile() {
 	use python && do_python_phase distutils-r1_src_compile
 }
 
+python_compile() {
+	# distutils-r1_python_compile() isn't designed to be called multiple
+	# times for the same EPYTHON, so do some cleanup between invocations
+	rm -rf -- "${BUILD_DIR}/install${EPREFIX}/usr/bin" || die
+
+	distutils-r1_python_compile
+}
+
 src_test() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
@@ -188,8 +199,10 @@ python_test() {
 }
 
 python_install_all() {
-	DOCS= distutils-r1_python_install_all
+	do_python_phase python_install_subdir_docs
+}
 
+python_install_subdir_docs() {
 	shopt -s nullglob
 	local -a docs=( README* )
 	shopt -u nullglob
@@ -214,7 +227,7 @@ src_install() {
 
 	newbashcomp contrib/lightning-cli.bash-completion lightning-cli
 
-	use python && do_python_phase distutils-r1_src_install
+	use python && distutils-r1_src_install
 
 	insinto "/etc/portage/savedconfig/${CATEGORY}"
 	newins compat.vars "${PN}"
