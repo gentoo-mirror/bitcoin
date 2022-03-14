@@ -23,7 +23,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+client daemon qt5"
 REQUIRED_USE="qt5? ( client )"
-RESTRICT="test"  # I've wasted enough time trying to get these tests to pass.
 
 RDEPEND="
 	$(python_gen_cond_dep '
@@ -153,7 +152,8 @@ python_test() {
 	cp -f -- test/bitcoin.conf "${btcconf}" || die
 	echo "datadir=${jm_test_datadir}" >>"${btcconf}" || die
 
-	epytest "${PYTHON_SUBDIRS[@]}" $(usev client test) \
+	epytest -p no:twisted \
+		"${PYTHON_SUBDIRS[@]}" $(usev client test) \
 		--nirc=2 \
 		--btcconf="${btcconf}" \
 		$(sed -n \
