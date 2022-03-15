@@ -26,8 +26,12 @@ RDEPEND="
 DEPEND=""
 BDEPEND="
 	test? (
-		dev-python/pytest-twisted[${PYTHON_USEDEP}]
+		>=dev-python/pytest-twisted-1.13.4-r1[${PYTHON_USEDEP}]
 	)
 "
 
 distutils_enable_tests pytest
+
+python_test() {
+	epytest -p pytest_twisted
+}
