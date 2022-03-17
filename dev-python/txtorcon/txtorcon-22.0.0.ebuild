@@ -17,16 +17,19 @@ KEYWORDS="~amd64 ~arm64"
 IUSE="doc examples test"
 RESTRICT="!test? ( test )"
 
-RDEPEND="
+PYTHON_DEPEND='
 	dev-python/automat[${PYTHON_USEDEP}]
 	dev-python/cryptography[${PYTHON_USEDEP}]
 	dev-python/incremental[${PYTHON_USEDEP}]
 	>=dev-python/twisted-15.5.0[${PYTHON_USEDEP},crypt]
 	>=dev-python/zope-interface-3.6.1[${PYTHON_USEDEP}]
+'
+RDEPEND="
+	${PYTHON_DEPEND//'${PYTHON_USEDEP}'/${PYTHON_USEDEP}}
 	sys-process/lsof
 "
 DEPEND=""
-DOC_DEPEND='
+DOC_DEPEND="${PYTHON_DEPEND}"'
 	>=dev-python/repoze-sphinx-autointerface-0.4[${PYTHON_USEDEP}]
 	dev-python/sphinx[${PYTHON_USEDEP}]
 '
@@ -46,7 +49,7 @@ PATCHES=(
 python_check_deps() {
 	if use doc ; then
 		local each ; for each in ${DOC_DEPEND} ; do
-			eval "has_version -b \"${each}\"" || return
+			has_version -b "${each/'${PYTHON_USEDEP}'/${PYTHON_USEDEP}}" || return
 		done
 	fi
 }
