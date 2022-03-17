@@ -73,6 +73,7 @@ BDEPEND="
 	')
 
 	test? (
+		>=net-p2p/bitcoin-cli-0.20
 		>=net-p2p/bitcoind-0.20
 	)
 "
