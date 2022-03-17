@@ -32,7 +32,10 @@ DOC_DEPEND='
 '
 BDEPEND="
 	doc? ( $(python_gen_any_dep "${DOC_DEPEND}") )
-	test? ( dev-python/mock[${PYTHON_USEDEP}] )
+	test? (
+		${RDEPEND}
+		dev-python/mock[${PYTHON_USEDEP}]
+	)
 "
 
 PATCHES=(
