@@ -46,7 +46,7 @@ PATCHES=(
 python_check_deps() {
 	if use doc ; then
 		local each ; for each in ${DOC_DEPEND} ; do
-			eval "has_version \"${each}\"" || return
+			eval "has_version -b \"${each}\"" || return
 		done
 	fi
 }
