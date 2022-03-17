@@ -80,7 +80,7 @@ REQUIRED_USE="
 S=${WORKDIR}/${MyPN}-${MyPV}
 
 python_check_deps() {
-	has_version "dev-python/mako[${PYTHON_USEDEP}]"
+	has_version -b "dev-python/mako[${PYTHON_USEDEP}]"
 }
 
 do_python_phase() {
