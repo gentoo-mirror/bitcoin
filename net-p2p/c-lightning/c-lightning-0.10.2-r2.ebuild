@@ -32,6 +32,7 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python +recent-libsecp256k1 sqlite test"
+RESTRICT="!test? ( test )"
 
 CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20180606:=
@@ -80,7 +81,7 @@ REQUIRED_USE="
 S=${WORKDIR}/${MyPN}-${MyPV}
 
 python_check_deps() {
-	has_version -b "dev-python/mako[${PYTHON_USEDEP}]"
+	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
 }
 
 do_python_phase() {

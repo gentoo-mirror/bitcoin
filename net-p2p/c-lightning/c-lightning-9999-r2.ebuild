@@ -27,6 +27,7 @@ SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
 IUSE="developer experimental postgres python +recent-libsecp256k1 sqlite test"
+RESTRICT="!test? ( test )"
 
 CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
@@ -75,7 +76,7 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 python_check_deps() {
-	has_version -b "dev-python/mako[${PYTHON_USEDEP}]"
+	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
 }
 
 do_python_phase() {
