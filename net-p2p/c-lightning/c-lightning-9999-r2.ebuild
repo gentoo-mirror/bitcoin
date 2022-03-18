@@ -27,6 +27,7 @@ SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
 IUSE="developer experimental postgres python +recent-libsecp256k1 sqlite test"
+RESTRICT="!test? ( test )"
 
 CDEPEND="
 	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
