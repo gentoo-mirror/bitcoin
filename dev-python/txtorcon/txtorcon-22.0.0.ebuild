@@ -47,11 +47,7 @@ PATCHES=(
 )
 
 python_check_deps() {
-	if use doc ; then
-		local each ; for each in ${DOC_DEPEND} ; do
-			has_version -b "${each/'${PYTHON_USEDEP}'/${PYTHON_USEDEP}}" || return
-		done
-	fi
+	use !doc || python_has_version ${DOC_DEPEND//'${PYTHON_USEDEP}'/${PYTHON_USEDEP}}
 }
 
 python_test() {

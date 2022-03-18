@@ -75,7 +75,7 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 python_check_deps() {
-	has_version -b "dev-python/mako[${PYTHON_USEDEP}]"
+	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
 }
 
 do_python_phase() {
