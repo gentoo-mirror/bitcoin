@@ -200,7 +200,7 @@ pkg_postinst() {
 		ewarn 'You must manually move any existing data files. See the release notes:'
 		ewarn "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory"
 	else
-		elog "It is always a good idea to back up your ${HILITE}joinmarket.cfg${NORMAL}, re-create a"
+		elog "It is always a good idea to back up your ${PORTAGE_COLOR_HILITE-${HILITE}}joinmarket.cfg${PORTAGE_COLOR_NORMAL-${NORMAL}}, re-create a"
 		elog 'default one, and then reapply your changes, as this will populate any'
 		elog 'newly introduced config settings and update any default values. Please'
 		elog 'see the release notes for more information and important announcements:'
