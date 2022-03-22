@@ -249,7 +249,7 @@ pkg_postinst() {
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
 
 	if [[ ${had_hsmtool} ]] ; then
-		ewarn "Upstream has renamed the ${HILITE}hsmtool${NORMAL} executable to ${HILITE}lightning-hsmtool${NORMAL}."
+		ewarn "Upstream has renamed the ${PORTAGE_COLOR_HILITE-${HILITE}}hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}} executable to ${PORTAGE_COLOR_HILITE-${HILITE}}lightning-hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}}."
 		ewarn 'Please adjust your scripts and workflows accordingly.'
 	fi
 }
