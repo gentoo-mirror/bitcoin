@@ -107,7 +107,7 @@ src_unpack() {
 
 src_prepare() {
 	if use recent-libsecp256k1 ; then
-		eapply "${FILESDIR}/0.10.2-support-recent-libsecp256k1.patch"
+		eapply "${FILESDIR}/9999-support-recent-libsecp256k1.patch"
 	fi
 
 	# hack to suppress tools/refresh-submodules.sh
