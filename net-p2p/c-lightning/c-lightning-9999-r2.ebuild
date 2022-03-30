@@ -115,12 +115,6 @@ src_prepare() {
 
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
-
-		# wallet/test/run-db and wallet/test/run-wallet segfault without SQLite.
-		# https://github.com/ElementsProject/lightning/issues/4928
-		use test && ewarn 'Disabling run-db and run-wallet unit tests due to USE="-sqlite".'
-		sed -e 's|^\(WALLET_TEST_SRC := \)\(.*\)$|\1$(filter-out %/run-db.c %/run-wallet.c,\2)|' \
-			-i wallet/test/Makefile || die
 	fi
 
 	default

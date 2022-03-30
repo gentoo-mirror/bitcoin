@@ -147,9 +147,7 @@ src_prepare() {
 
 		# wallet/test/run-db and wallet/test/run-wallet segfault without SQLite.
 		# https://github.com/ElementsProject/lightning/issues/4928
-		use test && ewarn 'Disabling run-db and run-wallet unit tests due to USE="-sqlite".'
-		sed -e 's|^\(WALLET_TEST_SRC := \)\(.*\)$|\1$(filter-out %/run-db.c %/run-wallet.c,\2)|' \
-			-i wallet/test/Makefile || die
+		use test && eapply "${FILESDIR}/0.10.2-tests-without-sqlite.patch"
 	fi
 
 	default
