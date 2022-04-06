@@ -30,13 +30,15 @@ IUSE="developer experimental postgres python +recent-libsecp256k1 sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
+	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
 	>=dev-libs/libsecp256k1-0.1_pre20200907:=[ecdh,extrakeys(-),recovery,schnorr(-)]
-	>=dev-libs/libsodium-1.0.16
+	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.8.3:=[elements]
+	>=sys-libs/zlib-1.2.12:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
-	sqlite? ( dev-db/sqlite:= )
+	sqlite? ( >=dev-db/sqlite-3.26.0:= )
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
