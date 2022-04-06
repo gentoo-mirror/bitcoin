@@ -22,8 +22,8 @@ DEPEND="
 	elements? ( dev-libs/libsecp256k1-zkp[generator,rangeproof,surjectionproof,whitelist] )
 "
 RDEPEND="${DEPEND}
-	!<net-p2p/c-lightning-0.9.3-r2
-	!=net-p2p/c-lightning-9999
+	!<net-p2p/core-lightning-0.9.3-r2
+	!=net-p2p/core-lightning-9999
 "
 
 S="${WORKDIR}/${PN}-release_${PV}"
@@ -35,15 +35,15 @@ PATCHES=(
 pkg_pretend() {
 	if has_version "<${CATEGORY}/${PN}-0.8.2" &&
 		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
-		{ has_version '<net-p2p/c-lightning-0.9.3-r2' || has_version '=net-p2p/c-lightning-9999' ; } &&
+		{ has_version '<net-p2p/core-lightning-0.9.3-r2' || has_version '=net-p2p/core-lightning-9999' ; } &&
 		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ||
 			-x "${EROOT%/}/run/openrc/started/lightningd" ]]
 	then
-		eerror "${CATEGORY}/${PN}-0.8.2 introduced a binary-incompatible change." \
-			'\n'"Installing version ${PV} while running an instance of C-Lightning that was" \
-			'\n'"compiled against a pre-0.8.2 version of ${PN} will cause assertion" \
-			'\n'"failures in newly spawned C-Lightning subdaemons. Please stop the running" \
-			'\n'"lightningd daemon and then reattempt this installation."
+		eerror "${CATEGORY}/${PN}-0.8.2 introduced a binary-incompatible change.
+Installing version ${PV} while running an instance of Core Lightning that
+was compiled against a pre-0.8.2 version of ${PN} will cause
+assertion failures in newly spawned Core Lightning subdaemons. Please stop
+the running lightningd daemon and then reattempt this installation."
 		die 'lightningd is running'
 	fi
 }

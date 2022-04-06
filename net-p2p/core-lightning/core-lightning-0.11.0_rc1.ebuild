@@ -6,15 +6,16 @@ EAPI=7
 POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 
 PYTHON_COMPAT=( python3_{8..10} )
-PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client,pylightning} )
+PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
+DISTUTILS_USE_PEP517=poetry
 
 inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
-	ff84b3f77327c1ea6a733261256f17587d66d440	# json_add_invoice: fix crash if missing invstring
+	d18817a525b2a046189277d8bcd2d80551bad850	# wallet: don't get so upset on orphaned HTLC.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -23,20 +24,21 @@ PATCHES=(
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P/ore}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+KEYWORDS=""
 IUSE="developer experimental postgres python +recent-libsecp256k1 sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
-	>=dev-libs/libbacktrace-0.0.0_pre20180606:=
+	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
 	>=dev-libs/libsecp256k1-0.1_pre20200907:=[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.8.3:=[elements]
@@ -46,10 +48,10 @@ CDEPEND="
 	sqlite? ( >=dev-db/sqlite-3.26.0:= )
 "
 PYTHON_DEPEND="
-	>=dev-python/base58-2.0.1[${PYTHON_USEDEP}]
-	>=dev-python/bitstring-3.1.6[${PYTHON_USEDEP}]
-	>=dev-python/coincurve-13.0[${PYTHON_USEDEP}]
-	>=dev-python/cryptography-3.2[${PYTHON_USEDEP}]
+	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
+	>=dev-python/bitstring-3.1.9[${PYTHON_USEDEP}]
+	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
 "
@@ -61,14 +63,16 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 "
 BDEPEND="
-	dev-python/mrkd
+	>=dev-python/mrkd-0.2.0
 	$(python_gen_any_dep '
-		dev-python/mako[${PYTHON_USEDEP}]
+		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
 	python? (
-		>=dev-python/setuptools_scm-3.3.0[${PYTHON_USEDEP}]
+		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
+		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
+		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 		test? (
-			>=dev-python/pytest-6.1.2[${PYTHON_USEDEP}]
+			>=dev-python/pytest-7.0.1[${PYTHON_USEDEP}]
 		)
 	)
 	sys-devel/gettext
@@ -118,12 +122,11 @@ pkg_setup() {
 	else
 		export PG_CONFIG=
 	fi
-	use python && export SETUPTOOLS_SCM_PRETEND_VERSION=${MyPV}
 	use test && tc-ld-disable-gold	# mock magic doesn't support gold
 }
 
 src_unpack() {
-	unpack "${P}.tar.gz"
+	unpack "${P/ore}.tar.gz"
 	rm -r "${S}/external"/*/
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
@@ -134,22 +137,14 @@ src_unpack() {
 
 src_prepare() {
 	if use recent-libsecp256k1 ; then
-		eapply "${FILESDIR}/0.10.2-support-recent-libsecp256k1.patch"
+		eapply "${FILESDIR}/0.11.0-support-recent-libsecp256k1.patch"
 	fi
 
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile
 
-	# don't instantiate lightning module during installation
-	sed -e '/^import lightning$/d' -e 's/\(version=\)lightning\.__version__/\1"'"${MyPV}"'"/' \
-		-i contrib/pylightning/setup.py || die
-
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
-
-		# wallet/test/run-db and wallet/test/run-wallet segfault without SQLite.
-		# https://github.com/ElementsProject/lightning/issues/4928
-		use test && eapply "${FILESDIR}/0.10.2-tests-without-sqlite.patch"
 	fi
 
 	default
@@ -211,6 +206,14 @@ src_compile() {
 	use python && do_python_phase distutils-r1_src_compile
 }
 
+python_compile() {
+	# distutils-r1_python_compile() isn't designed to be called multiple
+	# times for the same EPYTHON, so do some cleanup between invocations
+	rm -rf -- "${BUILD_DIR}/install${EPREFIX}/usr/bin" || die
+
+	distutils-r1_python_compile
+}
+
 src_test() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
@@ -218,12 +221,14 @@ src_test() {
 }
 
 python_test() {
-	[[ ! -d tests ]] || epytest
+	epytest
 }
 
 python_install_all() {
-	DOCS= distutils-r1_python_install_all
+	do_python_phase python_install_subdir_docs
+}
 
+python_install_subdir_docs() {
 	shopt -s nullglob
 	local -a docs=( README* )
 	shopt -u nullglob
@@ -239,7 +244,7 @@ src_install() {
 	dodoc doc/{PLUGINS.md,TOR.md}
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.10.2.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
@@ -248,14 +253,14 @@ src_install() {
 
 	newbashcomp contrib/lightning-cli.bash-completion lightning-cli
 
-	use python && do_python_phase distutils-r1_src_install
+	use python && distutils-r1_src_install
 
 	insinto "/etc/portage/savedconfig/${CATEGORY}"
 	newins compat.vars "${PN}"
 }
 
 pkg_preinst() {
-	has_version '<net-p2p/c-lightning-0.8' && had_pre_0_8_0=1
+	has_version "<${CATEGORY}/${PN}-0.8" && had_pre_0_8_0=1
 
 	if [[ -e ${EROOT%/}/etc/lightning/config && ! -e ${EROOT%/}/etc/lightning/lightningd.conf ]] ; then
 		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
@@ -272,7 +277,7 @@ pkg_postinst() {
 
 	# warn when upgrading from pre-0.8.0
 	if [[ ${had_pre_0_8_0} || -e ${EROOT%/}/var/lib/lightning/hsm_secret ]] ; then
-		ewarn 'This version of C-Lightning maintains its data files in network-specific'
+		ewarn 'This version of Core Lightning maintains its data files in network-specific'
 		ewarn 'subdirectories of its base directory. Your existing data files will be'
 		ewarn 'migrated automatically upon first startup of the new version.'
 	fi

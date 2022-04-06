@@ -5,7 +5,7 @@ local -A saved_compat_vars
 # load previously saved compatibility flags
 while IFS=$'= \t\n' read -r var val ; do
 	saved_compat_vars[${var}]=${val}
-done < <(cat "${PORTAGE_CONFIGROOT%/}/etc/portage/savedconfig/${CATEGORY}/"{"${PF}","${P}","${PN}"} 2>/dev/null)
+done < <(cat "${PORTAGE_CONFIGROOT%/}/etc/portage/savedconfig/${CATEGORY}/"{"${PF/ore}","${P/ore}","${PN/ore}","${PF}","${P}","${PN}"} 2>/dev/null)
 
 # initialize compatibility flags based on saved flags and presently installed version
 for var in $(sed -ne 's/^COMPAT_CFLAGS=//p' Makefile) ; do

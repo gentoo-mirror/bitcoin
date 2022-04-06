@@ -1,6 +1,6 @@
 #!/sbin/openrc-run
 
-name="C-Lightning Daemon"
+name="Core Lightning daemon"
 description="Bitcoin Lightning Network node daemon"
 
 : ${LIGHTNINGD_CONF:=/etc/lightning/${SVCNAME}.conf}
