@@ -1,6 +1,6 @@
 BDEPEND=sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.4:1.16 ) >=sys-devel/autoconf-2.71 >=sys-devel/libtool-2.4
 DEFINED_PHASES=configure install prepare
-DEPEND=!dev-util/bitcoin-tx[-recent-libsecp256k1(-)] !net-p2p/bitcoind[-recent-libsecp256k1(-)] !net-p2p/bitcoin-qt[-recent-libsecp256k1(-)] !net-p2p/c-lightning[-recent-libsecp256k1(-)] virtual/pkgconfig valgrind? ( dev-util/valgrind )
+DEPEND=!dev-util/bitcoin-tx[-recent-libsecp256k1(-)] !net-p2p/bitcoind[-recent-libsecp256k1(-)] !net-p2p/bitcoin-qt[-recent-libsecp256k1(-)] !net-p2p/core-lightning[-recent-libsecp256k1(-)] virtual/pkgconfig valgrind? ( dev-util/valgrind )
 DESCRIPTION=Optimized C library for EC operations on curve secp256k1
 EAPI=7
 HOMEPAGE=https://github.com/bitcoin-core/secp256k1
@@ -8,10 +8,10 @@ INHERIT=autotools
 IUSE=+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +schnorr +recovery test valgrind
 KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux
 LICENSE=MIT
-RDEPEND=!dev-util/bitcoin-tx[-recent-libsecp256k1(-)] !net-p2p/bitcoind[-recent-libsecp256k1(-)] !net-p2p/bitcoin-qt[-recent-libsecp256k1(-)] !net-p2p/c-lightning[-recent-libsecp256k1(-)]
+RDEPEND=!dev-util/bitcoin-tx[-recent-libsecp256k1(-)] !net-p2p/bitcoind[-recent-libsecp256k1(-)] !net-p2p/bitcoin-qt[-recent-libsecp256k1(-)] !net-p2p/core-lightning[-recent-libsecp256k1(-)]
 REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) extrakeys? ( experimental ) ?? ( lowmem precompute-ecmult ) schnorr? ( experimental extrakeys )
 RESTRICT=!test? ( test )
 SLOT=0/20210628
 SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/d8a246324650c3df8d54d133a8ac3c1b857a7a4e.tar.gz -> libsecp256k1-v0.1.0_pre20220127.tgz
 _eclasses_=gnuconfig	262062cef0ba4f22b397193da514a350	toolchain-funcs	badd6e329e1f3e6bee99b35bf8763ce8	multilib	4a33c9008e5ee30cb8840a3fdc24df2b	libtool	241a8f577b9781a42a7421e53448a44e	autotools	ed3ef2014ee93d24bde80f0c0ea9732e
-_md5_=3be40fa32bc1219532afbbf0e2975297
+_md5_=3b617f8e6dcd68935bdeabca52fd8c29
