@@ -27,7 +27,7 @@ RDEPEND="
 	!dev-util/bitcoin-tx[-recent-libsecp256k1(-)]
 	!net-p2p/bitcoind[-recent-libsecp256k1(-)]
 	!net-p2p/bitcoin-qt[-recent-libsecp256k1(-)]
-	!net-p2p/c-lightning[-recent-libsecp256k1(-)]
+	!net-p2p/core-lightning[-recent-libsecp256k1(-)]
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
