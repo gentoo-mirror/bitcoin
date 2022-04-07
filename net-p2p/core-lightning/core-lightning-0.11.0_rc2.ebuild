@@ -15,7 +15,6 @@ inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
-	d18817a525b2a046189277d8bcd2d80551bad850	# wallet: don't get so upset on orphaned HTLC.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -24,7 +23,7 @@ PATCHES=(
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P/ore}.tar.gz
+SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
@@ -126,7 +125,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	unpack "${P/ore}.tar.gz"
+	unpack "${P}.tar.gz"
 	rm -r "${S}/external"/*/
 	cd "${S}/external" || die
 	unpack jsmn-1.0.0.tar.gz
