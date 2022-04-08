@@ -41,7 +41,7 @@ CDEPEND="
 	>=dev-libs/libsecp256k1-0.1_pre20200907:=[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.8.3:=[elements]
-	>=sys-libs/zlib-1.2.11:=
+	>=sys-libs/zlib-1.2.12:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( >=dev-db/sqlite-3.26.0:= )
@@ -214,6 +214,8 @@ python_compile() {
 }
 
 src_test() {
+	# disable flaky bitcoin/test/run-secret_eq_consttime
+	SLOW_MACHINE=1 \
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
 	use python && do_python_phase distutils-r1_src_test
