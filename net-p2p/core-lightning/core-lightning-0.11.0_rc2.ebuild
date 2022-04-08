@@ -214,6 +214,8 @@ python_compile() {
 }
 
 src_test() {
+	# disable flaky bitcoin/test/run-secret_eq_consttime
+	SLOW_MACHINE=1 \
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
 	use python && do_python_phase distutils-r1_src_test
