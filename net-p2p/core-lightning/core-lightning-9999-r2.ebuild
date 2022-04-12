@@ -191,9 +191,9 @@ RESTRICT="!test? ( test )"
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
-	>=dev-libs/libsecp256k1-0.1_pre20200907:=[ecdh,extrakeys(-),recovery,schnorr(-)]
+	>=dev-libs/libsecp256k1-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.8.3:=[elements]
+	>=net-libs/libwally-core-0.8.5:=[elements]
 	>=sys-libs/zlib-1.2.12:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
@@ -274,10 +274,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	if use recent-libsecp256k1 ; then
-		eapply "${FILESDIR}/0.11.0-support-recent-libsecp256k1.patch"
-	fi
-
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile
 
