@@ -8,8 +8,8 @@ inherit autotools
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
-COMMITHASH="d8a246324650c3df8d54d133a8ac3c1b857a7a4e"
-SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
+COMMITHASH="8746600eec5e7fcd35dabd480839a3a4bdfee87b"
+SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
@@ -19,9 +19,8 @@ RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	extrakeys? ( experimental )
 	?? ( lowmem precompute-ecmult )
-	schnorr? ( experimental extrakeys )
+	schnorr? ( extrakeys )
 "
 RDEPEND="
 	!dev-util/bitcoin-tx[-recent-libsecp256k1(-)]
@@ -57,10 +56,10 @@ src_configure() {
 		$(use_enable experimental) \
 		$(use_enable test tests) \
 		$(use_enable test exhaustive-tests) \
-		$(use_enable ecdh module-ecdh) \
-		$(use_enable extrakeys module-extrakeys) \
 		--with-asm=$asm_opt \
-		$(use_enable recovery module-recovery) \
+		$(use_enable {,module-}ecdh) \
+		$(use_enable {,module-}extrakeys) \
+		$(use_enable {,module-}recovery) \
 		$(use_enable schnorr module-schnorrsig) \
 		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '') \
 		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '') \
@@ -70,5 +69,5 @@ src_configure() {
 
 src_install() {
 	default
-	find "${D}" -name '*.la' -delete || die
+	find "${ED}" -name '*.la' -delete || die
 }
