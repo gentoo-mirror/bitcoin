@@ -1,3 +1,7 @@
 # last rited in main Gentoo repository, but still good here
+# https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=fa8cab347241a1ea34e33db9215c13020119fae2
+dev-python/repoze-sphinx-autointerface
+
+# last rited in main Gentoo repository, but still good here
 # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=5c71075392d53ae933ed56fdf2e9aa6970cf6bbf
 dev-python/txtorcon
