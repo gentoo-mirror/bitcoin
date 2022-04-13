@@ -10,11 +10,170 @@ PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=poetry
 
-inherit bash-completion-r1 distutils-r1 postgres toolchain-funcs
+CARGO_OPTIONAL=1
+CRATES="
+	aho-corasick-0.7.18
+	anyhow-1.0.56
+	async-stream-0.3.3
+	async-stream-impl-0.3.3
+	async-trait-0.1.53
+	atty-0.2.14
+	autocfg-1.1.0
+	base64-0.13.0
+	bitflags-1.3.2
+	bumpalo-3.9.1
+	bytes-1.1.0
+	cc-1.0.73
+	cfg-if-1.0.0
+	chrono-0.4.19
+	core-foundation-0.9.3
+	core-foundation-sys-0.8.3
+	data-encoding-2.3.2
+	der-oid-macro-0.5.0
+	der-parser-6.0.1
+	either-1.6.1
+	env_logger-0.9.0
+	fastrand-1.7.0
+	fixedbitset-0.2.0
+	fnv-1.0.7
+	foreign-types-0.3.2
+	foreign-types-shared-0.1.1
+	futures-0.3.21
+	futures-channel-0.3.21
+	futures-core-0.3.21
+	futures-executor-0.3.21
+	futures-io-0.3.21
+	futures-macro-0.3.21
+	futures-sink-0.3.21
+	futures-task-0.3.21
+	futures-util-0.3.21
+	getrandom-0.2.6
+	h2-0.3.13
+	hashbrown-0.11.2
+	heck-0.3.3
+	hermit-abi-0.1.19
+	hex-0.4.3
+	http-0.2.6
+	http-body-0.4.4
+	httparse-1.6.0
+	httpdate-1.0.2
+	humantime-2.1.0
+	hyper-0.14.18
+	hyper-timeout-0.4.1
+	indexmap-1.8.1
+	instant-0.1.12
+	itertools-0.10.3
+	itoa-1.0.1
+	js-sys-0.3.57
+	lazy_static-1.4.0
+	libc-0.2.122
+	log-0.4.16
+	memchr-2.4.1
+	minimal-lexical-0.2.1
+	mio-0.8.2
+	miow-0.3.7
+	multimap-0.8.3
+	native-tls-0.2.10
+	nom-7.1.1
+	ntapi-0.3.7
+	num-bigint-0.4.3
+	num-integer-0.1.44
+	num-traits-0.2.14
+	num_cpus-1.13.1
+	oid-registry-0.2.0
+	once_cell-1.10.0
+	openssl-0.10.38
+	openssl-probe-0.1.5
+	openssl-src-111.18.0+1.1.1n
+	openssl-sys-0.9.72
+	pem-1.0.2
+	percent-encoding-2.1.0
+	petgraph-0.5.1
+	pin-project-1.0.10
+	pin-project-internal-1.0.10
+	pin-project-lite-0.2.8
+	pin-utils-0.1.0
+	pkg-config-0.3.25
+	ppv-lite86-0.2.16
+	proc-macro2-1.0.37
+	prost-0.8.0
+	prost-build-0.8.0
+	prost-derive-0.8.0
+	prost-types-0.8.0
+	quote-1.0.17
+	rand-0.8.5
+	rand_chacha-0.3.1
+	rand_core-0.6.3
+	rcgen-0.8.14
+	redox_syscall-0.2.13
+	regex-1.5.5
+	regex-syntax-0.6.25
+	remove_dir_all-0.5.3
+	ring-0.16.20
+	rusticata-macros-4.1.0
+	rustls-0.19.1
+	ryu-1.0.9
+	schannel-0.1.19
+	sct-0.6.1
+	security-framework-2.6.1
+	security-framework-sys-2.6.1
+	serde-1.0.136
+	serde_derive-1.0.136
+	serde_json-1.0.79
+	slab-0.4.6
+	socket2-0.4.4
+	spin-0.5.2
+	syn-1.0.91
+	tempfile-3.3.0
+	termcolor-1.1.3
+	thiserror-1.0.30
+	thiserror-impl-1.0.30
+	tokio-1.17.0
+	tokio-io-timeout-1.2.0
+	tokio-macros-1.7.0
+	tokio-rustls-0.22.0
+	tokio-stream-0.1.8
+	tokio-util-0.6.9
+	tokio-util-0.7.1
+	tonic-0.5.2
+	tonic-build-0.5.2
+	tower-0.4.12
+	tower-layer-0.3.1
+	tower-service-0.3.1
+	tracing-0.1.32
+	tracing-attributes-0.1.20
+	tracing-core-0.1.24
+	tracing-futures-0.2.5
+	try-lock-0.2.3
+	unicode-segmentation-1.9.0
+	unicode-xid-0.2.2
+	untrusted-0.7.1
+	vcpkg-0.2.15
+	want-0.3.0
+	wasi-0.10.2+wasi-snapshot-preview1
+	wasi-0.11.0+wasi-snapshot-preview1
+	wasm-bindgen-0.2.80
+	wasm-bindgen-backend-0.2.80
+	wasm-bindgen-macro-0.2.80
+	wasm-bindgen-macro-support-0.2.80
+	wasm-bindgen-shared-0.2.80
+	web-sys-0.3.57
+	webpki-0.21.4
+	which-4.2.5
+	winapi-0.3.9
+	winapi-i686-pc-windows-gnu-0.4.0
+	winapi-util-0.1.5
+	winapi-x86_64-pc-windows-gnu-0.4.0
+	x509-parser-0.12.0
+	yasna-0.4.0
+"
+
+inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
+	151d0094354e20654f49a58aa4923b3c50faa4b7	# lightningd: remove over-zealous assert.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -26,21 +185,22 @@ HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
+	rust? ( $(cargo_crate_uris) )
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer experimental postgres python +recent-libsecp256k1 sqlite test"
+IUSE="developer experimental postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
-	>=dev-libs/libsecp256k1-0.1_pre20200907:=[ecdh,extrakeys(-),recovery,schnorr(-)]
+	>=dev-libs/libsecp256k1-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.8.3:=[elements]
+	>=net-libs/libwally-core-0.8.5:=[elements]
 	>=sys-libs/zlib-1.2.12:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
@@ -74,6 +234,7 @@ BDEPEND="
 			>=dev-python/pytest-7.0.1[${PYTHON_USEDEP}]
 		)
 	)
+	rust? ( ${RUST_DEPEND} )
 	sys-devel/gettext
 "
 REQUIRED_USE="
@@ -132,13 +293,15 @@ src_unpack() {
 	mv jsmn{-1.0.0,} || die
 	unpack gheap-67fc83b.tar.gz
 	mv gheap{-*,} || die
+
+	if use rust ; then
+		set ${CRATES}
+		local A="${*/%/.crate}"
+		cargo_src_unpack
+	fi
 }
 
 src_prepare() {
-	if use recent-libsecp256k1 ; then
-		eapply "${FILESDIR}/0.11.0-support-recent-libsecp256k1.patch"
-	fi
-
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile
 
@@ -149,6 +312,12 @@ src_prepare() {
 	default
 
 	use python && do_python_phase distutils-r1_src_prepare
+
+	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
+		# suppress transitive dependency on rustfmt
+		sed -e 's/^\(tonic-build = \)\(.*\)$/\1{ version = \2, default-features = false, features = ["prost", "transport"] }/' \
+			-i cln-grpc/Cargo.toml || die
+	fi
 }
 
 src_configure() {
@@ -176,8 +345,16 @@ src_configure() {
 		SQLITE3_LDLIBS=
 	)
 
+	use rust && CLIGHTNING_MAKEOPTS+=(
+		RUST_PROFILE=release
+		CARGO_OPTS=--profile=release
+		CLN_RPC_EXAMPLES=
+		CLN_GRPC_EXAMPLES=
+		CLN_PLUGIN_EXAMPLES=
+	)
+
 	python_setup
-	./configure \
+	set ./configure \
 		CC="$(tc-getCC)" \
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
 		CWARNFLAGS= \
@@ -190,9 +367,14 @@ src_configure() {
 		--disable-valgrind \
 		--disable-static \
 		--disable-address-sanitizer \
-		|| die
+		--disable-ub-sanitize \
+		--disable-fuzzing \
+		$(use_enable rust)
+	echo "${@}"
+	"${@}" || die 'configure failed'
 
 	use python && do_python_phase distutils-r1_src_configure
+	use rust && cargo_src_configure
 }
 
 src_compile() {
@@ -200,7 +382,8 @@ src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" \
 		all-programs \
 		$(usex test 'all-test-programs' '') \
-		doc-all
+		doc-all \
+		default-targets
 
 	use python && do_python_phase distutils-r1_src_compile
 }
