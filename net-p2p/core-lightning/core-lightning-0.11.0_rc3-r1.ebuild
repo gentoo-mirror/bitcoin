@@ -173,7 +173,7 @@ inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
 MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
-	151d0094354e20654f49a58aa4923b3c50faa4b7	# lightningd: remove over-zealous assert.
+	c3a749957318fc4fc330fa38e46337811cce9ab6	# connectd: avoid use-after-free on reconnect with remote_addr.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
