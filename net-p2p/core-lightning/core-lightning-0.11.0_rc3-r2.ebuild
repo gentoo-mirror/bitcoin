@@ -174,6 +174,7 @@ MyPN=lightning
 MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
 PATCH_HASHES=(
 	c3a749957318fc4fc330fa38e46337811cce9ab6	# connectd: avoid use-after-free on reconnect with remote_addr.
+	f0dc028fa9b76a9a7829c1b163f3f39ab2bd7efc	# lightningd: fix overzealous check in htlc_out_check
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
