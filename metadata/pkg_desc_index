@@ -29,7 +29,7 @@ net-p2p/Sia 1.2.2 9999: A decentralized cloud storage platform based on blockcha
 net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0: Command-line JSON-RPC client specifically for interfacing with bitcoind
 net-p2p/bitcoin-qt 0.16.3 0.17.1 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0-r1: An end-user Qt GUI for the Bitcoin crypto-currency
 net-p2p/bitcoind 0.16.3 0.17.1 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0-r1: Original Bitcoin crypto-currency wallet for automated services
-net-p2p/core-lightning 0.10.2-r2 0.11.0_rc5 9999-r2: An implementation of Bitcoin's Lightning Network in C
+net-p2p/core-lightning 0.11.0.1 9999-r2: An implementation of Bitcoin's Lightning Network in C
 net-p2p/joinmarket 0.9.5: JoinMarket CoinJoin client and daemon
 net-p2p/libbitcoin 2.0-r1 9999: libbitcoin asynchronous C++ library for Bitcoin
 net-p2p/namecoin 0.3.75 0.3.76 0.3.80 9999: A P2P network based domain name system
