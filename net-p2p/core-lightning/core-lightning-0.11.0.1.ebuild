@@ -171,7 +171,7 @@ CRATES="
 inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=$(ver_rs 3 -) ; MyPV=${MyPV/[-_]rc/rc}
+MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
@@ -189,8 +189,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer experimental postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
