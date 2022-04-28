@@ -13,5 +13,5 @@ REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ?? ( lowmem precomp
 RESTRICT=!test? ( test )
 SLOT=0/20210628
 SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/8746600eec5e7fcd35dabd480839a3a4bdfee87b.tar.gz -> libsecp256k1-v0.1.0_pre20220329.tgz
-_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	badd6e329e1f3e6bee99b35bf8763ce8	multilib	4a33c9008e5ee30cb8840a3fdc24df2b	libtool	241a8f577b9781a42a7421e53448a44e	autotools	9724194ab651ce63fd9bc06e4e1410b4
+_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	badd6e329e1f3e6bee99b35bf8763ce8	multilib	4a33c9008e5ee30cb8840a3fdc24df2b	libtool	241a8f577b9781a42a7421e53448a44e	autotools	f6f9415937fb35f6464179e64b6765e7
 _md5_=04074f656dfc530662aa11b431a2a970
