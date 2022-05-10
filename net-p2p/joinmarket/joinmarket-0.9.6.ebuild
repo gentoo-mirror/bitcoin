@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{8..10} )
 PYTHON_REQ_USE="sqlite"
 DISTUTILS_SINGLE_IMPL=1
 
-inherit desktop distutils-r1
+inherit desktop distutils-r1 qmake-utils
 
 MyPN=${PN}-clientserver
 
@@ -28,7 +28,7 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
 		dev-python/service_identity[${PYTHON_USEDEP}]
-		>=dev-python/twisted-21.7.0[${PYTHON_USEDEP}]
+		>=dev-python/twisted-22.2.0[${PYTHON_USEDEP}]
 
 		client? (
 			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
@@ -80,9 +80,6 @@ BDEPEND="
 
 S="${WORKDIR}/${MyPN}-${PV}"
 
-EPYTEST_IGNORE=(
-	'test/test_full_coinjoin.py'	# ignored by upstream run_test.sh
-)
 distutils_enable_tests pytest
 
 do_python_phase() {
@@ -121,8 +118,9 @@ src_prepare() {
 
 	# PySide2 no longer ships pyside2-uic in favor of 'uic -g python'
 	# https://bugreports.qt.io/browse/PYSIDE-1098
+	local UIC="$(qt5_get_bindir)/uic"
 	sed -e 's/^#\(import os\)$/\1/' \
-			-e 's/^#\?\(os\.system('\''\)pyside2-uic/\1uic -g python/' \
+			-e 's:^#\?\(os\.system('\''\)pyside2-uic:\1'"${UIC//:/\\:}"' -g python:' \
 			-i jmqtui/setup.py || die
 
 	default
