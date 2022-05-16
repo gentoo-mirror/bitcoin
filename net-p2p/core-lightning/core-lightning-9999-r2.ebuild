@@ -13,7 +13,7 @@ DISTUTILS_USE_PEP517=poetry
 CARGO_OPTIONAL=1
 CRATES="
 	aho-corasick-0.7.18
-	anyhow-1.0.56
+	anyhow-1.0.57
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
 	async-trait-0.1.53
@@ -53,9 +53,9 @@ CRATES="
 	heck-0.3.3
 	hermit-abi-0.1.19
 	hex-0.4.3
-	http-0.2.6
+	http-0.2.7
 	http-body-0.4.4
-	httparse-1.6.0
+	httparse-1.7.1
 	httpdate-1.0.2
 	humantime-2.1.0
 	hyper-0.14.18
@@ -63,44 +63,43 @@ CRATES="
 	indexmap-1.8.1
 	instant-0.1.12
 	itertools-0.10.3
-	itoa-1.0.1
+	itoa-1.0.2
 	js-sys-0.3.57
 	lazy_static-1.4.0
-	libc-0.2.122
-	log-0.4.16
-	memchr-2.4.1
+	libc-0.2.125
+	log-0.4.17
+	memchr-2.5.0
 	minimal-lexical-0.2.1
-	mio-0.8.2
-	miow-0.3.7
+	mio-0.8.3
 	multimap-0.8.3
 	native-tls-0.2.10
 	nom-7.1.1
-	ntapi-0.3.7
 	num-bigint-0.4.3
-	num-integer-0.1.44
-	num-traits-0.2.14
+	num-integer-0.1.45
+	num-traits-0.2.15
 	num_cpus-1.13.1
 	oid-registry-0.2.0
 	once_cell-1.10.0
-	openssl-0.10.38
+	openssl-0.10.40
+	openssl-macros-0.1.0
 	openssl-probe-0.1.5
 	openssl-src-111.18.0+1.1.1n
-	openssl-sys-0.9.72
+	openssl-sys-0.9.73
 	pem-1.0.2
 	percent-encoding-2.1.0
 	petgraph-0.5.1
 	pin-project-1.0.10
 	pin-project-internal-1.0.10
-	pin-project-lite-0.2.8
+	pin-project-lite-0.2.9
 	pin-utils-0.1.0
 	pkg-config-0.3.25
 	ppv-lite86-0.2.16
-	proc-macro2-1.0.37
+	proc-macro2-1.0.38
 	prost-0.8.0
 	prost-build-0.8.0
 	prost-derive-0.8.0
 	prost-types-0.8.0
-	quote-1.0.17
+	quote-1.0.18
 	rand-0.8.5
 	rand_chacha-0.3.1
 	rand_core-0.6.3
@@ -112,41 +111,41 @@ CRATES="
 	ring-0.16.20
 	rusticata-macros-4.1.0
 	rustls-0.19.1
-	ryu-1.0.9
+	ryu-1.0.10
 	schannel-0.1.19
 	sct-0.6.1
 	security-framework-2.6.1
 	security-framework-sys-2.6.1
-	serde-1.0.136
-	serde_derive-1.0.136
-	serde_json-1.0.79
+	serde-1.0.137
+	serde_derive-1.0.137
+	serde_json-1.0.81
 	slab-0.4.6
 	socket2-0.4.4
 	spin-0.5.2
-	syn-1.0.91
+	syn-1.0.94
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.30
-	thiserror-impl-1.0.30
-	tokio-1.17.0
+	thiserror-1.0.31
+	thiserror-impl-1.0.31
+	tokio-1.18.2
 	tokio-io-timeout-1.2.0
 	tokio-macros-1.7.0
 	tokio-rustls-0.22.0
 	tokio-stream-0.1.8
-	tokio-util-0.6.9
-	tokio-util-0.7.1
+	tokio-util-0.6.10
+	tokio-util-0.7.2
 	tonic-0.5.2
 	tonic-build-0.5.2
 	tower-0.4.12
 	tower-layer-0.3.1
 	tower-service-0.3.1
-	tracing-0.1.32
-	tracing-attributes-0.1.20
-	tracing-core-0.1.24
+	tracing-0.1.34
+	tracing-attributes-0.1.21
+	tracing-core-0.1.26
 	tracing-futures-0.2.5
 	try-lock-0.2.3
 	unicode-segmentation-1.9.0
-	unicode-xid-0.2.2
+	unicode-xid-0.2.3
 	untrusted-0.7.1
 	vcpkg-0.2.15
 	want-0.3.0
@@ -164,6 +163,12 @@ CRATES="
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.5
 	winapi-x86_64-pc-windows-gnu-0.4.0
+	windows-sys-0.36.1
+	windows_aarch64_msvc-0.36.1
+	windows_i686_gnu-0.36.1
+	windows_i686_msvc-0.36.1
+	windows_x86_64_gnu-0.36.1
+	windows_x86_64_msvc-0.36.1
 	x509-parser-0.12.0
 	yasna-0.4.0
 "
@@ -283,7 +288,7 @@ src_prepare() {
 
 	default
 
-	use python && do_python_phase distutils-r1_src_prepare
+	use python && distutils-r1_src_prepare
 
 	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
 		# suppress transitive dependency on rustfmt
