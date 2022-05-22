@@ -5,7 +5,7 @@ EAPI=7
 
 POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=poetry
