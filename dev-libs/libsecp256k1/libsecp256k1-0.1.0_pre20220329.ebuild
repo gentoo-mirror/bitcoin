@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools
+inherit autotools flag-o-matic toolchain-funcs
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
@@ -30,42 +30,68 @@ RDEPEND="
 	!net-p2p/core-lightning[-recent-libsecp256k1(-)]
 "
 DEPEND="${RDEPEND}
-	virtual/pkgconfig
 	valgrind? ( dev-util/valgrind )
 "
+BDEPEND="
+	virtual/pkgconfig
+"
+
+LIBSECP256K1_CROSS_TOOLS=( precompute_ecmult precompute_ecmult_gen )
+
+is_crosscompile() {
+	[[ ${CHOST} != ${CBUILD:-${CHOST}} ]]
+}
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
 
 src_prepare() {
 	default
 	eautoreconf
+
+	# Generate during build
+	rm -f src/precomputed_ecmult.c src/precomputed_ecmult_gen.c || die
 }
 
 src_configure() {
-	local asm_opt
+	local myconf=(
+		--disable-benchmark
+		$(use_enable experimental)
+		$(use_enable test tests)
+		$(use_enable test exhaustive-tests)
+		$(use_enable {,module-}ecdh)
+		$(use_enable {,module-}extrakeys)
+		$(use_enable {,module-}recovery)
+		$(use_enable schnorr module-schnorrsig)
+		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '')
+		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '')
+		--disable-static
+	)
+
+	if is_crosscompile; then
+		einfo "Building native code generation tools"
+		(
+			unset AR AS CC CPP CXX LD NM OBJCOPY OBJDUMP RANLIB RC STRIP CHOST
+			strip-unsupported-flags
+			econf "${myconf[@]}" --without-valgrind
+			emake CC="$(tc-getCC)" "${LIBSECP256K1_CROSS_TOOLS[@]}"
+		)
+		einfo "Resuming with crosscompile target"
+	fi
+
+	myconf+=(
+		$(use_with valgrind)
+	)
 	if use asm; then
 		if use arm; then
-			asm_opt=arm
+			myconf+=( --with-asm=arm )
 		else
-			asm_opt=auto
+			myconf+=( --with-asm=auto )
 		fi
 	else
-		asm_opt=no
+		myconf+=( --with-asm=no )
 	fi
-	econf \
-		--disable-benchmark \
-		$(use_enable experimental) \
-		$(use_enable test tests) \
-		$(use_enable test exhaustive-tests) \
-		--with-asm=$asm_opt \
-		$(use_enable {,module-}ecdh) \
-		$(use_enable {,module-}extrakeys) \
-		$(use_enable {,module-}recovery) \
-		$(use_enable schnorr module-schnorrsig) \
-		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '') \
-		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '') \
-		$(use_with valgrind) \
-		--disable-static
+
+	econf "${myconf[@]}"
 }
 
 src_install() {
