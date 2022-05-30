@@ -20,7 +20,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +berkdb examples +knots sqlite bitcoin_protocol_taproot test upnp +wallet zeromq"
+IUSE="+asm +berkdb examples +knots sqlite test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -80,19 +80,6 @@ pkg_pretend() {
 	else  # Bitcoin Core doesn't support disabling RBF anymore
 		elog "of receive order. To disable RBF, rebuild with USE=knots to get ${PN}"
 		elog "from Bitcoin Knots, and set mempoolreplacement=never in bitcoin.conf"
-	fi
-	elog
-	ewarn "CAUTION: BITCOIN PROTOCOL CHANGE INCLUDED"
-	ewarn "This release adds enforcement of the Taproot protocol change to the Bitcoin"
-	ewarn "rules, beginning in November. Protocol changes require user consent to be"
-	ewarn "effective, and if enforced inconsistently within the community may compromise"
-	ewarn "your security or others! If you do not know what you are doing, learn more"
-	ewarn "before November. (You must make a decision either way - simply not upgrading"
-	ewarn "is insecure in all scenarios.)"
-	ewarn "To learn more, see https://bitcointaproot.cc"
-	if ! use bitcoin_protocol_taproot; then
-		eerror "To opt-in to Taproot enforcement, set USE=bitcoin_protocol_taproot"
-		die "Will not change consensus rules without user consent"
 	fi
 }
 
