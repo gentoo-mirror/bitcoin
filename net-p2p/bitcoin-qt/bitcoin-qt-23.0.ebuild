@@ -1,27 +1,28 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use desktop xdg-utils
+inherit autotools bash-completion-r1 db-use desktop flag-o-matic xdg-utils
 
-BITCOINCORE_COMMITHASH="194b9b8792d9b0798fdb570b79fa51f1d1f5ebaf"
-KNOTS_PV="${PV}.knots20210629"
+BITCOINCORE_COMMITHASH="fcf6c8f4eb217763545ede1766831a6b93f583bd"
+KNOTS_PV="${PV}.knots20220529"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
 DESCRIPTION="An end-user Qt GUI for the Bitcoin crypto-currency"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
-	https://bitcoinknots.org/files/0.21.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://bitcoinknots.org/files/23.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	!knots? ( https://raw.githubusercontent.com/bitcoin/bitcoin/8779adbdda7658d109556d2e3397e59869a4532a/doc/release-notes/release-notes-23.0.md -> bitcoin-v${PV}-release-notes-Core.md )
 "
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+asm +berkdb dbus kde +knots +qrcode sqlite system-leveldb bitcoin_protocol_taproot test upnp +wallet zeromq"
+IUSE="+asm +berkdb dbus +external-signer kde +knots nat-pmp +qrcode seccomp sqlite systemtap test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -30,16 +31,17 @@ REQUIRED_USE="
 	wallet? ( || ( berkdb sqlite ) )
 "
 RDEPEND="
-	>=dev-libs/boost-1.58.0:=[threads(+)]
-	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
+	>=dev-libs/boost-1.77.0:=[threads(+)]
+	>dev-libs/libsecp256k1-0.1_pre20210703:=[recovery,schnorr]
 	>=dev-libs/univalue-1.0.4:=
 	dev-qt/qtcore:5
 	dev-qt/qtgui:5
 	dev-qt/qtnetwork:5
 	dev-qt/qtwidgets:5
-	system-leveldb? ( virtual/bitcoin-leveldb )
+	virtual/bitcoin-leveldb
 	dbus? ( dev-qt/qtdbus:5 )
 	dev-libs/libevent:=
+	nat-pmp? ( net-libs/libnatpmp )
 	qrcode? (
 		media-gfx/qrencode:=
 	)
@@ -48,10 +50,12 @@ RDEPEND="
 	berkdb? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
 	zeromq? ( net-libs/zeromq:= )
 "
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	systemtap? ( >=dev-util/systemtap-4.5 )
+"
 BDEPEND="
-	>=sys-devel/autoconf-2.69
 	>=sys-devel/automake-1.13
+	|| ( >=sys-devel/gcc-8.1[cxx] >=sys-devel/clang-7 )
 	dev-qt/linguist-tools:5
 	knots? (
 		gnome-base/librsvg
@@ -62,12 +66,15 @@ BDEPEND="
 DOCS=(
 	doc/bips.md
 	doc/bitcoin-conf.md
+	doc/cjdns.md
 	doc/descriptors.md
 	doc/files.md
 	doc/JSON-RPC-interface.md
+	doc/p2p-bad-ports.md
+	doc/policy
 	doc/psbt.md
+	doc/reduce-memory.md
 	doc/reduce-traffic.md
-	doc/release-notes.md
 	doc/REST-interface.md
 	doc/tor.md
 )
@@ -78,28 +85,26 @@ pkg_pretend() {
 	if use knots; then
 		elog "You are building ${PN} from Bitcoin Knots."
 		elog "For more information, see:"
-		elog "https://bitcoinknots.org/files/0.21.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "https://bitcoinknots.org/files/23.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2021/05/01/release-${PV}/"
+		elog "https://bitcoincore.org/en/2022/04/25/release-${PV}/"
 	fi
 	elog
 	elog "Replace By Fee policy is now always enabled by default: Your node will"
 	elog "preferentially mine and relay transactions paying the highest fee, regardless"
-	elog "of receive order. To disable RBF, set mempoolreplacement=never in bitcoin.conf"
-	elog
-	ewarn "CAUTION: BITCOIN PROTOCOL CHANGE INCLUDED"
-	ewarn "This release adds enforcement of the Taproot protocol change to the Bitcoin"
-	ewarn "rules, beginning in November. Protocol changes require user consent to be"
-	ewarn "effective, and if enforced inconsistently within the community may compromise"
-	ewarn "your security or others! If you do not know what you are doing, learn more"
-	ewarn "before November. (You must make a decision either way - simply not upgrading"
-	ewarn "is insecure in all scenarios.)"
-	ewarn "To learn more, see https://bitcointaproot.cc"
-	if ! use bitcoin_protocol_taproot; then
-		eerror "To opt-in to Taproot enforcement, set USE=bitcoin_protocol_taproot"
-		die "Will not change consensus rules without user consent"
+	if use knots; then
+		elog "of receive order. To disable RBF, set mempoolreplacement=never in bitcoin.conf"
+	else  # Bitcoin Core doesn't support disabling RBF anymore
+		elog "of receive order. To disable RBF, rebuild with USE=knots to get ${PN}"
+		elog "from Bitcoin Knots, and set mempoolreplacement=never in bitcoin.conf"
+	fi
+
+	if [[ ${MERGE_TYPE} != "binary" ]] ; then
+		if ! test-flag-CXX -std=c++17 ; then
+			die "Building ${CATEGORY}/${P} requires at least GCC 8.1 or Clang 7"
+		fi
 	fi
 }
 
@@ -111,32 +116,32 @@ src_prepare() {
 
 	local knots_patchdir="${WORKDIR}/${KNOTS_P}.patches/"
 
-	eapply "${knots_patchdir}/${KNOTS_P}.syslibs.patch"
+	eapply "${knots_patchdir}/${KNOTS_P}_p1-syslibs.patch"
 
 	if use knots; then
-		eapply "${knots_patchdir}/${KNOTS_P}.f.patch"
-		eapply "${knots_patchdir}/${KNOTS_P}.branding.patch"
-		eapply "${knots_patchdir}/${KNOTS_P}.ts.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}_p2-fixes.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}_p3-features.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}_p4-branding.patch"
+		eapply "${knots_patchdir}/${KNOTS_P}_p5-ts.patch"
 	fi
 
-	eapply_user
-
-	echo '#!/bin/true' >share/genbuild.sh || die
-	mkdir -p src/obj || die
-	echo "#define BUILD_SUFFIX gentoo${PVR#${PV}}" >src/obj/build.h || die
+	default
 
 	eautoreconf
-	rm -r src/secp256k1 || die
-	if use system-leveldb; then
-		rm -r src/leveldb || die
-	fi
+	rm -r src/leveldb src/secp256k1 || die
 }
 
 src_configure() {
 	local my_econf=(
 		$(use_enable asm)
 		$(use_with dbus qtdbus)
+		$(use_enable systemtap usdt)
+		$(use_enable external-signer)
+		--with-boost-process
+		$(use_with nat-pmp natpmp)
+		$(use_with nat-pmp natpmp-default)
 		$(use_with qrcode qrencode)
+		$(use_with seccomp)
 		$(use_with upnp miniupnpc)
 		$(use_enable upnp upnp-default)
 		$(use_enable test tests)
@@ -145,16 +150,18 @@ src_configure() {
 		--with-gui=qt5
 		--disable-util-cli
 		--disable-util-tx
+		--disable-util-util
 		--disable-util-wallet
 		--disable-bench
 		--without-libs
 		--without-daemon
 		--disable-fuzz
+		--disable-fuzz-binary
 		--disable-ccache
 		--disable-static
 		$(use_with berkdb bdb)
 		$(use_with sqlite)
-		$(use_with system-leveldb)
+		--with-system-leveldb
 		--with-system-libsecp256k1
 		--with-system-univalue
 	)
@@ -180,6 +187,15 @@ src_install() {
 	fi
 	domenu "${T}/org.bitcoin.bitcoin-qt.desktop"
 
+	if use knots; then
+		dodoc doc/release-notes.md
+	else
+		# Bitcoin Core forgot to commit the release notes to git
+		newdoc "${DISTDIR}/bitcoin-v${PV}-release-notes-Core.md" "release-notes.md"
+	fi
+
+	use systemtap && dodoc doc/tracing.md
+	use wallet && dodoc doc/managing-wallets.md
 	use zeromq && dodoc doc/zmq.md
 
 	newbashcomp contrib/bitcoind.bash-completion ${PN}

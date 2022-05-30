@@ -8,7 +8,7 @@ inherit autotools flag-o-matic toolchain-funcs
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
-COMMITHASH="8746600eec5e7fcd35dabd480839a3a4bdfee87b"
+COMMITHASH="0559fc6e41b65af6e52c32eb9b1286494412a162"
 SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
@@ -19,8 +19,9 @@ RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
+	extrakeys? ( experimental )
 	?? ( lowmem precompute-ecmult )
-	schnorr? ( extrakeys )
+	schnorr? ( experimental extrakeys )
 "
 RDEPEND="
 	!=dev-util/bitcoin-tx-22*[-recent-libsecp256k1(-)]
@@ -36,7 +37,7 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-LIBSECP256K1_CROSS_TOOLS=( precompute_ecmult precompute_ecmult_gen )
+LIBSECP256K1_CROSS_TOOLS=( gen_ecmult_gen_static_prec_table gen_ecmult_static_pre_g )
 
 is_crosscompile() {
 	[[ ${CHOST} != ${CBUILD:-${CHOST}} ]]
@@ -49,7 +50,7 @@ src_prepare() {
 	eautoreconf
 
 	# Generate during build
-	rm -f src/precomputed_ecmult.c src/precomputed_ecmult_gen.c || die
+	rm -f src/ecmult_gen_static_prec_table.h src/ecmult_static_pre_g.h || die
 }
 
 src_configure() {

@@ -8,7 +8,6 @@
 	<use>
 		<flag name="asm">Enable assembly for optimization</flag>
 		<flag name="bitcoin_policy_rbf">Replace By Fee policy: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order</flag>
-		<flag name="bitcoin_protocol_taproot">Enforces the "Taproot" Bitcoin protocol change beginning in 2021 November</flag>
 		<flag name="external-signer">Include support for external wallet signer programs</flag>
 		<flag name="knots">Build enhanced Bitcoin Knots version, rather than Bitcoin Core</flag>
 		<flag name="nat-pmp">Enable NAT-PMP port forwarding</flag>
