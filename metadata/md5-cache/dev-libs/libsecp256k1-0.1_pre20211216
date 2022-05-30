@@ -9,9 +9,9 @@ IUSE=+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +schnorr +recov
 KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux
 LICENSE=MIT
 RDEPEND=!=dev-util/bitcoin-tx-22*[-recent-libsecp256k1(-)] !=net-p2p/bitcoind-22*[-recent-libsecp256k1(-)] !=net-p2p/bitcoin-qt-22*[-recent-libsecp256k1(-)] !=net-libs/libbitcoinconsensus-22*[-recent-libsecp256k1(-)] !net-p2p/core-lightning[-recent-libsecp256k1(-)]
-REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ?? ( lowmem precompute-ecmult ) schnorr? ( extrakeys )
+REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) extrakeys? ( experimental ) ?? ( lowmem precompute-ecmult ) schnorr? ( experimental extrakeys )
 RESTRICT=!test? ( test )
 SLOT=0/20210628
-SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/8746600eec5e7fcd35dabd480839a3a4bdfee87b.tar.gz -> libsecp256k1-v0.1.0_pre20220329.tgz
+SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/0559fc6e41b65af6e52c32eb9b1286494412a162.tar.gz -> libsecp256k1-v0.1_pre20211216.tgz
 _eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	fd9cde67030b26e479eeadaced488253	multilib	4fbbbc98f236f1b43acd99476bc3cd85	libtool	241a8f577b9781a42a7421e53448a44e	autotools	136117fb43a9bf5598530e9cc642f710	edos2unix	33e347e171066657f91f8b0c72ec8773	strip-linguas	ac3ee41ee2d31d8c41a77c0838320cc7	wrapper	4a1902f969e5718126434fc35f3a0d9c	eutils	dab5d8ec471d025b79c9e6906bcf3bff	flag-o-matic	a500d7cc40da3de38c361e889153bdf7
-_md5_=8a6917721db23bde9dbe277903dbdf96
+_md5_=deef7213476560918f473641c26b4a60
