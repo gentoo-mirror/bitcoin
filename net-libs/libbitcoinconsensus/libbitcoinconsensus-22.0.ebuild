@@ -19,7 +19,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm bitcoin_protocol_taproot +knots"
+IUSE="+asm +knots"
 
 RDEPEND="
 	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
@@ -43,19 +43,6 @@ pkg_pretend() {
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
 		elog "https://bitcoincore.org/en/2021/09/13/release-${PV}/"
-	fi
-	elog
-	ewarn "CAUTION: BITCOIN PROTOCOL CHANGE INCLUDED"
-	ewarn "This release adds enforcement of the Taproot protocol change to the Bitcoin"
-	ewarn "rules, beginning in November. Protocol changes require user consent to be"
-	ewarn "effective, and if enforced inconsistently within the community may compromise"
-	ewarn "your security or others! If you do not know what you are doing, learn more"
-	ewarn "before November. (You must make a decision either way - simply not upgrading"
-	ewarn "is insecure in all scenarios.)"
-	ewarn "To learn more, see https://bitcointaproot.cc"
-	if ! use bitcoin_protocol_taproot; then
-		eerror "To opt-in to Taproot enforcement, set USE=bitcoin_protocol_taproot"
-		die "Will not change consensus rules without user consent"
 	fi
 
 	if [[ ${MERGE_TYPE} != "binary" ]] ; then
