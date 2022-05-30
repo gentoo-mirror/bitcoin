@@ -9,7 +9,7 @@ MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 COMMITHASH="8746600eec5e7fcd35dabd480839a3a4bdfee87b"
-SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
+SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
 
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
@@ -23,9 +23,10 @@ REQUIRED_USE="
 	schnorr? ( extrakeys )
 "
 RDEPEND="
-	!dev-util/bitcoin-tx[-recent-libsecp256k1(-)]
-	!net-p2p/bitcoind[-recent-libsecp256k1(-)]
-	!net-p2p/bitcoin-qt[-recent-libsecp256k1(-)]
+	!=dev-util/bitcoin-tx-22*[-recent-libsecp256k1(-)]
+	!=net-p2p/bitcoind-22*[-recent-libsecp256k1(-)]
+	!=net-p2p/bitcoin-qt-22*[-recent-libsecp256k1(-)]
+	!=net-libs/libbitcoinconsensus-22*[-recent-libsecp256k1(-)]
 	!net-p2p/core-lightning[-recent-libsecp256k1(-)]
 "
 DEPEND="${RDEPEND}
