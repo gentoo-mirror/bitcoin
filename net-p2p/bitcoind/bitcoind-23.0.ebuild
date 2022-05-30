@@ -16,6 +16,7 @@ SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
 	https://bitcoinknots.org/files/23.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 	!knots? ( https://raw.githubusercontent.com/bitcoin/bitcoin/8779adbdda7658d109556d2e3397e59869a4532a/doc/release-notes/release-notes-23.0.md -> bitcoin-v${PV}-release-notes-Core.md )
+	knots? ( https://raw.githubusercontent.com/bitcoinknots/bitcoin/v23.0.knots20220529-release-notes/doc/release-notes.md -> bitcoin-v${PV}-release-notes-Knots.md )
 "
 
 LICENSE="MIT"
@@ -177,10 +178,10 @@ src_install() {
 
 	doman "${FILESDIR}/bitcoin.conf.5"
 
+	# Both forgot to commit the release notes to git
 	if use knots; then
-		dodoc doc/release-notes.md
+		newdoc "${DISTDIR}/bitcoin-v${PV}-release-notes-Knots.md" "release-notes.md"
 	else
-		# Bitcoin Core forgot to commit the release notes to git
 		newdoc "${DISTDIR}/bitcoin-v${PV}-release-notes-Core.md" "release-notes.md"
 	fi
 
