@@ -1,15 +1,15 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools flag-o-matic
+inherit autotools bash-completion-r1 flag-o-matic
 
 BITCOINCORE_COMMITHASH="a0988140b71485ad12c3c3a4a9573f7c21b1eff8"
 KNOTS_PV="${PV}.knots20211108"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
-DESCRIPTION="Bitcoin Core consensus library"
+DESCRIPTION="Command-line Bitcoin transaction tool"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
 	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
@@ -19,10 +19,12 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +knots"
+IUSE="+knots"
 
 RDEPEND="
+	>=dev-libs/boost-1.64.0:=[threads(+)]
 	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
+	>=dev-libs/univalue-1.0.4:=
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -30,7 +32,10 @@ BDEPEND="
 	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
 "
 
-DOCS=( doc/bips.md doc/release-notes.md doc/shared-libraries.md )
+DOCS=(
+	doc/bips.md
+	doc/release-notes.md
+)
 
 S="${WORKDIR}/bitcoin-${BITCOINCORE_COMMITHASH}"
 
@@ -56,6 +61,7 @@ src_prepare() {
 	local knots_patchdir="${WORKDIR}/${KNOTS_P}.patches/"
 
 	eapply "${knots_patchdir}/${KNOTS_P}_p1-syslibs.patch"
+	eapply "${FILESDIR}/${PV}-fix_build_without_leveldb.patch"
 
 	if use knots; then
 		eapply "${knots_patchdir}/${KNOTS_P}_p2-fixes.patch"
@@ -63,6 +69,9 @@ src_prepare() {
 		eapply "${knots_patchdir}/${KNOTS_P}_p4-branding.patch"
 		eapply "${knots_patchdir}/${KNOTS_P}_p5-ts.patch"
 	fi
+
+	eapply "${FILESDIR}/22-compat-libsecp256k1-secp256k1_schnorrsig_verify.patch"
+	eapply "${FILESDIR}/22-compat-libsecp256k1-secp256k1_schnorrsig_sign.patch"
 
 	default
 
@@ -72,7 +81,7 @@ src_prepare() {
 
 src_configure() {
 	local my_econf=(
-		$(use_enable asm)
+		--disable-asm
 		--without-qtdbus
 		--disable-ebpf
 		--without-natpmp
@@ -81,12 +90,12 @@ src_configure() {
 		--disable-tests
 		--disable-wallet
 		--disable-zmq
-		--with-libs
-		--disable-util-cli
-		--disable-util-tx
+		--enable-util-tx
 		--disable-util-util
+		--disable-util-cli
 		--disable-util-wallet
 		--disable-bench
+		--without-libs
 		--without-daemon
 		--without-gui
 		--disable-fuzz
@@ -94,6 +103,7 @@ src_configure() {
 		--disable-ccache
 		--disable-static
 		--with-system-libsecp256k1
+		--with-system-univalue
 	)
 	econf "${my_econf[@]}"
 }
@@ -101,5 +111,5 @@ src_configure() {
 src_install() {
 	default
 
-	find "${D}" -name '*.la' -delete || die
+	newbashcomp contrib/${PN}.bash-completion ${PN}
 }

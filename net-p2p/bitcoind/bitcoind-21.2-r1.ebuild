@@ -1,26 +1,26 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use systemd flag-o-matic
+inherit autotools bash-completion-r1 db-use systemd
 
-BITCOINCORE_COMMITHASH="a0988140b71485ad12c3c3a4a9573f7c21b1eff8"
-KNOTS_PV="${PV}.knots20211108"
+BITCOINCORE_COMMITHASH="af591f2068d0363c92d9756ca39c43db85e5804c"
+KNOTS_PV="${PV}.knots20210629"
 KNOTS_P="bitcoin-${KNOTS_PV}"
 
 DESCRIPTION="Original Bitcoin crypto-currency wallet for automated services"
 HOMEPAGE="https://bitcoincore.org/ https://bitcoinknots.org/"
 SRC_URI="
-	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v${PV}.tar.gz
-	https://bitcoinknots.org/files/22.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
+	https://github.com/bitcoin/bitcoin/archive/${BITCOINCORE_COMMITHASH}.tar.gz -> bitcoin-v0.${PV}.tar.gz
+	https://bitcoinknots.org/files/21.x/${KNOTS_PV}/${KNOTS_P}.patches.txz -> ${KNOTS_P}.patches.tar.xz
 "
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +berkdb examples +external-signer +knots nat-pmp +recent-libsecp256k1 sqlite systemtap test upnp +wallet zeromq"
+IUSE="+asm +berkdb examples +knots sqlite test upnp +wallet zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -28,26 +28,22 @@ REQUIRED_USE="
 	berkdb? ( wallet )
 	wallet? ( || ( berkdb sqlite ) )
 "
-RDEPEND="
+DEPEND="
 	acct-group/bitcoin
 	acct-user/bitcoin
-	>=dev-libs/boost-1.64.0:=[threads(+)]
+	>=dev-libs/boost-1.68.0:=[threads(+)]
 	dev-libs/libevent:=
 	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
 	>=dev-libs/univalue-1.0.4:=
-	nat-pmp? ( net-libs/libnatpmp )
 	virtual/bitcoin-leveldb
 	sqlite? ( >=dev-db/sqlite-3.7.17:= )
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	berkdb? ( sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx] )
 	zeromq? ( net-libs/zeromq:= )
 "
-DEPEND="${RDEPEND}
-	systemtap? ( dev-util/systemtap )
-"
+RDEPEND="${DEPEND}"
 BDEPEND="
 	>=sys-devel/automake-1.13
-	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
 "
 
 DOCS=(
@@ -70,11 +66,11 @@ pkg_pretend() {
 	if use knots; then
 		elog "You are building ${PN} from Bitcoin Knots."
 		elog "For more information, see:"
-		elog "https://bitcoinknots.org/files/22.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
+		elog "https://bitcoinknots.org/files/21.x/${KNOTS_PV}/${KNOTS_P}.desc.html"
 	else
 		elog "You are building ${PN} from Bitcoin Core."
 		elog "For more information, see:"
-		elog "https://bitcoincore.org/en/2021/09/13/release-${PV}/"
+		elog "https://bitcoincore.org/en/2021/09/29/release-0.${PV}/"
 	fi
 	elog
 	elog "Replace By Fee policy is now always enabled by default: Your node will"
@@ -84,12 +80,6 @@ pkg_pretend() {
 	else  # Bitcoin Core doesn't support disabling RBF anymore
 		elog "of receive order. To disable RBF, rebuild with USE=knots to get ${PN}"
 		elog "from Bitcoin Knots, and set mempoolreplacement=never in bitcoin.conf"
-	fi
-
-	if [[ ${MERGE_TYPE} != "binary" ]] ; then
-		if ! test-flag-CXX -std=c++17 ; then
-			die "Building ${CATEGORY}/${P} requires at least GCC 7 or Clang 5"
-		fi
 	fi
 }
 
@@ -107,9 +97,7 @@ src_prepare() {
 		eapply "${knots_patchdir}/${KNOTS_P}_p5-ts.patch"
 	fi
 
-	if use recent-libsecp256k1 ; then
-		eapply "${FILESDIR}/22.0-compat-libsecp256k1-0.1_pre20210628.patch"
-	fi
+	eapply "${FILESDIR}/22-compat-libsecp256k1-secp256k1_schnorrsig_verify.patch"
 
 	default
 
@@ -121,10 +109,6 @@ src_configure() {
 	local my_econf=(
 		$(use_enable asm)
 		--without-qtdbus
-		$(use_enable systemtap ebpf)
-		$(use_enable external-signer)
-		$(use_with nat-pmp natpmp)
-		$(use_with nat-pmp natpmp-default)
 		--without-qrencode
 		$(use_with upnp miniupnpc)
 		$(use_enable upnp upnp-default)
@@ -134,13 +118,11 @@ src_configure() {
 		--with-daemon
 		--disable-util-cli
 		--disable-util-tx
-		--disable-util-util
 		--disable-util-wallet
 		--disable-bench
 		--without-libs
 		--without-gui
 		--disable-fuzz
-		--disable-fuzz-binary
 		--disable-ccache
 		--disable-static
 		$(use_with berkdb bdb)
