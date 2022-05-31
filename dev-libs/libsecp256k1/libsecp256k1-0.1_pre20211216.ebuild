@@ -25,7 +25,8 @@ REQUIRED_USE="
 "
 RDEPEND="
 	!=dev-util/bitcoin-tx-22*[-recent-libsecp256k1(-)]
-	!=net-p2p/bitcoind-22*[-recent-libsecp256k1(-)]
+	!=net-p2p/bitcoind-0.21* !=net-p2p/bitcoind-21.2
+	!=net-p2p/bitcoind-22.0 !=net-p2p/bitcoind-22.0-r1[-recent-libsecp256k1(+)]
 	!=net-p2p/bitcoin-qt-22*[-recent-libsecp256k1(-)]
 	!=net-libs/libbitcoinconsensus-22*[-recent-libsecp256k1(-)]
 	!net-p2p/core-lightning[-recent-libsecp256k1(-)]
