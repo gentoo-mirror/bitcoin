@@ -33,7 +33,6 @@ dev-libs/libsecp256k1-zkp:schnorrsig - Enable Schnorr signature module
 dev-libs/libsecp256k1-zkp:surjectionproof - Enable surjection proof module
 dev-libs/libsecp256k1-zkp:whitelist - Enable key whitelisting module
 dev-util/bitcoin-tx:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
-dev-util/bitcoin-tx:recent-libsecp256k1 - Support recent versions of dev-libs/libsecp256k1
 net-libs/libbitcoinconsensus:asm - Enable assembly for optimization
 net-libs/libbitcoinconsensus:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-libs/libwally-core:elements - Enable support for Elements assets
@@ -87,7 +86,6 @@ net-p2p/bitcoin-qt:knots - Build enhanced Bitcoin Knots version, rather than Bit
 net-p2p/bitcoin-qt:libevent - Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration
 net-p2p/bitcoin-qt:nat-pmp - Enable NAT-PMP port forwarding
 net-p2p/bitcoin-qt:qrcode - Enable generation of QR Codes for receiving payments
-net-p2p/bitcoin-qt:recent-libsecp256k1 - Support recent versions of dev-libs/libsecp256k1
 net-p2p/bitcoin-qt:system-leveldb - Use the system-wide dev-libs/leveldb instead of bundled
 net-p2p/bitcoin-qt:systemtap - Enable SystemTAP/DTrace tracing
 net-p2p/bitcoin-qt:upnp - Enable Universal Plug and Play
@@ -98,7 +96,6 @@ net-p2p/bitcoind:bitcoin_policy_rbf - Replace By Fee policy: Your node will pref
 net-p2p/bitcoind:external-signer - Include support for external wallet signer programs
 net-p2p/bitcoind:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-p2p/bitcoind:nat-pmp - Enable NAT-PMP port forwarding
-net-p2p/bitcoind:recent-libsecp256k1 - Support recent versions of dev-libs/libsecp256k1
 net-p2p/bitcoind:system-leveldb - Use the system-wide dev-libs/leveldb instead of bundled
 net-p2p/bitcoind:systemtap - Enable SystemTAP/DTrace tracing
 net-p2p/bitcoind:upnp - Enable Universal Plug and Play

@@ -1,6 +1,6 @@
 BDEPEND=virtual/pkgconfig sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.5:1.16 ) >=sys-devel/autoconf-2.71 >=sys-devel/libtool-2.4
 DEFINED_PHASES=configure install prepare
-DEPEND=!=dev-util/bitcoin-tx-22*[-recent-libsecp256k1(-)] !=net-p2p/bitcoind-22*[-recent-libsecp256k1(-)] !=net-p2p/bitcoin-qt-22*[-recent-libsecp256k1(-)] !=net-libs/libbitcoinconsensus-22*[-recent-libsecp256k1(-)] !net-p2p/core-lightning[-recent-libsecp256k1(-)] valgrind? ( dev-util/valgrind )
+DEPEND=!=dev-util/bitcoin-tx-0.21* !=dev-util/bitcoin-tx-21.2 !=dev-util/bitcoin-tx-22.0 !=dev-util/bitcoin-tx-22.0-r1[-recent-libsecp256k1(+)] !=dev-util/bitcoin-tx-22.0-r2[-recent-libsecp256k1(+)] !=net-p2p/bitcoind-0.21* !=net-p2p/bitcoind-21.2 !=net-p2p/bitcoind-22.0 !=net-p2p/bitcoind-22.0-r1[-recent-libsecp256k1(+)] !=net-p2p/bitcoin-qt-0.21* !=net-p2p/bitcoin-qt-21.2 !=net-p2p/bitcoin-qt-22.0 !=net-p2p/bitcoin-qt-22.0-r1[-recent-libsecp256k1(+)] !=net-libs/libbitcoinconsensus-0.21* !=net-libs/libbitcoinconsensus-21.2 !=net-libs/libbitcoinconsensus-22.0 !net-p2p/core-lightning[-recent-libsecp256k1(-)] valgrind? ( dev-util/valgrind )
 DESCRIPTION=Optimized C library for EC operations on curve secp256k1
 EAPI=7
 HOMEPAGE=https://github.com/bitcoin-core/secp256k1
@@ -8,10 +8,10 @@ INHERIT=autotools flag-o-matic toolchain-funcs
 IUSE=+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +schnorr +recovery test valgrind
 KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux
 LICENSE=MIT
-RDEPEND=!=dev-util/bitcoin-tx-22*[-recent-libsecp256k1(-)] !=net-p2p/bitcoind-22*[-recent-libsecp256k1(-)] !=net-p2p/bitcoin-qt-22*[-recent-libsecp256k1(-)] !=net-libs/libbitcoinconsensus-22*[-recent-libsecp256k1(-)] !net-p2p/core-lightning[-recent-libsecp256k1(-)]
+RDEPEND=!=dev-util/bitcoin-tx-0.21* !=dev-util/bitcoin-tx-21.2 !=dev-util/bitcoin-tx-22.0 !=dev-util/bitcoin-tx-22.0-r1[-recent-libsecp256k1(+)] !=dev-util/bitcoin-tx-22.0-r2[-recent-libsecp256k1(+)] !=net-p2p/bitcoind-0.21* !=net-p2p/bitcoind-21.2 !=net-p2p/bitcoind-22.0 !=net-p2p/bitcoind-22.0-r1[-recent-libsecp256k1(+)] !=net-p2p/bitcoin-qt-0.21* !=net-p2p/bitcoin-qt-21.2 !=net-p2p/bitcoin-qt-22.0 !=net-p2p/bitcoin-qt-22.0-r1[-recent-libsecp256k1(+)] !=net-libs/libbitcoinconsensus-0.21* !=net-libs/libbitcoinconsensus-21.2 !=net-libs/libbitcoinconsensus-22.0 !net-p2p/core-lightning[-recent-libsecp256k1(-)]
 REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ?? ( lowmem precompute-ecmult ) schnorr? ( extrakeys )
 RESTRICT=!test? ( test )
 SLOT=0/20210628
 SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/8746600eec5e7fcd35dabd480839a3a4bdfee87b.tar.gz -> libsecp256k1-v0.1.0_pre20220329.tgz
 _eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	fd9cde67030b26e479eeadaced488253	multilib	4fbbbc98f236f1b43acd99476bc3cd85	libtool	241a8f577b9781a42a7421e53448a44e	autotools	136117fb43a9bf5598530e9cc642f710	edos2unix	33e347e171066657f91f8b0c72ec8773	strip-linguas	ac3ee41ee2d31d8c41a77c0838320cc7	wrapper	4a1902f969e5718126434fc35f3a0d9c	eutils	dab5d8ec471d025b79c9e6906bcf3bff	flag-o-matic	a500d7cc40da3de38c361e889153bdf7
-_md5_=8a6917721db23bde9dbe277903dbdf96
+_md5_=7f13627c0a9ab17b2c235d409d6dd22a
