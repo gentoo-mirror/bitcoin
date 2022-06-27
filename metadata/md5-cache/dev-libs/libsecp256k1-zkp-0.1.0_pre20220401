@@ -13,5 +13,5 @@ REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) ecdsa-adaptor? ( ex
 RESTRICT=!test? ( test )
 SLOT=0
 SRC_URI=https://github.com/ElementsProject/secp256k1-zkp/archive/6c0aecf72b1f4290f50302440065392715d6240a.tar.gz -> libsecp256k1-zkp-v0.1.0_pre20220401.tgz
-_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	fd9cde67030b26e479eeadaced488253	multilib	4fbbbc98f236f1b43acd99476bc3cd85	libtool	241a8f577b9781a42a7421e53448a44e	autotools	136117fb43a9bf5598530e9cc642f710
+_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	e9da88162e7a3c60376e80c2c2adcdfb	multilib	4fbbbc98f236f1b43acd99476bc3cd85	libtool	241a8f577b9781a42a7421e53448a44e	autotools	136117fb43a9bf5598530e9cc642f710
 _md5_=0b09ddc86e39c6feff804238aa33016c
