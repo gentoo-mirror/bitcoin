@@ -3,7 +3,7 @@
 
 EAPI=7
 
-POSTGRES_COMPAT=( 9.{5,6} 1{0..4} )
+POSTGRES_COMPAT=( 1{0..4} )
 
 PYTHON_COMPAT=( python3_{8..11} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
@@ -13,15 +13,15 @@ DISTUTILS_USE_PEP517=poetry
 CARGO_OPTIONAL=1
 CRATES="
 	aho-corasick-0.7.18
-	anyhow-1.0.57
+	anyhow-1.0.58
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.53
+	async-trait-0.1.56
 	atty-0.2.14
 	autocfg-1.1.0
 	base64-0.13.0
 	bitflags-1.3.2
-	bumpalo-3.9.1
+	bumpalo-3.10.0
 	bytes-1.1.0
 	cc-1.0.73
 	cfg-if-1.0.0
@@ -47,30 +47,30 @@ CRATES="
 	futures-sink-0.3.21
 	futures-task-0.3.21
 	futures-util-0.3.21
-	getrandom-0.2.6
+	getrandom-0.2.7
 	h2-0.3.13
-	hashbrown-0.11.2
+	hashbrown-0.12.1
 	heck-0.3.3
 	hermit-abi-0.1.19
 	hex-0.4.3
-	http-0.2.7
-	http-body-0.4.4
+	http-0.2.8
+	http-body-0.4.5
 	httparse-1.7.1
 	httpdate-1.0.2
 	humantime-2.1.0
-	hyper-0.14.18
+	hyper-0.14.19
 	hyper-timeout-0.4.1
-	indexmap-1.8.1
+	indexmap-1.9.1
 	instant-0.1.12
 	itertools-0.10.3
 	itoa-1.0.2
-	js-sys-0.3.57
+	js-sys-0.3.58
 	lazy_static-1.4.0
-	libc-0.2.125
+	libc-0.2.126
 	log-0.4.17
 	memchr-2.5.0
 	minimal-lexical-0.2.1
-	mio-0.8.3
+	mio-0.8.4
 	multimap-0.8.3
 	native-tls-0.2.10
 	nom-7.1.1
@@ -79,12 +79,12 @@ CRATES="
 	num-traits-0.2.15
 	num_cpus-1.13.1
 	oid-registry-0.2.0
-	once_cell-1.10.0
+	once_cell-1.12.0
 	openssl-0.10.40
 	openssl-macros-0.1.0
 	openssl-probe-0.1.5
-	openssl-src-111.18.0+1.1.1n
-	openssl-sys-0.9.73
+	openssl-src-111.21.0+1.1.1p
+	openssl-sys-0.9.74
 	pem-1.0.2
 	percent-encoding-2.1.0
 	petgraph-0.5.1
@@ -94,25 +94,25 @@ CRATES="
 	pin-utils-0.1.0
 	pkg-config-0.3.25
 	ppv-lite86-0.2.16
-	proc-macro2-1.0.38
+	proc-macro2-1.0.40
 	prost-0.8.0
 	prost-build-0.8.0
 	prost-derive-0.8.0
 	prost-types-0.8.0
-	quote-1.0.18
+	quote-1.0.20
 	rand-0.8.5
 	rand_chacha-0.3.1
 	rand_core-0.6.3
 	rcgen-0.8.14
 	redox_syscall-0.2.13
-	regex-1.5.5
-	regex-syntax-0.6.25
+	regex-1.5.6
+	regex-syntax-0.6.26
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
 	rustls-0.19.1
 	ryu-1.0.10
-	schannel-0.1.19
+	schannel-0.1.20
 	sct-0.6.1
 	security-framework-2.6.1
 	security-framework-sys-2.6.1
@@ -122,41 +122,40 @@ CRATES="
 	slab-0.4.6
 	socket2-0.4.4
 	spin-0.5.2
-	syn-1.0.94
+	syn-1.0.98
 	tempfile-3.3.0
 	termcolor-1.1.3
 	thiserror-1.0.31
 	thiserror-impl-1.0.31
-	tokio-1.18.2
+	tokio-1.19.2
 	tokio-io-timeout-1.2.0
-	tokio-macros-1.7.0
+	tokio-macros-1.8.0
 	tokio-rustls-0.22.0
-	tokio-stream-0.1.8
+	tokio-stream-0.1.9
 	tokio-util-0.6.10
-	tokio-util-0.7.2
+	tokio-util-0.7.3
 	tonic-0.5.2
 	tonic-build-0.5.2
-	tower-0.4.12
+	tower-0.4.13
 	tower-layer-0.3.1
-	tower-service-0.3.1
-	tracing-0.1.34
+	tower-service-0.3.2
+	tracing-0.1.35
 	tracing-attributes-0.1.21
-	tracing-core-0.1.26
+	tracing-core-0.1.28
 	tracing-futures-0.2.5
 	try-lock-0.2.3
+	unicode-ident-1.0.1
 	unicode-segmentation-1.9.0
-	unicode-xid-0.2.3
 	untrusted-0.7.1
 	vcpkg-0.2.15
 	want-0.3.0
-	wasi-0.10.2+wasi-snapshot-preview1
 	wasi-0.11.0+wasi-snapshot-preview1
-	wasm-bindgen-0.2.80
-	wasm-bindgen-backend-0.2.80
-	wasm-bindgen-macro-0.2.80
-	wasm-bindgen-macro-support-0.2.80
-	wasm-bindgen-shared-0.2.80
-	web-sys-0.3.57
+	wasm-bindgen-0.2.81
+	wasm-bindgen-backend-0.2.81
+	wasm-bindgen-macro-0.2.81
+	wasm-bindgen-macro-support-0.2.81
+	wasm-bindgen-shared-0.2.81
+	web-sys-0.3.58
 	webpki-0.21.4
 	which-4.2.5
 	winapi-0.3.9
