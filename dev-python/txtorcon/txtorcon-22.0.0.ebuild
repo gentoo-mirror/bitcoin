@@ -21,7 +21,7 @@ PYTHON_DEPEND='
 	dev-python/automat[${PYTHON_USEDEP}]
 	dev-python/cryptography[${PYTHON_USEDEP}]
 	dev-python/incremental[${PYTHON_USEDEP}]
-	>=dev-python/twisted-15.5.0[${PYTHON_USEDEP},crypt]
+	>=dev-python/twisted-15.5.0[${PYTHON_USEDEP},crypt(+),ssl(+)]
 	>=dev-python/zope-interface-3.6.1[${PYTHON_USEDEP}]
 '
 RDEPEND="
