@@ -3,7 +3,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
+DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 
@@ -17,9 +19,11 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/jinja-2[${PYTHON_USEDEP}]
-	<dev-python/mistune-2[${PYTHON_USEDEP}]
-	dev-python/pygments[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/jinja-2[${PYTHON_USEDEP}]
+		<dev-python/mistune-2[${PYTHON_USEDEP}]
+		dev-python/pygments[${PYTHON_USEDEP}]
+	')
 "
 DEPEND=""
 BDEPEND=""
