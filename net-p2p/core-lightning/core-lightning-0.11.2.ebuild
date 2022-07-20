@@ -224,7 +224,7 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 "
 BDEPEND="
-	>=dev-python/mrkd-0.2.0
+	>=app-text/mrkd-0.2.0
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
