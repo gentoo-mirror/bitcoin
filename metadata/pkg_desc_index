@@ -2,9 +2,9 @@ acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/lightning 0: System-wide Lightning services user
 app-text/mrkd 0.2.0-r1: Write man pages using Markdown, and convert them to Roff or HTML
 dev-libs/libbacktrace 0.0.0_pre20220218: A C library that may be linked into a C/C++ program to produce symbolic backtraces
-dev-libs/libsecp256k1 0.0.0_pre20141212 0.0.0_pre20150423 0.0.0_pre20151118 0.0.0_pre20161213 0.1_pre20170928 0.1_pre20181018 0.1_pre20190401 0.1_pre20191012 0.1_pre20200920 0.1_pre20201015 0.1_pre20201028 0.1_pre20211216 0.1.0_pre20220329 9999: Optimized C library for EC operations on curve secp256k1
+dev-libs/libsecp256k1 0.1_pre20170928 0.1_pre20181018 0.1_pre20190401 0.1_pre20191012 0.1_pre20200920 0.1_pre20201015 0.1_pre20201028 0.1_pre20211216 0.1.0_pre20220329 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/libsecp256k1-zkp 0.1.0_pre20220401: Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
-dev-libs/univalue 1.0.2 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON library
+dev-libs/univalue 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON library
 dev-python/base58 2.1.1: Base58 and Base58Check implementation compatible with what is used by the bitcoin network
 dev-python/bencoder-pyx 2.0.1: A fast bencode implementation in Cython
 dev-python/chromalog 1.0.5: Enhance Python with colored logging

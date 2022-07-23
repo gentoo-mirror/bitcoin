@@ -2,11 +2,6 @@
 # Please add your descriptions to your package's metadata.xml ONLY.
 # * generated automatically using pmaint *
 
-app-crypt/opentxs:dht - Enable net-libs/opendht integration.
-app-crypt/opentxs:doc - Include doc strings in python SWIG wrapper.
-app-crypt/opentxs:filesystem - Use filesystem storage driver.
-app-crypt/opentxs:kwallet - kde-base/kwallet keyring support.
-app-crypt/opentxs:sqlite - Use dev-db/sqlite storage driver
 dev-libs/libsecp256k1:asm - Enable x86_64 assembly optimisation
 dev-libs/libsecp256k1:ecdh - Enable ECDH shared secret computation
 dev-libs/libsecp256k1:endomorphism - Enable endomorphism
@@ -36,47 +31,6 @@ dev-util/bitcoin-tx:knots - Build enhanced Bitcoin Knots version, rather than Bi
 net-libs/libbitcoinconsensus:asm - Enable assembly for optimization
 net-libs/libbitcoinconsensus:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-libs/libwally-core:elements - Enable support for Elements assets
-net-misc/bfgminer:adl - Enable support for controlling fans and overclocking on AMD cards with AMD Display Library
-net-misc/bfgminer:antminer - Enable support for mining with AntMiner U1 sticks
-net-misc/bfgminer:avalon - Enable support for mining with Avalon 1 ASIC modules
-net-misc/bfgminer:avalonmm - Enable support for mining with Avalon 2/3 ASIC modules
-net-misc/bfgminer:bfsb - Enable support for mining on BFSB host Raspberry Pi
-net-misc/bfgminer:bfx - Enable support for mining with BFx2 USB sticks
-net-misc/bfgminer:bifury - Enable support for mining with Bi*fury USB sticks
-net-misc/bfgminer:bigpic - Enable support for mining with Big Picture Mining USB sticks (Red/BlueFury, BF1, etc)
-net-misc/bfgminer:bitforce - Enable support for mining with ButterFly Labs BitFORCE ASICs and/or FPGAs
-net-misc/bfgminer:bitfury - Enable support for mining with 55nm Bitfury-based devices
-net-misc/bfgminer:cointerra - Enable support for mining with CoinTerra TerraMiner.
-net-misc/bfgminer:cpumining - Enable support for mining with CPUs
-net-misc/bfgminer:drillbit - Enable support for mining with Drillbit boards
-net-misc/bfgminer:dualminer - Enable support for mining with DualMiner USB sticks
-net-misc/bfgminer:gridseed - Enable support for mining with 5-chip GridSeed orbs
-net-misc/bfgminer:hashbuster - Enable support for mining with HashBuster nano boards
-net-misc/bfgminer:hashbuster2 - Enable support for mining with HashBuster micro boards
-net-misc/bfgminer:hashfast - Enable support for mining with HashFast devices
-net-misc/bfgminer:icarus - Enable support for mining with Icarus-compatible devices (including Block Erupter Sapphire ASICs)
-net-misc/bfgminer:jingtian - Enable support for mining on JingTian boards via SPI/GPIO
-net-misc/bfgminer:keccak - Enable support for mining with Keccak miners
-net-misc/bfgminer:klondike - Enable support for mining with Klondike USB miners
-net-misc/bfgminer:libusb - Use libusb
-net-misc/bfgminer:littlefury - Enable support for mining with LittleFury USB sticks
-net-misc/bfgminer:metabank - Enable support for mining on Metabank host Raspberry Pi
-net-misc/bfgminer:minion - Enable support for mining on minion chips via SPI (BlackArrow Prospero)
-net-misc/bfgminer:modminer - Enable support for mining with ModMiner FPGAs
-net-misc/bfgminer:nanofury - Enable support for mining with NanoFury USB sticks
-net-misc/bfgminer:opencl - Enable support for mining with OpenCL-capable devices (GPUs)
-net-misc/bfgminer:proxy - Enable support for virtual proxy device
-net-misc/bfgminer:proxy_getwork - Enable proxy support for getwork protocol (often used with Block Erupter Blades)
-net-misc/bfgminer:proxy_stratum - Enable proxy support for stratum protocol
-net-misc/bfgminer:rockminer - Enable support for mining with RockMiner devices
-net-misc/bfgminer:screen - Provide start-bfgminer.sh script to launch BFGMiner in app-misc/screen
-net-misc/bfgminer:scrypt - Enable support for scrypt mining algorithm
-net-misc/bfgminer:sha256d - Enable support for SHA256d mining algorithm
-net-misc/bfgminer:twinfury - Enable support for mining with Twinfury USB sticks
-net-misc/bfgminer:udev-broad-rules - Enable broader udev rules that may match non-mining devices
-net-misc/bfgminer:x6500 - Enable support for mining with X6500 FPGAs
-net-misc/bfgminer:zeusminer - Enable support for mining with ZeusMiner units
-net-misc/bfgminer:ztex - Enable support for mining with Ztex FPGAs
 net-p2p/bitcoin-cli:knots - Build enhanced Bitcoin Knots version, rather than Bitcoin Core
 net-p2p/bitcoin-qt:asm - Enable assembly for optimization
 net-p2p/bitcoin-qt:bip70 - Enable support for the BIP70 payment protocol
