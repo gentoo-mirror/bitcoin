@@ -194,7 +194,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="developer experimental postgres python +recent-libsecp256k1 rust sqlite test"
+IUSE="developer doc experimental postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -226,7 +226,7 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	>=app-text/mrkd-0.2.0
+	doc? ( >=app-text/mrkd-0.2.0 )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
@@ -386,7 +386,7 @@ src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" \
 		all-programs \
 		$(usex test 'all-test-programs' '') \
-		doc-all \
+		$(usex doc doc-all '') \
 		default-targets
 
 	use python && do_python_phase distutils-r1_src_compile
@@ -413,6 +413,7 @@ python_test() {
 }
 
 python_install_all() {
+	use doc &&
 	do_python_phase python_install_subdir_docs
 }
 
@@ -427,9 +428,14 @@ python_install_subdir_docs() {
 }
 
 src_install() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
+	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" $(usex doc install 'install-program installdirs')
 
-	dodoc doc/{PLUGINS.md,TOR.md}
+	if use doc; then
+		dodoc doc/{PLUGINS.md,TOR.md}
+	else
+		# Normally README.md gets installed by `make install`, but not if we're skipping doc installation
+		dodoc doc/TOR.md README.md
+	fi
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
