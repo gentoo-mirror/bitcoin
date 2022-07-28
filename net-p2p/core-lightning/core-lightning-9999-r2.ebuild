@@ -175,13 +175,13 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer experimental postgres python +recent-libsecp256k1 rust sqlite test"
+IUSE="developer doc experimental postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
-	>=dev-libs/libbacktrace-0.0.0_pre20220218:=
-	>=dev-libs/libsecp256k1-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorr(-)]
+	|| ( >=dev-libs/libbacktrace-0.0.0_pre20220218:= >=sys-libs/libbacktrace-1.0_p20220218:= )
+	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorr(-)]
 	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.8.5:=[elements]
 	>=sys-libs/zlib-1.2.12:=
@@ -205,7 +205,9 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 "
 BDEPEND="
-	>=app-text/mrkd-0.2.0
+	acct-group/lightning
+	acct-user/lightning
+	doc? ( >=app-text/mrkd-0.2.0 )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
@@ -296,8 +298,8 @@ src_configure() {
 		LIBSECP_HEADERS=
 		LIBBACKTRACE_HEADERS=
 		EXTERNAL_LIBS="${BUNDLED_LIBS}"
-		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ -I external/gheap/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1)"
-		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1) -lbacktrace"
+		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ -I external/gheap/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1_zkp)"
+		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1_zkp) -lbacktrace"
 		docdir="/usr/share/doc/${PF}"
 	)
 
@@ -343,7 +345,7 @@ src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" \
 		all-programs \
 		$(usex test 'all-test-programs' '') \
-		doc-all \
+		$(usex doc doc-all '') \
 		default-targets
 
 	use python && do_python_phase distutils-r1_src_compile
@@ -370,6 +372,7 @@ python_test() {
 }
 
 python_install_all() {
+	use doc &&
 	do_python_phase python_install_subdir_docs
 }
 
@@ -384,9 +387,14 @@ python_install_subdir_docs() {
 }
 
 src_install() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
+	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" $(usex doc install 'install-program installdirs')
 
-	dodoc doc/{PLUGINS.md,TOR.md}
+	if use doc; then
+		dodoc doc/{PLUGINS.md,TOR.md}
+	else
+		# Normally README.md gets installed by `make install`, but not if we're skipping doc installation
+		dodoc doc/TOR.md README.md
+	fi
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
