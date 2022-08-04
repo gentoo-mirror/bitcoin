@@ -33,7 +33,6 @@ RDEPEND="
 	!=net-p2p/bitcoin-qt-22.0 !=net-p2p/bitcoin-qt-22.0-r1[-recent-libsecp256k1(+)]
 	!=net-libs/libbitcoinconsensus-0.21* !=net-libs/libbitcoinconsensus-21.2
 	!=net-libs/libbitcoinconsensus-22.0
-	!net-p2p/core-lightning[-recent-libsecp256k1(-)]
 "
 DEPEND="${RDEPEND}
 	valgrind? ( dev-util/valgrind )
