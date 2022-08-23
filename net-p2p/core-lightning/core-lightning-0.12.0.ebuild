@@ -172,6 +172,7 @@ PATCHES=(
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+	!doc? ( ${HOMEPAGE}/releases/download/v${MyPV}/clightning-v${MyPV}-manpages.tar.xz )
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
@@ -179,8 +180,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="developer doc experimental postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
@@ -236,6 +236,7 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 S=${WORKDIR}/${MyPN}-${MyPV}
+DOCS=( CHANGELOG.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
 
 python_check_deps() {
 	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
@@ -278,8 +279,10 @@ pkg_setup() {
 
 src_unpack() {
 	unpack "${P}.tar.gz"
-	rm -r "${S}/external"/*/
-	cd "${S}/external" || die
+	cd "${S}" || die
+	use doc || unpack "clightning-v${MyPV}-manpages.tar.xz"
+	cd external || die
+	rm -r */
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,} || die
 	unpack gheap-67fc83b.tar.gz
@@ -415,14 +418,9 @@ python_install_subdir_docs() {
 }
 
 src_install() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" $(usex doc install 'install-program installdirs')
+	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
 
-	if use doc; then
-		dodoc doc/{PLUGINS.md,TOR.md}
-	else
-		# Normally README.md gets installed by `make install`, but not if we're skipping doc installation
-		dodoc doc/TOR.md README.md
-	fi
+	einstalldocs
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
