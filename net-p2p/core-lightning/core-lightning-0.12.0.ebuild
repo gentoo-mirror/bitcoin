@@ -423,7 +423,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
