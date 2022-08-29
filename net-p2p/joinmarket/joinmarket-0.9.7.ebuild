@@ -28,7 +28,7 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
 		dev-python/service_identity[${PYTHON_USEDEP}]
-		>=dev-python/twisted-22.2.0[${PYTHON_USEDEP}]
+		>=dev-python/twisted-22.4.0[${PYTHON_USEDEP}]
 
 		client? (
 			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
@@ -37,7 +37,7 @@ RDEPEND="
 			>=dev-python/klein-20.6.0[${PYTHON_USEDEP}]
 			dev-python/mnemonic[${PYTHON_USEDEP}]
 			dev-python/pyaes[${PYTHON_USEDEP}]
-			>=dev-python/pyjwt-2.1.0[${PYTHON_USEDEP}]
+			>=dev-python/pyjwt-2.4.0[${PYTHON_USEDEP}]
 			>=dev-python/python-bitcointx-1.1.3[${PYTHON_USEDEP}]
 			dev-python/urldecode[${PYTHON_USEDEP}]
 		)
@@ -123,11 +123,7 @@ src_prepare() {
 			-e 's:^#\?\(os\.system('\''\)pyside2-uic:\1'"${UIC//:/\\:}"' -g python:' \
 			-i jmqtui/setup.py || die
 
-	default
-
-	# avoid running the default src_prepare() in each subdir
-	local DISTUTILS_OPTIONAL=1
-	do_python_phase distutils-r1_src_prepare
+	distutils-r1_src_prepare
 }
 
 src_configure() {
@@ -177,7 +173,7 @@ src_install() {
 	python_domodule $(scripts_to_install)
 	python_doscript $(scripts_to_install !)
 
-	dodoc README.md
+	dodoc -r README.md docs/{*.md,images,release-notes}
 	newdoc scripts{/,-}README.md
 
 	if use qt5 ; then
