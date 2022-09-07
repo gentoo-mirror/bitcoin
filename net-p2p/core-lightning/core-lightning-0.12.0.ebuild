@@ -176,6 +176,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
+	doc? ( ${HOMEPAGE}/pull/5445.patch -> ${P}-lowdown.patch )
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
@@ -213,7 +214,7 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	doc? ( >=app-text/mrkd-0.2.0 )
+	doc? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
@@ -280,7 +281,14 @@ pkg_setup() {
 src_unpack() {
 	unpack "${P}.tar.gz"
 	cd "${S}" || die
-	use doc || unpack "clightning-v${MyPV}-manpages.tar.xz"
+	if use doc ; then
+		# diffs embedded in Git commit log messages confuse patch
+		sed -e '/^```diff$/,/^```$/d' "${DISTDIR}/${P}-lowdown.patch" \
+			>"${T}/${P}-lowdown.patch" || die
+		eapply "${T}/${P}-lowdown.patch"
+	else
+		unpack "clightning-v${MyPV}-manpages.tar.xz"
+	fi
 	cd external || die
 	rm -r */
 	unpack jsmn-1.0.0.tar.gz
