@@ -163,6 +163,7 @@ inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
 MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
+	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -285,7 +286,6 @@ src_unpack() {
 		# diffs embedded in Git commit log messages confuse patch
 		sed -e '/^```diff$/,/^```$/d' "${DISTDIR}/${P}-lowdown.patch" \
 			>"${T}/${P}-lowdown.patch" || die
-		eapply "${T}/${P}-lowdown.patch"
 	else
 		unpack "clightning-v${MyPV}-manpages.tar.xz"
 	fi
@@ -311,6 +311,7 @@ src_prepare() {
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
 
+	use doc && eapply "${T}/${P}-lowdown.patch"
 	default
 
 	use python && distutils-r1_src_prepare
