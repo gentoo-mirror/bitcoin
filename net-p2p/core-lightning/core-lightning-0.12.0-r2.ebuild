@@ -164,6 +164,8 @@ MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
 	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
+	4167fe8dd962458c9ceacdb6c79832e3e8fad26f	# gossip_store: fix offset error
+	112115022c75940035ba7d5d70193ea81456f3c3	# gossmap: don't crash if we see a duplicate channel_announce.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
