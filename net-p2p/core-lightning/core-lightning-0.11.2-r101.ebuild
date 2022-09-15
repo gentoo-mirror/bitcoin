@@ -179,11 +179,19 @@ MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
 	4e902fbd883e710d1324c8c0870b5d15c0d1db0f	# msggen: introduce chain of responsibility pattern to make msggen extensible
 	7c8dc620359f6d3e614551e9491c70e9d07e2d31	# channeld: take over gossip_rcvd_filter.c and is_msg_gossip_broadcast.
+	# backports.patch
+	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
+	4167fe8dd962458c9ceacdb6c79832e3e8fad26f	# gossip_store: fix offset error
+	112115022c75940035ba7d5d70193ea81456f3c3	# gossmap: don't crash if we see a duplicate channel_announce.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
 	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
-	"${DISTDIR}/${PN}-${PVR}-backports.patch"
+)
+PATCHES=(
+	"${PATCHES[@]:0:2}"
+	"${DISTDIR}/${P}-r100-backports.patch"
+	"${PATCHES[@]:2}"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -192,7 +200,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
-	https://github.com/whitslack/lightning/compare/e53f1c844bddef541402b0bf5a82a5e2eb7a5e46...0.11.2/backports.patch -> ${PN}-${PVR}-backports.patch
+	https://github.com/whitslack/lightning/compare/e53f1c844bddef541402b0bf5a82a5e2eb7a5e46...0.11.2/backports.patch -> ${P}-r100-backports.patch
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
