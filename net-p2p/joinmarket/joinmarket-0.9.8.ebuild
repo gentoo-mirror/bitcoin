@@ -193,6 +193,8 @@ pkg_postinst() {
 		ewarn 'This release of JoinMarket moves the user data directory to ~/.joinmarket.'
 		ewarn 'You must manually move any existing data files. See the release notes:'
 		ewarn "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory"
+	elif [[ " ${REPLACING_VERSIONS} " == *' 0.9.7 '* ]] ; then
+		elog "There are no changes to the default ${PORTAGE_COLOR_HILITE-${HILITE}}joinmarket.cfg${PORTAGE_COLOR_NORMAL-${NORMAL}} since version 0.9.7."
 	else
 		elog "It is always a good idea to back up your ${PORTAGE_COLOR_HILITE-${HILITE}}joinmarket.cfg${PORTAGE_COLOR_NORMAL-${NORMAL}}, re-create a"
 		elog 'default one, and then reapply your changes, as this will populate any'
