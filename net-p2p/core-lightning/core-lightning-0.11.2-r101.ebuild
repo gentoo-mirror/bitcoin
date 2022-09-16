@@ -172,7 +172,7 @@ CRATES="
 	yasna-0.4.0
 "
 
-inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
+inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
