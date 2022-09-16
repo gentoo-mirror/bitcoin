@@ -1,7 +1,6 @@
 acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/lightning 0: System-wide Lightning services user
 app-text/mrkd 0.2.0-r1: Write man pages using Markdown, and convert them to Roff or HTML
-dev-libs/libbacktrace 0.0.0_pre20220218: A C library that may be linked into a C/C++ program to produce symbolic backtraces
 dev-libs/libsecp256k1 0.1_pre20170928 0.1_pre20181018 0.1_pre20190401 0.1_pre20191012 0.1_pre20200920 0.1_pre20201015 0.1_pre20201028 0.1_pre20211216 0.1.0_pre20220329 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/libsecp256k1-zkp 0.1.0_pre20220401: Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs
 dev-libs/univalue 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON library
@@ -30,6 +29,7 @@ net-p2p/core-lightning 0.11.2-r1 0.11.2-r101 0.12.0-r2 9999-r2: An implementatio
 net-p2p/joinmarket 0.9.8: JoinMarket CoinJoin client and daemon
 net-p2p/namecoin 0.3.75 0.3.76 0.3.80 9999: A P2P network based domain name system
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
+sys-libs/libbacktrace 1.0_p20220709: A C library that may be linked into a C/C++ program to produce symbolic backtraces
 virtual/bitcoin-leveldb 0 0-r1: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
 virtual/python-serviceproxy 0: Virtual for jsonrpc.proxy.ServiceProxy
 x11-libs/amd-adl-sdk 3.0 4.0: API to access display driver functionality for ATI graphics cards
