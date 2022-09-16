@@ -195,7 +195,7 @@ PYTHON_DEPEND="
 	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
-	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
+	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
 	acct-group/lightning
