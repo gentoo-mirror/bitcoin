@@ -249,6 +249,7 @@ BDEPEND="
 		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 		test? (
 			>=dev-python/pytest-7.0.1[${PYTHON_USEDEP}]
+			${PYTHON_DEPEND}
 		)
 	)
 	rust? ( ${RUST_DEPEND} )
