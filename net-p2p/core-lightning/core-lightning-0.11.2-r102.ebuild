@@ -183,6 +183,7 @@ PATCH_HASHES=(
 	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
 	4167fe8dd962458c9ceacdb6c79832e3e8fad26f	# gossip_store: fix offset error
 	112115022c75940035ba7d5d70193ea81456f3c3	# gossmap: don't crash if we see a duplicate channel_announce.
+	6a48ed9e826efed1ea53b18a8308f97c2d5bbe34	# gossmap: fail to get capacity of locally-added chans (don't crash!).
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -249,6 +250,7 @@ BDEPEND="
 		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 		test? (
 			>=dev-python/pytest-7.0.1[${PYTHON_USEDEP}]
+			${PYTHON_DEPEND}
 		)
 	)
 	rust? ( ${RUST_DEPEND} )
