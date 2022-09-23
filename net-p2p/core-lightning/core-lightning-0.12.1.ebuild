@@ -164,8 +164,6 @@ MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
 	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
-	4167fe8dd962458c9ceacdb6c79832e3e8fad26f	# gossip_store: fix offset error
-	112115022c75940035ba7d5d70193ea81456f3c3	# gossmap: don't crash if we see a duplicate channel_announce.
 	6a48ed9e826efed1ea53b18a8308f97c2d5bbe34	# gossmap: fail to get capacity of locally-added chans (don't crash!).
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
@@ -176,11 +174,9 @@ PATCHES=(
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
-	!doc? ( ${HOMEPAGE}/releases/download/v${MyPV}/clightning-v${MyPV}-manpages.tar.xz )
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
-	doc? ( ${HOMEPAGE}/pull/5445.patch -> ${P}-lowdown.patch )
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
@@ -285,15 +281,7 @@ pkg_setup() {
 
 src_unpack() {
 	unpack "${P}.tar.gz"
-	cd "${S}" || die
-	if use doc ; then
-		# diffs embedded in Git commit log messages confuse patch
-		sed -e '/^```diff$/,/^```$/d' "${DISTDIR}/${P}-lowdown.patch" \
-			>"${T}/${P}-lowdown.patch" || die
-	else
-		unpack "clightning-v${MyPV}-manpages.tar.xz"
-	fi
-	cd external || die
+	cd "${S}/external" || die
 	rm -r */
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,} || die
@@ -315,7 +303,6 @@ src_prepare() {
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
 
-	use doc && eapply "${T}/${P}-lowdown.patch"
 	default
 
 	use python && distutils-r1_src_prepare
@@ -431,9 +418,13 @@ python_install_subdir_docs() {
 }
 
 src_install() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
+	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" $(usex doc install 'install-program installdirs')
 
 	einstalldocs
+	if ! use doc ; then
+		# Normally README.md gets installed by `make install`, but not if we're skipping doc installation
+		dodoc README.md
+	fi
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf

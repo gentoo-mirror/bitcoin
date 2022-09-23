@@ -230,6 +230,8 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
+DOCS=( CHANGELOG.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
+
 python_check_deps() {
 	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
 }
@@ -390,15 +392,14 @@ python_install_subdir_docs() {
 src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" $(usex doc install 'install-program installdirs')
 
-	if use doc; then
-		dodoc doc/{PLUGINS.md,TOR.md}
-	else
+	einstalldocs
+	if ! use doc ; then
 		# Normally README.md gets installed by `make install`, but not if we're skipping doc installation
-		dodoc doc/TOR.md README.md
+		dodoc README.md
 	fi
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
