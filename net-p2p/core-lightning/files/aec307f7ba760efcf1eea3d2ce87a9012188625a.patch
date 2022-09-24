@@ -1,0 +1,12 @@
+--- /var/cache/distfiles/aec307f7ba760efcf1eea3d2ce87a9012188625a.patch	2022-09-23 21:55:58.292368530 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r103/temp/aec307f7ba760efcf1eea3d2ce87a9012188625a.patch	2022-09-23 23:01:55.907168979 -0400
+@@ -67,8 +67,8 @@
+ +++ b/plugins/spender/multifundchannel.c
+ @@ -6,6 +6,7 @@
+  #include <common/addr.h>
+- #include <common/json_param.h>
+  #include <common/json_stream.h>
++ #include <common/json_tok.h>
+ +#include <common/memleak.h>
+  #include <common/psbt_open.h>
+  #include <common/pseudorand.h>
