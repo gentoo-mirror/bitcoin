@@ -1,0 +1,18 @@
+--- /var/cache/distfiles/41b379ed897ad24bf2d68ce022eb15339e430761.patch	2022-09-23 21:55:54.296324410 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r103/temp/41b379ed897ad24bf2d68ce022eb15339e430761.patch	2022-09-23 23:01:55.884168743 -0400
+@@ -411,10 +411,11 @@
+  	}
+  
+  	initmsg = towire_channeld_init(tmpctx,
+-@@ -796,6 +796,7 @@ void peer_start_channeld(struct channel *channel,
+- 	subd_send_msg(channel->owner,
+- 		      take(towire_channeld_funding_depth(
+- 			  NULL, channel->scid, channel->alias[LOCAL], 0)));
++@@ -780,6 +780,8 @@ void peer_start_channeld(struct channel *channel,
++ 		try_update_blockheight(ld, channel,
++ 				       get_block_height(ld->topology));
++ 	}
+++
+ +	return true;
+  }
+  
