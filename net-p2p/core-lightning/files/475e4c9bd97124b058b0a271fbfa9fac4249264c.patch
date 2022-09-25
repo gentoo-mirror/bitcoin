@@ -1,0 +1,11 @@
+--- /var/cache/distfiles/475e4c9bd97124b058b0a271fbfa9fac4249264c.patch	2022-09-25 08:06:29.564215204 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r104/temp/475e4c9bd97124b058b0a271fbfa9fac4249264c.patch	2022-09-25 08:10:58.597986204 -0400
+@@ -28,7 +28,7 @@
+  RFC site (BOLT \#9):
+  <https://github.com/lightningnetwork/lightning-rfc/blob/master/09-features.md>
+  
+--[comment]: # ( SHA256STAMP:4f76b5ac19d3dfdaf3d04f5dd5de2312a2ab0ccffe779508c416aaf6e644612a)
++-[comment]: # ( SHA256STAMP:6b0ec5c899c8685487190209f594635030205a275e1dc6d61a7b057adbf66192)
+ +[comment]: # ( SHA256STAMP:e6829e8ced923131b95bcfa4f366dd04286fe85485039e9ebc89e79899937df6)
+ diff --git a/doc/schemas/listpeers.schema.json b/doc/schemas/listpeers.schema.json
+ index f50cef596c9..f9ac1cad27f 100644
