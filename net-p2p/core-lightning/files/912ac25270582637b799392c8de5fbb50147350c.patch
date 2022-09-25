@@ -1,0 +1,69 @@
+--- /var/cache/distfiles/912ac25270582637b799392c8de5fbb50147350c.patch	2022-09-25 08:06:40.752330453 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r104/temp/912ac25270582637b799392c8de5fbb50147350c.patch	2022-09-25 08:24:59.662648117 -0400
+@@ -41,8 +41,8 @@
+  
+  struct htlc_out *channel_has_htlc_out(struct channel *channel)
+ @@ -239,8 +239,6 @@ struct channel *new_unsaved_channel(struct peer *peer,
++ 	channel->closing_feerate_range = NULL;
+  	channel->channel_update = NULL;
+- 	channel->alias[LOCAL] = channel->alias[REMOTE] = NULL;
+  
+ -	/* Channel is connected! */
+ -	channel->connected = true;
+@@ -65,18 +65,15 @@
+  	channel->local_basepoints = *local_basepoints;
+  	channel->local_funding_pubkey = *local_funding_pubkey;
+  	channel->future_per_commitment_point
+-@@ -980,6 +976,11 @@ void channel_fail_reconnect(struct channel *channel, const char *fmt, ...)
++@@ -935,3 +931,8 @@ void channel_fail_reconnect(struct channel *channel, const char *fmt, ...)
++ 	err_and_reconnect(channel, tal_vfmt(tmpctx, fmt, ap), 1);
+  	va_end(ap);
+  }
+- 
+++
+ +bool channel_is_connected(const struct channel *channel)
+ +{
+ +	return channel->owner && channel->owner->talks_to_peer;
+ +}
+-+
+- const struct short_channel_id *
+- channel_scid_or_local_alias(const struct channel *chan)
+- {
+ diff --git a/lightningd/channel.h b/lightningd/channel.h
+ index 8851bd72ff0..c872bd1cc34 100644
+ --- a/lightningd/channel.h
+@@ -92,7 +89,7 @@
+  	 * peer via option_data_loss_protect? */
+  	const struct pubkey *future_per_commitment_point;
+ @@ -267,6 +264,8 @@ struct channel {
+- 	struct scb_chan *scb;
++ 	u8 *channel_update;
+  };
+  
+ +bool channel_is_connected(const struct channel *channel);
+@@ -132,8 +129,8 @@
+ --- a/lightningd/dual_open_control.c
+ +++ b/lightningd/dual_open_control.c
+ @@ -1234,9 +1234,6 @@ wallet_commit_channel(struct lightningd *ld,
+- 	channel->scb->funding_sats = total_funding;
+- 	channel->scb->type = channel_type_dup(channel->scb, channel->type);
++ 	channel->min_possible_feerate = commitment_feerate;
++ 	channel->max_possible_feerate = commitment_feerate;
+  
+ -	/* We are connected */
+ -	channel->connected = true;
+@@ -154,14 +151,6 @@
+  			      &uc->local_basepoints,
+  			      &uc->local_funding_pubkey,
+  			      NULL,
+-@@ -1363,7 +1361,6 @@ static struct channel *stub_chan(struct command *cmd,
+- 			      get_network_blockheight(ld->topology),
+-                               FEERATE_FLOOR,
+-                               funding_sats.satoshis / MINIMUM_TX_WEIGHT * 1000 /* Raw: convert to feerate */,
+--			      false,
+- 			      &basepoints,
+- 			      &localFundingPubkey,
+- 			      NULL,
+ diff --git a/wallet/test/run-wallet.c b/wallet/test/run-wallet.c
+ index 94cb6a29e8e..c16ffc6dff4 100644
+ --- a/wallet/test/run-wallet.c
