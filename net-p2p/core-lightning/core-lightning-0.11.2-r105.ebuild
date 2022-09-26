@@ -165,6 +165,13 @@ MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
 	4e902fbd883e710d1324c8c0870b5d15c0d1db0f	# msggen: introduce chain of responsibility pattern to make msggen extensible
 	8dd51d127fff01b9302009906dcbdc83ea3b6548	# Restore description of "reserved" field for listfunds
+	535fdc06909c7a8828fb04047a187e71b0b5a15c	# More explanation of bolt csv regeneration
+	b15cf312e8aa14d1f4d0b46fb02e571e18cc0770	# Change lightning-rfc to bolts post repo move
+	5735f71e3c1a5c23624c73c9afb4bea26eaf44e2	# gossipd: don't ever use zlib compression on gossip.
+	a4c365f8d07872c8b8461d0b48c8c04dae0a63e5	# gossipd: neaten code now we don't have to prepend prefix after.
+	bf040c398b1dc6c42c9b3df3ac74bb786db56a99	# Makefile: update to BOLTs without zlib.
+	685fa25756bf42a611dbeb8af6eb49159b09c3e3	# Makefile: update bolts to include remote_pubkey change.
+	abd01a1701a1e38e511299ef44af8b9503e709bb	# Makefile: update to include fix for remote_addr generation.
 	c7d359baf455e5260dc5d126b05211279e186ef8	# cln-grpc: API updates after 8dd51d127fff01b9302009906dcbdc83ea3b6548
 	572942c783a58e518f0a1b449412a82717594636:strip='.*test/run-'	# psbt: use DER encoded + sighash byte for PSBT_IN_PARTIAL_SIG items
 	7c8dc620359f6d3e614551e9491c70e9d07e2d31	# channeld: take over gossip_rcvd_filter.c and is_msg_gossip_broadcast.
@@ -200,7 +207,7 @@ PATCH_HASHES=(
 	cc7a405ca4acb8e96cc7890439663e5474236767	# lightningd: use the standard port derivation in connect command
 	4b11f968ad15c28b526e02a4068b6243220efa6a	# lightningd: change the regtest default port according with the tests
 	c07d44b4d4acddecf232d859b7b424c086d06706	# docs: update the docs in according with the new code
-	7ff62b4a00c71987841db6cc1f63f8533f522b08:strip=tests/	# lightnind: remove DEFAULT_PORT global definition
+	7ff62b4a00c71987841db6cc1f63f8533f522b08:strip=tests/	# lightnind: remove`DEFAULT_PORT` global definition
 	2754e30269e918525e49cf871006c9a5d569fdf5:strip=tests/	# devtools: revert changes and make sure chainparams always set.
 	8e2dcc11673a4c6d39350a0b439350e2312d482c	# doc: document the [] IPv6 address hack.
 	6d07f4ed85be91d5af0bfffa75895d4b33fd4cc2	# json: Add parser for u32 params
@@ -291,6 +298,8 @@ PATCH_HASHES=(
 	9498e14530fea53167b4fa2488446643b60e7595	# connectd: two logging cleanups.
 	008a59b004486053c07bc269a928da00e807bc74	# lightningd: ignore default if it's a literal 'null' JSON token.
 	b55df5c62648ceaae5bd8558c7a3ebaecfe5f3a2	# msggen: Use tempfile + rename to make changes to .msggen.json atomic
+	282ab72e2da5462cc431ed86f78b3c235aef91b1	# tests: valgrind barfing on uninitialized value
+	d3ba01767279405e4202088d300ce05b0f0dc0b6	# valgrind: rm ref to cmd when cmd is free'd
 	79a76a96f7a60616464937acf7e18b75b51e1061	# v2open: dont rely on ordering of interprocess messages
 	75c89f0b8e39a45cd1d2fdaa1b718e1f6ed0c3de	# doc: fix bolt 12 link (it's not in master), update bolt 11 to new "bolts" repo.
 	967c56859f6cb15f13d077f7238458e1914e0c99	# sql: use last " as " to find name token for column
