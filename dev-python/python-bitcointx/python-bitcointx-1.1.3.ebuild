@@ -3,8 +3,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
 PYTHON_REQ_USE="ssl" # for ripemd160
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
@@ -28,3 +29,11 @@ BDEPEND=""
 S="${WORKDIR}/${PN}-${PN}-v${MyPV}"
 
 distutils_enable_tests unittest
+
+src_prepare() {
+	default
+
+	# don't install the unit tests
+	sed -e 's/\(packages=find_packages\)()/\1(exclude=["bitcointx.tests"])/' \
+		-i setup.py || die
+}

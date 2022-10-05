@@ -3,7 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
@@ -51,6 +52,7 @@ python_check_deps() {
 }
 
 python_test() {
+	PYTHONPATH="${BUILD_DIR}/lib:${PYTHONPATH}" \
 	trial --temp-directory="${T}/_trial_temp-${EPYTHON}" test ||
 		die "Tests failed with ${EPYTHON}"
 }

@@ -3,7 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
@@ -16,8 +17,7 @@ SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="test"
-RESTRICT="!test? ( test )"
+IUSE=""
 
 RDEPEND=""
 DEPEND=""
@@ -25,6 +25,8 @@ BDEPEND=""
 
 S="${WORKDIR}/${MyPN}-${PV}"
 
+distutils_enable_tests unittest
+
 python_test() {
-	python tests/test_mnemonic.py || die 'test failed'
+	eunittest -s tests
 }

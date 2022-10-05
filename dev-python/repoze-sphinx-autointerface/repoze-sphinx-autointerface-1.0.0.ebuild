@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
 
 inherit distutils-r1
 
@@ -21,9 +21,20 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
 RDEPEND="
-	dev-python/sphinx[${PYTHON_USEDEP}]
+	>=dev-python/sphinx-4.0[${PYTHON_USEDEP}]
 	dev-python/zope-interface[${PYTHON_USEDEP}]
 "
+
+distutils_enable_tests unittest
+
+src_prepare() {
+	default
+
+	# don't install the unit tests
+	sed -e 's/\(packages=find_packages\)()/\1(exclude=["repoze.sphinx.tests"])/' \
+		-e 's/\(include_package_data=\)True/\1False/' \
+		-i setup.py || die
+}
 
 python_compile() {
 	distutils-r1_python_compile

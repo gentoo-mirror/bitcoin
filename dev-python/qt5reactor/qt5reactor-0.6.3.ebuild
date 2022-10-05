@@ -3,7 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
@@ -31,6 +32,14 @@ BDEPEND="
 "
 
 distutils_enable_tests pytest
+
+src_prepare() {
+	default
+
+	# don't install the unit tests
+	sed -e 's/\(packages=find_packages([^)]\+\))/\1, exclude=["qt5reactor.tests"])/' \
+		-i setup.py || die
+}
 
 python_test() {
 	epytest -p pytest_twisted
