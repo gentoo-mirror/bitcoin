@@ -3,7 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
@@ -21,9 +22,9 @@ IUSE=""
 RDEPEND=""
 DEPEND=""
 BDEPEND="
-	>=dev-python/cython-0.29.21[${PYTHON_USEDEP}]
+	>=dev-python/cython-0.29.26[${PYTHON_USEDEP}]
 	test? (
-		>=dev-python/pytest-4.6.2[${PYTHON_USEDEP}]
+		>=dev-python/pytest-6.2.5[${PYTHON_USEDEP}]
 	)
 "
 
