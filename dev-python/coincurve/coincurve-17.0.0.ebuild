@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{8..11} )
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
@@ -25,7 +26,6 @@ RDEPEND="${CDEPEND}
 "
 DEPEND="${CDEPEND}"
 BDEPEND="
-	dev-python/requests[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest
