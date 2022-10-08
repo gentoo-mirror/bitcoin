@@ -1,0 +1,25 @@
+--- /var/cache/distfiles/bcabb3825fd9daa351f1d56db23eb7dde8c9ab21.patch	2022-10-07 10:19:26.912806392 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/bcabb3825fd9daa351f1d56db23eb7dde8c9ab21.patch	2022-10-07 11:59:33.134911316 -0400
+@@ -243,22 +243,6 @@
+ index b6464ab9b2b..ad2b21006fa 100644
+ --- a/doc/lightning-decode.7.md
+ +++ b/doc/lightning-decode.7.md
+-@@ -172,6 +172,7 @@ If **type** is "bolt11 invoice", and **valid** is *true*:
+-     - **data** (string): The bech32 data for this field
+- 
+- If **type** is "rune", and **valid** is *true*:
+-+
+-   - **valid** (boolean) (always *true*)
+-   - **string** (string): the string encoding of the rune
+-   - **restrictions** (array of objects): restrictions built into the rune: all must pass:
+-@@ -182,6 +183,7 @@ If **type** is "rune", and **valid** is *true*:
+-   - **version** (string, optional): rune version, not currently set on runes we create
+- 
+- If **type** is "rune", and **valid** is *false*:
+-+
+-   - **valid** (boolean) (always *false*)
+-   - **hex** (hex, optional): the raw rune in hex
+-   - the following warnings are possible:
+ @@ -209,4 +211,4 @@ RESOURCES
+  
+  Main web site: <https://github.com/ElementsProject/lightning>

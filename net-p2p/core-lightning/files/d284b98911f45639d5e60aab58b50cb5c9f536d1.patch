@@ -1,0 +1,13 @@
+--- /var/cache/distfiles/d284b98911f45639d5e60aab58b50cb5c9f536d1.patch	2022-10-07 07:22:54.463376652 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/d284b98911f45639d5e60aab58b50cb5c9f536d1.patch	2022-10-07 08:38:27.589425833 -0400
+@@ -30,9 +30,9 @@
+ --- a/lightningd/opening_control.c
+ +++ b/lightningd/opening_control.c
+ @@ -102,6 +102,7 @@ wallet_commit_channel(struct lightningd *ld,
++ 	s64 final_key_idx;
+  	u64 static_remotekey_start;
+  	u32 lease_start_blockheight = 0; /* No leases on v1 */
+- 	struct short_channel_id *alias_local;
+ +	struct timeabs timestamp;
+  
+  	/* We cannot both be the fundee *and* have a `fundchannel_start`

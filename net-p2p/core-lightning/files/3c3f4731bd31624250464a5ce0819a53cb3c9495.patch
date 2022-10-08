@@ -1,0 +1,39 @@
+--- /var/cache/distfiles/3c3f4731bd31624250464a5ce0819a53cb3c9495.patch	2022-10-07 10:19:25.061788347 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/3c3f4731bd31624250464a5ce0819a53cb3c9495.patch	2022-10-07 11:21:41.616082229 -0400
+@@ -218,7 +218,7 @@
+  
+  DEBUGGING
+  ---------
+-@@ -43,231 +43,268 @@ OPTIONS
++@@ -43,220 +43,255 @@ OPTIONS
+  
+  ### General options
+  
+@@ -512,26 +512,9 @@
+  database `db_name`. The database must exist, but the schema will be managed
+  automatically by `lightningd`.
+  
+-- **bookkeeper-dir**=*DIR* [plugin `bookkeeper`]
+--Directory to keep the accounts.sqlite3 database file in.
+-+* **bookkeeper-dir**=*DIR* [plugin `bookkeeper`]
+-+
+-+  Directory to keep the accounts.sqlite3 database file in.
+- Defaults to lightning-dir.
+- 
+-- **bookkeeper-db**=*DSN* [plugin `bookkeeper`]
+--Identify the location of the bookkeeper data. This is a fully qualified data source
+-+* **bookkeeper-db**=*DSN* [plugin `bookkeeper`]
+-+
+-+  Identify the location of the bookkeeper data. This is a fully qualified data source
+- name, including a scheme such as `sqlite3` or `postgres` followed by the
+- connection parameters.
+- Defaults to `sqlite3://accounts.sqlite3` in the `bookkeeper-dir`.
+- 
+-+* **encrypted-hsm**
+- 
+ - **encrypted-hsm**
+ -If set, you will be prompted to enter a password used to encrypt the `hsm_secret`.
+++* **encrypted-hsm**
+ + If set, you will be prompted to enter a password used to encrypt the `hsm_secret`.
+  Note that once you encrypt the `hsm_secret` this option will be mandatory for
+  `lightningd` to start.
