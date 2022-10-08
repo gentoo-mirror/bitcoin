@@ -1,0 +1,14 @@
+--- /var/cache/distfiles/80a6d9b58e3f3dd9e5fbb2087c83cb717e1e5469.patch	2022-10-07 07:23:07.200505292 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/80a6d9b58e3f3dd9e5fbb2087c83cb717e1e5469.patch	2022-10-07 10:29:59.405972437 -0400
+@@ -19,9 +19,9 @@
+ --- a/lightningd/lightningd.c
+ +++ b/lightningd/lightningd.c
+ @@ -827,6 +827,7 @@ static struct feature_set *default_features(const tal_t *ctx)
++ 		OPTIONAL_FEATURE(OPT_STATIC_REMOTEKEY),
++ 		OPTIONAL_FEATURE(OPT_SHUTDOWN_ANYSEGWIT),
+  		OPTIONAL_FEATURE(OPT_PAYMENT_METADATA),
+- 		OPTIONAL_FEATURE(OPT_SCID_ALIAS),
+- 		OPTIONAL_FEATURE(OPT_ZEROCONF),
+ +		OPTIONAL_FEATURE(OPT_CHANNEL_TYPE),
+  #if EXPERIMENTAL_FEATURES
+  		OPTIONAL_FEATURE(OPT_ANCHOR_OUTPUTS),

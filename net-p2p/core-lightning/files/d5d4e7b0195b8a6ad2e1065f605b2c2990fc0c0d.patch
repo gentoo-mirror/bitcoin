@@ -1,0 +1,14 @@
+--- /var/cache/distfiles/d5d4e7b0195b8a6ad2e1065f605b2c2990fc0c0d.patch	2022-10-07 07:23:06.476497980 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/d5d4e7b0195b8a6ad2e1065f605b2c2990fc0c0d.patch	2022-10-07 10:27:47.637687853 -0400
+@@ -33,9 +33,9 @@
+  		"option_provide_peer_backup", /* https://github.com/lightningnetwork/lightning-rfc/pull/881 */
+ -		NULL,
+ +		"option_channel_type",
+- 		"option_scid_alias", /* https://github.com/lightning/bolts/pull/910 */
++ 		NULL,
+  		"option_payment_metadata",
+- 		"option_zeroconf", /* 50/51, https://github.com/lightning/bolts/pull/910 */
++ 		NULL, /* 50/51 */
+ diff --git a/common/features.h b/common/features.h
+ index d5da02fdf79..ccb914020bf 100644
+ --- a/common/features.h

@@ -1,0 +1,18 @@
+--- /var/cache/distfiles/0868fa9f1edb2cb7430ca5ecf436ecfead0ac459.patch	2022-10-07 07:23:51.280950490 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/0868fa9f1edb2cb7430ca5ecf436ecfead0ac459.patch	2022-10-07 14:57:33.777986535 -0400
+@@ -28,13 +27,12 @@
+ +- **fetchinvoice-noconnect** (boolean, optional): `fetchinvoice-noconnect` fields from config or cmdline, or default
+ +- **accept-htlc-tlv-types** (string, optional): `accept-extra-tlvs-type` fields from config or cmdline, or not present
+  - **tor-service-password** (string, optional): `tor-service-password` field from config or cmdline, if any
+- - **dev-allowdustreserve** (boolean, optional): Whether we allow setting dust reserves
+  
+-@@ -217,5 +218,4 @@ RESOURCES
++ [comment]: # (GENERATE-FROM-SCHEMA-END)
++@@ -214,4 +215,4 @@ RESOURCES
+  ---------
+  
+  Main web site: <https://github.com/ElementsProject/lightning>
+--
+ -[comment]: # ( SHA256STAMP:)
+ +[comment]: # ( SHA256STAMP:)
+ diff --git a/doc/lightningd-config.5.md b/doc/lightningd-config.5.md
