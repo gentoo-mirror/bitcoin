@@ -454,7 +454,6 @@ PATCH_HASHES=(
 #	98185dfc2b6a9d264b111249fe890123b65ff492	# startup_regtest: add connect helper
 	08e3e979c8c5f6926f2b97255981159547f7216c	# lightningd: set cid correctly in peer->uncommitted_channel.
 	b8ed1077437707b5fc1dec53437ccef4b958c42e	# lightningd: fix dev-memleak crash on unown unconfirmed channels.
-# <- good
 	912ac25270582637b799392c8de5fbb50147350c:resolve-conflicts	# lightningd: remove 'connected' flag from channel structure.
 	37ff013c2c5eac7d13a774f1ea655e8fdfca4841	# connectd: fix subd tal parents.
 	9dc388036028c32eab79785b1a8591e0ea5c38e4	# connectd: put peer into "draining" mode when we want to close it.
@@ -469,31 +468,21 @@ PATCH_HASHES=(
 #	6a9a0912348fe073d0c66855637ab92d80187f85	# pytest: add another connection stress test, using multiple channels (bug #5254)
 	ab0e5d30ee73e389f12fcdcdcb003bfe18fda07a	# connectd: don't io_halfclose()
 	a12e2209ff382286adf17fa59cb9f8a87b784b2f	# dualopend: fix memleak report.
-# <- good
 	571f0fad1b5f4fd18385db2b2d3c0319764e9d14	# lightningd: remove delay on succeeding connect.
 	eff53495dbfeeed35ed496e9043af78090a3c14c	# lightningd: make "is peer connected" a tristate.
-# <- good
 	430d6521a0a95b0cb084a43a614b01d721f95902	# common/daemon_conn: add function to read an fd.
 	41b379ed897ad24bf2d68ce022eb15339e430761:resolve-conflicts	# lightningd: hand fds to connectd, not receive them from connectd.
-# <- unstable
 	d31420211ad6e3d665cd75ae2ee9e870161feb22	# connectd: add counters to each peer connection.
 #	2daf4617628ec0ac288dac3509795d9e5e0b46ed	# pytest: enable race test.
 	6a2817101d07fdc497cc57fb22592a45cea056e5	# connectd: don't move parent while we're being freed.
-# <- good
 	671e66490e8633c49221f37e008ed73b0f18ae0c	# lightningd: don't kill subds immediately on disconnect.
-# <- good (but slow recovery from network outages)
 	9cff125590a30328660db9abacb6de1c524ca8c3	# common/gossip_store: fix leak on partial read.
-# <- bad? (maybe not? retest)
 	719d1384d15b3bb782a7f09c14aec6d68edb7ed9	# connectd: give connections a chance to drain when lightningd says to disconnect, or peer disconnects.
 #	c415c80d487ead3ce4338a818f0070be504f001a	# connectd: spelling and typo fixes.
 	c57a5a0a06c9fd5e8b4b8674f6bebaeddb6eea98	# gossipd: downgrade broken message that can actually happen.
-# )
-# UNUSED_PATCH_HASHES=(
-# <- bad
 	e15e55190b8ce35440f626e8648fa3844203bdb5	# lightningd: provide peer address for reconnect if connect fails.
 	e59e12dcb64c92667619e9bed8b414741f726d0a	# lightningd: don't forget peer if it's still connected.
 	aec307f7ba760efcf1eea3d2ce87a9012188625a	# multifundchannel: fix race where we restart fundchannel.
-# <- bad
 #	2962b931990f3ad2db28ca44737e52872e1a586e	# pytest: don't assume disconnect finished atomically, and suppress interfering redirects.
 	a3c4908f4a33aae31c433106e1069bc761a7202f:strip='tests/\|.*test/run-'	# lightningd: don't explicitly tell connectd to disconnect, have it do it on sending error/warning.
 	02e169fd2727a75a1a27a14b7d924287c91eb626:strip=tests/	# lightningd: drive all reconnections out of disconnections.
@@ -563,7 +552,6 @@ PATCH_HASHES=(
 #	f4abc3a661fbc30bfd40debf7d4fd379d7627b3e	# tests: local flake fix; l1 was waiting too long to reconnect
 	282ab72e2da5462cc431ed86f78b3c235aef91b1	# tests: valgrind barfing on uninitialized value
 	d3ba01767279405e4202088d300ce05b0f0dc0b6	# valgrind: rm ref to cmd when cmd is free'd
-# <- bad
 #	2c2bcc8eb42ab798074a328696f9aa507ea665ed	# flake: permit test_v2_open_sigs_restart_while_dead to succeed/fail
 	79a76a96f7a60616464937acf7e18b75b51e1061	# v2open: dont rely on ordering of interprocess messages
 #	1c26ebdb31c32cb4b853067bb262b3dca4cb150d	# pytest: fix flake in test_wumbo_channels
