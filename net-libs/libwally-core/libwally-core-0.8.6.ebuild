@@ -116,7 +116,12 @@ python_compile() {
 
 src_compile() {
 	default
-	use python || use doc && distutils-r1_src_compile
+	if use python ; then
+		distutils-r1_src_compile
+	elif use doc ; then
+		python_setup
+		sphinx_compile_all
+	fi
 }
 
 python_test() {
