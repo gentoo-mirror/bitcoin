@@ -20,7 +20,7 @@ dev-python/urldecode 0.1: A simple function to decode an encoded URL
 dev-util/bitcoin-tx 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2-r1 22.0-r3 23.0: Command-line Bitcoin transaction tool
 net-libs/libbitcoinconsensus 21.2-r1 22.0-r1 23.0: Bitcoin Core consensus library
 net-libs/libblkmaker 0.4.2 0.4.3 0.5.1 0.5.2 0.5.3 0.6.0: C implementation of Bitcoin's getblocktemplate interface
-net-libs/libwally-core 0.8.6: Collection of useful primitives for cryptocurrency wallets
+net-libs/libwally-core 0.8.5 0.8.6: Collection of useful primitives for cryptocurrency wallets
 net-p2p/Sia 1.2.2 9999: A decentralized cloud storage platform based on blockchain technology
 net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0 23.0: Command-line JSON-RPC client specifically for interfacing with bitcoind
 net-p2p/bitcoin-qt 21.2-r1 22.0-r2 23.0: An end-user Qt GUI for the Bitcoin crypto-currency
