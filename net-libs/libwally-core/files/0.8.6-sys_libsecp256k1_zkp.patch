@@ -1,4 +1,4 @@
-From 890b741c565a29f85098b84f26f64062640e0678 Mon Sep 17 00:00:00 2001
+From a6118596b609969630b614d0301fdf4564230421 Mon Sep 17 00:00:00 2001
 From: Matt Whitlock <c-lightning@mattwhitlock.name>
 Date: Sat, 8 Oct 2022 14:22:42 -0400
 Subject: [PATCH 1/2] build: support linking against system-installed
@@ -114,7 +114,7 @@ index 0ed7c6d..c3392d5 100644
  kwargs = {
      'name': 'wallycore',
 diff --git a/src/Makefile.am b/src/Makefile.am
-index c13f34b..1d1f36c 100644
+index 0f6ad1e..2f2df18 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
 @@ -14,7 +14,6 @@ include_HEADERS += $(top_srcdir)/include/wally_bip38.h
@@ -122,10 +122,10 @@ index c13f34b..1d1f36c 100644
  include_HEADERS += $(top_srcdir)/include/wally_core.h
  include_HEADERS += $(top_srcdir)/include/wally_crypto.h
 -include_HEADERS += $(top_srcdir)/include/wally_elements.h
+ include_HEADERS += $(top_srcdir)/include/wally_map.h
  include_HEADERS += $(top_srcdir)/include/wally_psbt.h
- include_HEADERS += $(top_srcdir)/include/wally_script.h
- include_HEADERS += $(top_srcdir)/include/wally_symmetric.h
-@@ -35,7 +34,7 @@ if USE_SWIG_PYTHON
+ include_HEADERS += $(top_srcdir)/include/wally_psbt_members.h
+@@ -37,7 +36,7 @@ if USE_SWIG_PYTHON
  noinst_LTLIBRARIES += libswig_python.la
  libswig_python_la_SOURCES = swig_python/swig_python_wrap.c
  
@@ -134,7 +134,7 @@ index c13f34b..1d1f36c 100644
  if PYTHON_MANYLINUX
  else
  libswig_python_la_LIBADD = $(PYTHON_LIBS)
-@@ -129,7 +128,7 @@ noinst_LTLIBRARIES += libswig_java.la
+@@ -131,7 +130,7 @@ noinst_LTLIBRARIES += libswig_java.la
  libswig_java_la_SOURCES = \
      swig_java/swig_java_wrap.c
  
@@ -143,7 +143,7 @@ index c13f34b..1d1f36c 100644
  
  SWIG_JOPT = $(SWIG_JAVA_OPT) -outdir swig_java -noproxy -package com.blockstream.libwally
  
-@@ -191,7 +190,6 @@ libwallycore_la_SOURCES = \
+@@ -193,7 +192,6 @@ libwallycore_la_SOURCES = \
      bip39.c \
      bech32.c \
      ecdh.c \
@@ -151,7 +151,7 @@ index c13f34b..1d1f36c 100644
      blech32.c \
      hex.c \
      hmac.c \
-@@ -222,7 +220,6 @@ libwallycore_la_INCLUDES = \
+@@ -224,7 +222,6 @@ libwallycore_la_INCLUDES = \
      include/wally_bip39.h \
      include/wally_core.h \
      include/wally_crypto.h \
@@ -159,7 +159,7 @@ index c13f34b..1d1f36c 100644
      include/wally_map.h \
      include/wally_psbt.h \
      include/wally_script.h \
-@@ -237,10 +234,14 @@ libwallycore_la_LDFLAGS =
+@@ -239,10 +236,14 @@ libwallycore_la_LDFLAGS =
  endif
  endif # SHARED_BUILD_ENABLED
  

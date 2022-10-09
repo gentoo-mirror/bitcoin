@@ -182,7 +182,7 @@ CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.8.5:=[elements]
+	>=net-libs/libwally-core-0.8.5:0/0.8.2[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.12:=
 	postgres? ( ${POSTGRES_DEP} )
@@ -230,7 +230,7 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
-DOCS=( CHANGELOG.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
+DOCS=( CHANGELOG.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
 
 python_check_deps() {
 	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
