@@ -1,4 +1,4 @@
-From 4fe24887db7958745ecef5d9a6720383ec498c56 Mon Sep 17 00:00:00 2001
+From 7e7fb744850f9f5f5995b3a4b8d54f49fb880a7f Mon Sep 17 00:00:00 2001
 From: Matt Whitlock <c-lightning@mattwhitlock.name>
 Date: Sat, 8 Oct 2022 22:07:13 -0400
 Subject: [PATCH 2/2] swig_python: link dynamically to libwallycore.so

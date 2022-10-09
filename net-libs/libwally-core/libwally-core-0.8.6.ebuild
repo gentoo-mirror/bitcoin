@@ -59,6 +59,7 @@ REQUIRED_USE="
 S="${WORKDIR}/${PN}-release_${PV}"
 
 PATCHES=(
+	"${FILESDIR}/0.8.6-install-missing-headers.patch"
 	"${FILESDIR}/0.8.6-sys_libsecp256k1_zkp.patch"
 	"${FILESDIR}/0.8.6-dont-cache-ax_jni_include_dir.patch"
 	"${FILESDIR}/0.8.6-python-module-dynamic-link.patch"
