@@ -1,0 +1,142 @@
+From d24e4bd4e4568b21d2aef41db85d3baaf45bafbb Mon Sep 17 00:00:00 2001
+From: Matt Whitlock <c-lightning@mattwhitlock.name>
+Date: Sun, 9 Oct 2022 01:06:19 -0400
+Subject: [PATCH] src/Makefile.am: split unit tests into separate targets by
+ language
+
+In the typical course of packaging, libwallycore's SWIG Python module
+may be built for multiple Python interpreters in parallel. Ideally each
+such resulting module should be tested. However, libwallycore's Makefile
+currently runs all unit tests for all language bindings under a single
+target. This means, if the Java or JavaScript bindings are enabled, then
+the unit tests for those other bindings have to be run once for each
+Python module to be tested. This is redundant and easily avoidable.
+
+Split up check-local into four new sub-targets:
+
+  * check-libwallycore (src/test/*.py)
+    These unit tests are written in Python but do not use (or test!) the
+    wallycore Python module. Indeed, they do not require SWIG even to be
+    installed, as they use Python's ctypes module to link dynamically
+    with libwallycore at run time. They are run for check-local iff
+    tests are enabled and any working Python interpreter is found,
+    regardless of the setting of --enable-swig-python.
+
+  * check-swig-python (src/swig_python/contrib/*.py)
+    These are the unit tests for the wallycore Python module. They are
+    run for check-local iff --enable-tests and --enable-swig-python.
+
+  * check-swig-java (src/swig_java/src/com/blockstream/test/*.java)
+    These are the unit tests for the wallycore Java library. They are
+    run for check-local iff --enable-tests and --enable-swig-java.
+
+  * check-js-wrappers (src/wrap_js/test/*.js)
+    These are the unit tests for the wallycore JavaScript wrappers. They
+    are run for check-local iff --enable-tests and --enable-js-wrappers.
+
+This commit relaxes the criteria for RUN_PYTHON_TESTS so that it now is
+enabled whenever any working Python interpreter is found. This implies
+that `make check` will perform a more thorough check of libwallycore
+even if the Python module wasn't built, so long as a working Python
+interpreter is found.
+---
+ configure.ac    |  2 +-
+ src/Makefile.am | 23 +++++++++++++++--------
+ 2 files changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 3098fdc..e360c65 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -281,7 +281,7 @@ AC_ARG_ENABLE(swig-python,
+     [swig_python=$enableval], [swig_python=no])
+ AM_CONDITIONAL([USE_SWIG_PYTHON], [test "x$swig_python" == "xyes"])
+ 
+-AM_CONDITIONAL([RUN_PYTHON_TESTS], [test "$PYTHON" != "" -a "x$pythonexists" == "xyes" -a "x$swig_python" == "xyes"])
++AM_CONDITIONAL([RUN_PYTHON_TESTS], [test "$PYTHON" != "" -a "x$pythonexists" == "xyes"])
+ 
+ if test "x$swig_python" == "xyes"; then
+     if test "x$pythonexists" != "xyes"; then
+diff --git a/src/Makefile.am b/src/Makefile.am
+index c13f34b..e978ae5 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -52,7 +52,9 @@ PYTHON_SWIGTEST = PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.libs:swig_python $(PYTHO
+ clean-swig-python:
+ 	$(AM_V_at)rm -f swig_python/swig_python_wrap.c swig_python/wallycore/__init__.py
+ clean-local: clean-swig-python
++endif # USE_SWIG_PYTHON
+ 
++if RUN_PYTHON_TESTS
+ # Python requires the shared library to be named _wallycore.so
+ # for 'import' to work.
+ if IS_OSX
+@@ -64,13 +66,9 @@ else
+ platform_dso_ext = so
+ endif # IS_MINGW
+ endif # IS_OSX
+-.libs/_wallycore.so:
+-	$(AM_V_at)ln -s libwallycore.$(platform_dso_ext) .libs/_wallycore.so
+-SWIG_PYTHON_TEST_DEPS = .libs/_wallycore.so
+-
+-endif # USE_SWIG_PYTHON
+-
+-if RUN_PYTHON_TESTS
++.libs/_wallycore.so: .libs/libwallycore.$(platform_dso_ext)
++	$(AM_V_at)ln -sfn libwallycore.$(platform_dso_ext) $@
++PYTHON_TEST_DEPS = .libs/_wallycore.so
+ PYTHON_TEST = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
+ endif
+ 
+@@ -299,10 +297,12 @@ test_elements_tx_LDADD += $(PYTHON_LIBS)
+ endif
+ endif
+ 
+-check-local: $(SWIG_PYTHON_TEST_DEPS) $(SWIG_JAVA_TEST_DEPS)
++check-local:
+ 	$(AM_V_at)! grep '^int ' $(top_srcdir)/include/*.h # Missing WALLY_CORE_API
+ if SHARED_BUILD_ENABLED
+ if RUN_PYTHON_TESTS
++check-local: check-libwallycore
++check-libwallycore: $(PYTHON_TEST_DEPS)
+ 	$(AM_V_at)$(PYTHON_TEST) test/test_address.py
+ 	$(AM_V_at)$(PYTHON_TEST) test/test_aes.py
+ 	$(AM_V_at)$(PYTHON_TEST) test/test_anti_exfil.py
+@@ -335,6 +335,8 @@ if BUILD_ELEMENTS
+ 	$(AM_V_at)$(PYTHON_TEST) test/test_elements.py
+ endif
+ if USE_SWIG_PYTHON
++check-local: check-swig-python
++check-swig-python: $(SWIG_PYTHON_TEST_DEPS)
+ 	$(AM_V_at)$(PYTHON_SWIGTEST) swig_python/contrib/bip32.py
+ 	$(AM_V_at)$(PYTHON_SWIGTEST) swig_python/contrib/mnemonic.py
+ 	$(AM_V_at)$(PYTHON_SWIGTEST) swig_python/contrib/psbt.py
+@@ -349,6 +351,8 @@ endif
+ endif # USE_SWIG_PYTHON
+ endif # RUN_PYTHON_TESTS
+ if RUN_JAVA_TESTS
++check-local: check-swig-java
++check-swig-java: $(SWIG_JAVA_TEST_DEPS)
+ 	$(AM_V_at)! grep 'native int wally_' $(sjs)/$(cblw)/Wally.java # Unwrapped Java calls
+ 	$(AM_V_at)! grep 'native Object wally_' $(sjs)/$(cblw)/Wally.java # Unwrapped Java calls
+ if BUILD_ELEMENTS
+@@ -361,6 +365,8 @@ endif
+ 	$(AM_V_at)$(JAVA_TEST)test_tx
+ endif
+ if USE_JS_WRAPPERS
++check-local: check-js-wrappers
++check-js-wrappers:
+ if BUILD_ELEMENTS
+ 	$(AM_V_at)wrap_js/node_modules/.bin/tape wrap_js/test/test_assets.js
+ 	$(AM_V_at)wrap_js/node_modules/.bin/tape wrap_js/test/test_confidential_address.js
+@@ -378,6 +384,7 @@ endif
+ 	$(AM_V_at)wrap_js/node_modules/.bin/tape wrap_js/test/test_scrypt.js
+ endif
+ endif # SHARED_BUILD_ENABLED
++.PHONY: check-libwallycore check-swig-python check-swig-java check-js-wrappers
+ endif # RUN_TESTS
+ 
+ .PHONY: clean-swig-python clean-js-wrappers clean-swig-java cordova-wrappers
+-- 
+2.38.0
+
