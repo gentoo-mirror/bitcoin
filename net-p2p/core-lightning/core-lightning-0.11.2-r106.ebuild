@@ -183,7 +183,7 @@ PATCH_HASHES=(
 	8dd51d127fff01b9302009906dcbdc83ea3b6548:scrub-stamps	# Restore description of "reserved" field for listfunds
 	8b62e2584fc840bd3c84aa6e85a9b10bfe2d5c1e:strip='doc/.*\.[0-9]$'	# connectd: remove enable-autotor-v2-mode option
 	f078e54e9887c9b747b948bce54d7f9988d1a5cb:scrub-stamps	# lightningd: remove various deprecated JSON fields.
-#	c77eda6d64b6092cc1fd26ae93798acc40d6414e	# pyln-spec: upgrade to the last bolt version
+	c77eda6d64b6092cc1fd26ae93798acc40d6414e	# pyln-spec: upgrade to the last bolt version
 	535fdc06909c7a8828fb04047a187e71b0b5a15c	# More explanation of bolt csv regeneration
 	b15cf312e8aa14d1f4d0b46fb02e571e18cc0770	# Change lightning-rfc to bolts post repo move
 #	4cd6210c19485a646c65a719da9f2e64a5f58708	# docker: Add rust build support to Dockerfile
