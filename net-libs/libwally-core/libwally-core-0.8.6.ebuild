@@ -9,9 +9,20 @@ DISTUTILS_USE_PEP517=setuptools
 
 inherit autotools distutils-r1 java-pkg-opt-2
 
+PATCH_HASHES=(
+	5a1fef754c72902c734370ea5d74a891c5d3db5d	# src/Makefile.am: add missing headers to install
+	5f7dbe7fe07fc67db97a786e6531466ad6e73384	# m4/ax_jni_include_dir: don't cache result
+	cdd358f64f59aa4a9836cb732cb92163bbe02471	# src/Makefile.am: split unit tests into separate targets by language
+)
+PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
+PATCHES=(
+	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
+)
+
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
-SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
+	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0"
 SLOT="0/0.8.6"
@@ -58,12 +69,9 @@ REQUIRED_USE="
 
 S="${WORKDIR}/${PN}-release_${PV}"
 
-PATCHES=(
-	"${FILESDIR}/0.8.6-install-missing-headers.patch"
+PATCHES+=(
 	"${FILESDIR}/0.8.6-sys_libsecp256k1_zkp.patch"
-	"${FILESDIR}/0.8.6-dont-cache-ax_jni_include_dir.patch"
 	"${FILESDIR}/0.8.6-python-module-dynamic-link.patch"
-	"${FILESDIR}/0.8.6-split-test-targets.patch"
 )
 
 distutils_enable_sphinx docs/source dev-python/sphinx_rtd_theme
@@ -86,6 +94,10 @@ the running lightningd daemon and then reattempt this installation."
 
 pkg_setup() {
 	use java && java-pkg-opt-2_pkg_setup
+}
+
+src_unpack() {
+	unpack "${P}.tar.gz"
 }
 
 src_prepare() {
