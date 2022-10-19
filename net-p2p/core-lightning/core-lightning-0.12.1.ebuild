@@ -3,7 +3,7 @@
 
 EAPI=7
 
-POSTGRES_COMPAT=( 1{0..4} )
+POSTGRES_COMPAT=( {10..15} )
 
 PYTHON_COMPAT=( python3_{8..11} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
