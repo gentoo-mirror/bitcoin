@@ -960,6 +960,31 @@ PATCH_HASHES=(
 #	335f52d1a8b002018270194654c9e53c5a65fa5d	# cln-rpc: implement from Secret to slice conversion
 #	e7e7a7186f7b2ae145f756a757d576b7ac0c51e1	# tests/test_misc.py: Check if funds are getting recovered on reconnecting... Changelog-None: Increasing test scope
 #	e855ac2f9e6453913df64602b680b3644d847a6c	# keysend: just strip even unknown fields.
+#	a99509db36188bac5b8008e6005404cc96dd29ab	# py: Update protobuf dependency to silence dependabot
+#	2136d5912f08dd8dd5589844de45dbc919220089	# update package dependencies for Alpine Linux
+#	74652f7cf45e93df57b24ba67a5516863f492199	# move alpine build dependencies to virtual package
+#	f0d81f46f09a917af2d66981f8fb586ba239d4ce	# Clean up Dockerfile.alpine
+#	1f5e579f1b3d03eee9f307f1880875cc0b6786c2	# docker: Clean up dependencies for alpine build
+#	0acdc911a5c9b65f50aa10977ac1db5a0f6ee37e	# docker: Build the alpine docker image from a clone
+#	6fb653ef9709e5e46042432f461b7efb8593be84	# docker: Separate builder from runner stage in alpine docker image
+#	62bfed9a8df8731be44ba4e86afb08a5d28a4442	# docker: Add bitcoin-cli to the alpine dockerfile
+	1c5edc14a5cb74420e711273b9cfbb4e60c763d5	# bitcoin: add test for to/from wiring a bitcoin tx w/ scriptsig data
+	49ed0a4b9e9a11bade7d84fc7e9a4f8135ee5d67	# psbt: wipe global tx scriptSig/witness data after saved to PSBT
+#	d2633d3e6d56bf4594910cffad5b05fe583f72e5	# pytest: fix flake in test_emergencyrecover
+#	7c7c4c4cb3143011487430fe48781a00891a96b7	# zlib 1.2.12 yanked, update to 1.2.13 in Dockerfile
+	250b190e5fefd7dfa65ffb0467c0df242be6fbd2	# chainparams/dual-open: set max_supply; use for max on wumbo channels
+	8d864d22991668a90c573a4cf80c6436944e0982	# funder: we always pass in channel_max, no need to special case it
+	fa987f23446740987bcf158f49c6732867a9ecaa	# df: put requested_lease onto state, so it persists
+	00d3e3e492ed1be204fa4b14f79dda065bcd3c63	# df: for rbfs, since we know what they asked for, we can abort
+	d3066ab7f9a16fcb39c12884b77f6415f91642a6	# openchannel2: may re-use rates
+	85039d4f4efd2939b17036183b3bfecc199c7a12	# df: pass lease data back to funder for rbfs
+#	dc9e79c4458a99798e3f8fd9115aba61cc49ccec	# funder: rm quote that makes nifty cringe every time she sees it
+	a5e9035e2ef065bd483c1cb7e9dab9a0e07e18f6	# funder: save utxos of signed txs to datastore
+	7733c2b0f490d53b24516dd88d2a23dba9024010	# funder: pull out previous input list from datastore on RBF
+	45acc20a8de1d8833f28f102469ad1a9cd764c93	# funder: use previous outputs in count towards available funding
+	38e2428f12af69bbd9af145d969eaca6c6ade99f:strip=tests/	# funder: use utxopsbt to build psbt for RBFs
+	efd096dc96f156b6b223be4f32c638bf3fc7ab64	# funder: filter prev-outs such that we only use still unspent ones
+	e00857827fd5b45a3022753edf855df4765a4e93	# funder: cleanup datastore on state-change/channel failure
 )
 PATCH_FILES=( )
 PATCHES=( )
