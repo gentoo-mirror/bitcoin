@@ -305,6 +305,9 @@ src_prepare() {
 
 	default
 
+	# we'll strip the binaries ourselves
+	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
+
 	use python && distutils-r1_src_prepare
 
 	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
