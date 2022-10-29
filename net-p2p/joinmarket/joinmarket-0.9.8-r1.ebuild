@@ -3,9 +3,10 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
 PYTHON_REQ_USE="sqlite"
 DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_USE_PEP517=setuptools
 
 inherit desktop distutils-r1 qmake-utils
 
@@ -39,7 +40,6 @@ RDEPEND="
 			dev-python/pyaes[${PYTHON_USEDEP}]
 			>=dev-python/pyjwt-2.4.0[${PYTHON_USEDEP}]
 			>=dev-python/python-bitcointx-1.1.3[${PYTHON_USEDEP}]
-			dev-python/urldecode[${PYTHON_USEDEP}]
 		)
 
 		daemon? (
@@ -69,6 +69,7 @@ BDEPEND="
 			dev-python/mock[${PYTHON_USEDEP}]
 			dev-python/pexpect[${PYTHON_USEDEP}]
 			>=dev-python/pytest-5.3.5[${PYTHON_USEDEP}]
+			!!<dev-python/pytest-twisted-1.13.4-r1[${PYTHON_USEDEP}]
 		)
 	')
 
@@ -78,11 +79,15 @@ BDEPEND="
 	)
 "
 
+PATCHES=(
+	"${FILESDIR}/0.9.8-eliminate-urldecode-dependency.patch"
+)
+
 S="${WORKDIR}/${MyPN}-${PV}"
 
 distutils_enable_tests pytest
 
-do_python_phase() {
+python_foreach_subdir() {
 	local subdir
 	for subdir in "${PYTHON_SUBDIRS[@]}" ; do
 		pushd "${subdir}" >/dev/null || die
@@ -126,17 +131,11 @@ src_prepare() {
 	distutils-r1_src_prepare
 }
 
-src_configure() {
-	do_python_phase distutils-r1_src_configure
-}
-
-src_compile() {
-	do_python_phase distutils-r1_src_compile
+python_compile() {
+	python_foreach_subdir distutils-r1_python_compile
 }
 
 python_test() {
-	do_python_phase distutils_install_for_testing
-
 	ln -sfn test/regtest_joinmarket.cfg joinmarket.cfg || die
 
 	jm_test_datadir=${T}/jm_test_home/.bitcoin
@@ -147,7 +146,7 @@ python_test() {
 	cp -f -- test/bitcoin.conf "${btcconf}" || die
 	echo "datadir=${jm_test_datadir}" >>"${btcconf}" || die
 
-	epytest -p no:twisted \
+	epytest \
 		"${PYTHON_SUBDIRS[@]}" $(usev client test) \
 		--nirc=2 \
 		--btcconf="${btcconf}" \
@@ -158,7 +157,7 @@ python_test() {
 }
 
 src_install() {
-	do_python_phase distutils-r1_src_install
+	distutils-r1_src_install
 
 	scripts_to_install() {
 		{

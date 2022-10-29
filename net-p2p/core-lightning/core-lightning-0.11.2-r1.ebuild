@@ -255,7 +255,7 @@ python_check_deps() {
 	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
 }
 
-do_python_phase() {
+python_foreach_subdir() {
 	local subdir
 	for subdir in "${PYTHON_SUBDIRS[@]}" ; do
 		pushd "${subdir}" >/dev/null || die
@@ -315,6 +315,10 @@ src_prepare() {
 	fi
 
 	default
+
+	# don't look for headers or libraries beneath /usr/local
+	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
+		-i configure Makefile || die
 
 	use python && distutils-r1_src_prepare
 
@@ -378,7 +382,7 @@ src_configure() {
 	echo "${@}"
 	"${@}" || die 'configure failed'
 
-	use python && do_python_phase distutils-r1_src_configure
+	use python && distutils-r1_src_configure
 	use rust && cargo_src_configure
 }
 
@@ -390,15 +394,11 @@ src_compile() {
 		$(usex doc doc-all '') \
 		default-targets
 
-	use python && do_python_phase distutils-r1_src_compile
+	use python && distutils-r1_src_compile
 }
 
 python_compile() {
-	# distutils-r1_python_compile() isn't designed to be called multiple
-	# times for the same EPYTHON, so do some cleanup between invocations
-	rm -rf -- "${BUILD_DIR}/install${EPREFIX}/usr/bin" || die
-
-	distutils-r1_python_compile
+	python_foreach_subdir distutils-r1_python_compile
 }
 
 src_test() {
@@ -406,22 +406,23 @@ src_test() {
 	SLOW_MACHINE=1 \
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
-	use python && do_python_phase distutils-r1_src_test
+	use python && distutils-r1_src_test
+	use rust && cargo_src_test
 }
 
 python_test() {
-	epytest
+	epytest "${PYTHON_SUBDIRS[@]}"
 }
 
 python_install_all() {
-	use doc &&
-	do_python_phase python_install_subdir_docs
+	python_foreach_subdir python_install_subdir_docs
 }
 
 python_install_subdir_docs() {
+	local shopt_pop=$(shopt -p nullglob)
 	shopt -s nullglob
 	local -a docs=( README* )
-	shopt -u nullglob
+	${shopt_pop}
 	if (( ${#docs[@]} )) ; then
 		docinto "${PWD##*/}"
 		dodoc "${docs[@]}"
