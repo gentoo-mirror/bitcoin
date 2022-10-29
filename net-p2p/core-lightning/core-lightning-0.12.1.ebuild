@@ -308,6 +308,9 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
+	# one wonders if upstream actually runs the tests before tagging a release
+	sed -e 's/msatoshi:/amount_msat:/' -i cln-grpc/src/test.rs || die
+
 	use python && distutils-r1_src_prepare
 
 	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
@@ -395,6 +398,7 @@ src_test() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
 	use python && distutils-r1_src_test
+	use rust && cargo_src_test
 }
 
 python_test() {

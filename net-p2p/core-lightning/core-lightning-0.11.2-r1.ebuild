@@ -403,6 +403,7 @@ src_test() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
 	use python && distutils-r1_src_test
+	use rust && cargo_src_test
 }
 
 python_test() {

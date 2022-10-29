@@ -1173,6 +1173,9 @@ src_prepare() {
 
 	default
 
+	# fix up an oversight in the Rust tests
+	sed -e 's/"id": "1"/"id": 1/' -i cln-rpc/src/lib.rs || die
+
 	sed -e 's|\(path = \)subprocess.*"git".*$|\1b"'"${S}"'"|' \
 		-i contrib/msggen/msggen/utils/utils.py || die
 
@@ -1263,6 +1266,7 @@ src_test() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
 	use python && distutils-r1_src_test
+	use rust && cargo_src_test
 }
 
 python_test() {
