@@ -280,6 +280,11 @@ src_prepare() {
 
 	default
 
+	# don't look for headers or libraries beneath /usr/local
+	sed -e '/"Darwin-arm64"/,/^$/d' \
+		-e 's/ *\(-[IL]\$(\?\(CPATH\|LIBRARY_PATH\))\? *\)\+/ /g' \
+		-i configure Makefile || die
+
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 

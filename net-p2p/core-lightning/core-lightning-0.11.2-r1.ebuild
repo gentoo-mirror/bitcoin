@@ -316,6 +316,10 @@ src_prepare() {
 
 	default
 
+	# don't look for headers or libraries beneath /usr/local
+	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
+		-i configure Makefile || die
+
 	use python && distutils-r1_src_prepare
 
 	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then

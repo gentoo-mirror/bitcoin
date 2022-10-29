@@ -1173,6 +1173,10 @@ src_prepare() {
 
 	default
 
+	# don't look for headers or libraries beneath /usr/local
+	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
+		-i configure Makefile || die
+
 	# fix up an oversight in the Rust tests
 	sed -e 's/"id": "1"/"id": 1/' -i cln-rpc/src/lib.rs || die
 
