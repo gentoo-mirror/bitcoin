@@ -1,0 +1,50 @@
+From 5b8ef40bd6e7d62d0ba67e5627564b0b40aa81b8 Mon Sep 17 00:00:00 2001
+From: Matt Whitlock <joinmarket@mattwhitlock.name>
+Date: Fri, 28 Oct 2022 10:46:38 -0400
+Subject: [PATCH] jmbitcoin: eliminate dependency on urldecode
+
+urllib.parse.unquote_plus() serves the same purpose as
+url_decode.urldecode(), and moreover it correctly decodes UTF-8
+sequences into Unicode characters rather than generating mojibake.
+---
+ jmbitcoin/jmbitcoin/bip21.py | 5 ++---
+ jmbitcoin/setup.py           | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/jmbitcoin/jmbitcoin/bip21.py b/jmbitcoin/jmbitcoin/bip21.py
+index 72b38b0..c618254 100644
+--- a/jmbitcoin/jmbitcoin/bip21.py
++++ b/jmbitcoin/jmbitcoin/bip21.py
+@@ -4,8 +4,7 @@
+ # this are expected to do address validation independently anyway.
+ 
+ from jmbitcoin import amount_to_sat
+-from urllib.parse import quote, parse_qs, urlencode, urlparse
+-from url_decode import urldecode
++from urllib.parse import parse_qs, quote, unquote_plus, urlencode, urlparse
+ import re
+ 
+ 
+@@ -40,7 +39,7 @@ def decode_bip21_uri(uri):
+             # Convert amount to sats, as used internally by JM
+             result['amount'] = amount_to_sat(amount_str + "btc")
+         else:
+-            result[key] = urldecode(params[key][0])
++            result[key] = unquote_plus(params[key][0])
+     return result
+ 
+ 
+diff --git a/jmbitcoin/setup.py b/jmbitcoin/setup.py
+index 4caeea6..0b3ed19 100644
+--- a/jmbitcoin/setup.py
++++ b/jmbitcoin/setup.py
+@@ -10,5 +10,5 @@ setup(name='joinmarketbitcoin',
+       license='GPL',
+       packages=['jmbitcoin'],
+       python_requires='>=3.6',
+-      install_requires=['python-bitcointx==1.1.3', 'pyaes', 'urldecode'],
++      install_requires=['python-bitcointx==1.1.3', 'pyaes'],
+       zip_safe=False)
+-- 
+2.38.1
+
