@@ -177,7 +177,7 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer doc experimental postgres python +recent-libsecp256k1 rust sqlite test"
+IUSE="developer experimental +man postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -209,7 +209,7 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	doc? ( app-text/lowdown )
+	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
@@ -232,7 +232,7 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
-DOCS=( CHANGELOG.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
+DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
 
 python_check_deps() {
 	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
@@ -280,6 +280,10 @@ src_prepare() {
 
 	default
 
+	# only run 'install' command if there are actually files to install
+	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
+		-i Makefile || die
+
 	# don't look for headers or libraries beneath /usr/local
 	sed -e '/"Darwin-arm64"/,/^$/d' \
 		-e 's/ *\(-[IL]\$(\?\(CPATH\|LIBRARY_PATH\))\? *\)\+/ /g' \
@@ -315,6 +319,14 @@ src_configure() {
 		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ -I external/gheap/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1_zkp)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1_zkp) -lbacktrace"
 		docdir="/usr/share/doc/${PF}"
+	)
+
+	use man || CLIGHTNING_MAKEOPTS+=(
+		MANPAGES=
+	)
+
+	use test || CLIGHTNING_MAKEOPTS+=(
+		ALL_TEST_PROGRAMS=
 	)
 
 	use sqlite || CLIGHTNING_MAKEOPTS+=(
@@ -356,11 +368,7 @@ src_configure() {
 
 src_compile() {
 	python_setup
-	emake "${CLIGHTNING_MAKEOPTS[@]}" \
-		all-programs \
-		$(usex test 'all-test-programs' '') \
-		$(usex doc doc-all '') \
-		default-targets
+	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
 	use python && distutils-r1_src_compile
 }
@@ -398,13 +406,7 @@ python_install_subdir_docs() {
 }
 
 src_install() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" $(usex doc install 'install-program installdirs')
-
-	einstalldocs
-	if ! use doc ; then
-		# Normally README.md gets installed by `make install`, but not if we're skipping doc installation
-		dodoc README.md
-	fi
+	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" DOC_DATA="${DOCS[*]}" install
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf
