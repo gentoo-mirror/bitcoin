@@ -304,6 +304,7 @@ src_configure() {
 		V=1
 		DISTRO=Gentoo
 		COVERAGE=
+		DEVTOOLS=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
 		LIBSODIUM_HEADERS=

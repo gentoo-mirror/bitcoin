@@ -337,6 +337,7 @@ src_configure() {
 		VERSION="${MyPV}-gentoo-${PR}"
 		DISTRO=Gentoo
 		COVERAGE=
+		DEVTOOLS=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
 		LIBSODIUM_HEADERS=
