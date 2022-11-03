@@ -12,61 +12,62 @@ DISTUTILS_USE_PEP517=poetry
 
 CARGO_OPTIONAL=1
 CRATES="
-	aho-corasick-0.7.18
-	anyhow-1.0.57
+	aho-corasick-0.7.19
+	anyhow-1.0.65
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.53
+	async-trait-0.1.57
 	atty-0.2.14
 	autocfg-1.1.0
 	base64-0.13.0
+	bitcoin_hashes-0.10.0
 	bitflags-1.3.2
-	bumpalo-3.9.1
-	bytes-1.1.0
+	bumpalo-3.11.0
+	bytes-1.2.1
 	cc-1.0.73
 	cfg-if-1.0.0
-	chrono-0.4.19
+	chrono-0.4.22
 	data-encoding-2.3.2
 	der-oid-macro-0.5.0
 	der-parser-6.0.1
-	either-1.6.1
-	env_logger-0.9.0
-	fastrand-1.7.0
+	either-1.8.0
+	env_logger-0.9.1
+	fastrand-1.8.0
 	fixedbitset-0.2.0
 	fnv-1.0.7
-	futures-0.3.21
-	futures-channel-0.3.21
-	futures-core-0.3.21
-	futures-executor-0.3.21
-	futures-io-0.3.21
-	futures-macro-0.3.21
-	futures-sink-0.3.21
-	futures-task-0.3.21
-	futures-util-0.3.21
-	getrandom-0.2.6
-	h2-0.3.13
-	hashbrown-0.11.2
+	futures-0.3.24
+	futures-channel-0.3.24
+	futures-core-0.3.24
+	futures-executor-0.3.24
+	futures-io-0.3.24
+	futures-macro-0.3.24
+	futures-sink-0.3.24
+	futures-task-0.3.24
+	futures-util-0.3.24
+	getrandom-0.2.7
+	h2-0.3.14
+	hashbrown-0.12.3
 	heck-0.3.3
 	hermit-abi-0.1.19
 	hex-0.4.3
-	http-0.2.7
-	http-body-0.4.4
-	httparse-1.7.1
+	http-0.2.8
+	http-body-0.4.5
+	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
-	hyper-0.14.18
+	hyper-0.14.20
 	hyper-timeout-0.4.1
-	indexmap-1.8.1
+	indexmap-1.9.1
 	instant-0.1.12
-	itertools-0.10.3
-	itoa-1.0.1
-	js-sys-0.3.57
+	itertools-0.10.5
+	itoa-1.0.3
+	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.125
+	libc-0.2.133
 	log-0.4.17
 	memchr-2.5.0
 	minimal-lexical-0.2.1
-	mio-0.8.3
+	mio-0.8.4
 	multimap-0.8.3
 	nom-7.1.1
 	num-bigint-0.4.3
@@ -74,76 +75,77 @@ CRATES="
 	num-traits-0.2.15
 	num_cpus-1.13.1
 	oid-registry-0.2.0
-	once_cell-1.10.0
-	pem-1.0.2
-	percent-encoding-2.1.0
+	once_cell-1.15.0
+	pem-1.1.0
+	percent-encoding-2.2.0
 	petgraph-0.5.1
-	pin-project-1.0.10
-	pin-project-internal-1.0.10
+	pin-project-1.0.12
+	pin-project-internal-1.0.12
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
 	ppv-lite86-0.2.16
-	proc-macro2-1.0.38
+	proc-macro2-1.0.44
 	prost-0.8.0
 	prost-build-0.8.0
 	prost-derive-0.8.0
 	prost-types-0.8.0
-	quote-1.0.18
+	quote-1.0.21
 	rand-0.8.5
 	rand_chacha-0.3.1
-	rand_core-0.6.3
+	rand_core-0.6.4
 	rcgen-0.8.14
-	redox_syscall-0.2.13
-	regex-1.5.5
-	regex-syntax-0.6.25
+	redox_syscall-0.2.16
+	regex-1.6.0
+	regex-syntax-0.6.27
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
 	rustls-0.19.1
-	ryu-1.0.9
+	ryu-1.0.11
 	sct-0.6.1
-	serde-1.0.137
-	serde_derive-1.0.137
-	serde_json-1.0.81
-	slab-0.4.6
-	socket2-0.4.4
+	secp256k1-0.22.1
+	secp256k1-sys-0.5.2
+	serde-1.0.145
+	serde_derive-1.0.145
+	serde_json-1.0.85
+	slab-0.4.7
+	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.94
+	syn-1.0.100
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.31
-	thiserror-impl-1.0.31
-	tokio-1.18.2
+	thiserror-1.0.36
+	thiserror-impl-1.0.36
+	tokio-1.21.1
 	tokio-io-timeout-1.2.0
-	tokio-macros-1.7.0
+	tokio-macros-1.8.0
 	tokio-rustls-0.22.0
-	tokio-stream-0.1.8
-	tokio-util-0.6.9
-	tokio-util-0.7.1
+	tokio-stream-0.1.10
+	tokio-util-0.6.10
+	tokio-util-0.7.4
 	tonic-0.5.2
 	tonic-build-0.5.2
-	tower-0.4.12
+	tower-0.4.13
 	tower-layer-0.3.1
-	tower-service-0.3.1
-	tracing-0.1.34
-	tracing-attributes-0.1.21
-	tracing-core-0.1.26
+	tower-service-0.3.2
+	tracing-0.1.36
+	tracing-attributes-0.1.22
+	tracing-core-0.1.29
 	tracing-futures-0.2.5
 	try-lock-0.2.3
-	unicode-segmentation-1.9.0
-	unicode-xid-0.2.3
+	unicode-ident-1.0.4
+	unicode-segmentation-1.10.0
 	untrusted-0.7.1
 	want-0.3.0
-	wasi-0.10.2+wasi-snapshot-preview1
 	wasi-0.11.0+wasi-snapshot-preview1
-	wasm-bindgen-0.2.80
-	wasm-bindgen-backend-0.2.80
-	wasm-bindgen-macro-0.2.80
-	wasm-bindgen-macro-support-0.2.80
-	wasm-bindgen-shared-0.2.80
-	web-sys-0.3.57
+	wasm-bindgen-0.2.83
+	wasm-bindgen-backend-0.2.83
+	wasm-bindgen-macro-0.2.83
+	wasm-bindgen-macro-support-0.2.83
+	wasm-bindgen-shared-0.2.83
+	web-sys-0.3.60
 	webpki-0.21.4
-	which-4.2.5
+	which-4.3.0
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.5
@@ -377,7 +379,7 @@ PATCH_HASHES=(
 #	980f3bda1fe4e464c471a8eb57c062ec93b34021	# pytest: test that listforwards gives as much outgoing information as possible.
 	d6afb0cd8d40fe3836dbc27375caee37bc95fb96	# lightningd: allow outgoing_scid without outgoing amount.
 #	3a1a7eb93f3daef5b90cb3ccc9ac48a85b4a0fa3	# wallet: allow saving forwarding scid even if we don't have amount.
-#	312751075c0ef069e771698852d650dab3d09dda	# lightningd: save outgoing information for more forwards.
+	312751075c0ef069e771698852d650dab3d09dda:pick=doc/:scrub-stamps	# lightningd: save outgoing information for more forwards.
 	ddf8fbdb5d224909cfade68178cc41efb0b9d61f	# gossipd: fix crash from gossip_store v10 changes
 #	06e1e119aa0633a9257dbfefe65a04082df488c0	# pytest: fix test_gossip_no_empty_announcements flake.
 #	f98df63b75e972bbfbea56023f9937745a00e613	# Revert "pytest: fix test_gossip_no_backtalk flake."
@@ -502,7 +504,7 @@ PATCH_HASHES=(
 	5307586d4d7a064b0fa6a45dc6f91752da348c44	# msggen: Add a new generator for grpc -> python converter
 #	b8bcc7d13f50779fd54490681bf57317ffe431ee	# pytest: Add a new RPC interface to talk to grpc
 	77f5eb556bab084b2a184c09dfaf46654cae7724:strip=contrib/pyln-testing/	# msggen: Add fundchannel request
-#	12275d0bfe0e0745aa5c3d9507f534cb0e2e39a2	# cln-grpc: Skip serializing fields when Option<Vec<T>> is empty too
+	12275d0bfe0e0745aa5c3d9507f534cb0e2e39a2	# cln-grpc: Skip serializing fields when Option<Vec<T>> is empty too
 	1efa5c37be5e7bfc806eaf48e49ba0056eaa2e62	# cln-plugin: Notify waiting tasks if the lightningd connection closes
 	18a9eb2feb79502b93cfa9d219e5a8c552506ebe:strip=contrib/pyln-testing/	# msggen: Add `stop` method to generators
 	ca8c46c286b03d17849051d06ed2f5bc7a5bbfad	# schema: `minconf` should be an integer (u32) not a float (number)
@@ -880,7 +882,7 @@ PATCH_HASHES=(
 #	e286c38c6ff66680638384e0c22210ccd86fb49d	# wallet: use db_col_scid / db_bind_scid where possible.
 #	2752e04f8f24f68c7e55244fe39d6fc27677222f	# db: add `scid` field to channels table.
 #	d7c1325e38dfa15ccb2021430d118ee6a14dd1ee	# wallet: use scid not string for failchannel (now failscid) in payments table.
-#	311807ff1f4f3574413b2ef86f63bf28e5363ee2	# lightningd: add in_htlc_id / out_htlc_id to listforwards.
+	311807ff1f4f3574413b2ef86f63bf28e5363ee2:strip=contrib/pyln-testing/:scrub-stamps:resolve-conflicts	# lightningd: add in_htlc_id / out_htlc_id to listforwards.
 #	7420a7021f4805d8b8058e86eec791f4ce3e27fa	# lightningd: add `listhtlcs` to list all the HTLCs we know about.
 #	3079afb024e9307a696046d0e936ff240a5f4c86	# lightningd: add `delforward` command.
 #	a15f1be5f88bdae5a6e816026e35a035791875e8	# autoclean: clean up listforwards as well.
@@ -892,7 +894,7 @@ PATCH_HASHES=(
 	8b7a8265e7ad80bb0e1882ad5dffada14f7425df:strip=plugins/bkpr/	# libplugin: avoid memmove if we have many outputs to lightningd.
 #	555b8a2f7a2bd728efa15dda8302084e477aa8c9	# lightningd: don't always wrap each command in a db transaction.
 #	fa7d732ba6f6cbba035f8162df3ad32ec8cabbd9	# lightningd: allow a connection to specify db batching.
-#	05095313f5c30a2fc20e1b188f78398c7a717863	# lightningd: listsendpays always has groupid.
+	05095313f5c30a2fc20e1b188f78398c7a717863:strip=contrib/pyln-testing/:scrub-stamps	# lightningd: listsendpays always has groupid.
 #	f52ff07558709bd1f7ed0cdca65c891d80b1a785	# lightningd: allow delpay to delete a specific payment.
 	939a7b2b1881a0658ee9f9711cf6b808aedc9f29	# db/postgres: avoid memleak.
 #	e0218841c26015322b6a223894d8b2742af26b4d	# db: set now-unused channels.short_channel_id text column to NULL after migration
@@ -918,7 +920,7 @@ PATCH_HASHES=(
 	8898511cf6b6612bb15127bc7c8e54aa551517ce	# cln-plugin: Defer binding the plugin state until after configuring
 	064a5a69406d8d44e005c94e914126626d1bf460	# cln-plugin: Add log filtering support
 	e1fc88ff700aeae3123e6bbc9d8152562788f86e	# cln-plugin: Prep the logging payload in a let
-#	b13ab8de3ae21fd22d09dcfb3ac6a2999764b2ba	# msggen: Use owned versions to convert from cln-rpc to cln-grpc
+	b13ab8de3ae21fd22d09dcfb3ac6a2999764b2ba:resolve-conflicts	# msggen: Use owned versions to convert from cln-rpc to cln-grpc
 #	437ae11610fda83f26d56a87669ea650ab185c99	# pytest: Configure the plugin logging to debug
 	b698a5a5ef4acb8d90aec0f6dccc52fb6c37afb2	# channeld: send error, not warning, if peer has old commitment number.
 #	6e86fa92206eb6e935a8dcba37b9e7849d2cc816	# lightningd: figure out optimal channel *before* forward_htlc hook.
@@ -926,10 +928,10 @@ PATCH_HASHES=(
 #	87bab2b85138bf99a29bb9b881d110e90e3a4e88	# Add ConfigurationDirectory
 	7046252f96c0436500a1b45c379a6aab56ee9612	# Impl `std::error::Error` for `RpcError` to make it anyhow compatible
 	10917743fe3fedd9d00b69ef1fa42d47989955ae	# Implement a typed version of `call` to avoid useless matching
-#	e272c93a88c7302dad026dbe06627a569487a25c	# Use `bitcoin_hashes` for `Sha256`
-#	b4b0b479ac1c60111a4eadda6a3b68f158f5f11c	# Use `secp256k1` for public key type
-#	09dfe3931dd0d14707b52d2b2f0189da3b5c0270	# Make eligible types `Copy`
-#	6abcb181457d1b52da8374ca714ff8ff0ba354c7	# Add basic arithmetic to `Amount` type
+	e272c93a88c7302dad026dbe06627a569487a25c	# Use `bitcoin_hashes` for `Sha256`
+	b4b0b479ac1c60111a4eadda6a3b68f158f5f11c	# Use `secp256k1` for public key type
+	09dfe3931dd0d14707b52d2b2f0189da3b5c0270	# Make eligible types `Copy`
+	6abcb181457d1b52da8374ca714ff8ff0ba354c7	# Add basic arithmetic to `Amount` type
 #	657b315f1cb3c25c981d0cc9ca367a96ec547e09	# pyln: Bump versions to v0.12.1
 #	9023bd9334c16cc66d3731aa31f57818971d3fdc	# pytest: add test for migrations upgrade which breaks 'fees_collected_msat'.
 #	cafa1a8c65117833d70cf7a1f000b41605abe1f6	# db: correctly migrate forwards for closed incoming channels.
@@ -985,6 +987,47 @@ PATCH_HASHES=(
 	38e2428f12af69bbd9af145d969eaca6c6ade99f:strip=tests/	# funder: use utxopsbt to build psbt for RBFs
 	efd096dc96f156b6b223be4f32c638bf3fc7ab64	# funder: filter prev-outs such that we only use still unspent ones
 	e00857827fd5b45a3022753edf855df4765a4e93	# funder: cleanup datastore on state-change/channel failure
+#	fee9a7ce04bb20c8e77e3d01a190e636156007aa	# hsmd: introduce a simple API versioning scheme.
+#	987adb97180848908ec54ff43d3b564f1a40c45a	# Makefile: check that hsm_version.h changes if wire/hsmd_wire.csv contents does
+#	bed905a394dee7f7584628b6389b3f202fd0112b	# lightningd: use 33 byte pubkeys internally.
+#	4e39b3ff3dfa2e552b0c0bfabee2853e4a38248e	# hsmd: don't use point32 for bolt12, but use pubkeys (though still always 02)
+#	7745513c5106fa1cc5ea568527594b96e4ff3d52	# bolt12: change our payer_key calculation.
+#	82d98e4b9696093c19bf040b4b298f7a24dadaa1	# gossmap: move gossmap_guess_node_id to pay plugin.
+#	eac8401f8486b7d61252831bc0bccdfb41c43896	# Makefile: separate bolt12 wireobjects
+#	e30ea91908c58018f775a92179d150a0f2f6d71a	# BOLTs: update to more recent bolt12 spec.
+#	1cdf21678e00897ea288907c051c124d11bf66ae	# offers: print out more details, fix up schema for decode of blinded paths.
+#	662c6931f3b44c5f21f8a05f8ef911cdf952fd92	# Remove point32.
+#	56939295de342d4b8a887e2eefcf46336c0a6107	# wire: add latest Route Blinding htlc fields from https://github.com/lightning/bolts/pull/765
+#	1d4f1a5199334ef81c26a04a980279c6083f662e	# common: remove old route-blinding-override test, update route-blinding test for new vectors.
+#	85baca56c6d0119b7c65ed92d5d30006d14ce99a	# channeld: don't calculate blinding shared secret, let lightningd do it.
+#	53e40c4380df362ac2fe6b7107d011898e26eca2	# common/blindedpath: generalize routines.
+#	c0ae2394d85da90e565450aa56dbe208e3dd02ae	# common/blindedpath: generalize construction routines.
+#	c94c742e581f767e16f5c7f41afe4c82873a2cb5	# common/features: understand the route_blinding feature (feature 24)
+#	077ec99788447c2c234bd60ac017376d5ea422fe	# common/onion: blinded payment support.
+#	21e7c3432e8d2c7f1efdf8ed6cde8722ea3d5852	# common/onion: enforce payment constraints.
+#	325fe2e04c7cac629b2cb566ab4466cef7da5bc6	# common/onion: cleanup by removing unnecessary local temporary.
+#	511e8e6477f8a81c31c0365ef01e6215ded6919d	# common/blindedpay: routines to construct a blinded payment.
+#	426886ff9b1bb13b6505c68b12b452745e421b36	# lightningd: return invalid_onon_blinding for any blinded payment error.
+#	8eee5dd7fd624c2c7b4c8b0416dc268e9b8a9de0	# channeld, lightningd: allow blinded payments with !EXPERIMENTAL_FEATURES.
+#	67b8fadf029c6df594776b8c2cdbf6c205df07a7	# common/test: check we meet bolt04/onion-route-blinding-test.json
+#	5cf86a1a2ed1c93bffdc182ca984c5b57c197304	# common: update to latest onion message spec.
+#	159fc7d1a22bd02eeca286ed8abccbd1db04cb09	# common/onion_message_parse: generic routine for parsing onion messages.
+#	422e68a4d6aa0e8a2095f1fb06eb254bb17c8fbf	# common/blindedpath: create onion mesage test vectors.
+#	f158b529d3e4c56b70c44aaebc821c1f15477fa2	# wire/Makefile: fix missing wire/bolt12_exp_wiregen.c in ALL_C_SOURCES.
+	83beaa5396acd15874311bce4b01431e583a6113	# json: Add helper for quoted numbers
+	8a4f44a58dd0f0514f9b05c8089cb5ac6f16f3a4:strip=tests/	# keysend: Allow quoted numbers in `extratlvs`
+	93c95056a31f8138cb036a35091dc9db04206c9b	# rs: Fix two small regressions
+	1a1c0a38fc9d45b40d0a90afd2f41bdf766b575d:strip=contrib/pyln-testing/	# msggen: Map the `extratlvs` field of `keysend`
+	87616b7ffc44d18d218edb32bc168f7e6ceae887	# mkfunding: add missing common_setup
+	7bd0d7641cfd1aab738f6d9ed1aa202daf0c6dae	# mkfunding: no scriptPubKey on utxo causing crash, so we add one
+#	8f549bfccae57a378cc726a073222882531293c1	# doc: add `make install` line for macOS instructions
+#	62e44e6bc8114524cbad7d5f7812ec7c34debabf	# doc: Move M1 instructions install to its own section
+#	76623b2ef2205cab63e5a84f0dbf12c4379e300e	# Collaborative transaction building
+	f111d6772dfdf071af9f2cade05259e630dd3d90	# Plugin config options with no defaults
+#	2605e117c9655a2d0241f6935ea35c8327d60703	# pytest: Add test for optional options in cln-plugin
+	5bd6c715e5939314db6503724c03b209d03a2309	# gossipd: ensure old private channel updates are properly deleted
+#	8f484069855a8975613e59730d49d84654d4a35e	# pytest: test for gossip store corruption by private channel updates
+	0d756ff017afa0eee577990e07247772d7f29221	# gossipd: Cleanup channel update replacement logic
 )
 PATCH_FILES=( )
 PATCHES=( )
@@ -1010,8 +1053,8 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer doc experimental postgres python +recent-libsecp256k1 rust sqlite test"
-RESTRICT="!test? ( test )"
+IUSE="developer experimental +man postgres python +recent-libsecp256k1 rust sqlite test"
+RESTRICT="mirror !test? ( test )"
 
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
@@ -1042,7 +1085,7 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	doc? ( app-text/lowdown )
+	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
@@ -1183,9 +1226,6 @@ src_prepare() {
 	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
 		-i configure Makefile || die
 
-	# fix up an oversight in the Rust tests
-	sed -e 's/"id": "1"/"id": 1/' -i cln-rpc/src/lib.rs || die
-
 	sed -e 's|\(path = \)subprocess.*"git".*$|\1b"'"${S}"'"|' \
 		-i contrib/msggen/msggen/utils/utils.py || die
 
@@ -1219,7 +1259,7 @@ src_configure() {
 		docdir="/usr/share/doc/${PF}"
 	)
 
-	use doc || CLIGHTNING_MAKEOPTS+=(
+	use man || CLIGHTNING_MAKEOPTS+=(
 		MANPAGES=
 	)
 

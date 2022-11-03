@@ -1,16 +1,5 @@
 --- /var/cache/distfiles/fb433a70f8b0de0e771de1f3378ee8f3e3bbef58.patch	2022-10-07 09:15:30.115316271 -0400
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/fb433a70f8b0de0e771de1f3378ee8f3e3bbef58.patch	2022-10-07 13:15:21.844659284 -0400
-@@ -488,8 +481,8 @@
-  - **in\_msat** (msat): the value of the incoming HTLC
-  - **status** (string): still ongoing, completed, failed locally, or failed after forwarding (one of "offered", "settled", "local_failed", "failed")
-  - **received\_time** (number): the UNIX timestamp when this was received
---- **out\_channel** (short_channel_id, optional): the channel that the HTLC (trying to) forward to
--+- **out\_channel** (short\_channel\_id, optional): the channel that the HTLC (trying to) forward to
-+-- **out\_channel** (short_channel_id, optional): the channel that the HTLC was forwarded to
-++- **out\_channel** (short\_channel\_id, optional): the channel that the HTLC was forwarded to
-  - **payment\_hash** (hex, optional): payment hash sought by HTLC (always 64 characters)
-  - **style** (string, optional): Either a legacy onion format or a modern tlv format (one of "legacy", "tlv")
-  
 @@ -576,17 +569,6 @@
     - **channel\_id** (hash, optional): The full channel_id (always 64 characters)
     - **funding\_txid** (txid, optional): ID of the funding transaction

@@ -1,0 +1,60 @@
+--- /var/cache/distfiles/311807ff1f4f3574413b2ef86f63bf28e5363ee2.patch	2022-11-02 13:07:57.814023124 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r107/temp/311807ff1f4f3574413b2ef86f63bf28e5363ee2.patch	2022-11-02 14:41:43.556952683 -0400
+@@ -416,25 +416,22 @@
+ --- a/wallet/wallet.c
+ +++ b/wallet/wallet.c
+ @@ -4552,6 +4552,8 @@ const struct forwarding *wallet_forwarded_payments_get(struct wallet *w,
+- 		", out_msatoshi"
++ 		", hin.payment_hash as payment_hash"
+  		", in_channel_scid"
+  		", out_channel_scid"
+ +		", in_htlc_id"
+ +		", out_htlc_id"
+- 		", received_time"
+- 		", resolved_time"
+- 		", failcode "
+-@@ -4618,9 +4620,8 @@ const struct forwarding *wallet_forwarded_payments_get(struct wallet *w,
+- 			cur->fee =  AMOUNT_MSAT(0);
++ 		", f.received_time"
++ 		", f.resolved_time"
++ 		", f.failcode "
++@@ -4558,6 +4560,7 @@ const struct forwarding *wallet_forwarded_payments_get(struct wallet *w,
+  		}
+  
+--		/* FIXME: This now requires complex join to determine! */
+--		cur->payment_hash = NULL;
+- 		db_col_scid(stmt, "in_channel_scid", &cur->channel_in);
++ 		cur->channel_in.u64 = db_col_u64(stmt, "in_channel_scid");
+ +		cur->htlc_id_in = db_col_u64(stmt, "in_htlc_id");
+  
+  		if (!db_col_is_null(stmt, "out_channel_scid")) {
+- 			db_col_scid(stmt, "out_channel_scid", &cur->channel_out);
++ 			cur->channel_out.u64
+ @@ -4628,6 +4629,11 @@ const struct forwarding *wallet_forwarded_payments_get(struct wallet *w,
+  			assert(cur->status == FORWARD_LOCAL_FAILED);
+  			cur->channel_out.u64 = 0;
+@@ -445,13 +442,13 @@
+ +		} else
+ +			cur->htlc_id_out = NULL;
+  
+- 		cur->received_time = db_col_timeabs(stmt, "received_time");
++ 		cur->received_time = db_col_timeabs(stmt, "f.received_time");
+  
+ diff --git a/wallet/wallet.h b/wallet/wallet.h
+ index dfc66e14b0b..94ec5c0825f 100644
+ --- a/wallet/wallet.h
+ +++ b/wallet/wallet.h
+-@@ -272,9 +272,11 @@ static inline enum htlc_state htlc_state_in_db(enum htlc_state s)
++@@ -271,7 +271,10 @@ static inline enum htlc_state htlc_state_in_db(enum htlc_state s)
+  }
+  
+  struct forwarding {
+@@ -460,7 +457,5 @@
+ +	/* htlc_id_out is NULL if unknown. */
+ +	u64 htlc_id_in, *htlc_id_out;
+  	struct amount_msat msat_in, msat_out, fee;
+--	struct sha256 *payment_hash;
++ 	struct sha256 *payment_hash;
+  	enum forward_style forward_style;
+- 	enum forward_status status;
+- 	enum onion_wire failcode;
