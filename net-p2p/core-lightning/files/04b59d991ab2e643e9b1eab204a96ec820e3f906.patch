@@ -25,26 +25,6 @@
  @@ -211,4 +211,4 @@ RESOURCES
   
   Main web site: <https://github.com/ElementsProject/lightning>
-@@ -1193,15 +1168,15 @@
- +- **in\_msat** (msat): the value of the incoming HTLC
-  - **status** (string): still ongoing, completed, failed locally, or failed after forwarding (one of "offered", "settled", "local_failed", "failed")
- -- **received_time** (number): the UNIX timestamp when this was received
---- **out_channel** (short_channel_id, optional): the channel that the HTLC (trying to) forward to
-+-- **out_channel** (short_channel_id, optional): the channel that the HTLC was forwarded to
- -- **payment_hash** (hex, optional): payment hash sought by HTLC (always 64 characters)
- +- **received\_time** (number): the UNIX timestamp when this was received
--+- **out\_channel** (short_channel_id, optional): the channel that the HTLC (trying to) forward to
-++- **out\_channel** (short_channel_id, optional): the channel that the HTLC was forwarded to
- +- **payment\_hash** (hex, optional): payment hash sought by HTLC (always 64 characters)
-  - **style** (string, optional): Either a legacy onion format or a modern tlv format (one of "legacy", "tlv")
-  
---If **out_msat** is present:
--+If **out\_msat** is present:
-+-If **out_channel** is present:
-++If **out\_channel** is present:
-  
- -  - **fee_msat** (msat): the amount this paid in fees
- -  - **out_msat** (msat): the amount we sent out the *out_channel*
 @@ -1428,10 +1400,10 @@
  index ab9dbe7a15a..6445cff5de5 100644
  --- a/doc/lightning-listpeers.7.md

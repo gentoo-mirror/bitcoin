@@ -9,12 +9,3 @@
   - **valid** (boolean): if this is false, you *MUST* not use the result except for diagnostics!
   
   If **type** is "bolt12 offer", and **valid** is *true*:
-@@ -612,7 +612,7 @@
- @@ -32,13 +33,16 @@ On success, an object containing **forwards** is returned.  It is an array of ob
-  - **style** (string, optional): Either a legacy onion format or a modern tlv format (one of "legacy", "tlv")
-  
-- If **out_msat** is present:
-+ If **out_channel** is present:
- +
-    - **fee_msat** (msat): the amount this paid in fees
-    - **out_msat** (msat): the amount we sent out the *out_channel*

@@ -1,0 +1,67 @@
+--- /var/cache/distfiles/b13ab8de3ae21fd22d09dcfb3ac6a2999764b2ba.patch	2022-11-02 12:54:29.904908928 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r107/temp/b13ab8de3ae21fd22d09dcfb3ac6a2999764b2ba.patch	2022-11-02 14:23:48.314642253 -0400
+@@ -201,7 +201,7 @@
+              dust_limit_msat: c.dust_limit_msat.map(|f| f.into()), // Rule #2 for type msat?
+              max_total_htlc_in_msat: c.max_total_htlc_in_msat.map(|f| f.into()), // Rule #2 for type msat?
+              their_reserve_msat: c.their_reserve_msat.map(|f| f.into()), // Rule #2 for type msat?
+-@@ -136,130 +136,130 @@ impl From<&responses::ListpeersPeersChannels> for pb::ListpeersPeersChannels {
++@@ -136,129 +136,129 @@ impl From<&responses::ListpeersPeersChannels> for pb::ListpeersPeersChannels {
+              minimum_htlc_in_msat: c.minimum_htlc_in_msat.map(|f| f.into()), // Rule #2 for type msat?
+              minimum_htlc_out_msat: c.minimum_htlc_out_msat.map(|f| f.into()), // Rule #2 for type msat?
+              maximum_htlc_out_msat: c.maximum_htlc_out_msat.map(|f| f.into()), // Rule #2 for type msat?
+@@ -343,10 +343,8 @@
+              amount_msat: c.amount_msat.map(|f| f.into()), // Rule #2 for type msat?
+ -            destination: c.destination.as_ref().map(|v| v.to_vec()), // Rule #2 for type pubkey?
+ -            created_at: c.created_at.clone(), // Rule #2 for type u64
+--            completed_at: c.completed_at.clone(), // Rule #2 for type u64?
+ +            destination: c.destination.map(|v| v.to_vec()), // Rule #2 for type pubkey?
+ +            created_at: c.created_at, // Rule #2 for type u64
+-+            completed_at: c.completed_at, // Rule #2 for type u64?
+              amount_sent_msat: Some(c.amount_sent_msat.into()), // Rule #2 for type msat
+ -            label: c.label.clone(), // Rule #2 for type string?
+ -            partid: c.partid.clone(), // Rule #2 for type u64?
+@@ -468,7 +466,7 @@
+          Self {
+              id: c.id.to_vec(), // Rule #2 for type pubkey
+              features: hex::decode(&c.features).unwrap(), // Rule #2 for type hex
+-@@ -328,441 +328,441 @@ impl From<&responses::ConnectResponse> for pb::ConnectResponse {
++@@ -327,440 +327,440 @@ impl From<&responses::ConnectResponse> for pb::ConnectResponse {
+  }
+  
+  #[allow(unused_variables)]
+@@ -1001,10 +999,8 @@
+              amount_msat: c.amount_msat.map(|f| f.into()), // Rule #2 for type msat?
+ -            destination: c.destination.as_ref().map(|v| v.to_vec()), // Rule #2 for type pubkey?
+ -            created_at: c.created_at.clone(), // Rule #2 for type u64
+--            completed_at: c.completed_at.clone(), // Rule #2 for type number?
+ +            destination: c.destination.map(|v| v.to_vec()), // Rule #2 for type pubkey?
+ +            created_at: c.created_at, // Rule #2 for type u64
+-+            completed_at: c.completed_at, // Rule #2 for type number?
+              amount_sent_msat: Some(c.amount_sent_msat.into()), // Rule #2 for type msat
+ -            label: c.label.clone(), // Rule #2 for type string?
+ -            partid: c.partid.clone(), // Rule #2 for type u64?
+@@ -1306,7 +1302,7 @@
+              style: c.style.map(|v| v as i32),
+              fee_msat: c.fee_msat.map(|f| f.into()), // Rule #2 for type msat?
+              out_msat: c.out_msat.map(|f| f.into()), // Rule #2 for type msat?
+-@@ -911,46 +911,46 @@ impl From<&responses::ListforwardsForwards> for pb::ListforwardsForwards {
++@@ -909,45 +909,45 @@ impl From<&responses::ListforwardsForwards> for pb::ListforwardsForwards {
+  }
+  
+  #[allow(unused_variables)]
+@@ -1331,7 +1327,6 @@
+              status: c.status as i32,
+ -            destination: c.destination.as_ref().map(|v| v.to_vec()), // Rule #2 for type pubkey?
+ -            created_at: c.created_at.clone(), // Rule #2 for type u64
+--            completed_at: c.completed_at.clone(), // Rule #2 for type u64?
+ -            label: c.label.clone(), // Rule #2 for type string?
+ -            bolt11: c.bolt11.clone(), // Rule #2 for type string?
+ -            description: c.description.clone(), // Rule #2 for type string?
+@@ -1341,7 +1336,6 @@
+ -            erroronion: c.erroronion.as_ref().map(|v| hex::decode(&v).unwrap()), // Rule #2 for type hex?
+ +            destination: c.destination.map(|v| v.to_vec()), // Rule #2 for type pubkey?
+ +            created_at: c.created_at, // Rule #2 for type u64
+-+            completed_at: c.completed_at, // Rule #2 for type u64?
+ +            label: c.label, // Rule #2 for type string?
+ +            bolt11: c.bolt11, // Rule #2 for type string?
+ +            description: c.description, // Rule #2 for type string?
