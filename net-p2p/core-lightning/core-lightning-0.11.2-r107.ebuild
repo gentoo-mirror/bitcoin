@@ -1066,7 +1066,7 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 S=${WORKDIR}/${MyPN}-${MyPV}
-DOCS=( CHANGELOG.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
+DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
 
 python_check_deps() {
 	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
@@ -1173,6 +1173,12 @@ src_prepare() {
 
 	default
 
+	# only run 'install' command if there are actually files to install
+	# and correct the FORCE target since GNU make 4.4 chokes on it
+	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
+		-e 's/^\(FORCE:\):$/\1/' \
+		-i Makefile || die
+
 	# don't look for headers or libraries beneath /usr/local
 	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
 		-i configure Makefile || die
@@ -1200,6 +1206,7 @@ src_configure() {
 		VERSION="${MyPV}-gentoo-${PR}"
 		DISTRO=Gentoo
 		COVERAGE=
+		DEVTOOLS=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
 		LIBSODIUM_HEADERS=
@@ -1210,6 +1217,14 @@ src_configure() {
 		EXTERNAL_INCLUDE_FLAGS="-I external/jsmn/ -I external/gheap/ $("$(tc-getPKG_CONFIG)" --cflags libsodium wallycore libsecp256k1_zkp)"
 		EXTERNAL_LDLIBS="${BUNDLED_LIBS} $("$(tc-getPKG_CONFIG)" --libs libsodium wallycore libsecp256k1_zkp) -lbacktrace"
 		docdir="/usr/share/doc/${PF}"
+	)
+
+	use doc || CLIGHTNING_MAKEOPTS+=(
+		MANPAGES=
+	)
+
+	use test || CLIGHTNING_MAKEOPTS+=(
+		ALL_TEST_PROGRAMS=
 	)
 
 	use sqlite || CLIGHTNING_MAKEOPTS+=(
@@ -1251,11 +1266,7 @@ src_configure() {
 
 src_compile() {
 	python_setup
-	emake "${CLIGHTNING_MAKEOPTS[@]}" \
-		all-programs \
-		$(usex test 'all-test-programs' '') \
-		$(usex doc doc-all '') \
-		default-targets
+	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
 	use python && distutils-r1_src_compile
 }
@@ -1293,13 +1304,7 @@ python_install_subdir_docs() {
 }
 
 src_install() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" $(usex doc install 'install-program installdirs')
-
-	einstalldocs
-	if ! use doc ; then
-		# Normally README.md gets installed by `make install`, but not if we're skipping doc installation
-		dodoc README.md
-	fi
+	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" DOC_DATA="${DOCS[*]}" install
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
