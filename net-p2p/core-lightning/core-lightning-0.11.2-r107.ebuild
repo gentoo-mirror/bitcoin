@@ -1174,7 +1174,9 @@ src_prepare() {
 	default
 
 	# only run 'install' command if there are actually files to install
+	# and correct the FORCE target since GNU make 4.4 chokes on it
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
+		-e 's/^\(FORCE:\):$/\1/' \
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local
