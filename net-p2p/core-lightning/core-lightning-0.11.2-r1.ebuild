@@ -206,7 +206,7 @@ CDEPEND="
 	>=sys-libs/zlib-1.2.12:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
-	sqlite? ( >=dev-db/sqlite-3.26.0:= )
+	sqlite? ( >=dev-db/sqlite-3.29.0:= )
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]

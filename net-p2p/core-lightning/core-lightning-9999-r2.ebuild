@@ -186,10 +186,10 @@ CDEPEND="
 	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.8.5:0/0.8.2[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
-	>=sys-libs/zlib-1.2.12:=
+	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
-	sqlite? ( >=dev-db/sqlite-3.26.0:= )
+	sqlite? ( >=dev-db/sqlite-3.29.0:= )
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
