@@ -186,10 +186,10 @@ CDEPEND="
 	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.8.5:0/0.8.2[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
-	>=sys-libs/zlib-1.2.12:=
+	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
-	sqlite? ( >=dev-db/sqlite-3.26.0:= )
+	sqlite? ( >=dev-db/sqlite-3.29.0:= )
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
@@ -431,17 +431,10 @@ pkg_preinst() {
 		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
 		mv --no-clobber -- "${EROOT%/}/etc/lightning/"{config,lightningd.conf}
 	fi
-
-	[[ -e ${EROOT%/}/usr/bin/hsmtool ]] && had_hsmtool=1
 }
 
 pkg_postinst() {
 	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
 	elog " - Add your user(s) to the 'lightning' group."
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
-
-	if [[ ${had_hsmtool} ]] ; then
-		ewarn "Upstream has renamed the ${PORTAGE_COLOR_HILITE-${HILITE}}hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}} executable to ${PORTAGE_COLOR_HILITE-${HILITE}}lightning-hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}}."
-		ewarn 'Please adjust your scripts and workflows accordingly.'
-	fi
 }

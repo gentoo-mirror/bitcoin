@@ -12,152 +12,140 @@ DISTUTILS_USE_PEP517=poetry
 
 CARGO_OPTIONAL=1
 CRATES="
-	aho-corasick-0.7.18
-	anyhow-1.0.58
+	aho-corasick-0.7.19
+	anyhow-1.0.65
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.56
+	async-trait-0.1.57
 	atty-0.2.14
 	autocfg-1.1.0
 	base64-0.13.0
+	bitcoin_hashes-0.10.0
 	bitflags-1.3.2
-	bumpalo-3.10.0
-	bytes-1.1.0
+	bumpalo-3.11.0
+	bytes-1.2.1
 	cc-1.0.73
 	cfg-if-1.0.0
-	chrono-0.4.19
-	core-foundation-0.9.3
-	core-foundation-sys-0.8.3
+	chrono-0.4.22
 	data-encoding-2.3.2
 	der-oid-macro-0.5.0
 	der-parser-6.0.1
-	either-1.6.1
-	env_logger-0.9.0
-	fastrand-1.7.0
+	either-1.8.0
+	env_logger-0.9.1
+	fastrand-1.8.0
 	fixedbitset-0.2.0
 	fnv-1.0.7
-	foreign-types-0.3.2
-	foreign-types-shared-0.1.1
-	futures-0.3.21
-	futures-channel-0.3.21
-	futures-core-0.3.21
-	futures-executor-0.3.21
-	futures-io-0.3.21
-	futures-macro-0.3.21
-	futures-sink-0.3.21
-	futures-task-0.3.21
-	futures-util-0.3.21
+	futures-0.3.24
+	futures-channel-0.3.24
+	futures-core-0.3.24
+	futures-executor-0.3.24
+	futures-io-0.3.24
+	futures-macro-0.3.24
+	futures-sink-0.3.24
+	futures-task-0.3.24
+	futures-util-0.3.24
 	getrandom-0.2.7
-	h2-0.3.13
-	hashbrown-0.12.1
+	h2-0.3.14
+	hashbrown-0.12.3
 	heck-0.3.3
 	hermit-abi-0.1.19
 	hex-0.4.3
 	http-0.2.8
 	http-body-0.4.5
-	httparse-1.7.1
+	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
-	hyper-0.14.19
+	hyper-0.14.20
 	hyper-timeout-0.4.1
 	indexmap-1.9.1
 	instant-0.1.12
-	itertools-0.10.3
-	itoa-1.0.2
-	js-sys-0.3.58
+	itertools-0.10.5
+	itoa-1.0.3
+	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.126
+	libc-0.2.133
 	log-0.4.17
 	memchr-2.5.0
 	minimal-lexical-0.2.1
 	mio-0.8.4
 	multimap-0.8.3
-	native-tls-0.2.10
 	nom-7.1.1
 	num-bigint-0.4.3
 	num-integer-0.1.45
 	num-traits-0.2.15
 	num_cpus-1.13.1
 	oid-registry-0.2.0
-	once_cell-1.12.0
-	openssl-0.10.40
-	openssl-macros-0.1.0
-	openssl-probe-0.1.5
-	openssl-src-111.21.0+1.1.1p
-	openssl-sys-0.9.74
-	pem-1.0.2
-	percent-encoding-2.1.0
+	once_cell-1.15.0
+	pem-1.1.0
+	percent-encoding-2.2.0
 	petgraph-0.5.1
-	pin-project-1.0.10
-	pin-project-internal-1.0.10
+	pin-project-1.0.12
+	pin-project-internal-1.0.12
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
-	pkg-config-0.3.25
 	ppv-lite86-0.2.16
-	proc-macro2-1.0.40
+	proc-macro2-1.0.44
 	prost-0.8.0
 	prost-build-0.8.0
 	prost-derive-0.8.0
 	prost-types-0.8.0
-	quote-1.0.20
+	quote-1.0.21
 	rand-0.8.5
 	rand_chacha-0.3.1
-	rand_core-0.6.3
+	rand_core-0.6.4
 	rcgen-0.8.14
-	redox_syscall-0.2.13
-	regex-1.5.6
-	regex-syntax-0.6.26
+	redox_syscall-0.2.16
+	regex-1.6.0
+	regex-syntax-0.6.27
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
 	rustls-0.19.1
-	ryu-1.0.10
-	schannel-0.1.20
+	ryu-1.0.11
 	sct-0.6.1
-	security-framework-2.6.1
-	security-framework-sys-2.6.1
-	serde-1.0.137
-	serde_derive-1.0.137
-	serde_json-1.0.81
-	slab-0.4.6
-	socket2-0.4.4
+	secp256k1-0.22.1
+	secp256k1-sys-0.5.2
+	serde-1.0.145
+	serde_derive-1.0.145
+	serde_json-1.0.85
+	slab-0.4.7
+	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.98
+	syn-1.0.100
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.31
-	thiserror-impl-1.0.31
-	tokio-1.19.2
+	thiserror-1.0.36
+	thiserror-impl-1.0.36
+	tokio-1.21.1
 	tokio-io-timeout-1.2.0
 	tokio-macros-1.8.0
 	tokio-rustls-0.22.0
-	tokio-stream-0.1.9
+	tokio-stream-0.1.10
 	tokio-util-0.6.10
-	tokio-util-0.7.3
+	tokio-util-0.7.4
 	tonic-0.5.2
 	tonic-build-0.5.2
 	tower-0.4.13
 	tower-layer-0.3.1
 	tower-service-0.3.2
-	tracing-0.1.35
-	tracing-attributes-0.1.21
-	tracing-core-0.1.28
+	tracing-0.1.36
+	tracing-attributes-0.1.22
+	tracing-core-0.1.29
 	tracing-futures-0.2.5
 	try-lock-0.2.3
-	unicode-ident-1.0.1
-	unicode-segmentation-1.9.0
+	unicode-ident-1.0.4
+	unicode-segmentation-1.10.0
 	untrusted-0.7.1
-	vcpkg-0.2.15
 	want-0.3.0
 	wasi-0.11.0+wasi-snapshot-preview1
-	wasm-bindgen-0.2.81
-	wasm-bindgen-backend-0.2.81
-	wasm-bindgen-macro-0.2.81
-	wasm-bindgen-macro-support-0.2.81
-	wasm-bindgen-shared-0.2.81
-	web-sys-0.3.58
+	wasm-bindgen-0.2.83
+	wasm-bindgen-backend-0.2.83
+	wasm-bindgen-macro-0.2.83
+	wasm-bindgen-macro-support-0.2.83
+	wasm-bindgen-shared-0.2.83
+	web-sys-0.3.60
 	webpki-0.21.4
-	which-4.2.5
+	which-4.3.0
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.5
@@ -175,7 +163,7 @@ CRATES="
 inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV/[-_]rc/rc}
+MyPV=${PV/_}
 PATCH_HASHES=(
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
@@ -193,8 +181,9 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="developer doc experimental postgres python +recent-libsecp256k1 rust sqlite test"
+#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+KEYWORDS=""
+IUSE="developer experimental +man postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -203,7 +192,7 @@ CDEPEND="
 	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.8.5:0/0.8.2[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
-	>=sys-libs/zlib-1.2.12:=
+	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( >=dev-db/sqlite-3.29.0:= )
@@ -214,7 +203,7 @@ PYTHON_DEPEND="
 	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
-	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
+	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
 	acct-group/lightning
@@ -226,7 +215,7 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	doc? ( >=app-text/mrkd-0.2.0 )
+	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
@@ -293,8 +282,8 @@ pkg_setup() {
 
 src_unpack() {
 	unpack "${P}.tar.gz"
-	rm -r "${S}/external"/*/ || die
 	cd "${S}/external" || die
+	rm -r */ || die
 	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,} || die
 	unpack gheap-67fc83b.tar.gz
@@ -324,8 +313,17 @@ src_prepare() {
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local
-	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
+	sed -e '/"Darwin-arm64"/,/^$/d' \
+		-e 's/ *\(-[IL]\$(\?\(CPATH\|LIBRARY_PATH\))\? *\)\+/ /g' \
 		-i configure Makefile || die
+
+	# we'll strip the binaries ourselves
+	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
+
+	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
+	[[ ${PV} != v*([.[:digit:]]) ]] ||
+		sed -ne '/^static bool is_released_version(void)/{a { return true; }
+			p;:x;n;/^}$/d;bx};p' -i wallet/db.c || die
 
 	use python && distutils-r1_src_prepare
 
@@ -357,7 +355,7 @@ src_configure() {
 		docdir="/usr/share/doc/${PF}"
 	)
 
-	use doc || CLIGHTNING_MAKEOPTS+=(
+	use man || CLIGHTNING_MAKEOPTS+=(
 		MANPAGES=
 	)
 
@@ -445,7 +443,7 @@ src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" DOC_DATA="${DOCS[*]}" install
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-22.11.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
@@ -461,30 +459,14 @@ src_install() {
 }
 
 pkg_preinst() {
-	has_version "<${CATEGORY}/${PN}-0.8" && had_pre_0_8_0=1
-
 	if [[ -e ${EROOT%/}/etc/lightning/config && ! -e ${EROOT%/}/etc/lightning/lightningd.conf ]] ; then
 		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
 		mv --no-clobber -- "${EROOT%/}/etc/lightning/"{config,lightningd.conf}
 	fi
-
-	[[ -e ${EROOT%/}/usr/bin/hsmtool ]] && had_hsmtool=1
 }
 
 pkg_postinst() {
 	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
 	elog " - Add your user(s) to the 'lightning' group."
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
-
-	# warn when upgrading from pre-0.8.0
-	if [[ ${had_pre_0_8_0} || -e ${EROOT%/}/var/lib/lightning/hsm_secret ]] ; then
-		ewarn 'This version of Core Lightning maintains its data files in network-specific'
-		ewarn 'subdirectories of its base directory. Your existing data files will be'
-		ewarn 'migrated automatically upon first startup of the new version.'
-	fi
-
-	if [[ ${had_hsmtool} ]] ; then
-		ewarn "Upstream has renamed the ${PORTAGE_COLOR_HILITE-${HILITE}}hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}} executable to ${PORTAGE_COLOR_HILITE-${HILITE}}lightning-hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}}."
-		ewarn 'Please adjust your scripts and workflows accordingly.'
-	fi
 }
