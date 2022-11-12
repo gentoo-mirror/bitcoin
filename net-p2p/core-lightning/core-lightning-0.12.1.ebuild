@@ -283,9 +283,8 @@ src_unpack() {
 	unpack "${P}.tar.gz"
 	cd "${S}/external" || die
 	rm -r */ || die
-	unpack jsmn-1.0.0.tar.gz
+	unpack jsmn-1.0.0.tar.gz gheap-67fc83b.tar.gz
 	mv jsmn{-1.0.0,} || die
-	unpack gheap-67fc83b.tar.gz
 	mv gheap{-*,} || die
 
 	if use rust ; then
