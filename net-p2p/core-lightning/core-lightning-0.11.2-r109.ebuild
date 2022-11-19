@@ -13,39 +13,39 @@ DISTUTILS_USE_PEP517=poetry
 CARGO_OPTIONAL=1
 CRATES="
 	aho-corasick-0.7.19
-	anyhow-1.0.65
+	anyhow-1.0.66
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.57
+	async-trait-0.1.58
 	atty-0.2.14
 	autocfg-1.1.0
-	base64-0.13.0
+	base64-0.13.1
 	bitcoin_hashes-0.10.0
 	bitflags-1.3.2
-	bumpalo-3.11.0
+	bumpalo-3.11.1
 	bytes-1.2.1
-	cc-1.0.73
+	cc-1.0.76
 	cfg-if-1.0.0
 	chrono-0.4.22
 	data-encoding-2.3.2
 	der-oid-macro-0.5.0
 	der-parser-6.0.1
 	either-1.8.0
-	env_logger-0.9.1
+	env_logger-0.9.3
 	fastrand-1.8.0
 	fixedbitset-0.2.0
 	fnv-1.0.7
-	futures-0.3.24
-	futures-channel-0.3.24
-	futures-core-0.3.24
-	futures-executor-0.3.24
-	futures-io-0.3.24
-	futures-macro-0.3.24
-	futures-sink-0.3.24
-	futures-task-0.3.24
-	futures-util-0.3.24
-	getrandom-0.2.7
-	h2-0.3.14
+	futures-0.3.25
+	futures-channel-0.3.25
+	futures-core-0.3.25
+	futures-executor-0.3.25
+	futures-io-0.3.25
+	futures-macro-0.3.25
+	futures-sink-0.3.25
+	futures-task-0.3.25
+	futures-util-0.3.25
+	getrandom-0.2.8
+	h2-0.3.15
 	hashbrown-0.12.3
 	heck-0.3.3
 	hermit-abi-0.1.19
@@ -55,27 +55,27 @@ CRATES="
 	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
-	hyper-0.14.20
+	hyper-0.14.23
 	hyper-timeout-0.4.1
 	indexmap-1.9.1
 	instant-0.1.12
 	itertools-0.10.5
-	itoa-1.0.3
+	itoa-1.0.4
 	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.133
+	libc-0.2.137
 	log-0.4.17
 	memchr-2.5.0
 	minimal-lexical-0.2.1
-	mio-0.8.4
+	mio-0.8.5
 	multimap-0.8.3
 	nom-7.1.1
 	num-bigint-0.4.3
 	num-integer-0.1.45
 	num-traits-0.2.15
-	num_cpus-1.13.1
+	num_cpus-1.14.0
 	oid-registry-0.2.0
-	once_cell-1.15.0
+	once_cell-1.16.0
 	pem-1.1.0
 	percent-encoding-2.2.0
 	petgraph-0.5.1
@@ -83,8 +83,8 @@ CRATES="
 	pin-project-internal-1.0.12
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
-	ppv-lite86-0.2.16
-	proc-macro2-1.0.44
+	ppv-lite86-0.2.17
+	proc-macro2-1.0.47
 	prost-0.8.0
 	prost-build-0.8.0
 	prost-derive-0.8.0
@@ -95,8 +95,8 @@ CRATES="
 	rand_core-0.6.4
 	rcgen-0.8.14
 	redox_syscall-0.2.16
-	regex-1.6.0
-	regex-syntax-0.6.27
+	regex-1.7.0
+	regex-syntax-0.6.28
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
@@ -105,35 +105,35 @@ CRATES="
 	sct-0.6.1
 	secp256k1-0.22.1
 	secp256k1-sys-0.5.2
-	serde-1.0.145
-	serde_derive-1.0.145
-	serde_json-1.0.85
+	serde-1.0.147
+	serde_derive-1.0.147
+	serde_json-1.0.87
 	slab-0.4.7
 	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.100
+	syn-1.0.103
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.36
-	thiserror-impl-1.0.36
-	tokio-1.21.1
+	thiserror-1.0.37
+	thiserror-impl-1.0.37
+	tokio-1.21.2
 	tokio-io-timeout-1.2.0
 	tokio-macros-1.8.0
 	tokio-rustls-0.22.0
-	tokio-stream-0.1.10
+	tokio-stream-0.1.11
 	tokio-util-0.6.10
 	tokio-util-0.7.4
 	tonic-0.5.2
 	tonic-build-0.5.2
 	tower-0.4.13
-	tower-layer-0.3.1
+	tower-layer-0.3.2
 	tower-service-0.3.2
-	tracing-0.1.36
-	tracing-attributes-0.1.22
-	tracing-core-0.1.29
+	tracing-0.1.37
+	tracing-attributes-0.1.23
+	tracing-core-0.1.30
 	tracing-futures-0.2.5
 	try-lock-0.2.3
-	unicode-ident-1.0.4
+	unicode-ident-1.0.5
 	unicode-segmentation-1.10.0
 	untrusted-0.7.1
 	want-0.3.0
@@ -150,12 +150,14 @@ CRATES="
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.5
 	winapi-x86_64-pc-windows-gnu-0.4.0
-	windows-sys-0.36.1
-	windows_aarch64_msvc-0.36.1
-	windows_i686_gnu-0.36.1
-	windows_i686_msvc-0.36.1
-	windows_x86_64_gnu-0.36.1
-	windows_x86_64_msvc-0.36.1
+	windows-sys-0.42.0
+	windows_aarch64_gnullvm-0.42.0
+	windows_aarch64_msvc-0.42.0
+	windows_i686_gnu-0.42.0
+	windows_i686_msvc-0.42.0
+	windows_x86_64_gnu-0.42.0
+	windows_x86_64_gnullvm-0.42.0
+	windows_x86_64_msvc-0.42.0
 	x509-parser-0.12.0
 	yasna-0.4.0
 "
@@ -1028,6 +1030,98 @@ PATCH_HASHES=(
 	5bd6c715e5939314db6503724c03b209d03a2309	# gossipd: ensure old private channel updates are properly deleted
 #	8f484069855a8975613e59730d49d84654d4a35e	# pytest: test for gossip store corruption by private channel updates
 	0d756ff017afa0eee577990e07247772d7f29221	# gossipd: Cleanup channel update replacement logic
+#	b1b280d10b6972ddb0a784da36deccabcccc15e9	# reckless: new tool to manage lightningd plugins
+#	7e8a889d895ed4244304756b2e77dfaae0b699cb	# reckless: it turns out the warning is a bit much.
+#	83dd431cdcb71955f85f761fcd27dcb39626b4fc	# reckless: use the lightning path when invoking lightning-cli
+#	f18c5e320d3388c6a277bd88233edf875365be1a	# reckless: detect pip3 or pip
+#	651c5b6de039e9cc92be48c7c4d277932d5ca665	# reckless: use config that was explicitly passed to lightningd
+#	f3934cda5083f75ce56c06a40453074536f961f9	# reckless: use argparse subparsers
+#	791e521179636fd2832ff0ef656bae267bf83eea	# reckless: update help alias
+#	5d23c7ab0bbbbf72c021a1587fff2c9b7a8131b2	# reckless: raise exception or early termination instead of returning None
+#	24422e9f7cb2f11c410f482eac34ef07784e3055	# reckless: add type hints
+#	df98c8b92702758a0648e4876f20c25c20b671e2	# reckless: refactor argument list handling.
+#	71351ceacf385a50f2ee26ca0a116df7983e698a	# reckless: replace os.path with pathlib operations
+#	4a95a4c7da6c773a8b7cfd06c139179c02d86c32	# reckless: multiline string style cleanup
+#	53ad1ee5761fb7f05958e68b0f5e035e47716563	# reckless: add function for lightning-cli calls
+#	2f4e862863a760705ccdb56315a73898b978221f	# reckless: improve config file handling
+#	e48fda1ba081399abba7b509061bba46f842bf47	# reckless: analyze repositories with urlparse
+#	a728b042431c778fe38ad1127f43e8caa59cbf96	# Reckless: add man page
+#	341d73fdc2585db65d6d86dd0bbf439afc143c1e	# reckless: fix git clone issue with removed dir
+	75c382fe163df8f8b7feb7245922b1b83835cf30	# lightningd: --dev-onion-reply-length option.
+#	fe1b285bba409ebf708572d97d186242364ba88b	# pytest: add test for generating non-standard length onion errors.
+	a4c482dc072aa2905a6eca61679d613e3cb501e8:strip=tests/	# common/sphinx: don't use fixed lengths anywhere.
+#	15112ae87bc74c1d3a1c95e9d0680acbadf26aae	# gci: Force MacOS CI Job to use python 3.10
+#	3c75770586ec9123889d126f6bc05d3563d55ee0	# common/json_filter: routines for json filtering.
+#	508a170598952701a88739c47bc6662d065697c8	# common/json_filter: routine to turn "filter" JSON into a filter.
+#	22c42de6f134ca35682774f458a46db160f43234	# tests/fuzz: don't pull in JSON common at all.
+#	f0731d2ca11ee647566bd6fc11809c9519252cf8	# common/json_stream: support filtering don't print fields not allowed.
+#	3b4c1968a3d9b5333c31d253f3d1d951b25506e0	# common/test: add unit tests for JSON filtering.
+#	2a14afbf216f5964e01a1c347e798461bb3ffe2c	# lightningd: set filter when we see 'filter' object.
+#	1436ad334d59612bc3f1e323023724d793b24e59	# pytest: add filter tests.
+#	b6134303d467becc58136d30fc9ddf06f93fc50c	# pyln: add context manager to simpify filter use.
+#	cb1156cd328f31e068e09afe0667784ec21a1077	# libplugin: support filters.
+#	c31fb99d2d705dfa793c0aa45f860cf5af67b7cb	# doc: add lightingd-rpc documentation.
+#	ae3550cb00c3a8539a58d5d272d921c748da2ac5	# lightning-cli: support --filter parameter.
+#	d60dbba43bf2dd69360aa9b98bddcee3952ab984	# tests: test for coinbase wallet spend.
+#	26f5dcd2a5af21ca9a902084872014566497058b	#  wallet: mark coinbase outputs as 'immature' until spendable
+#	adf14151fa868763d7b4ff05032cf45f3115312f	# wallet: Use boolean to determine whether an output is coinbase
+#	eb122827f6c82ae2fa1852309b53a511b7397706	# wallet: Add utxo_is_immature helper
+#	2760490d5d4fcc20f6b404fc90807ed756d7114d	# common: catch up on latest routeblinding spec.
+#	987df688ed4aca0d806e2da179b4c69386b3ace2	# lightningd: don't return normal errors on blinded path entry, either.
+#	c5656ec90a788b87280b910ecc7aa664986f960d	# common/onion: handle payment by node_id.
+#	8720bbedae855e33aadd0d515ab84203f1e657ec	# common/onion: split into decode and encode routines.
+#	01a47720c3472237b3000110c209b88bf095827d	# plugins/libplugin-pay: hack in blinded path support.
+#	4cfd972407a6ff1c15e5c978ba72c43418795351	# common/blindedpath: expose API at a lower level.
+#	5becfa6ee18127030e86aa26ed1fca2de7a871ee	# onion_message: don't use general secret, use per-message secret.
+	85cb302b657133c2ab20473460b2ebae7ea7f33f	# invoice: invert check to reduce indentation.
+#	a5471a405b44fc46365b9a3980049898436adad7	# lightningd: temporarily ignore missing payment_secret for bolt12.
+#	595fbd2a19abe2c98ba66a34fe65fd214122bc40	# createinvoice: make a minimal blinded "path" in bolt12 invoice if none presented.
+#	c6f50220e1640aa9358ebc73152e9cac5b8919ce	# common/onion_decode: put the path_id into onion_payload->payment_secret.
+#	4bc10579e6b816f0ce8599e26e5e7936c88f345d	# listincoming: add htlc_min_msat, public and peer_features fields.
+#	744605997ea63e64c657e93d3409a0ef55ed8b9a	# offers: monitor blockheight.
+#	c2c9f45dacc6b868f204361781af2cf89dd06aee	# offers: create a real blinded path, if necessary.
+#	aa73878831157bd7bd23620bb885c46338045d26	# common/bolt12: add code to generate offer_id, extract parts of streams.
+#	6e755d6fe860277233312f44577006be3e5b5142	# common/bolt12: code to initialize invreqs from offers, invs from invreqs.
+#	9a0d2040d34d20722accaa5daf20e5c907922eb9	# common/features: add explicit bolt12 feature sets.
+#	3afa5077fe705bd917de1c4b9c9f8bfa5f53b7b2	# offers: make them always unsigned.
+#	846a520bc238c9011a2e7acbe30561ffe4e10f29	# offers: remove 'send-invoice' offers support.
+#	1e3cb015469088880e7976647fd5625598434c5e	# bolt12: import the latest spec, update to fit.
+#	505356145b90c2989ba79d9f020a878cab0ad743	# bolt12: update to modern signature scheme.
+#	fdb3d9186abfd843c531d2d36aabee71e98f23d9	# devtools/bolt12-cli: fix decode to understand modern fields.
+#	ef2f4a06485a5b06ad7a1521a95510aad8096c2d	# bolt12: use spec field names, update decode API.
+#	bc283cecf292606f491cb93cda94a34366fe7354	# decode: print unknown fields in bolt12 strings.
+#	1d1174c2861e044b993e9f33bc7e62b3b9b1b527	# offers: use existing copied fields.
+#	179f573e456a10312ea0319f565fa172e82e26fc	# lightningd/invoice.c, plugins/fetchinvoice.c: use tlv_make_fields() instead of towire/fromwire hack.
+#	891cef7b2b3981a1893866180ac5e13dcbd369f1	# bolt12: routines to hash the invreq parts.
+#	02d74542260b18c1c2b2b5a142be50e4aceee947	# db: add invoicerequests table.
+#	79067704897de01c750c1eee22ab9e6e0d7587cf	# lightningd: add "savetodb" argument to createinvoicerequest, add listinvoicerequests/disableinvoicerequest
+#	37bc4603b8c088eecd67863071157e3729d90470	# lightningd: re-add 'offerout' functionality, as 'invoicerequest'.
+#	8a217f13cf7555f610802d0d7432b7bf4081169a	# bolt12: update comments to match latest spec.
+	2e4a58efac38ae2184abe263cd7a5cdcd32e6753	# check: fix warnings from shellcheck 0.8.0
+#	36b4457c0410b5d9af007897dd35d76b1a813967	# reckless: Use urllib3 instead of requests
+#	f1c2f811b7259feb74c5362551533196e7c32e70	# reckless: avoid changing directory during install
+#	fd52e260f04bfacda3f1e7dd64234a0d6994fe2b	# reckless: neaten path conversions
+#	77b7a74cd63213ffd2cf86a52e59c84da266cade	# reckless: Replace urllib3 with urllib
+#	7b12d3eb6019da5f21ce3043e30d4f09f15698cc	# reckless: Replace custom logging with the logging crate
+	5cbd5220d9bfa5d983210b587608eeecf2ddf926	# onchain: Document how the expected witness weight for the close tx
+	832b2e5e2e045e2b749acd215125241563848edb	# onchaind: Adjust witness weight estimate to be more conservative
+#	d45b13df56313df2bb59150c240ca3e6210e1a63	# lightningd.service: note that the hardening setting seems to break node.js plugins
+#	5a08691ffceabdb2c69a5764d1b63458876af392	# meta: Add version v22.11rc1 changelog
+#	d4ead536529cd297705e12a4178e4956f13b7637	# pyln: Bump versions
+#	08cbdaf84f2f5862aa94c2e59d00f44490bf8877	# add some stuff to gitignores
+	5e76c74622efe3dfdc6dc8fc416fb9ee31ad989a	# tools/generate_wire.py: don't declare unused for variable.
+	d94b715bcfd02abbcceba8196dd2b89aa9ff7ff1	# wallet/wallet.c: don't declare unused variable.
+#	9e41754e7d23f7e79e58ebdd7170889aaacd902d	# wallet: fix typo in debug message.
+	f2291c44d65fde0dc6a370b5483d80ac81f016ec	# onchaind: cap RBF penalty fee for testnet/regtest
+	c7ff3c4288d60a0b76a8747a197b33d04a827a6c	# ld: Do not blindly add rebroadcasts to outgoing_tx set
+	351b8999c997c1add5aee81722501129cdd7e51a	# ld: Add an outgoing_txs_map htable to avoid costly lookups
+	d27591ff543bc65b4abeee41965698354293f703	# ld: Replace list of outgoing_txs with a hash table
+	6518f6f26ab61ec33a796e57125ca8bad4b6c632	# make: Make the Makefile make 4.4 compatible
+#	00dc0f082e427871434fdd9196c948d9997a048a	# make: Fix external/lowdown clean targets
+	4f5ab638df51d181e4e25747dd5ff00e6301ba59	# grpc: Add the experimental optional flag to protoc
+	9481fb8815b60a021e0df2a144e0f415177bf1d6	# msggen: Be less magic in detecting the repo root
+#	d2dae46de95a5e20848357127a878299690d9b59	# docker: Fix the dockerfile
+	2e270ea7d33034857f5c989fb7b2e14d8bc42c8e	# rs: Bump cln crate versions to 0.1.1
 )
 PATCH_FILES=( )
 PATCHES=( )
@@ -1216,17 +1310,12 @@ src_prepare() {
 	default
 
 	# only run 'install' command if there are actually files to install
-	# and correct the FORCE target since GNU make 4.4 chokes on it
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
-		-e 's/^\(FORCE:\):$/\1/' \
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local
 	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
 		-i configure Makefile || die
-
-	sed -e 's|\(path = \)subprocess.*"git".*$|\1b"'"${S}"'"|' \
-		-i contrib/msggen/msggen/utils/utils.py || die
 
 	use python && distutils-r1_src_prepare
 
