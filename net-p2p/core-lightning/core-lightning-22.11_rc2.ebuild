@@ -13,39 +13,39 @@ DISTUTILS_USE_PEP517=poetry
 CARGO_OPTIONAL=1
 CRATES="
 	aho-corasick-0.7.19
-	anyhow-1.0.65
+	anyhow-1.0.66
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.57
+	async-trait-0.1.58
 	atty-0.2.14
 	autocfg-1.1.0
-	base64-0.13.0
+	base64-0.13.1
 	bitcoin_hashes-0.10.0
 	bitflags-1.3.2
-	bumpalo-3.11.0
+	bumpalo-3.11.1
 	bytes-1.2.1
-	cc-1.0.73
+	cc-1.0.76
 	cfg-if-1.0.0
 	chrono-0.4.22
 	data-encoding-2.3.2
 	der-oid-macro-0.5.0
 	der-parser-6.0.1
 	either-1.8.0
-	env_logger-0.9.1
+	env_logger-0.9.3
 	fastrand-1.8.0
 	fixedbitset-0.2.0
 	fnv-1.0.7
-	futures-0.3.24
-	futures-channel-0.3.24
-	futures-core-0.3.24
-	futures-executor-0.3.24
-	futures-io-0.3.24
-	futures-macro-0.3.24
-	futures-sink-0.3.24
-	futures-task-0.3.24
-	futures-util-0.3.24
-	getrandom-0.2.7
-	h2-0.3.14
+	futures-0.3.25
+	futures-channel-0.3.25
+	futures-core-0.3.25
+	futures-executor-0.3.25
+	futures-io-0.3.25
+	futures-macro-0.3.25
+	futures-sink-0.3.25
+	futures-task-0.3.25
+	futures-util-0.3.25
+	getrandom-0.2.8
+	h2-0.3.15
 	hashbrown-0.12.3
 	heck-0.3.3
 	hermit-abi-0.1.19
@@ -55,27 +55,27 @@ CRATES="
 	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
-	hyper-0.14.20
+	hyper-0.14.23
 	hyper-timeout-0.4.1
 	indexmap-1.9.1
 	instant-0.1.12
 	itertools-0.10.5
-	itoa-1.0.3
+	itoa-1.0.4
 	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.133
+	libc-0.2.137
 	log-0.4.17
 	memchr-2.5.0
 	minimal-lexical-0.2.1
-	mio-0.8.4
+	mio-0.8.5
 	multimap-0.8.3
 	nom-7.1.1
 	num-bigint-0.4.3
 	num-integer-0.1.45
 	num-traits-0.2.15
-	num_cpus-1.13.1
+	num_cpus-1.14.0
 	oid-registry-0.2.0
-	once_cell-1.15.0
+	once_cell-1.16.0
 	pem-1.1.0
 	percent-encoding-2.2.0
 	petgraph-0.5.1
@@ -83,8 +83,8 @@ CRATES="
 	pin-project-internal-1.0.12
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
-	ppv-lite86-0.2.16
-	proc-macro2-1.0.44
+	ppv-lite86-0.2.17
+	proc-macro2-1.0.47
 	prost-0.8.0
 	prost-build-0.8.0
 	prost-derive-0.8.0
@@ -95,8 +95,8 @@ CRATES="
 	rand_core-0.6.4
 	rcgen-0.8.14
 	redox_syscall-0.2.16
-	regex-1.6.0
-	regex-syntax-0.6.27
+	regex-1.7.0
+	regex-syntax-0.6.28
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
@@ -105,35 +105,35 @@ CRATES="
 	sct-0.6.1
 	secp256k1-0.22.1
 	secp256k1-sys-0.5.2
-	serde-1.0.145
-	serde_derive-1.0.145
-	serde_json-1.0.85
+	serde-1.0.147
+	serde_derive-1.0.147
+	serde_json-1.0.87
 	slab-0.4.7
 	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.100
+	syn-1.0.103
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.36
-	thiserror-impl-1.0.36
-	tokio-1.21.1
+	thiserror-1.0.37
+	thiserror-impl-1.0.37
+	tokio-1.21.2
 	tokio-io-timeout-1.2.0
 	tokio-macros-1.8.0
 	tokio-rustls-0.22.0
-	tokio-stream-0.1.10
+	tokio-stream-0.1.11
 	tokio-util-0.6.10
 	tokio-util-0.7.4
 	tonic-0.5.2
 	tonic-build-0.5.2
 	tower-0.4.13
-	tower-layer-0.3.1
+	tower-layer-0.3.2
 	tower-service-0.3.2
-	tracing-0.1.36
-	tracing-attributes-0.1.22
-	tracing-core-0.1.29
+	tracing-0.1.37
+	tracing-attributes-0.1.23
+	tracing-core-0.1.30
 	tracing-futures-0.2.5
 	try-lock-0.2.3
-	unicode-ident-1.0.4
+	unicode-ident-1.0.5
 	unicode-segmentation-1.10.0
 	untrusted-0.7.1
 	want-0.3.0
@@ -150,12 +150,14 @@ CRATES="
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.5
 	winapi-x86_64-pc-windows-gnu-0.4.0
-	windows-sys-0.36.1
-	windows_aarch64_msvc-0.36.1
-	windows_i686_gnu-0.36.1
-	windows_i686_msvc-0.36.1
-	windows_x86_64_gnu-0.36.1
-	windows_x86_64_msvc-0.36.1
+	windows-sys-0.42.0
+	windows_aarch64_gnullvm-0.42.0
+	windows_aarch64_msvc-0.42.0
+	windows_i686_gnu-0.42.0
+	windows_i686_msvc-0.42.0
+	windows_x86_64_gnu-0.42.0
+	windows_x86_64_gnullvm-0.42.0
+	windows_x86_64_msvc-0.42.0
 	x509-parser-0.12.0
 	yasna-0.4.0
 "
@@ -184,7 +186,7 @@ SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
 IUSE="developer experimental +man postgres python +recent-libsecp256k1 rust sqlite test"
-RESTRICT="!test? ( test )"
+RESTRICT="mirror !test? ( test )"
 
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
@@ -306,9 +308,7 @@ src_prepare() {
 	default
 
 	# only run 'install' command if there are actually files to install
-	# and correct the FORCE target since GNU make 4.4 chokes on it
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
-		-e 's/^\(FORCE:\):$/\1/' \
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local
@@ -320,7 +320,7 @@ src_prepare() {
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
 	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
-	[[ ${PV} != v*([.[:digit:]]) ]] ||
+	[[ ${PV} != *([.[:digit:]]) ]] ||
 		sed -ne '/^static bool is_released_version(void)/{a { return true; }
 			p;:x;n;/^}$/d;bx};p' -i wallet/db.c || die
 
