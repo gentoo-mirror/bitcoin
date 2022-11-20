@@ -8,8 +8,9 @@ inherit autotools flag-o-matic toolchain-funcs
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
-COMMITHASH="8746600eec5e7fcd35dabd480839a3a4bdfee87b"
-SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
+COMMITHASH="694ce8fb2d1fd8a3d641d7c33705691d41a2a860"
+SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
+	${HOMEPAGE}/pull/1159.patch -> ${PN}-PR1159.patch"
 
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
@@ -37,16 +38,19 @@ DEPEND="${RDEPEND}
 	valgrind? ( dev-util/valgrind )
 "
 BDEPEND="
+	sys-devel/autoconf-archive
 	virtual/pkgconfig
 "
 
-LIBSECP256K1_CROSS_TOOLS=( precompute_ecmult precompute_ecmult_gen )
-
-is_crosscompile() {
-	[[ ${CHOST} != ${CBUILD:-${CHOST}} ]]
-}
+PATCHES=(
+	"${DISTDIR}/${PN}-PR1159.patch"
+)
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
+
+src_unpack() {
+	unpack "${P}.tgz"
+}
 
 src_prepare() {
 	default
@@ -70,17 +74,6 @@ src_configure() {
 		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '')
 		--disable-static
 	)
-
-	if is_crosscompile; then
-		einfo "Building native code generation tools"
-		(
-			unset AR AS CC CPP CXX LD NM OBJCOPY OBJDUMP RANLIB RC STRIP CHOST
-			strip-unsupported-flags
-			econf "${myconf[@]}" --without-valgrind
-			emake CC="$(tc-getCC)" "${LIBSECP256K1_CROSS_TOOLS[@]}"
-		)
-		einfo "Resuming with crosscompile target"
-	fi
 
 	myconf+=(
 		$(use_with valgrind)
