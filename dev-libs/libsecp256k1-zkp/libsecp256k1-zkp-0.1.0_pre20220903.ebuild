@@ -3,14 +3,15 @@
 
 EAPI=7
 
-inherit autotools
+inherit autotools multilib-minimal
 
 MyPN=secp256k1-zkp
 DESCRIPTION="Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs"
 HOMEPAGE="https://github.com/ElementsProject/secp256k1-zkp"
 COMMITHASH="d22774e248c703a191049b78f8d04f37d6fcfa05"
 SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
-	https://github.com/bitcoin-core/secp256k1/pull/1159.patch -> libsecp256k1-PR1159.patch"
+	https://github.com/bitcoin-core/secp256k1/pull/1159.patch -> libsecp256k1-PR1159.patch
+	https://github.com/bitcoin-core/secp256k1/pull/1160.patch -> libsecp256k1-PR1160.patch"
 
 LICENSE="MIT"
 SLOT="0"
@@ -40,6 +41,7 @@ BDEPEND="
 
 PATCHES=(
 	"${DISTDIR}/libsecp256k1-PR1159.patch"
+	"${DISTDIR}/libsecp256k1-PR1160.patch"
 )
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
@@ -63,7 +65,7 @@ src_prepare() {
 	rm -f src/precomputed_ecmult.c src/precomputed_ecmult_gen.c || die
 }
 
-src_configure() {
+multilib_src_configure() {
 	local myconf=(
 		--includedir="/usr/include/${MyPN//-/_}"
 		$(use_enable static{-libs,})
@@ -97,10 +99,10 @@ src_configure() {
 		myconf+=( --with-asm=no )
 	fi
 
-	econf "${myconf[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
-src_install() {
+multilib_src_install_all() {
 	default
 	use static-libs || find "${ED}" -name '*.la' -delete || die
 }

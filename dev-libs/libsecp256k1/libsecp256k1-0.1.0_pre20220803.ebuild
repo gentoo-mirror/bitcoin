@@ -3,14 +3,15 @@
 
 EAPI=7
 
-inherit autotools
+inherit autotools multilib-minimal
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 COMMITHASH="694ce8fb2d1fd8a3d641d7c33705691d41a2a860"
 SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
-	${HOMEPAGE}/pull/1159.patch -> ${PN}-PR1159.patch"
+	${HOMEPAGE}/pull/1159.patch -> ${PN}-PR1159.patch
+	${HOMEPAGE}/pull/1160.patch -> ${PN}-PR1160.patch"
 
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
@@ -44,6 +45,7 @@ BDEPEND="
 
 PATCHES=(
 	"${DISTDIR}/${PN}-PR1159.patch"
+	"${DISTDIR}/${PN}-PR1160.patch"
 )
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
@@ -60,7 +62,7 @@ src_prepare() {
 	rm -f src/precomputed_ecmult.c src/precomputed_ecmult_gen.c || die
 }
 
-src_configure() {
+multilib_src_configure() {
 	local myconf=(
 		$(use_enable static{-libs,})
 		--disable-benchmark
@@ -85,10 +87,10 @@ src_configure() {
 		myconf+=( --with-asm=no )
 	fi
 
-	econf "${myconf[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
-src_install() {
+multilib_src_install_all() {
 	default
 	use static-libs || find "${ED}" -name '*.la' -delete || die
 }
