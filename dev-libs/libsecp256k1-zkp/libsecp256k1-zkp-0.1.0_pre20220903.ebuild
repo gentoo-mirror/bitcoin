@@ -8,8 +8,8 @@ inherit autotools
 MyPN=secp256k1-zkp
 DESCRIPTION="Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs"
 HOMEPAGE="https://github.com/ElementsProject/secp256k1-zkp"
-COMMITHASH="6c0aecf72b1f4290f50302440065392715d6240a"
-SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz
+COMMITHASH="d22774e248c703a191049b78f8d04f37d6fcfa05"
+SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
 	https://github.com/bitcoin-core/secp256k1/pull/1159.patch -> libsecp256k1-PR1159.patch"
 
 LICENSE="MIT"
@@ -45,7 +45,7 @@ PATCHES=(
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
 
 src_unpack() {
-	unpack "${PN}-v${PV}.tgz"
+	unpack "${P}.tgz"
 }
 
 src_prepare() {

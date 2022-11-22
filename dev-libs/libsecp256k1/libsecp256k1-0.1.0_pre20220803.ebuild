@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic toolchain-funcs
+inherit autotools
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
@@ -15,7 +15,7 @@ SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +schnorr +recovery test valgrind"
+IUSE="+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +recovery +schnorr static-libs test valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -62,6 +62,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		$(use_enable static{-libs,})
 		--disable-benchmark
 		$(use_enable experimental)
 		$(use_enable test tests)
@@ -72,10 +73,6 @@ src_configure() {
 		$(use_enable schnorr module-schnorrsig)
 		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '')
 		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '')
-		--disable-static
-	)
-
-	myconf+=(
 		$(use_with valgrind)
 	)
 	if use asm; then
@@ -93,5 +90,5 @@ src_configure() {
 
 src_install() {
 	default
-	find "${ED}" -name '*.la' -delete || die
+	use static-libs || find "${ED}" -name '*.la' -delete || die
 }
