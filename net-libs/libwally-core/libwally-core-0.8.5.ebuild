@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools
+inherit autotools multilib-minimal
 
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
@@ -18,8 +18,8 @@ RESTRICT="!test? ( test )"
 # TODO: python, java, js
 
 DEPEND="
-	!elements? ( >=dev-libs/libsecp256k1-0.1.0_pre20220329[ecdh,recovery] )
-	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20220401[ecdh,ecdsa-s2c,generator,rangeproof,recovery,surjectionproof,whitelist] )
+	!elements? ( >=dev-libs/libsecp256k1-0.1.0_pre20220329[${MULTILIB_USEDEP},ecdh,recovery] )
+	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20220401[${MULTILIB_USEDEP},ecdh,ecdsa-s2c,generator,rangeproof,recovery,surjectionproof,whitelist] )
 "
 RDEPEND="${DEPEND}
 	!<net-p2p/core-lightning-0.9.3-r2
@@ -57,8 +57,9 @@ src_prepare() {
 	eautoreconf
 }
 
-src_configure() {
-	econf --includedir="${EPREFIX}"/usr/include/libwally/ \
+multilib_src_configure() {
+	ECONF_SOURCE="${S}" econf \
+		--includedir="${EPREFIX}/usr/include/libwally" \
 		--enable-export-all \
 		$(use_enable test tests) \
 		$(use_enable elements) \
@@ -67,7 +68,7 @@ src_configure() {
 		$(use_enable asm)
 }
 
-src_install() {
+multilib_src_install_all() {
 	default
 	find "${ED}" -name '*.la' -delete || die
 }
