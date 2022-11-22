@@ -9,16 +9,18 @@ MyPN=secp256k1-zkp
 DESCRIPTION="Experimental fork of libsecp256k1 with support for Pedersen commitments and range proofs"
 HOMEPAGE="https://github.com/ElementsProject/secp256k1-zkp"
 COMMITHASH="6c0aecf72b1f4290f50302440065392715d6240a"
-SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz"
+SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz
+	https://github.com/bitcoin-core/secp256k1/pull/1159.patch -> libsecp256k1-PR1159.patch"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +ecdh ecdsa-adaptor ecdsa-s2c experimental external-default-callbacks +extrakeys generator musig rangeproof +recovery +schnorrsig surjectionproof test whitelist"
+IUSE="+asm +ecdh ecdsa-adaptor ecdsa-s2c experimental external-default-callbacks +extrakeys generator lowmem musig precompute-ecmult rangeproof +recovery +schnorrsig static-libs surjectionproof test valgrind whitelist"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
+	?? ( lowmem precompute-ecmult )
 	ecdsa-adaptor? ( experimental )
 	ecdsa-s2c? ( experimental )
 	generator? ( experimental )
@@ -30,11 +32,21 @@ REQUIRED_USE="
 "
 RDEPEND="
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
+	sys-devel/autoconf-archive
 	virtual/pkgconfig
 "
 
+PATCHES=(
+	"${DISTDIR}/libsecp256k1-PR1159.patch"
+)
+
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
+
+src_unpack() {
+	unpack "${PN}-v${PV}.tgz"
+}
 
 src_prepare() {
 	default
@@ -46,43 +58,49 @@ src_prepare() {
 		-i libsecp256k1.pc.in || die
 	mv libsecp256k1{,_zkp}.pc.in || die
 	eautoreconf
+
+	# Generate during build
+	rm -f src/precomputed_ecmult.c src/precomputed_ecmult_gen.c || die
 }
 
 src_configure() {
-	local asm_opt
+	local myconf=(
+		--includedir="/usr/include/${MyPN//-/_}"
+		$(use_enable static{-libs,})
+		--disable-benchmark
+		$(use_enable experimental)
+		$(use_enable external-default-callbacks)
+		$(use_enable test tests)
+		$(use_enable test exhaustive-tests)
+		$(use_enable {,module-}ecdh)
+		$(use_enable {,module-}ecdsa-adaptor)
+		$(use_enable {,module-}ecdsa-s2c)
+		$(use_enable {,module-}extrakeys)
+		$(use_enable {,module-}generator)
+		$(use_enable {,module-}musig)
+		$(use_enable {,module-}rangeproof)
+		$(use_enable {,module-}recovery)
+		$(use_enable {,module-}schnorrsig) \
+		$(use_enable {,module-}surjectionproof)
+		$(use_enable {,module-}whitelist)
+		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '')
+		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '')
+		$(use_with valgrind)
+	)
 	if use asm; then
 		if use arm; then
-			asm_opt=arm
+			myconf+=( --with-asm=arm )
 		else
-			asm_opt=auto
+			myconf+=( --with-asm=auto )
 		fi
 	else
-		asm_opt=no
+		myconf+=( --with-asm=no )
 	fi
-	econf \
-		--includedir="/usr/include/${MyPN//-/_}" \
-		--disable-benchmark \
-		$(use_enable experimental) \
-		$(use_enable external-default-callbacks) \
-		$(use_enable test tests) \
-		$(use_enable test exhaustive-tests) \
-		--with-asm=$asm_opt \
-		$(use_enable {,module-}ecdh) \
-		$(use_enable {,module-}ecdsa-adaptor) \
-		$(use_enable {,module-}ecdsa-s2c) \
-		$(use_enable {,module-}extrakeys) \
-		$(use_enable {,module-}generator) \
-		$(use_enable {,module-}musig) \
-		$(use_enable {,module-}rangeproof) \
-		$(use_enable {,module-}recovery) \
-		$(use_enable {,module-}schnorrsig) \
-		$(use_enable {,module-}surjectionproof) \
-		$(use_enable {,module-}whitelist) \
-		--disable-static
+
+	econf "${myconf[@]}"
 }
 
 src_install() {
-	dodoc README.md
-	emake DESTDIR="${D}" install
-	find "${ED}" -name '*.la' -delete || die
+	default
+	use static-libs || find "${ED}" -name '*.la' -delete || die
 }

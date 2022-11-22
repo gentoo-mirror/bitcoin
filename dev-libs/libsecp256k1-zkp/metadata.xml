@@ -10,11 +10,14 @@
 		<flag name="external-default-callbacks">Enable external default callback functions</flag>
 		<flag name="extrakeys">Enable extrakeys module</flag>
 		<flag name="generator">Enable NUMS generator module</flag>
+		<flag name="lowmem">Reduce runtime memory usage at the expense of performance (ecmult window size 2, gen precision 2)</flag>
 		<flag name="musig">Enable MuSig module</flag>
+		<flag name="precompute-ecmult">Use over 512 MB memory at runtime for better performance (ecmult window size 24, gen precision 8)</flag>
 		<flag name="rangeproof">Enable Pedersen / zero-knowledge range proofs module</flag>
 		<flag name="recovery">Enable ECDSA pubkey recovery module</flag>
 		<flag name="schnorrsig">Enable Schnorr signature module</flag>
 		<flag name="surjectionproof">Enable surjection proof module</flag>
+		<flag name="valgrind">Compile in valgrind memory hints</flag>
 		<flag name="whitelist">Enable key whitelisting module</flag>
 	</use>
 	<upstream>
