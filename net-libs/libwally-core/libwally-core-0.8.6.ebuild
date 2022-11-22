@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{8..11} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit autotools distutils-r1 java-pkg-opt-2
+inherit autotools distutils-r1 java-pkg-opt-2 multilib-minimal
 
 PATCH_HASHES=(
 	5a1fef754c72902c734370ea5d74a891c5d3db5d	# src/Makefile.am: add missing headers to install
@@ -34,8 +34,8 @@ RESTRICT="!test? ( test )"
 
 JAVA_PKG_NV_DEPEND=">=virtual/jdk-1.7"
 DEPEND+="
-	!elements? ( >=dev-libs/libsecp256k1-0.1.0_pre20220329[ecdh,extrakeys,recovery] )
-	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20220401[ecdh,ecdsa-s2c,extrakeys,generator,rangeproof,recovery,surjectionproof,whitelist] )
+	!elements? ( >=dev-libs/libsecp256k1-0.1.0_pre20220329[${MULTILIB_USEDEP},ecdh,extrakeys,recovery] )
+	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20220401[${MULTILIB_USEDEP},ecdh,ecdsa-s2c,extrakeys,generator,rangeproof,recovery,surjectionproof,whitelist] )
 "
 RDEPEND="${DEPEND}
 	!<net-p2p/core-lightning-0.9.3-r2
@@ -111,24 +111,22 @@ src_prepare() {
 	use java && java-pkg-opt-2_src_prepare
 }
 
-src_configure() {
-	econf --includedir="${EPREFIX}"/usr/include/libwally/ \
+multilib_src_configure() {
+	multilib_is_native_abi && cd "${S}" # distutils needs in-tree native build
+	ECONF_SOURCE="${S}" econf \
+		--includedir="${EPREFIX}/usr/include/libwally" \
 		--enable-export-all \
 		$(use_enable test tests) \
 		$(use_enable elements) \
 		$(use_enable !elements standard-secp) \
 		$(use_enable minimal) \
 		$(use_enable asm) \
-		$(use_enable {,swig-}java) \
-		$(use_enable {,swig-}python)
-}
-
-python_compile() {
-	use python && distutils-r1_python_compile
+		$(multilib_native_use_enable {,swig-}java) \
+		$(multilib_native_use_enable {,swig-}python)
 }
 
 src_compile() {
-	default
+	multilib-minimal_src_compile
 	if use python ; then
 		distutils-r1_src_compile
 	elif use doc ; then
@@ -137,22 +135,37 @@ src_compile() {
 	fi
 }
 
+multilib_src_compile() {
+	multilib_is_native_abi && cd "${S}"
+	default
+}
+
 python_test() {
 	emake -C src check-swig-python PYTHON="${EPYTHON}"
 }
 
 src_test() {
 	python_setup
-	emake -C src check-{TESTS,libwallycore} PYTHON="${EPYTHON}"
+	multilib-minimal_src_test
 	use java && emake -C src check-swig-java
 	use python && distutils-r1_src_test
 }
 
+multilib_src_test() {
+	multilib_is_native_abi && cd "${S}"
+	emake -C src check-{TESTS,libwallycore} PYTHON="${EPYTHON}"
+}
+
 src_install() {
-	default
+	multilib-minimal_src_install
 	find "${ED}" -name '*.la' -delete || die
 	use java && java-pkg_dojar src/swig_java/wallycore.jar
 	use python && distutils-r1_src_install
+}
+
+multilib_src_install() {
+	multilib_is_native_abi && cd "${S}"
+	emake DESTDIR="${ED}" install
 }
 
 pkg_preinst() {
