@@ -1122,6 +1122,11 @@ PATCH_HASHES=(
 	9481fb8815b60a021e0df2a144e0f415177bf1d6	# msggen: Be less magic in detecting the repo root
 #	d2dae46de95a5e20848357127a878299690d9b59	# docker: Fix the dockerfile
 	2e270ea7d33034857f5c989fb7b2e14d8bc42c8e	# rs: Bump cln crate versions to 0.1.1
+#	94928de479237b83e90504a2807b7426faeaabfa	# meta: Update CHANGELOG for release candidate v22.11rc2
+#	b1f50c825f9a81c15d26bf82fbfe2cc7d0f0999a	# doc: document how to construct JSON ids in modern plugins and utilities.
+	24651f57adc773f3a3b1470181023c9187686a99	# plugins: set non_numeric_ids flag based on getmanifest `nonnumericids` field.
+	d5ce5cbab302fcc3f88e78a4c3132705d3cc7867:strip=tests/	# lightningd: only use non-numeric JSON ids if plugin says we can.
+	ece77840f906bba94d77889d651dd39208c9127d:strip=tests/	# pyln-client, libplugin, rust cln-plugin: explicitly flag that we allow non-numeric JSON ids.
 )
 PATCH_FILES=( )
 PATCHES=( )
