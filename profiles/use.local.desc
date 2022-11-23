@@ -7,8 +7,7 @@ dev-libs/libsecp256k1:ecdh - Enable ECDH shared secret computation
 dev-libs/libsecp256k1:endomorphism - Enable endomorphism
 dev-libs/libsecp256k1:experimental - Allow experimental USE flags
 dev-libs/libsecp256k1:extrakeys - Enable extrakeys module
-dev-libs/libsecp256k1:lowmem - Reduce runtime memory usage at the expense of performance (ecmult window size 2, gen precision 2)
-dev-libs/libsecp256k1:precompute-ecmult - Use over 512 MB memory at runtime for better performance (ecmult window size 24, gen precision 8)
+dev-libs/libsecp256k1:lowmem - Reduce runtime memory usage at the expense of performance (ecmult window size 4, gen precision 2)
 dev-libs/libsecp256k1:recovery - Enable ECDSA pubkey recovery module
 dev-libs/libsecp256k1:schnorr - Enable Schnorr signature module
 dev-libs/libsecp256k1:test-openssl - Enable OpenSSL comparison tests
@@ -21,9 +20,8 @@ dev-libs/libsecp256k1-zkp:experimental - Allow experimental USE flags
 dev-libs/libsecp256k1-zkp:external-default-callbacks - Enable external default callback functions
 dev-libs/libsecp256k1-zkp:extrakeys - Enable extrakeys module
 dev-libs/libsecp256k1-zkp:generator - Enable NUMS generator module
-dev-libs/libsecp256k1-zkp:lowmem - Reduce runtime memory usage at the expense of performance (ecmult window size 2, gen precision 2)
+dev-libs/libsecp256k1-zkp:lowmem - Reduce runtime memory usage at the expense of performance (ecmult window size 4, gen precision 2)
 dev-libs/libsecp256k1-zkp:musig - Enable MuSig module
-dev-libs/libsecp256k1-zkp:precompute-ecmult - Use over 512 MB memory at runtime for better performance (ecmult window size 24, gen precision 8)
 dev-libs/libsecp256k1-zkp:rangeproof - Enable Pedersen / zero-knowledge range proofs module
 dev-libs/libsecp256k1-zkp:recovery - Enable ECDSA pubkey recovery module
 dev-libs/libsecp256k1-zkp:schnorrsig - Enable Schnorr signature module

@@ -5,12 +5,12 @@ DESCRIPTION=Optimized C library for EC operations on curve secp256k1
 EAPI=7
 HOMEPAGE=https://github.com/bitcoin-core/secp256k1
 INHERIT=git-r3 autotools eutils
-IUSE=+asm ecdh +experimental +extrakeys gmp lowmem precompute-ecmult +schnorr +recovery test test-openssl valgrind
+IUSE=+asm ecdh +experimental +extrakeys gmp lowmem +schnorr +recovery test test-openssl valgrind
 LICENSE=MIT
 PROPERTIES=live
 RDEPEND=gmp? ( dev-libs/gmp:0= )
-REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) extrakeys? ( experimental ) ?? ( lowmem precompute-ecmult ) schnorr? ( experimental extrakeys ) test-openssl? ( test )
+REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) extrakeys? ( experimental ) schnorr? ( experimental extrakeys ) test-openssl? ( test )
 RESTRICT=!test? ( test )
 SLOT=0
 _eclasses_=git-r3	2347f8fe2d392b2a091191f94be37e6f	gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	441f754fd75cd4fd1fa06fbc17da6144	multilib	5ca4e49abed8e3a2f7b56920eadee157	libtool	241a8f577b9781a42a7421e53448a44e	autotools	9e6965bfaa00f52cc61e0d4bc44c87b3	edos2unix	33e347e171066657f91f8b0c72ec8773	strip-linguas	ac3ee41ee2d31d8c41a77c0838320cc7	wrapper	4a1902f969e5718126434fc35f3a0d9c	eutils	8f942ebdcf04334697649d4a0bf65a32
-_md5_=2b35c3f5362aa54728dfa8134d577feb
+_md5_=9fe86c9968b4e3731f0b61a2d1b7d444
