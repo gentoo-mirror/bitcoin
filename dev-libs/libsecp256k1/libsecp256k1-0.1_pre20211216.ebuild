@@ -14,13 +14,12 @@ SRC_URI="https://github.com/bitcoin-core/${MyPN}/archive/${COMMITHASH}.tar.gz ->
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +schnorr +recovery test valgrind"
+IUSE="+asm ecdh +experimental +extrakeys lowmem +schnorr +recovery test valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	extrakeys? ( experimental )
-	?? ( lowmem precompute-ecmult )
 	schnorr? ( experimental extrakeys )
 "
 RDEPEND="
@@ -67,8 +66,7 @@ src_configure() {
 		$(use_enable {,module-}extrakeys)
 		$(use_enable {,module-}recovery)
 		$(use_enable schnorr module-schnorrsig)
-		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '')
-		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '')
+		$(usex lowmem '--with-ecmult-window=4 --with-ecmult-gen-precision=2' '')
 		--disable-static
 	)
 
