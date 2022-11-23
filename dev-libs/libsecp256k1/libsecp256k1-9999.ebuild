@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -13,13 +13,12 @@ HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+asm ecdh +experimental +extrakeys gmp lowmem precompute-ecmult +schnorr +recovery test test-openssl valgrind"
+IUSE="+asm ecdh +experimental +extrakeys gmp lowmem +schnorr +recovery test test-openssl valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
 	extrakeys? ( experimental )
-	?? ( lowmem precompute-ecmult )
 	schnorr? ( experimental extrakeys )
 	test-openssl? ( test )
 "
@@ -61,7 +60,6 @@ src_configure() {
 		$(use_enable recovery module-recovery) \
 		$(use_enable schnorr module-schnorrsig) \
 		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '') \
-		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '') \
 		$(use_with valgrind) \
 		--disable-static
 }

@@ -15,12 +15,11 @@ SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +ecdh ecdsa-adaptor ecdsa-s2c experimental external-default-callbacks +extrakeys generator lowmem musig precompute-ecmult rangeproof +recovery +schnorrsig static-libs surjectionproof test valgrind whitelist"
+IUSE="+asm +ecdh ecdsa-adaptor ecdsa-s2c experimental external-default-callbacks +extrakeys generator lowmem musig rangeproof +recovery +schnorrsig static-libs surjectionproof test valgrind whitelist"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	?? ( lowmem precompute-ecmult )
 	ecdsa-adaptor? ( experimental )
 	ecdsa-s2c? ( experimental )
 	generator? ( experimental )
@@ -83,8 +82,7 @@ src_configure() {
 		$(use_enable {,module-}schnorrsig) \
 		$(use_enable {,module-}surjectionproof)
 		$(use_enable {,module-}whitelist)
-		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '')
-		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '')
+		$(usex lowmem '--with-ecmult-window=4 --with-ecmult-gen-precision=2' '')
 		$(use_with valgrind)
 	)
 	if use asm; then

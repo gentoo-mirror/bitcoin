@@ -16,12 +16,11 @@ SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm ecdh +experimental +extrakeys lowmem precompute-ecmult +recovery +schnorr static-libs test valgrind"
+IUSE="+asm ecdh +experimental +extrakeys lowmem +recovery +schnorr static-libs test valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	?? ( lowmem precompute-ecmult )
 	schnorr? ( extrakeys )
 "
 RDEPEND="
@@ -73,8 +72,7 @@ multilib_src_configure() {
 		$(use_enable {,module-}extrakeys)
 		$(use_enable {,module-}recovery)
 		$(use_enable schnorr module-schnorrsig)
-		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '')
-		$(usex precompute-ecmult '--with-ecmult-window=24 --with-ecmult-gen-precision=8' '')
+		$(usex lowmem '--with-ecmult-window=4 --with-ecmult-gen-precision=2' '')
 		$(use_with valgrind)
 	)
 	if use asm; then
