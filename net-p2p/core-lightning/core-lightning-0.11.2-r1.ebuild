@@ -177,6 +177,7 @@ inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
+	6518f6f26ab61ec33a796e57125ca8bad4b6c632	# make: Make the Makefile make 4.4 compatible
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -317,9 +318,7 @@ src_prepare() {
 	default
 
 	# only run 'install' command if there are actually files to install
-	# and correct the FORCE target since GNU make 4.4 chokes on it
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
-		-e 's/^\(FORCE:\):$/\1/' \
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local

@@ -165,6 +165,7 @@ MyPV=${PV/[-_]rc/rc}
 PATCH_HASHES=(
 	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
 	6a48ed9e826efed1ea53b18a8308f97c2d5bbe34	# gossmap: fail to get capacity of locally-added chans (don't crash!).
+	6518f6f26ab61ec33a796e57125ca8bad4b6c632	# make: Make the Makefile make 4.4 compatible
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -305,9 +306,7 @@ src_prepare() {
 	default
 
 	# only run 'install' command if there are actually files to install
-	# and correct the FORCE target since GNU make 4.4 chokes on it
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
-		-e 's/^\(FORCE:\):$/\1/' \
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local
