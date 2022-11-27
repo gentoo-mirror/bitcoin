@@ -167,7 +167,6 @@ inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=${PV/_}
 PATCH_HASHES=(
-	02f9c2df249c342a282e47179e643471cdf9cd77	# autoclean: Fix a null-pointer derefence when checking HTLC age
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
