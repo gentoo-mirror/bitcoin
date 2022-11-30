@@ -10,9 +10,6 @@ DISTUTILS_USE_PEP517=setuptools
 inherit autotools distutils-r1 java-pkg-opt-2 multilib-minimal
 
 PATCH_HASHES=(
-	5a1fef754c72902c734370ea5d74a891c5d3db5d	# src/Makefile.am: add missing headers to install
-	5f7dbe7fe07fc67db97a786e6531466ad6e73384	# m4/ax_jni_include_dir: don't cache result
-	cdd358f64f59aa4a9836cb732cb92163bbe02471	# src/Makefile.am: split unit tests into separate targets by language
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -25,7 +22,7 @@ SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
 	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0"
-SLOT="0/0.8.6"
+SLOT="0/0.8.7"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE+=" +asm doc elements minimal python test"
 RESTRICT="!test? ( test )"
@@ -52,7 +49,7 @@ BDEPEND+="
 		${JAVA_PKG_NV_DEPEND}
 	)
 	python? (
-		>=dev-lang/swig-3.0.7[pcre]
+		>=dev-lang/swig-3.0.12[pcre]
 		${PYTHON_DEPS}
 		${DISTUTILS_DEPS}
 		>=dev-python/pkgconfig-1.5.3[${PYTHON_USEDEP}]
