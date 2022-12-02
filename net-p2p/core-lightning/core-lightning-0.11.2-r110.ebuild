@@ -162,11 +162,11 @@ CRATES="
 	yasna-0.4.0
 "
 
-inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
-PATCH_HASHES=(
+BACKPORTS=(
 #	182c900ceaec6d6544b1e4970b3f03e348a9778e	# repro: Add reprobuild support for ubuntu:22.04
 #	f40b6da457794fc60854172065fdcb5b3b218780	# repro: Update repro dockerfiles and instructions
 #	6ced5558fb7c817375112072d8f670b878356ddd	# Makefile: stumble along if git does not work.
@@ -1128,25 +1128,15 @@ PATCH_HASHES=(
 	d5ce5cbab302fcc3f88e78a4c3132705d3cc7867:strip=tests/	# lightningd: only use non-numeric JSON ids if plugin says we can.
 	ece77840f906bba94d77889d651dd39208c9127d:strip=tests/	# pyln-client, libplugin, rust cln-plugin: explicitly flag that we allow non-numeric JSON ids.
 )
-PATCH_FILES=( )
-PATCHES=( )
-for hash in "${PATCH_HASHES[@]}" ; do
-	if [[ ${hash} == *:* ]] ; then
-		hash=${hash%%:*}
-		PATCHES+=( "${T%/}/${hash}.patch" )
-	else
-		PATCHES+=( "${DISTDIR%/}/${hash}.patch" )
-	fi
-	PATCH_FILES+=( "${hash}.patch" )
-done ; unset hash
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
+BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
-	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
+	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -1264,6 +1254,14 @@ src_unpack() {
 	fi
 }
 
+backports_mod_scrub-log() {
+	sed -e '0,/^---$/d' -i "${1}" || die
+}
+
+backports_mod_scrub-stamps() {
+	sed -e 's/\(SHA256STAMP:\)[[:xdigit:]]\{64\}/\1/' -i "${1}" || die
+}
+
 src_prepare() {
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile || die
@@ -1272,45 +1270,13 @@ src_prepare() {
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
 
-	local patch ; for patch in "${PATCH_HASHES[@]}" ; do
-		[[ ${patch} == *:* ]] || continue
-		local -a flags ; IFS=: read -r -a flags <<<"${patch}"
-		set "${flags[@]}" ; patch="${1}.patch" ; shift
-		cp -- {"${DISTDIR}","${T}"}/"${patch}" || die
-		local flag ; for flag ; do
-			case "${flag}" in
-				scrub-log)
-					sed -e '0,/^---$/d' -i "${T}/${patch}" || die
-					;;
-				scrub-stamps)
-					sed -e 's/\(SHA256STAMP:\)[[:xdigit:]]\{64\}/\1/' \
-						-i "${T}/${patch}" || die
-					;;
-				strip=*)
-					local strip="${flag#*=}"
-					sed -ne ':0;/^diff --git a\/'"${strip////\\/}"'/{:1;n;/^diff --git /!b1;b0};p' \
-						-i "${T}/${patch}" || die
-					;;
-				pick=*)
-					local pick="${flag#*=}"
-					sed -ne ':0;/^diff --git/{/^diff --git a\/'"${pick////\\/}"'/!{:1;n;/^diff --git /!b1;b0}};p' \
-						-i "${T}/${patch}" || die
-					;;
-				resolve-conflicts)
-					patch {"${T}","${FILESDIR}"}/"${patch}" || die
-					;;
-				*)
-					die "unknown patch mod: ${flag}"
-					;;
-			esac
-		done
-	done
-
 	# blank out all embedded SHA256STAMPs to make cherry-picking easier
 	sed -e 's/\(SHA256STAMP:\)[[:xdigit:]]\{64\}/\1/' -i doc/*.md || die
 
 	# delete all pre-generated manpages; they're often stale anyway
 	rm -f doc/*.[0-9] || die
+
+	backports_apply_patches
 
 	default
 
