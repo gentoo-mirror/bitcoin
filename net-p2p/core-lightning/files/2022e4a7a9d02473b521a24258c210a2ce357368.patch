@@ -1,0 +1,35 @@
+--- /var/cache/distfiles/2022e4a7a9d02473b521a24258c210a2ce357368.patch	2022-12-02 22:04:15.749499095 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r100/temp/2022e4a7a9d02473b521a24258c210a2ce357368.patch	2022-12-02 22:05:51.128339317 -0500
+@@ -205,7 +205,7 @@
+  {
+  	const struct wallet_payment **payments;
+  	struct db_stmt *stmt;
+-@@ -3528,47 +3527,58 @@ wallet_payment_list(const tal_t *ctx,
++@@ -3512,46 +3511,56 @@ wallet_payment_list(const tal_t *ctx,
+  
+  	payments = tal_arr(ctx, const struct wallet_payment *, 0);
+  
+@@ -232,7 +232,6 @@
+ -				      ", partid"
+ -				      ", local_offer_id"
+ -				      ", groupid"
+--				      ", completed_at"
+ -				      " FROM payments"
+ -				      " WHERE"
+ -				      "  (payment_hash = ? OR 1=?) AND"
+@@ -261,7 +260,6 @@
+ +						     ", partid"
+ +						     ", local_offer_id"
+ +						     ", groupid"
+-+						     ", completed_at"
+ +						     " FROM payments"
+ +						     " WHERE"
+ +						     "  payment_hash = ?"
+@@ -297,7 +295,6 @@
+ +						     ", partid"
+ +						     ", local_offer_id"
+ +						     ", groupid"
+-+						     ", completed_at"
+ +						     " FROM payments"
+ +						     " ORDER BY id;"));
+ +	}

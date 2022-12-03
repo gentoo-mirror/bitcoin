@@ -1,0 +1,21 @@
+--- /var/cache/distfiles/305a2388108e638a7c24c097be4a5814d081dc52.patch	2022-12-02 23:32:47.065717957 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r111/temp/305a2388108e638a7c24c097be4a5814d081dc52.patch	2022-12-02 23:37:50.073455163 -0500
+@@ -27,7 +26,7 @@
+  	bitcoin/feerate.o			\
+  	bitcoin/preimage.o			\
+  	bitcoin/privkey.o			\
+-@@ -168,32 +169,32 @@ ALL_PROGRAMS += $(C_PLUGINS)
++@@ -161,30 +162,30 @@ PLUGIN_COMMON_OBJS :=				\
+  # Make all plugins depend on all plugin headers, for simplicity.
+  $(PLUGIN_ALL_OBJS): $(PLUGIN_ALL_HEADER)
+  
+@@ -40,9 +39,6 @@
+ -plugins/chanbackup: bitcoin/chainparams.o $(PLUGIN_chanbackup_OBJS) $(PLUGIN_LIB_OBJS) $(PLUGIN_COMMON_OBJS) $(JSMN_OBJS)
+ +plugins/chanbackup: $(PLUGIN_chanbackup_OBJS) $(PLUGIN_LIB_OBJS) $(PLUGIN_COMMON_OBJS) $(JSMN_OBJS)
+  
+--plugins/commando: $(PLUGIN_COMMANDO_OBJS) $(PLUGIN_LIB_OBJS) $(PLUGIN_COMMON_OBJS) $(JSMN_OBJS) bitcoin/chainparams.o 
+-+plugins/commando: $(PLUGIN_COMMANDO_OBJS) $(PLUGIN_LIB_OBJS) $(PLUGIN_COMMON_OBJS) $(JSMN_OBJS) 
+- 
+  # Topology wants to decode node_announcement, and peer_wiregen which
+  # pulls in some of bitcoin/.
+ -plugins/topology: common/route.o common/dijkstra.o common/gossmap.o common/fp16.o bitcoin/chainparams.o wire/peer$(EXP)_wiregen.o wire/channel_type_wiregen.o bitcoin/block.o bitcoin/preimage.o  $(PLUGIN_TOPOLOGY_OBJS) $(PLUGIN_LIB_OBJS) $(PLUGIN_COMMON_OBJS) $(JSMN_OBJS)

@@ -308,7 +308,7 @@ BACKPORTS=(
 	147787319084382e4a7141163d52aa632bc99faa	# plugin: Allow plugins to customize the mindepth in accept_channel
 #	8609f9e00d2dfe0c36697550c76a606f381afd10	# pytest: Test the `mindepth` customizations of `fundchannel` and hook
 #	3fbaac3fdbadbae51d3342a7d5d6a282fc9f54ad	# jsonrpc: Add option_zeroconf handling to `listpeers`
-#	9d3cb95489a2d74f7fc624b9a1d8ad074e9fd66a	# wire: Add funding_locked tlv patch from PR lightning/bolts#910
+	9d3cb95489a2d74f7fc624b9a1d8ad074e9fd66a	# wire: Add funding_locked tlv patch from PR lightning/bolts#910
 #	de1c0b51f024daf79b4414d9a70865e63e474db2	# zeroconf: Add alias_remote and alias_local to channel and DB
 #	b9817d395fad5ed6c32ff573a5b5a069d9f336fb	# zeroconf: Wire the aliases through `channeld`
 #	c98f011479ff54ed136059875c58467b1d38cd1a	# channeld: Send a depth=0 notification when channeld starts up
@@ -638,7 +638,7 @@ BACKPORTS=(
 #	e5d3ce3b1f1373f6b4e136f5272739a38b92c56d	# bkpr incomestmt: properly escape things for the CSVs
 #	3c79a456c0c15abe8c980153d4fe8d6c8fccd6fe	# test-db-provider: if postgres in tests, startup a bookkeeper db
 #	71c03bc082d82c96ea81071ed741222756b5fdba	# bkpr: Add an option to set the database to something else (postgres)
-#	305a2388108e638a7c24c097be4a5814d081dc52	# plugins/Makefile: put bitcoin/chainparams.o in PLUGIN_COMMON_OBJS since everyone needs it.
+	305a2388108e638a7c24c097be4a5814d081dc52:strip=plugins/bkpr/:resolve-conflicts	# plugins/Makefile: put bitcoin/chainparams.o in PLUGIN_COMMON_OBJS since everyone needs it.
 #	6a22411f7e3daa8287c5ec88eeb498d3a09c5a63	# doc: note that bookkeeper-dir and bookkeeper-db are in bookkeeper plugin.
 #	1b5dc4409ae7d47b6e7d51d6224b24db58768af4	# doc: remove two more generated manpages.
 #	30aa1d79fb48a2f28c04e6af191e31b6fd686165	# bkpr: for zerconfs, we still wanna know you're opening a channel
@@ -720,7 +720,7 @@ BACKPORTS=(
 #	299a99ed6745bf618d9897700fd45f21ba1539c0	# Use unordered list
 #	d4a04ba8b316e7653c909eb0af0490d41f966bc8	# Simplify poetry interactions
 #	6a7d40f51a9ba74f1bbb1621cc5a7b1d06580cca	# ccan: update to get -Wshadow=local clean build.
-#	6fe570820e66491778b9e60d2b2942bbffbee813	# Remove general shadowed variables.
+	6fe570820e66491778b9e60d2b2942bbffbee813	# Remove general shadowed variables.
 	44d9e8d9c5e738f99eba29d194e8972799c57e7e	# Remove names of parameters of callbacks which confuse gcc.
 #	2c722291069dd5cf5a65288ed3131f96daed5b05	# configure: add -Wshadow=local flag.
 #	0d5808b6f6ed23e724e8b1c283c557d69a4adaa6	# pytest: fix test_channel_state_change_history
@@ -746,14 +746,14 @@ BACKPORTS=(
 #	a56b17c759c53e7705fd6f002d53e809c03e4c26	# wire/test: neaten and complete tlv checks.
 	6c33f7db65caf619c2c9ceea1071b38c05e3357d	# common: remove unused parameter "allow_deprecated" from parse_wireaddr_internal.
 #	bfe342c64b5fb298f6739e940ddcaf778af3ba33	# lightningd: remove double-wrapped rpc_command hook.
-#	43b037ab0b372397cecc477a50fef201b0b313ed	# lightningd: always require "jsonrpc": "2.0"  in request.
+	43b037ab0b372397cecc477a50fef201b0b313ed	# lightningd: always require "jsonrpc": "2.0"  in request.
 #	a45ec78c36c869534b78cbfa238befdb64107666	# lightningd: don't allow old listforwards arg order.
 #	15751ea1b8c10186dd3ac4fec679a6699d1d7d01	# lightningd: do inline parsing for listforwards status parameter
 #	733ce81bd4d115779450f87a8e2287af0c55574e	# plugins: require usage for plugin APIs.
 #	29264e83fbac59771164ece2361a135a15140b20	# lightningd: remove `use_proxy_always` parameter to plugin init.
 	318650a6275d7246c4a2aa6c663aecac5070dd5e	# listchannels: don't show "htlc_maximum_msat" if channel_update didn't set it.
-#	136d0c8005ed56d9a36a91656bb00d8f3b4a86f4	# offers: update to remove "vendor" and "timestamp" fields.
-#	6cf3d4750526a6d4f5d70bd6a47e16a8aab30529	# offers: remove backwards-compatiblity invoice_request signatures.
+	136d0c8005ed56d9a36a91656bb00d8f3b4a86f4	# offers: update to remove "vendor" and "timestamp" fields.
+	6cf3d4750526a6d4f5d70bd6a47e16a8aab30529	# offers: remove backwards-compatiblity invoice_request signatures.
 #	1a0f7ddb0dd501d5eb69a9a836018b33f0f71c1c	# hsmtool: remove hsm_secret passwords on cmdline support in `dumponchaindescriptors`.
 #	fbcdf2c565b6b5fb59c761ca36bf8d5637d7b0f5	# devtools/bolt-catchup.sh: a tool to update the specs, one commit at a time.
 	341bbdfcbe75331d12d84410a5893d199d19b552	# doc: increase BOLT level to 03468e17563650fb9bfe58b2da4d1e5d28e92009
@@ -878,9 +878,9 @@ BACKPORTS=(
 #	660c9af1d9e1966080cfe066924abdc39e380301	# autoclean: allow cleaning of paid invoices too.
 #	4cab396cc8f9eb9894f3c5745366058bd058d881	# autoclean: handle cleaning of old payments (not just invoices).
 #	2a5660b3bca78b8f49f5c57ea3ed7083efdfc423	# lightningd: index to speed up sendpay / listsendpays
-#	2022e4a7a9d02473b521a24258c210a2ce357368	# wallet: simplify payments lookup so sqlite3 uses index.
+	2022e4a7a9d02473b521a24258c210a2ce357368:resolve-conflicts	# wallet: simplify payments lookup so sqlite3 uses index.
 #	63457229cbe287cb04ddf907898794a12288d721	# wallet: replace forwarded_payments table with forwards table.
-#	33a6b188919ffb6f0abfc5902eb50f8bc564641e	# db/bindings: rename db_bind_short_channel_id to db_bind_short_channel_id_str, add db_bind_scid.
+	33a6b188919ffb6f0abfc5902eb50f8bc564641e	# db/bindings: rename db_bind_short_channel_id to db_bind_short_channel_id_str, add db_bind_scid.
 #	e286c38c6ff66680638384e0c22210ccd86fb49d	# wallet: use db_col_scid / db_bind_scid where possible.
 #	2752e04f8f24f68c7e55244fe39d6fc27677222f	# db: add `scid` field to channels table.
 #	d7c1325e38dfa15ccb2021430d118ee6a14dd1ee	# wallet: use scid not string for failchannel (now failscid) in payments table.
@@ -894,10 +894,10 @@ BACKPORTS=(
 #	540a6e4b99c5c0b5b49dbd6b1c604f599eb45718	# autoclean: remove per-delete debugging messages.
 	4d8c3215174e1436dccb66d60fa69536f3b4d31a	# libplugin: optimize parsing lightningd rpc responses.
 	8b7a8265e7ad80bb0e1882ad5dffada14f7425df:strip=plugins/bkpr/	# libplugin: avoid memmove if we have many outputs to lightningd.
-#	555b8a2f7a2bd728efa15dda8302084e477aa8c9	# lightningd: don't always wrap each command in a db transaction.
-#	fa7d732ba6f6cbba035f8162df3ad32ec8cabbd9	# lightningd: allow a connection to specify db batching.
+	555b8a2f7a2bd728efa15dda8302084e477aa8c9	# lightningd: don't always wrap each command in a db transaction.
+	fa7d732ba6f6cbba035f8162df3ad32ec8cabbd9:resolve-conflicts	# lightningd: allow a connection to specify db batching.
 	05095313f5c30a2fc20e1b188f78398c7a717863:strip=contrib/pyln-testing/:scrub-stamps	# lightningd: listsendpays always has groupid.
-#	f52ff07558709bd1f7ed0cdca65c891d80b1a785	# lightningd: allow delpay to delete a specific payment.
+	f52ff07558709bd1f7ed0cdca65c891d80b1a785:strip=plugins/autoclean	# lightningd: allow delpay to delete a specific payment.
 	939a7b2b1881a0658ee9f9711cf6b808aedc9f29	# db/postgres: avoid memleak.
 #	e0218841c26015322b6a223894d8b2742af26b4d	# db: set now-unused channels.short_channel_id text column to NULL after migration
 #	651753bbd57b4f02769f102aa3531271d90eb63a	# pytest: slow down test_autoclean.
@@ -914,7 +914,7 @@ BACKPORTS=(
 	253b25522b4c0eb33064e0d35070d6148e053776:strip=Makefile	# BOLT: update to version which requires option_channel_htlc_max.
 	bb49e1bea586991f6e4cedeb277c3aece2593b25:strip=contrib/pyln-testing/	# common: assume htlc_maximum_msat, don't check bit any more.
 	bfc21cbb55ac5b5a423ccf1e6144948594363ede	# gossipd: set no_forward bit on channel_update for private channels.
-	0d94d2d269c760721a49d2e0c8951371e9a435c2:resolve-conflicts	# gossipd: batch outpoints spent, add block height.
+	0d94d2d269c760721a49d2e0c8951371e9a435c2	# gossipd: batch outpoints spent, add block height.
 #	f0fa42bd7370c9ee9a7b6e1d34d6bc824cc65a2e	# lnprototest: update gossip test including 12 blocks delay
 	a1f62ba0e70b28ea82862aebc8ff776850073df2:strip='\(Makefile\|tests/\)'	# gossipd: don't close non-local channels immediately, add 12 block delay.
 #	f53155d93b5eef9f4353c68e623cd54134aa7e2b	# BOLT: update to clarify HTLC tx amount calculation.
@@ -925,7 +925,7 @@ BACKPORTS=(
 	b13ab8de3ae21fd22d09dcfb3ac6a2999764b2ba:resolve-conflicts	# msggen: Use owned versions to convert from cln-rpc to cln-grpc
 #	437ae11610fda83f26d56a87669ea650ab185c99	# pytest: Configure the plugin logging to debug
 	b698a5a5ef4acb8d90aec0f6dccc52fb6c37afb2	# channeld: send error, not warning, if peer has old commitment number.
-#	6e86fa92206eb6e935a8dcba37b9e7849d2cc816	# lightningd: figure out optimal channel *before* forward_htlc hook.
+	6e86fa92206eb6e935a8dcba37b9e7849d2cc816:strip=tests/:resolve-conflicts	# lightningd: figure out optimal channel *before* forward_htlc hook.
 #	a7ce03bae6cd763e7796f7b961d40a83a7e64a4a	# The project is called Core Lightning
 #	87bab2b85138bf99a29bb9b881d110e90e3a4e88	# Add ConfigurationDirectory
 	7046252f96c0436500a1b45c379a6aab56ee9612	# Impl `std::error::Error` for `RpcError` to make it anyhow compatible
@@ -941,27 +941,27 @@ BACKPORTS=(
 #	68f15f17bb35919ca6a32f3cc95041008135c8a9	# delforward: allow deletion of "unknown in_htlc_id" and fix autoclean to use it.
 #	695f0011619d758dc53b2c6463ca08d246327edb	# pytest: fix flake in test_zeroconf_forward
 #	d4ef20d54a7db05d96e4df8c0906dae475697218	# pytest: fix flake in test_gossip_persistence.
-#	836a2aa2616dff3bd78267d276c0902b26f7f33c	# use msat_or_all for fundpsbt request amount
+	836a2aa2616dff3bd78267d276c0902b26f7f33c:strip=contrib/pyln-testing/	# use msat_or_all for fundpsbt request amount
 	1de4e4627623d488836cffc93537d124ec1487c0	# tests: add onion-test-vector from "BOLT 4: Remove legacy format, make var_onion_optin compulsory."
-#	c8ad9e18a9ff47dd047292ccc1b1a8a21e2a6712	# common/onion: remove all trace of legacy parsing.
-#	8771c863794d2774e93ea759f4eb23873a236112	# common/onion: expunge all trace of different onion styles.
+	c8ad9e18a9ff47dd047292ccc1b1a8a21e2a6712	# common/onion: remove all trace of legacy parsing.
+	8771c863794d2774e93ea759f4eb23873a236112:strip=plugins/bkpr/:resolve-conflicts	# common/onion: expunge all trace of different onion styles.
 	f00cc23f671643446577ee9c0da3e5b9a266fbc0	# sphinx: rename confusing functions, ensure valid payloads.
 	6324980484cdfe68e5228a56b74ac60542dc46d7	# channeld: do not enforce max_accepted_htlcs on LOCAL in channel reinit
-#	51e243308761e056d0da23e596b7dfedbb909db1	# Setchannel request is provided
-#	93b315756f80cbd9a112c0ca627243017c55213f	# schema: Add `enforcedelay` to `setchannel`
+	51e243308761e056d0da23e596b7dfedbb909db1:strip=contrib/pyln-testing/	# Setchannel request is provided
+	93b315756f80cbd9a112c0ca627243017c55213f	# schema: Add `enforcedelay` to `setchannel`
 #	6adb1e0b4b419e723d53b1e54e16593f58656986	# pytest: Bypass schema verification for some RPC calls
 	49fe1c8ed7aea1f109b4bcc4944ddcd0cc30117b	# lightningd: have `makesecret` take `hex` or `string` (just like `datastore`)
 	342e330b565fd3326f8a046dfa2c0e63e8785c24:scrub-stamps	# doc: update references to old BOLTs repo.
-#	41ef85318d367c8e6f34df0749f2bc373c5451b8	# onionmessages: remove obsolete onion message parsing.
-#	2fbe0f59f1142f1c5ded0c5048c20b9398ddbb47	# plugins/fetchinvoice: remove obsolete string-based API.
+	41ef85318d367c8e6f34df0749f2bc373c5451b8	# onionmessages: remove obsolete onion message parsing.
+	2fbe0f59f1142f1c5ded0c5048c20b9398ddbb47	# plugins/fetchinvoice: remove obsolete string-based API.
 	125b17b7fc570f57486a42e176cd48caa3492a94	# devtools: enhance bolt12-cli to convert to/from hex
-#	0195b41461dfedae09ca5cfdf8cd1abae8d4a174	# pytest: test that we don't change our payer_key calculation.
+	0195b41461dfedae09ca5cfdf8cd1abae8d4a174:strip=tests/	# pytest: test that we don't change our payer_key calculation.
 	c9d42d82795ef5b8846bfc37775d744bcf00f326	# bitcoin: add routine to check a Schnorr sig given a 33-byte pubkey.
-#	2749b1f61eaf9db789f63c91a2f0f65f7c80f79b	# common/onion: remove old blinded payment handling.
-#	22c8cfc3744b1cd868b24b4df2f1809f0c729be4	# channeld: remove onion objects.
-#	52be59587c5acc030dfa9a4079b217627e40d0cd	# msggen: generate deprecated fields in rust.py
+	2749b1f61eaf9db789f63c91a2f0f65f7c80f79b	# common/onion: remove old blinded payment handling.
+	22c8cfc3744b1cd868b24b4df2f1809f0c729be4	# channeld: remove onion objects.
+	52be59587c5acc030dfa9a4079b217627e40d0cd:strip=contrib/pyln-testing/	# msggen: generate deprecated fields in rust.py
 #	6aca9f665b580aa9ad2beed8ab10f511e56ac180	# devtools: Make fund_nodes compatible w/zsh
-#	335f52d1a8b002018270194654c9e53c5a65fa5d	# cln-rpc: implement from Secret to slice conversion
+	335f52d1a8b002018270194654c9e53c5a65fa5d	# cln-rpc: implement from Secret to slice conversion
 #	e7e7a7186f7b2ae145f756a757d576b7ac0c51e1	# tests/test_misc.py: Check if funds are getting recovered on reconnecting... Changelog-None: Increasing test scope
 #	e855ac2f9e6453913df64602b680b3644d847a6c	# keysend: just strip even unknown fields.
 #	a99509db36188bac5b8008e6005404cc96dd29ab	# py: Update protobuf dependency to silence dependabot
@@ -989,32 +989,32 @@ BACKPORTS=(
 	38e2428f12af69bbd9af145d969eaca6c6ade99f:strip=tests/	# funder: use utxopsbt to build psbt for RBFs
 	efd096dc96f156b6b223be4f32c638bf3fc7ab64	# funder: filter prev-outs such that we only use still unspent ones
 	e00857827fd5b45a3022753edf855df4765a4e93	# funder: cleanup datastore on state-change/channel failure
-#	fee9a7ce04bb20c8e77e3d01a190e636156007aa	# hsmd: introduce a simple API versioning scheme.
-#	987adb97180848908ec54ff43d3b564f1a40c45a	# Makefile: check that hsm_version.h changes if wire/hsmd_wire.csv contents does
-#	bed905a394dee7f7584628b6389b3f202fd0112b	# lightningd: use 33 byte pubkeys internally.
-#	4e39b3ff3dfa2e552b0c0bfabee2853e4a38248e	# hsmd: don't use point32 for bolt12, but use pubkeys (though still always 02)
-#	7745513c5106fa1cc5ea568527594b96e4ff3d52	# bolt12: change our payer_key calculation.
-#	82d98e4b9696093c19bf040b4b298f7a24dadaa1	# gossmap: move gossmap_guess_node_id to pay plugin.
-#	eac8401f8486b7d61252831bc0bccdfb41c43896	# Makefile: separate bolt12 wireobjects
-#	e30ea91908c58018f775a92179d150a0f2f6d71a	# BOLTs: update to more recent bolt12 spec.
-#	1cdf21678e00897ea288907c051c124d11bf66ae	# offers: print out more details, fix up schema for decode of blinded paths.
-#	662c6931f3b44c5f21f8a05f8ef911cdf952fd92	# Remove point32.
-#	56939295de342d4b8a887e2eefcf46336c0a6107	# wire: add latest Route Blinding htlc fields from https://github.com/lightning/bolts/pull/765
-#	1d4f1a5199334ef81c26a04a980279c6083f662e	# common: remove old route-blinding-override test, update route-blinding test for new vectors.
-#	85baca56c6d0119b7c65ed92d5d30006d14ce99a	# channeld: don't calculate blinding shared secret, let lightningd do it.
-#	53e40c4380df362ac2fe6b7107d011898e26eca2	# common/blindedpath: generalize routines.
-#	c0ae2394d85da90e565450aa56dbe208e3dd02ae	# common/blindedpath: generalize construction routines.
-#	c94c742e581f767e16f5c7f41afe4c82873a2cb5	# common/features: understand the route_blinding feature (feature 24)
-#	077ec99788447c2c234bd60ac017376d5ea422fe	# common/onion: blinded payment support.
-#	21e7c3432e8d2c7f1efdf8ed6cde8722ea3d5852	# common/onion: enforce payment constraints.
-#	325fe2e04c7cac629b2cb566ab4466cef7da5bc6	# common/onion: cleanup by removing unnecessary local temporary.
-#	511e8e6477f8a81c31c0365ef01e6215ded6919d	# common/blindedpay: routines to construct a blinded payment.
-#	426886ff9b1bb13b6505c68b12b452745e421b36	# lightningd: return invalid_onon_blinding for any blinded payment error.
-#	8eee5dd7fd624c2c7b4c8b0416dc268e9b8a9de0	# channeld, lightningd: allow blinded payments with !EXPERIMENTAL_FEATURES.
-#	67b8fadf029c6df594776b8c2cdbf6c205df07a7	# common/test: check we meet bolt04/onion-route-blinding-test.json
-#	5cf86a1a2ed1c93bffdc182ca984c5b57c197304	# common: update to latest onion message spec.
-#	159fc7d1a22bd02eeca286ed8abccbd1db04cb09	# common/onion_message_parse: generic routine for parsing onion messages.
-#	422e68a4d6aa0e8a2095f1fb06eb254bb17c8fbf	# common/blindedpath: create onion mesage test vectors.
+	fee9a7ce04bb20c8e77e3d01a190e636156007aa	# hsmd: introduce a simple API versioning scheme.
+	987adb97180848908ec54ff43d3b564f1a40c45a	# Makefile: check that hsm_version.h changes if wire/hsmd_wire.csv contents does
+	bed905a394dee7f7584628b6389b3f202fd0112b	# lightningd: use 33 byte pubkeys internally.
+	4e39b3ff3dfa2e552b0c0bfabee2853e4a38248e	# hsmd: don't use point32 for bolt12, but use pubkeys (though still always 02)
+	7745513c5106fa1cc5ea568527594b96e4ff3d52:strip=tests/	# bolt12: change our payer_key calculation.
+	82d98e4b9696093c19bf040b4b298f7a24dadaa1	# gossmap: move gossmap_guess_node_id to pay plugin.
+	eac8401f8486b7d61252831bc0bccdfb41c43896:strip=plugins/bkpr/	# Makefile: separate bolt12 wireobjects
+	e30ea91908c58018f775a92179d150a0f2f6d71a:strip=tests/:scrub-stamps	# BOLTs: update to more recent bolt12 spec.
+	1cdf21678e00897ea288907c051c124d11bf66ae:scrub-stamps	# offers: print out more details, fix up schema for decode of blinded paths.
+	662c6931f3b44c5f21f8a05f8ef911cdf952fd92	# Remove point32.
+	56939295de342d4b8a887e2eefcf46336c0a6107	# wire: add latest Route Blinding htlc fields from https://github.com/lightning/bolts/pull/765
+	1d4f1a5199334ef81c26a04a980279c6083f662e	# common: remove old route-blinding-override test, update route-blinding test for new vectors.
+	85baca56c6d0119b7c65ed92d5d30006d14ce99a	# channeld: don't calculate blinding shared secret, let lightningd do it.
+	53e40c4380df362ac2fe6b7107d011898e26eca2	# common/blindedpath: generalize routines.
+	c0ae2394d85da90e565450aa56dbe208e3dd02ae	# common/blindedpath: generalize construction routines.
+	c94c742e581f767e16f5c7f41afe4c82873a2cb5:resolve-conflicts	# common/features: understand the route_blinding feature (feature 24)
+	077ec99788447c2c234bd60ac017376d5ea422fe	# common/onion: blinded payment support.
+	21e7c3432e8d2c7f1efdf8ed6cde8722ea3d5852	# common/onion: enforce payment constraints.
+	325fe2e04c7cac629b2cb566ab4466cef7da5bc6	# common/onion: cleanup by removing unnecessary local temporary.
+	511e8e6477f8a81c31c0365ef01e6215ded6919d	# common/blindedpay: routines to construct a blinded payment.
+	426886ff9b1bb13b6505c68b12b452745e421b36	# lightningd: return invalid_onon_blinding for any blinded payment error.
+	8eee5dd7fd624c2c7b4c8b0416dc268e9b8a9de0	# channeld, lightningd: allow blinded payments with !EXPERIMENTAL_FEATURES.
+	67b8fadf029c6df594776b8c2cdbf6c205df07a7	# common/test: check we meet bolt04/onion-route-blinding-test.json
+	5cf86a1a2ed1c93bffdc182ca984c5b57c197304	# common: update to latest onion message spec.
+	159fc7d1a22bd02eeca286ed8abccbd1db04cb09	# common/onion_message_parse: generic routine for parsing onion messages.
+	422e68a4d6aa0e8a2095f1fb06eb254bb17c8fbf	# common/blindedpath: create onion mesage test vectors.
 #	f158b529d3e4c56b70c44aaebc821c1f15477fa2	# wire/Makefile: fix missing wire/bolt12_exp_wiregen.c in ALL_C_SOURCES.
 	83beaa5396acd15874311bce4b01431e583a6113	# json: Add helper for quoted numbers
 	8a4f44a58dd0f0514f9b05c8089cb5ac6f16f3a4:strip=tests/	# keysend: Allow quoted numbers in `extratlvs`
@@ -1051,48 +1051,48 @@ BACKPORTS=(
 #	fe1b285bba409ebf708572d97d186242364ba88b	# pytest: add test for generating non-standard length onion errors.
 	a4c482dc072aa2905a6eca61679d613e3cb501e8:strip=tests/	# common/sphinx: don't use fixed lengths anywhere.
 #	15112ae87bc74c1d3a1c95e9d0680acbadf26aae	# gci: Force MacOS CI Job to use python 3.10
-#	3c75770586ec9123889d126f6bc05d3563d55ee0	# common/json_filter: routines for json filtering.
-#	508a170598952701a88739c47bc6662d065697c8	# common/json_filter: routine to turn "filter" JSON into a filter.
+	3c75770586ec9123889d126f6bc05d3563d55ee0	# common/json_filter: routines for json filtering.
+	508a170598952701a88739c47bc6662d065697c8	# common/json_filter: routine to turn "filter" JSON into a filter.
 #	22c42de6f134ca35682774f458a46db160f43234	# tests/fuzz: don't pull in JSON common at all.
-#	f0731d2ca11ee647566bd6fc11809c9519252cf8	# common/json_stream: support filtering don't print fields not allowed.
-#	3b4c1968a3d9b5333c31d253f3d1d951b25506e0	# common/test: add unit tests for JSON filtering.
-#	2a14afbf216f5964e01a1c347e798461bb3ffe2c	# lightningd: set filter when we see 'filter' object.
-#	1436ad334d59612bc3f1e323023724d793b24e59	# pytest: add filter tests.
-#	b6134303d467becc58136d30fc9ddf06f93fc50c	# pyln: add context manager to simpify filter use.
-#	cb1156cd328f31e068e09afe0667784ec21a1077	# libplugin: support filters.
-#	c31fb99d2d705dfa793c0aa45f860cf5af67b7cb	# doc: add lightingd-rpc documentation.
-#	ae3550cb00c3a8539a58d5d272d921c748da2ac5	# lightning-cli: support --filter parameter.
+	f0731d2ca11ee647566bd6fc11809c9519252cf8:strip=plugins/bkpr/	# common/json_stream: support filtering don't print fields not allowed.
+	3b4c1968a3d9b5333c31d253f3d1d951b25506e0	# common/test: add unit tests for JSON filtering.
+	2a14afbf216f5964e01a1c347e798461bb3ffe2c	# lightningd: set filter when we see 'filter' object.
+	1436ad334d59612bc3f1e323023724d793b24e59:strip=tests/	# pytest: add filter tests.
+	b6134303d467becc58136d30fc9ddf06f93fc50c:strip=tests/	# pyln: add context manager to simpify filter use.
+	cb1156cd328f31e068e09afe0667784ec21a1077:strip=tests/	# libplugin: support filters.
+	c31fb99d2d705dfa793c0aa45f860cf5af67b7cb	# doc: add lightingd-rpc documentation.
+	ae3550cb00c3a8539a58d5d272d921c748da2ac5	# lightning-cli: support --filter parameter.
 #	d60dbba43bf2dd69360aa9b98bddcee3952ab984	# tests: test for coinbase wallet spend.
 #	26f5dcd2a5af21ca9a902084872014566497058b	#  wallet: mark coinbase outputs as 'immature' until spendable
 #	adf14151fa868763d7b4ff05032cf45f3115312f	# wallet: Use boolean to determine whether an output is coinbase
 #	eb122827f6c82ae2fa1852309b53a511b7397706	# wallet: Add utxo_is_immature helper
-#	2760490d5d4fcc20f6b404fc90807ed756d7114d	# common: catch up on latest routeblinding spec.
-#	987df688ed4aca0d806e2da179b4c69386b3ace2	# lightningd: don't return normal errors on blinded path entry, either.
-#	c5656ec90a788b87280b910ecc7aa664986f960d	# common/onion: handle payment by node_id.
-#	8720bbedae855e33aadd0d515ab84203f1e657ec	# common/onion: split into decode and encode routines.
-#	01a47720c3472237b3000110c209b88bf095827d	# plugins/libplugin-pay: hack in blinded path support.
-#	4cfd972407a6ff1c15e5c978ba72c43418795351	# common/blindedpath: expose API at a lower level.
-#	5becfa6ee18127030e86aa26ed1fca2de7a871ee	# onion_message: don't use general secret, use per-message secret.
+	2760490d5d4fcc20f6b404fc90807ed756d7114d	# common: catch up on latest routeblinding spec.
+	987df688ed4aca0d806e2da179b4c69386b3ace2	# lightningd: don't return normal errors on blinded path entry, either.
+	c5656ec90a788b87280b910ecc7aa664986f960d:resolve-conflicts	# common/onion: handle payment by node_id.
+	8720bbedae855e33aadd0d515ab84203f1e657ec	# common/onion: split into decode and encode routines.
+	01a47720c3472237b3000110c209b88bf095827d	# plugins/libplugin-pay: hack in blinded path support.
+	4cfd972407a6ff1c15e5c978ba72c43418795351	# common/blindedpath: expose API at a lower level.
+	5becfa6ee18127030e86aa26ed1fca2de7a871ee	# onion_message: don't use general secret, use per-message secret.
 	85cb302b657133c2ab20473460b2ebae7ea7f33f	# invoice: invert check to reduce indentation.
-#	a5471a405b44fc46365b9a3980049898436adad7	# lightningd: temporarily ignore missing payment_secret for bolt12.
-#	595fbd2a19abe2c98ba66a34fe65fd214122bc40	# createinvoice: make a minimal blinded "path" in bolt12 invoice if none presented.
-#	c6f50220e1640aa9358ebc73152e9cac5b8919ce	# common/onion_decode: put the path_id into onion_payload->payment_secret.
-#	4bc10579e6b816f0ce8599e26e5e7936c88f345d	# listincoming: add htlc_min_msat, public and peer_features fields.
-#	744605997ea63e64c657e93d3409a0ef55ed8b9a	# offers: monitor blockheight.
-#	c2c9f45dacc6b868f204361781af2cf89dd06aee	# offers: create a real blinded path, if necessary.
-#	aa73878831157bd7bd23620bb885c46338045d26	# common/bolt12: add code to generate offer_id, extract parts of streams.
-#	6e755d6fe860277233312f44577006be3e5b5142	# common/bolt12: code to initialize invreqs from offers, invs from invreqs.
-#	9a0d2040d34d20722accaa5daf20e5c907922eb9	# common/features: add explicit bolt12 feature sets.
-#	3afa5077fe705bd917de1c4b9c9f8bfa5f53b7b2	# offers: make them always unsigned.
-#	846a520bc238c9011a2e7acbe30561ffe4e10f29	# offers: remove 'send-invoice' offers support.
-#	1e3cb015469088880e7976647fd5625598434c5e	# bolt12: import the latest spec, update to fit.
-#	505356145b90c2989ba79d9f020a878cab0ad743	# bolt12: update to modern signature scheme.
-#	fdb3d9186abfd843c531d2d36aabee71e98f23d9	# devtools/bolt12-cli: fix decode to understand modern fields.
-#	ef2f4a06485a5b06ad7a1521a95510aad8096c2d	# bolt12: use spec field names, update decode API.
-#	bc283cecf292606f491cb93cda94a34366fe7354	# decode: print unknown fields in bolt12 strings.
-#	1d1174c2861e044b993e9f33bc7e62b3b9b1b527	# offers: use existing copied fields.
-#	179f573e456a10312ea0319f565fa172e82e26fc	# lightningd/invoice.c, plugins/fetchinvoice.c: use tlv_make_fields() instead of towire/fromwire hack.
-#	891cef7b2b3981a1893866180ac5e13dcbd369f1	# bolt12: routines to hash the invreq parts.
+	a5471a405b44fc46365b9a3980049898436adad7	# lightningd: temporarily ignore missing payment_secret for bolt12.
+	595fbd2a19abe2c98ba66a34fe65fd214122bc40	# createinvoice: make a minimal blinded "path" in bolt12 invoice if none presented.
+	c6f50220e1640aa9358ebc73152e9cac5b8919ce	# common/onion_decode: put the path_id into onion_payload->payment_secret.
+	4bc10579e6b816f0ce8599e26e5e7936c88f345d	# listincoming: add htlc_min_msat, public and peer_features fields.
+	744605997ea63e64c657e93d3409a0ef55ed8b9a	# offers: monitor blockheight.
+	c2c9f45dacc6b868f204361781af2cf89dd06aee	# offers: create a real blinded path, if necessary.
+	aa73878831157bd7bd23620bb885c46338045d26	# common/bolt12: add code to generate offer_id, extract parts of streams.
+	6e755d6fe860277233312f44577006be3e5b5142	# common/bolt12: code to initialize invreqs from offers, invs from invreqs.
+	9a0d2040d34d20722accaa5daf20e5c907922eb9	# common/features: add explicit bolt12 feature sets.
+	3afa5077fe705bd917de1c4b9c9f8bfa5f53b7b2:scrub-stamps	# offers: make them always unsigned.
+	846a520bc238c9011a2e7acbe30561ffe4e10f29:strip=tests/	# offers: remove 'send-invoice' offers support.
+	1e3cb015469088880e7976647fd5625598434c5e:strip='\(plugins/bkpr/\|tests/\)':scrub-stamps	# bolt12: import the latest spec, update to fit.
+	505356145b90c2989ba79d9f020a878cab0ad743	# bolt12: update to modern signature scheme.
+	fdb3d9186abfd843c531d2d36aabee71e98f23d9	# devtools/bolt12-cli: fix decode to understand modern fields.
+	ef2f4a06485a5b06ad7a1521a95510aad8096c2d:strip='\(contrib/pyln-testing/\|tests/\)':scrub-stamps	# bolt12: use spec field names, update decode API.
+	bc283cecf292606f491cb93cda94a34366fe7354:scrub-stamps	# decode: print unknown fields in bolt12 strings.
+	1d1174c2861e044b993e9f33bc7e62b3b9b1b527	# offers: use existing copied fields.
+	179f573e456a10312ea0319f565fa172e82e26fc	# lightningd/invoice.c, plugins/fetchinvoice.c: use tlv_make_fields() instead of towire/fromwire hack.
+	891cef7b2b3981a1893866180ac5e13dcbd369f1	# bolt12: routines to hash the invreq parts.
 #	02d74542260b18c1c2b2b5a142be50e4aceee947	# db: add invoicerequests table.
 #	79067704897de01c750c1eee22ab9e6e0d7587cf	# lightningd: add "savetodb" argument to createinvoicerequest, add listinvoicerequests/disableinvoicerequest
 #	37bc4603b8c088eecd67863071157e3729d90470	# lightningd: re-add 'offerout' functionality, as 'invoicerequest'.
@@ -1127,6 +1127,25 @@ BACKPORTS=(
 	24651f57adc773f3a3b1470181023c9187686a99	# plugins: set non_numeric_ids flag based on getmanifest `nonnumericids` field.
 	d5ce5cbab302fcc3f88e78a4c3132705d3cc7867:strip=tests/	# lightningd: only use non-numeric JSON ids if plugin says we can.
 	ece77840f906bba94d77889d651dd39208c9127d:strip=tests/	# pyln-client, libplugin, rust cln-plugin: explicitly flag that we allow non-numeric JSON ids.
+#	02f9c2df249c342a282e47179e643471cdf9cd77	# autoclean: Fix a null-pointer derefence when checking HTLC age
+#	64aa42e85b08ef097efac1b5ee1b5c2f9f30a63f	# doc: Add a readme to the `cln-grpc` proxy
+#	47e9e3d399c89085a6c31542babd4fd52eeb3b79	# CHANGELOG.md: order into a more user-first ordering.
+#	8ebde4574d66c9d94f82280209486ca5f1cd6a6d	# CHANGELOG.md: include the v0.12.1 CHANGELOG entries!
+	db62d542e10baa2c20c1447cbf1fdd496a5b8e48	# cln-plugin: Make the configuration in `init` public
+	3d311c96b1ffe5351dde9b9025853b3efaa4f982	# cln-plugin: Adjust visibility of some internals
+	626998efce3b0c73c2aa4a0241b9c816bf4ba21b	# lightningd: don't timeout plugins if init is slow!
+#	22798b80b3e8e35568c8ce890d1d29c4c8528def	# meta: Adjust changelog for v22.11rc3
+#	dfb963e2494bb1003b268193ad79129112739f0d	# db: Backfill missing HTLC IDs in the forwards table
+#	090facd79b857dd775af9e1c591cd7c2d5fcc215	# ci: Temporarily disable lnprototest tests
+#	110ed3b1a935e845393ee6e632f91b44c785e505	# submod: Switch lnprototest to clone from github.com/rustyrussell/lnprototest
+	19300de58fac880fb0ea3853eb63ea0668a21e3d	# lightningd: correctly exit when an important-plugin fails to start.
+#	dbb38e2c7d142f7379922ea0db6177d42e9931c0	# docs: Add the `reckless` manpage to the readthedocs generation
+	2064982006dfbe762e23d33c92e81d696d39a0a1	# lightningd: do not abort while parsing hsm pwd.
+	15d0a8bec8336f07862a5be566bb5992f87094f9	# connectd: don't spam logs when we're under load.
+#	b6555dccaf5671a8d24e75c5ee2f7e0ba11f08b1	# pytest: test for wumbo direct payments.
+	3ca1c70c4439955d523467bac032622cce5105bd:strip=tests/	# lightningd: don't cap spendable_msat/receivable_msat for wumbo channels.
+#	280b49a6771ed70ee421b2647c060409866086f4	# meta: Update changelog for v22.11 final
+	d7cd3e1cb5614b3973e70884d463ed736fd4565b	# pyln: Fix an issue with the LightningConnection short-reading
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
