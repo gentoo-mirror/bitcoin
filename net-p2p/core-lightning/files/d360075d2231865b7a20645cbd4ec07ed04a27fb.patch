@@ -1,0 +1,76 @@
+--- /var/cache/distfiles/d360075d2231865b7a20645cbd4ec07ed04a27fb.patch	2022-10-21 07:23:39.640617235 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r100/temp/d360075d2231865b7a20645cbd4ec07ed04a27fb.patch	2022-12-02 18:24:14.609044362 -0500
+@@ -44,10 +44,19 @@
+  	u64 next_outreq_id;
+  
+  	/* Synchronous RPC interaction */
++@@ -156,7 +160,7 @@ static void disable_request_cb(struct command *cmd, struct out_req *out)
++ 
++ static void destroy_out_req(struct out_req *out_req, struct plugin *plugin)
++ {
++-	uintmap_del(&plugin->out_reqs, out_req->id);
+++	strmap_del(&plugin->out_reqs, out_req->id, NULL);
++ }
++ 
++ /* FIXME: Move lightningd/jsonrpc to common/ ? */
+ @@ -172,12 +176,20 @@ jsonrpc_request_start_(struct plugin *plugin, struct command *cmd,
+  	struct out_req *out;
+  
+- 	out = tal(plugin, struct out_req);
++ 	out = tal(cmd, struct out_req);
+ -	out->id = plugin->next_outreq_id++;
+ +	if (cmd)
+ +		out->id = tal_fmt(out, "%s/%s:%s#%"PRIu64, cmd->id,
+@@ -64,9 +73,9 @@
+  	out->arg = arg;
+ -	uintmap_add(&plugin->out_reqs, out->id, out);
+ +	strmap_add(&plugin->out_reqs, out->id, out);
++ 	tal_add_destructor2(out, destroy_out_req, plugin);
+  
+  	/* If command goes away, don't call callbacks! */
+- 	if (out->cmd)
+ @@ -186,7 +198,7 @@ jsonrpc_request_start_(struct plugin *plugin, struct command *cmd,
+  	out->js = new_json_stream(NULL, cmd, NULL);
+  	json_object_start(out->js, NULL);
+@@ -76,7 +85,7 @@
+  	json_add_string(out->js, "method", method);
+  	if (out->errcb)
+  		json_object_start(out->js, "params");
+-@@ -667,22 +679,19 @@ static void handle_rpc_reply(struct plugin *plugin, const jsmntok_t *toks)
++@@ -673,24 +685,20 @@ static void handle_rpc_reply(struct plugin *plugin, const jsmntok_t *toks)
+  	const jsmntok_t *idtok, *contenttok;
+  	struct out_req *out;
+  	struct command_result *res;
+@@ -95,24 +104,17 @@
+ +	out = strmap_getn(&plugin->out_reqs,
+ +			  plugin->rpc_buffer + idtok->start,
+ +			  idtok->end - idtok->start);
+- 	if (!out)
+--		plugin_err(plugin, "JSON reply with unknown id '%.*s' (%"PRIu64")",
+-+		plugin_err(plugin, "JSON reply with unknown id '%.*s'",
++ 	if (!out) {
++ 		/* This can actually happen, if they free req! */
++-		plugin_log(plugin, LOG_DBG, "JSON reply with unknown id '%.*s' (%"PRIu64")",
+++		plugin_log(plugin, LOG_DBG, "JSON reply with unknown id '%.*s'",
+  			   json_tok_full_len(toks),
+--			   json_tok_full(plugin->rpc_buffer, toks), id);
++-			   json_tok_full(plugin->rpc_buffer, toks),
++-			   id);
+ +			   json_tok_full(plugin->rpc_buffer, toks));
++ 		return;
++ 	}
+  
+- 	/* Remove destructor if one existed */
+- 	if (out->cmd)
+-@@ -690,7 +699,7 @@ static void handle_rpc_reply(struct plugin *plugin, const jsmntok_t *toks)
+- 
+- 	/* We want to free this if callback doesn't. */
+- 	tal_steal(tmpctx, out);
+--	uintmap_del(&plugin->out_reqs, out->id);
+-+	strmap_del(&plugin->out_reqs, out->id, NULL);
+- 
+- 	contenttok = json_get_member(plugin->rpc_buffer, toks, "error");
+- 	if (contenttok) {
+ @@ -1356,8 +1365,8 @@ static void memleak_check(struct plugin *plugin, struct command *cmd)
+  	/* Now delete plugin and anything it has pointers to. */
+  	memleak_remove_region(memtable, plugin, sizeof(*plugin));

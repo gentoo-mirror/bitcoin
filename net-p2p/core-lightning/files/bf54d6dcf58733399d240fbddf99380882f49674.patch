@@ -1,0 +1,20 @@
+--- /var/cache/distfiles/bf54d6dcf58733399d240fbddf99380882f49674.patch	2022-10-21 07:23:41.868636774 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r100/temp/bf54d6dcf58733399d240fbddf99380882f49674.patch	2022-12-02 16:46:58.851749876 -0500
+@@ -34,13 +34,13 @@
+ +		       plugin->next_outreq_id++);
+ +}
+ +
+- /* FIXME: Move lightningd/jsonrpc to common/ ? */
+- 
+- struct out_req *
++ static void destroy_out_req(struct out_req *out_req, struct plugin *plugin)
++ {
++ 	uintmap_del(&plugin->out_reqs, out_req->id);
+ @@ -176,15 +191,7 @@ jsonrpc_request_start_(struct plugin *plugin, struct command *cmd,
+  	struct out_req *out;
+  
+- 	out = tal(plugin, struct out_req);
++ 	out = tal(cmd, struct out_req);
+ -	if (cmd)
+ -		out->id = tal_fmt(out, "%s/%s:%s#%"PRIu64, cmd->id,
+ -				  plugin->id, method,
