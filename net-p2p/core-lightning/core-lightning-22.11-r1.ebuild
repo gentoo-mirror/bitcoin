@@ -167,6 +167,7 @@ inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=${PV/_}
 PATCH_HASHES=(
+	9751502ff5382dc0bc77d46fcff29a13419ef4fd	# jsonrpc: fix error when we abort batching due to timeout.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
