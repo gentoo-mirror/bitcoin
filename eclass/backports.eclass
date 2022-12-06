@@ -63,7 +63,7 @@ esac
 # and ".patch".  You must append $(backports_patch_uris) to SRC_URI to fetch
 # these patches.
 # @EXAMPLE:
-# https://github.com/acme/frobnicator/commits/
+# https://github.com/acme/frobnicator/commit/
 
 # @FUNCTION: backports_patch_uris
 # @RETURN: A whitespace-separated list of URIs to be added to SRC_URI.
