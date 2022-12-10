@@ -1,0 +1,26 @@
+--- /var/cache/distfiles/ec025344cc03140f18161cf3ce38e0c9e18c7695.patch	2022-12-09 20:59:13.255233986 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r111/temp/ec025344cc03140f18161cf3ce38e0c9e18c7695.patch	2022-12-09 21:19:09.693057760 -0500
+@@ -27,9 +27,9 @@
+ --- a/doc/lightning-listconfigs.7.md
+ +++ b/doc/lightning-listconfigs.7.md
+ @@ -101,6 +101,7 @@ On success, an object is returned, containing:
++ - **fetchinvoice-noconnect** (boolean, optional): `fetchinvoice-noconnect` fields from config or cmdline, or default
+  - **accept-htlc-tlv-types** (string, optional): `accept-extra-tlvs-type` fields from config or cmdline, or not present
+  - **tor-service-password** (string, optional): `tor-service-password` field from config or cmdline, if any
+- - **dev-allowdustreserve** (boolean, optional): Whether we allow setting dust reserves
+ +- **announce-addr-dns** (boolean, optional): Whether we put DNS entries into node_announcement
+  
+  [comment]: # (GENERATE-FROM-SCHEMA-END)
+@@ -74,9 +73,9 @@
+ --- a/doc/schemas/listconfigs.schema.json
+ +++ b/doc/schemas/listconfigs.schema.json
+ @@ -294,6 +294,10 @@
+-     "dev-allowdustreserve": {
+-       "type": "boolean",
+-       "description": "Whether we allow setting dust reserves"
++     "tor-service-password": {
++       "type": "string",
++       "description": "`tor-service-password` field from config or cmdline, if any"
+ +    },
+ +    "announce-addr-dns": {
+ +      "type": "boolean",

@@ -103,7 +103,7 @@ CRATES="
 	rustls-0.19.1
 	ryu-1.0.11
 	sct-0.6.1
-	secp256k1-0.22.1
+	secp256k1-0.22.2
 	secp256k1-sys-0.5.2
 	serde-1.0.147
 	serde_derive-1.0.147
@@ -167,7 +167,6 @@ inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=${PV/_}
 PATCH_HASHES=(
-	9751502ff5382dc0bc77d46fcff29a13419ef4fd	# jsonrpc: fix error when we abort batching due to timeout.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
@@ -442,7 +441,7 @@ src_install() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" DOC_DATA="${DOCS[*]}" install
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-22.11.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-22.11.1.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
