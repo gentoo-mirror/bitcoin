@@ -103,7 +103,7 @@ CRATES="
 	rustls-0.19.1
 	ryu-1.0.11
 	sct-0.6.1
-	secp256k1-0.22.1
+	secp256k1-0.22.2
 	secp256k1-sys-0.5.2
 	serde-1.0.147
 	serde_derive-1.0.147
@@ -1146,6 +1146,26 @@ BACKPORTS=(
 	3ca1c70c4439955d523467bac032622cce5105bd:strip=tests/	# lightningd: don't cap spendable_msat/receivable_msat for wumbo channels.
 #	280b49a6771ed70ee421b2647c060409866086f4	# meta: Update changelog for v22.11 final
 	d7cd3e1cb5614b3973e70884d463ed736fd4565b	# pyln: Fix an issue with the LightningConnection short-reading
+#	744d111ceaf3d32121b10370c7043dd0fa4bb6a1	# doc: Create a blockreplace tool to update generated blocks in docs
+#	a31575ca0b5a6d53ac8c8ed949d3a8686e1f690c	# tools: Add multi-language support to blockreplace.py
+#	4613b2981544addb2d5c3f1da409c4718b94bde1	# doc: document autoclean-once command.
+#	24d7aad3d0ae16995056f489fbe675b7f01d75ff	# autoclean: fix uncleaned stats when we don't clean due to being too new.
+	9751502ff5382dc0bc77d46fcff29a13419ef4fd	# jsonrpc: fix error when we abort batching due to timeout.
+#	3f2e923e81eff637c7b8ce586d795740807412a4	# reckless: fix verbose option
+#	8653d1200fd27f8bf0edf9c8cf70c5cd7139900d	# reckless: avoid redundant include statement in config
+#	70fc702ee483cf3a22efaf1c029dfad882423001	# reckless: further verbosity/squelch of pip output
+	1d4f7f023de838b33ffe41a0b7f8ac3ab72ae6d0	# Revert "lightningd: always require "jsonrpc": "2.0"  in request."
+	37590eeeb2ffbe6981d64078601f3592cd5b3a36	# common: fix arm32 compile breakage.
+#	e778ebb9af5a6157a4b605a77f87b2c48b9d03b0	# wallet: only log broken if we have duplicate scids in channels.
+#	a96ff3b097f10d44d938c3e3c7863e387b8927c7	# Update the contrib arm32v7 and arm64v8 dockerfiles
+	29f81baac994597174da0122f427ccb2e6fb9caa	# wireaddr: is_dnsaddr allow underscore in hostname
+	fb9d6684adc2e49828ff61e490fba348e0edeb00	# wireaddr: adds test for punycode
+#	6af78c35df6dfcce7f282159f7f7b69c9b6c489e	# misc: Update cdecker's gpg key
+	f0dd701bc5901e252db335675faeab857d886c32	# doc: document the usage of DNS hostnames
+	0ae6f4d6fb1b96ab3f0e31c5987eeb299ee175e1	# wireaddr: allow for UpperCase DNS names
+	ec025344cc03140f18161cf3ce38e0c9e18c7695:strip=tests/:scrub-stamps:resolve-conflicts	# lightningd: don't announce names as DNS by default.
+	2ed10196d092d7aba22a700b0f26d248d04c36f7	# build(deps): bump secp256k1 from 0.22.1 to 0.22.2
+#	b3a1d01e51f913cff5fe68f4c79caa0bc9933f16	# meta: Add changelog for hotfix release v22.11.1
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
