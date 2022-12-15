@@ -13,6 +13,7 @@ PATCH_HASHES=(
 	5a1fef754c72902c734370ea5d74a891c5d3db5d	# src/Makefile.am: add missing headers to install
 	5f7dbe7fe07fc67db97a786e6531466ad6e73384	# m4/ax_jni_include_dir: don't cache result
 	cdd358f64f59aa4a9836cb732cb92163bbe02471	# src/Makefile.am: split unit tests into separate targets by language
+	312d688ddcc0889f644d81c2fe37d2432186051d	# test: skip non-applicable tests if BUILD_STANDARD_SECP
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(

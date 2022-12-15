@@ -10,6 +10,7 @@ DISTUTILS_USE_PEP517=setuptools
 inherit autotools distutils-r1 java-pkg-opt-2 multilib-minimal
 
 PATCH_HASHES=(
+	312d688ddcc0889f644d81c2fe37d2432186051d	# test: skip non-applicable tests if BUILD_STANDARD_SECP
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
