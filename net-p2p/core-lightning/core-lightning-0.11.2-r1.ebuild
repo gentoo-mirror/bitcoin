@@ -195,7 +195,7 @@ SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="developer doc experimental postgres python +recent-libsecp256k1 rust sqlite test"
+IUSE="developer doc experimental +man postgres python +recent-libsecp256k1 rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -227,10 +227,15 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	doc? ( >=app-text/mrkd-0.2.0 )
+	man? ( >=app-text/mrkd-0.2.0 )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
+	doc? ( $(python_gen_any_dep '
+		dev-python/recommonmark[${PYTHON_USEDEP}]
+		dev-python/sphinx[${PYTHON_USEDEP}]
+		dev-python/sphinx_rtd_theme[${PYTHON_USEDEP}]
+	') )
 	python? (
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
 		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
@@ -254,7 +259,10 @@ S=${WORKDIR}/${MyPN}-${MyPV}
 DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
 
 python_check_deps() {
-	python_has_version "dev-python/mako[${PYTHON_USEDEP}]"
+	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
+		"dev-python/mako[${PYTHON_USEDEP}]" ; } &&
+	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
+		dev-python/{recommonmark,sphinx{,_rtd_theme}}"[${PYTHON_USEDEP}]" ; }
 }
 
 python_foreach_subdir() {
@@ -325,6 +333,12 @@ src_prepare() {
 	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
 		-i configure Makefile || die
 
+	# don't require running in a Git worktree
+	sed -e '/^import subprocess$/d' \
+		-e 's/^\(version = \).*$/\1"'"$(ver_cut 1-3)"'"/' \
+		-e 's/^\(release = \).*$/\1"'"${MyPV}-gentoo-${PR}"'"/' \
+		-i doc/conf.py || die
+
 	use python && distutils-r1_src_prepare
 
 	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
@@ -343,6 +357,7 @@ src_configure() {
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
+		DOC_DATA=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
 		LIBSODIUM_HEADERS=
@@ -355,7 +370,7 @@ src_configure() {
 		docdir="/usr/share/doc/${PF}"
 	)
 
-	use doc || CLIGHTNING_MAKEOPTS+=(
+	use man || CLIGHTNING_MAKEOPTS+=(
 		MANPAGES=
 	)
 
@@ -376,7 +391,7 @@ src_configure() {
 		CLN_PLUGIN_EXAMPLES=
 	)
 
-	python_setup
+	python_need='mako' python_setup
 	set ./configure \
 		CC="$(tc-getCC)" \
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
@@ -401,14 +416,29 @@ src_configure() {
 }
 
 src_compile() {
-	python_setup
+	python_need='mako' python_setup
 	emake "${CLIGHTNING_MAKEOPTS[@]}"
+
+	if use doc ; then
+		local python_need='sphinx'
+		python_setup
+		build_sphinx doc
+	fi
 
 	use python && distutils-r1_src_compile
 }
 
 python_compile() {
 	python_foreach_subdir distutils-r1_python_compile
+}
+
+python_compile_all() {
+	use doc && python_foreach_subdir python_compile_subdir_docs
+}
+
+python_compile_subdir_docs() {
+	local -a HTML_DOCS
+	[[ -f docs/conf.py ]] && build_sphinx docs
 }
 
 src_test() {
@@ -433,14 +463,14 @@ python_install_subdir_docs() {
 	shopt -s nullglob
 	local -a docs=( README* )
 	${shopt_pop}
-	if (( ${#docs[@]} )) ; then
-		docinto "${PWD##*/}"
-		dodoc "${docs[@]}"
-	fi
+	docinto "${PWD##*/}"
+	(( ${#docs[@]} )) && dodoc "${docs[@]}"
+	use doc && [[ -d docs/_build/html ]] && dodoc -r docs/_build/html
 }
 
 src_install() {
-	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" DOC_DATA="${DOCS[*]}" install
+	emake "${CLIGHTNING_MAKEOPTS[@]}" DESTDIR="${D}" install
+	einstalldocs
 
 	insinto /etc/lightning
 	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
