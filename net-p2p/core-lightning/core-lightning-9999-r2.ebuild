@@ -12,28 +12,35 @@ DISTUTILS_USE_PEP517=poetry
 
 CARGO_OPTIONAL=1
 CRATES="
-	aho-corasick-0.7.19
+	aho-corasick-0.7.20
 	anyhow-1.0.66
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.58
+	async-trait-0.1.59
 	atty-0.2.14
 	autocfg-1.1.0
+	axum-0.6.1
+	axum-core-0.3.0
 	base64-0.13.1
-	bitcoin_hashes-0.10.0
+	bech32-0.9.1
+	bitcoin-0.29.2
+	bitcoin_hashes-0.11.0
 	bitflags-1.3.2
 	bumpalo-3.11.1
-	bytes-1.2.1
-	cc-1.0.76
+	bytes-1.3.0
+	cc-1.0.77
 	cfg-if-1.0.0
-	chrono-0.4.22
-	data-encoding-2.3.2
+	chrono-0.4.23
+	data-encoding-2.3.3
 	der-oid-macro-0.5.0
 	der-parser-6.0.1
 	either-1.8.0
 	env_logger-0.9.3
+	env_logger-0.10.0
+	errno-0.2.8
+	errno-dragonfly-0.1.2
 	fastrand-1.8.0
-	fixedbitset-0.2.0
+	fixedbitset-0.4.2
 	fnv-1.0.7
 	futures-0.3.25
 	futures-channel-0.3.25
@@ -47,25 +54,32 @@ CRATES="
 	getrandom-0.2.8
 	h2-0.3.15
 	hashbrown-0.12.3
-	heck-0.3.3
+	heck-0.4.0
 	hermit-abi-0.1.19
+	hermit-abi-0.2.6
 	hex-0.4.3
 	http-0.2.8
 	http-body-0.4.5
+	http-range-header-0.3.0
 	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
 	hyper-0.14.23
 	hyper-timeout-0.4.1
-	indexmap-1.9.1
+	indexmap-1.9.2
 	instant-0.1.12
+	io-lifetimes-1.0.3
+	is-terminal-0.4.1
 	itertools-0.10.5
 	itoa-1.0.4
 	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.137
+	libc-0.2.138
+	linux-raw-sys-0.1.3
 	log-0.4.17
+	matchit-0.7.0
 	memchr-2.5.0
+	mime-0.3.16
 	minimal-lexical-0.2.1
 	mio-0.8.5
 	multimap-0.8.3
@@ -78,17 +92,18 @@ CRATES="
 	once_cell-1.16.0
 	pem-1.1.0
 	percent-encoding-2.2.0
-	petgraph-0.5.1
+	petgraph-0.6.2
 	pin-project-1.0.12
 	pin-project-internal-1.0.12
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
 	ppv-lite86-0.2.17
+	prettyplease-0.1.21
 	proc-macro2-1.0.47
-	prost-0.8.0
-	prost-build-0.8.0
-	prost-derive-0.8.0
-	prost-types-0.8.0
+	prost-0.11.3
+	prost-build-0.11.4
+	prost-derive-0.11.2
+	prost-types-0.11.2
 	quote-1.0.21
 	rand-0.8.5
 	rand_chacha-0.3.1
@@ -100,32 +115,36 @@ CRATES="
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
-	rustls-0.19.1
+	rustix-0.36.5
+	rustls-0.20.7
+	rustls-pemfile-1.0.1
+	rustversion-1.0.9
 	ryu-1.0.11
-	sct-0.6.1
-	secp256k1-0.22.1
-	secp256k1-sys-0.5.2
-	serde-1.0.147
-	serde_derive-1.0.147
-	serde_json-1.0.87
+	sct-0.7.0
+	secp256k1-0.24.2
+	secp256k1-sys-0.6.1
+	serde-1.0.150
+	serde_derive-1.0.150
+	serde_json-1.0.89
 	slab-0.4.7
 	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.103
+	syn-1.0.105
+	sync_wrapper-0.1.1
 	tempfile-3.3.0
 	termcolor-1.1.3
 	thiserror-1.0.37
 	thiserror-impl-1.0.37
-	tokio-1.21.2
+	tokio-1.23.0
 	tokio-io-timeout-1.2.0
-	tokio-macros-1.8.0
-	tokio-rustls-0.22.0
+	tokio-macros-1.8.2
+	tokio-rustls-0.23.4
 	tokio-stream-0.1.11
-	tokio-util-0.6.10
 	tokio-util-0.7.4
-	tonic-0.5.2
-	tonic-build-0.5.2
+	tonic-0.8.3
+	tonic-build-0.8.4
 	tower-0.4.13
+	tower-http-0.3.5
 	tower-layer-0.3.2
 	tower-service-0.3.2
 	tracing-0.1.37
@@ -134,7 +153,6 @@ CRATES="
 	tracing-futures-0.2.5
 	try-lock-0.2.3
 	unicode-ident-1.0.5
-	unicode-segmentation-1.10.0
 	untrusted-0.7.1
 	want-0.3.0
 	wasi-0.11.0+wasi-snapshot-preview1
@@ -144,7 +162,7 @@ CRATES="
 	wasm-bindgen-macro-support-0.2.83
 	wasm-bindgen-shared-0.2.83
 	web-sys-0.3.60
-	webpki-0.21.4
+	webpki-0.22.0
 	which-4.3.0
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
