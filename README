@@ -1,8 +1,7 @@
-Using the ebuilds:
-	USE=git emerge layman
-	layman -a bitcoin
+To enable this ebuild repository on your Gentoo system:
 
-Whenever you update (emerge --sync), also run:
-	layman -S
+	# emerge -n app-eselect/eselect-repository dev-vcs/git
+	# eselect repository enable bitcoin
+	# emaint sync -r bitcoin
 
 Come to freenode #bitcoin-gentoo and indicate your GitLab account name if you would like commit access.

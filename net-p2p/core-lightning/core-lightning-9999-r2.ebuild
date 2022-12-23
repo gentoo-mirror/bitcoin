@@ -14,10 +14,12 @@ CARGO_OPTIONAL=1
 CRATES="
 	aho-corasick-0.7.20
 	anyhow-1.0.66
+	asn1-rs-0.5.1
+	asn1-rs-derive-0.4.0
+	asn1-rs-impl-0.1.0
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
 	async-trait-0.1.59
-	atty-0.2.14
 	autocfg-1.1.0
 	axum-0.6.1
 	axum-core-0.3.0
@@ -30,12 +32,10 @@ CRATES="
 	bytes-1.3.0
 	cc-1.0.77
 	cfg-if-1.0.0
-	chrono-0.4.23
 	data-encoding-2.3.3
-	der-oid-macro-0.5.0
-	der-parser-6.0.1
+	der-parser-8.1.0
+	displaydoc-0.2.3
 	either-1.8.0
-	env_logger-0.9.3
 	env_logger-0.10.0
 	errno-0.2.8
 	errno-dragonfly-0.1.2
@@ -88,7 +88,7 @@ CRATES="
 	num-integer-0.1.45
 	num-traits-0.2.15
 	num_cpus-1.14.0
-	oid-registry-0.2.0
+	oid-registry-0.6.1
 	once_cell-1.16.0
 	pem-1.1.0
 	percent-encoding-2.2.0
@@ -108,7 +108,7 @@ CRATES="
 	rand-0.8.5
 	rand_chacha-0.3.1
 	rand_core-0.6.4
-	rcgen-0.8.14
+	rcgen-0.10.0
 	redox_syscall-0.2.16
 	regex-1.7.0
 	regex-syntax-0.6.28
@@ -131,10 +131,14 @@ CRATES="
 	spin-0.5.2
 	syn-1.0.105
 	sync_wrapper-0.1.1
+	synstructure-0.12.6
 	tempfile-3.3.0
 	termcolor-1.1.3
 	thiserror-1.0.37
 	thiserror-impl-1.0.37
+	time-0.3.17
+	time-core-0.1.0
+	time-macros-0.2.6
 	tokio-1.23.0
 	tokio-io-timeout-1.2.0
 	tokio-macros-1.8.2
@@ -153,6 +157,7 @@ CRATES="
 	tracing-futures-0.2.5
 	try-lock-0.2.3
 	unicode-ident-1.0.5
+	unicode-xid-0.2.4
 	untrusted-0.7.1
 	want-0.3.0
 	wasi-0.11.0+wasi-snapshot-preview1
@@ -176,8 +181,8 @@ CRATES="
 	windows_x86_64_gnu-0.42.0
 	windows_x86_64_gnullvm-0.42.0
 	windows_x86_64_msvc-0.42.0
-	x509-parser-0.12.0
-	yasna-0.4.0
+	x509-parser-0.14.0
+	yasna-0.5.1
 "
 
 inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
