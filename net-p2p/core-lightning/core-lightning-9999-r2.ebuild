@@ -13,13 +13,13 @@ DISTUTILS_USE_PEP517=poetry
 CARGO_OPTIONAL=1
 CRATES="
 	aho-corasick-0.7.20
-	anyhow-1.0.66
+	anyhow-1.0.68
 	asn1-rs-0.5.1
 	asn1-rs-derive-0.4.0
 	asn1-rs-impl-0.1.0
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.59
+	async-trait-0.1.60
 	autocfg-1.1.0
 	axum-0.6.1
 	axum-core-0.3.0
@@ -30,7 +30,7 @@ CRATES="
 	bitflags-1.3.2
 	bumpalo-3.11.1
 	bytes-1.3.0
-	cc-1.0.77
+	cc-1.0.78
 	cfg-if-1.0.0
 	data-encoding-2.3.3
 	der-parser-8.1.0
@@ -55,7 +55,6 @@ CRATES="
 	h2-0.3.15
 	hashbrown-0.12.3
 	heck-0.4.0
-	hermit-abi-0.1.19
 	hermit-abi-0.2.6
 	hex-0.4.3
 	http-0.2.8
@@ -69,13 +68,13 @@ CRATES="
 	indexmap-1.9.2
 	instant-0.1.12
 	io-lifetimes-1.0.3
-	is-terminal-0.4.1
+	is-terminal-0.4.2
 	itertools-0.10.5
-	itoa-1.0.4
+	itoa-1.0.5
 	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.138
-	linux-raw-sys-0.1.3
+	libc-0.2.139
+	linux-raw-sys-0.1.4
 	log-0.4.17
 	matchit-0.7.0
 	memchr-2.5.0
@@ -87,7 +86,7 @@ CRATES="
 	num-bigint-0.4.3
 	num-integer-0.1.45
 	num-traits-0.2.15
-	num_cpus-1.14.0
+	num_cpus-1.15.0
 	oid-registry-0.6.1
 	once_cell-1.16.0
 	pem-1.1.0
@@ -98,13 +97,13 @@ CRATES="
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
 	ppv-lite86-0.2.17
-	prettyplease-0.1.21
-	proc-macro2-1.0.47
-	prost-0.11.3
-	prost-build-0.11.4
-	prost-derive-0.11.2
-	prost-types-0.11.2
-	quote-1.0.21
+	prettyplease-0.1.22
+	proc-macro2-1.0.49
+	prost-0.11.5
+	prost-build-0.11.5
+	prost-derive-0.11.5
+	prost-types-0.11.5
+	quote-1.0.23
 	rand-0.8.5
 	rand_chacha-0.3.1
 	rand_core-0.6.4
@@ -118,24 +117,24 @@ CRATES="
 	rustix-0.36.5
 	rustls-0.20.7
 	rustls-pemfile-1.0.1
-	rustversion-1.0.9
-	ryu-1.0.11
+	rustversion-1.0.11
+	ryu-1.0.12
 	sct-0.7.0
 	secp256k1-0.24.2
 	secp256k1-sys-0.6.1
-	serde-1.0.150
-	serde_derive-1.0.150
-	serde_json-1.0.89
+	serde-1.0.151
+	serde_derive-1.0.151
+	serde_json-1.0.91
 	slab-0.4.7
 	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.105
+	syn-1.0.107
 	sync_wrapper-0.1.1
 	synstructure-0.12.6
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.37
-	thiserror-impl-1.0.37
+	thiserror-1.0.38
+	thiserror-impl-1.0.38
 	time-0.3.17
 	time-core-0.1.0
 	time-macros-0.2.6
@@ -156,7 +155,7 @@ CRATES="
 	tracing-core-0.1.30
 	tracing-futures-0.2.5
 	try-lock-0.2.3
-	unicode-ident-1.0.5
+	unicode-ident-1.0.6
 	unicode-xid-0.2.4
 	untrusted-0.7.1
 	want-0.3.0
