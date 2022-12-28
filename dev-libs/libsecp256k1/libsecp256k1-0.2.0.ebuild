@@ -8,9 +8,11 @@ inherit autotools multilib-minimal
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
-SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tgz
-	${HOMEPAGE}/pull/1159.patch -> ${PN}-PR1159.patch
-	${HOMEPAGE}/pull/1160.patch -> ${PN}-PR1160.patch"
+SRC_URI="
+	${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tgz
+	${HOMEPAGE}/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch -> ${PN}-PR1159-772e74.patch
+	${HOMEPAGE}/commit/54e290ddaf3499002d9ce06bc4adbae05ac32e9e.patch -> ${PN}-PR1160-54e290.patch
+"
 
 LICENSE="MIT"
 SLOT="0/1"  # subslot is "$((_LIB_VERSION_CURRENT-_LIB_VERSION_AGE))" from configure.ac
@@ -42,8 +44,8 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${DISTDIR}/${PN}-PR1159.patch"
-	"${DISTDIR}/${PN}-PR1160.patch"
+	"${DISTDIR}/${PN}-PR1159-772e74.patch"
+	"${DISTDIR}/${PN}-PR1160-54e290.patch"
 )
 
 S="${WORKDIR}/${MyPN}-${PV}"
