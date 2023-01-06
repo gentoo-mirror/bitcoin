@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,9 +9,11 @@ MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 COMMITHASH="694ce8fb2d1fd8a3d641d7c33705691d41a2a860"
-SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
-	${HOMEPAGE}/pull/1159.patch -> ${PN}-PR1159.patch
-	${HOMEPAGE}/pull/1160.patch -> ${PN}-PR1160.patch"
+SRC_URI="
+	${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
+	${HOMEPAGE}/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch -> ${PN}-PR1159-772e74.patch
+	${HOMEPAGE}/commit/54e290ddaf3499002d9ce06bc4adbae05ac32e9e.patch -> ${PN}-PR1160-54e290.patch
+"
 
 LICENSE="MIT"
 SLOT="0/20210628"  # subslot is date of last ABI change
@@ -43,8 +45,8 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${DISTDIR}/${PN}-PR1159.patch"
-	"${DISTDIR}/${PN}-PR1160.patch"
+	"${DISTDIR}/${PN}-PR1159-772e74.patch"
+	"${DISTDIR}/${PN}-PR1160-54e290.patch"
 )
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
