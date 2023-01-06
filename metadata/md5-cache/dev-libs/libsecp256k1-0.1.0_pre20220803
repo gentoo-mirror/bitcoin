@@ -12,6 +12,6 @@ RDEPEND=!=dev-util/bitcoin-tx-0.21* !=dev-util/bitcoin-tx-21.2 !=dev-util/bitcoi
 REQUIRED_USE=asm? ( || ( amd64 arm ) arm? ( experimental ) ) schnorr? ( extrakeys )
 RESTRICT=!test? ( test )
 SLOT=0/20210628
-SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/694ce8fb2d1fd8a3d641d7c33705691d41a2a860.tar.gz -> libsecp256k1-0.1.0_pre20220803.tgz https://github.com/bitcoin-core/secp256k1/pull/1159.patch -> libsecp256k1-PR1159.patch https://github.com/bitcoin-core/secp256k1/pull/1160.patch -> libsecp256k1-PR1160.patch
+SRC_URI=https://github.com/bitcoin-core/secp256k1/archive/694ce8fb2d1fd8a3d641d7c33705691d41a2a860.tar.gz -> libsecp256k1-0.1.0_pre20220803.tgz https://github.com/bitcoin-core/secp256k1/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch -> libsecp256k1-PR1159-772e74.patch https://github.com/bitcoin-core/secp256k1/commit/54e290ddaf3499002d9ce06bc4adbae05ac32e9e.patch -> libsecp256k1-PR1160-54e290.patch
 _eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	ec8bbc28394c7305b43ea07164bd8f5f	multilib	5ca4e49abed8e3a2f7b56920eadee157	libtool	241a8f577b9781a42a7421e53448a44e	autotools	6dcd6b6a486e79928e1243ff9ba41fcc	multibuild	d26d81f242cb193d899a72bca423d0bd	multilib-build	87f1b83e21a473787b821ef3d0437bf3	multilib-minimal	4b0f1857965db8869a729948d5277e0b
-_md5_=01f0660f3e22a99d05d7bc109a799441
+_md5_=a2745537db07be1cc7ca40373943b894
