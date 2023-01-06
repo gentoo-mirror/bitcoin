@@ -12,7 +12,6 @@ COMMITHASH="6c0aecf72b1f4290f50302440065392715d6240a"
 SRC_URI="
 	${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz
 	https://github.com/bitcoin-core/secp256k1/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch -> libsecp256k1-PR1159-772e74.patch
-	https://github.com/bitcoin-core/secp256k1/commit/54e290ddaf3499002d9ce06bc4adbae05ac32e9e.patch -> libsecp256k1-PR1160-54e290.patch
 "
 
 LICENSE="MIT"
@@ -41,7 +40,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${DISTDIR}/libsecp256k1-PR1159.patch"
+	"${DISTDIR}/libsecp256k1-PR1159-772e74.patch"
 )
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"

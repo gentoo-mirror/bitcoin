@@ -45,8 +45,8 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${DISTDIR}/${PN}-PR1159.patch"
-	"${DISTDIR}/${PN}-PR1160.patch"
+	"${DISTDIR}/${PN}-PR1159-772e74.patch"
+	"${DISTDIR}/${PN}-PR1160-54e290.patch"
 )
 
 S="${WORKDIR}/${MyPN}-${COMMITHASH}"
