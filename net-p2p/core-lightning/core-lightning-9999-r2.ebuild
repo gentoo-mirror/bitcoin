@@ -324,12 +324,6 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
-	# don't require running in a Git worktree
-	sed -e '/^import subprocess$/d' \
-		-e 's/^\(version = \).*$/\1"'"$(ver_cut 1-3)"'"/' \
-		-e 's/^\(release = \).*$/\1"'"${MyPV}-gentoo-${PR}"'"/' \
-		-i doc/conf.py || die
-
 	use python && distutils-r1_src_prepare
 }
 
