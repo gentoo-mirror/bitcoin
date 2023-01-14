@@ -331,12 +331,6 @@ src_prepare() {
 		-i doc/conf.py || die
 
 	use python && distutils-r1_src_prepare
-
-	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
-		# suppress transitive dependency on rustfmt
-		sed -e 's/^\(tonic-build = \)\(.*\)$/\1{ version = \2, default-features = false, features = ["prost", "transport"] }/' \
-			-i cln-grpc/Cargo.toml || die
-	fi
 }
 
 src_configure() {
