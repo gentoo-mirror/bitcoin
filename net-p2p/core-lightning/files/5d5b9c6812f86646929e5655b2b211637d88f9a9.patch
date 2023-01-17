@@ -1,0 +1,75 @@
+--- /var/cache/distfiles/5d5b9c6812f86646929e5655b2b211637d88f9a9.patch	2023-01-12 23:58:58.805432343 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r112/temp/5d5b9c6812f86646929e5655b2b211637d88f9a9.patch	2023-01-13 00:14:17.731550440 -0500
+@@ -17,45 +17,35 @@
+ index d47430aab66..02bacca9ce3 100644
+ --- a/plugins/libplugin-pay.c
+ +++ b/plugins/libplugin-pay.c
+-@@ -3302,11 +3302,10 @@ static struct command_result *direct_pay_listpeers(struct command *cmd,
++@@ -3286,7 +3286,7 @@ static struct command_result *direct_pay_listpeers(struct command *cmd,
++ 
+  		d->chan = tal(d, struct short_channel_id_dir);
+- 		if (chan->scid) {
+- 			d->chan->scid = *chan->scid;
+--			d->chan->dir = *chan->direction;
+- 		} else {
+- 			d->chan->scid = *chan->alias[LOCAL];
+--			d->chan->dir = 0; /* Don't care. */
+- 		}
++ 		d->chan->scid = *chan->scid;
++-		d->chan->dir = *chan->direction;
+ +		d->chan->dir = chan->direction;
+  	}
+  
+  	direct_pay_override(p);
+ diff --git a/plugins/libplugin.c b/plugins/libplugin.c
+ index 19d9b3f2515..cebee85c67a 100644
+ --- a/plugins/libplugin.c
+ +++ b/plugins/libplugin.c
+-@@ -1925,14 +1925,6 @@ static struct listpeers_channel *json_to_listpeers_channel(const tal_t *ctx,
+- 		json_to_short_channel_id(buffer, scidtok, chan->scid);
+- 	} else {
+- 		chan->scid = NULL;
+--		chan->direction = NULL;
+--	}
+--
+--	if (dirtok != NULL) {
++@@ -1922,15 +1922,18 @@ static struct listpeers_channel *json_to_listpeers_channel(const tal_t *ctx,
++ 	if (scidtok != NULL) {
++ 		assert(dirtok != NULL);
++ 		chan->scid = tal(chan, struct short_channel_id);
+ -		chan->direction = tal(chan, int);
++ 		json_to_short_channel_id(buffer, scidtok, chan->scid);
+ -		json_to_int(buffer, dirtok, chan->direction);
+--	} else {
++ 	}else {
++ 		assert(dirtok == NULL);
++ 		chan->scid = NULL;
+ -		chan->direction = NULL;
+  	}
+  
+- 	if (aliastok != NULL) {
+-@@ -1958,6 +1950,12 @@ static struct listpeers_channel *json_to_listpeers_channel(const tal_t *ctx,
+- 		chan->alias[REMOTE] = NULL;
+- 	}
+- 
+ +	/* If we catch a channel during opening, these might not be set.
+ +	 * It's not a real channel (yet), so ignore it! */
+-+	if (!chan->scid && !chan->alias[LOCAL])
+++	if (!chan->scid)
+ +		return tal_free(chan);
+ +
+ +	json_to_int(buffer, dirtok, &chan->direction);
+@@ -75,12 +65,9 @@
+ index bd74f5827a9..a846317f1bd 100644
+ --- a/plugins/libplugin.h
+ +++ b/plugins/libplugin.h
+-@@ -438,9 +438,10 @@ struct listpeers_channel {
+- 	bool private;
++@@ -438,7 +438,7 @@ struct listpeers_channel {
+  	struct bitcoin_txid funding_txid;
+  	const char *state;
+-+	/* scid or alias[LOCAL] is always non-NULL */
+- 	struct short_channel_id *alias[NUM_SIDES];
+  	struct short_channel_id *scid;
+ -	int *direction;
+ +	int direction;

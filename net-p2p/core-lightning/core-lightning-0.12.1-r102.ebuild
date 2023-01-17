@@ -12,28 +12,35 @@ DISTUTILS_USE_PEP517=poetry
 
 CARGO_OPTIONAL=1
 CRATES="
-	aho-corasick-0.7.19
-	anyhow-1.0.66
+	aho-corasick-0.7.20
+	anyhow-1.0.68
+	asn1-rs-0.5.1
+	asn1-rs-derive-0.4.0
+	asn1-rs-impl-0.1.0
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.58
-	atty-0.2.14
+	async-trait-0.1.60
 	autocfg-1.1.0
+	axum-0.6.1
+	axum-core-0.3.0
 	base64-0.13.1
-	bitcoin_hashes-0.10.0
+	bech32-0.9.1
+	bitcoin-0.29.2
+	bitcoin_hashes-0.11.0
 	bitflags-1.3.2
 	bumpalo-3.11.1
-	bytes-1.2.1
-	cc-1.0.76
+	bytes-1.3.0
+	cc-1.0.78
 	cfg-if-1.0.0
-	chrono-0.4.22
-	data-encoding-2.3.2
-	der-oid-macro-0.5.0
-	der-parser-6.0.1
+	data-encoding-2.3.3
+	der-parser-8.1.0
+	displaydoc-0.2.3
 	either-1.8.0
-	env_logger-0.9.3
+	env_logger-0.10.0
+	errno-0.2.8
+	errno-dragonfly-0.1.2
 	fastrand-1.8.0
-	fixedbitset-0.2.0
+	fixedbitset-0.4.2
 	fnv-1.0.7
 	futures-0.3.25
 	futures-channel-0.3.25
@@ -47,25 +54,31 @@ CRATES="
 	getrandom-0.2.8
 	h2-0.3.15
 	hashbrown-0.12.3
-	heck-0.3.3
-	hermit-abi-0.1.19
+	heck-0.4.0
+	hermit-abi-0.2.6
 	hex-0.4.3
 	http-0.2.8
 	http-body-0.4.5
+	http-range-header-0.3.0
 	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
 	hyper-0.14.23
 	hyper-timeout-0.4.1
-	indexmap-1.9.1
+	indexmap-1.9.2
 	instant-0.1.12
+	io-lifetimes-1.0.3
+	is-terminal-0.4.2
 	itertools-0.10.5
-	itoa-1.0.4
+	itoa-1.0.5
 	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.137
+	libc-0.2.139
+	linux-raw-sys-0.1.4
 	log-0.4.17
+	matchit-0.7.0
 	memchr-2.5.0
+	mime-0.3.16
 	minimal-lexical-0.2.1
 	mio-0.8.5
 	multimap-0.8.3
@@ -73,59 +86,68 @@ CRATES="
 	num-bigint-0.4.3
 	num-integer-0.1.45
 	num-traits-0.2.15
-	num_cpus-1.14.0
-	oid-registry-0.2.0
+	num_cpus-1.15.0
+	oid-registry-0.6.1
 	once_cell-1.16.0
 	pem-1.1.0
 	percent-encoding-2.2.0
-	petgraph-0.5.1
+	petgraph-0.6.2
 	pin-project-1.0.12
 	pin-project-internal-1.0.12
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
 	ppv-lite86-0.2.17
-	proc-macro2-1.0.47
-	prost-0.8.0
-	prost-build-0.8.0
-	prost-derive-0.8.0
-	prost-types-0.8.0
-	quote-1.0.21
+	prettyplease-0.1.22
+	proc-macro2-1.0.49
+	prost-0.11.5
+	prost-build-0.11.5
+	prost-derive-0.11.5
+	prost-types-0.11.5
+	quote-1.0.23
 	rand-0.8.5
 	rand_chacha-0.3.1
 	rand_core-0.6.4
-	rcgen-0.8.14
+	rcgen-0.10.0
 	redox_syscall-0.2.16
 	regex-1.7.0
 	regex-syntax-0.6.28
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
-	rustls-0.19.1
-	ryu-1.0.11
-	sct-0.6.1
-	secp256k1-0.22.2
-	secp256k1-sys-0.5.2
-	serde-1.0.147
-	serde_derive-1.0.147
-	serde_json-1.0.87
+	rustix-0.36.5
+	rustls-0.20.7
+	rustls-pemfile-1.0.1
+	rustversion-1.0.11
+	ryu-1.0.12
+	sct-0.7.0
+	secp256k1-0.24.2
+	secp256k1-sys-0.6.1
+	serde-1.0.151
+	serde_derive-1.0.151
+	serde_json-1.0.91
 	slab-0.4.7
 	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.103
+	syn-1.0.107
+	sync_wrapper-0.1.1
+	synstructure-0.12.6
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.37
-	thiserror-impl-1.0.37
-	tokio-1.21.2
+	thiserror-1.0.38
+	thiserror-impl-1.0.38
+	time-0.3.17
+	time-core-0.1.0
+	time-macros-0.2.6
+	tokio-1.23.1
 	tokio-io-timeout-1.2.0
-	tokio-macros-1.8.0
-	tokio-rustls-0.22.0
+	tokio-macros-1.8.2
+	tokio-rustls-0.23.4
 	tokio-stream-0.1.11
-	tokio-util-0.6.10
 	tokio-util-0.7.4
-	tonic-0.5.2
-	tonic-build-0.5.2
+	tonic-0.8.3
+	tonic-build-0.8.4
 	tower-0.4.13
+	tower-http-0.3.5
 	tower-layer-0.3.2
 	tower-service-0.3.2
 	tracing-0.1.37
@@ -133,8 +155,8 @@ CRATES="
 	tracing-core-0.1.30
 	tracing-futures-0.2.5
 	try-lock-0.2.3
-	unicode-ident-1.0.5
-	unicode-segmentation-1.10.0
+	unicode-ident-1.0.6
+	unicode-xid-0.2.4
 	untrusted-0.7.1
 	want-0.3.0
 	wasi-0.11.0+wasi-snapshot-preview1
@@ -144,7 +166,7 @@ CRATES="
 	wasm-bindgen-macro-support-0.2.83
 	wasm-bindgen-shared-0.2.83
 	web-sys-0.3.60
-	webpki-0.21.4
+	webpki-0.22.0
 	which-4.3.0
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
@@ -158,8 +180,8 @@ CRATES="
 	windows_x86_64_gnu-0.42.0
 	windows_x86_64_gnullvm-0.42.0
 	windows_x86_64_msvc-0.42.0
-	x509-parser-0.12.0
-	yasna-0.4.0
+	x509-parser-0.14.0
+	yasna-0.5.1
 "
 
 inherit backports bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
@@ -310,7 +332,7 @@ BACKPORTS=(
 #	2752e04f8f24f68c7e55244fe39d6fc27677222f	# db: add `scid` field to channels table.
 #	d7c1325e38dfa15ccb2021430d118ee6a14dd1ee	# wallet: use scid not string for failchannel (now failscid) in payments table.
 	311807ff1f4f3574413b2ef86f63bf28e5363ee2:strip=contrib/pyln-testing/:scrub-stamps:resolve-conflicts	# lightningd: add in_htlc_id / out_htlc_id to listforwards.
-	7420a7021f4805d8b8058e86eec791f4ce3e27fa	# lightningd: add `listhtlcs` to list all the HTLCs we know about.
+	7420a7021f4805d8b8058e86eec791f4ce3e27fa:scrub-stamps	# lightningd: add `listhtlcs` to list all the HTLCs we know about.
 #	3079afb024e9307a696046d0e936ff240a5f4c86	# lightningd: add `delforward` command.
 #	a15f1be5f88bdae5a6e816026e35a035791875e8	# autoclean: clean up listforwards as well.
 #	399288db3f2a90e52fcea587424c1287705c69d1	# autoclean: use config variables, not commands.
@@ -320,7 +342,7 @@ BACKPORTS=(
 	4d8c3215174e1436dccb66d60fa69536f3b4d31a	# libplugin: optimize parsing lightningd rpc responses.
 	8b7a8265e7ad80bb0e1882ad5dffada14f7425df	# libplugin: avoid memmove if we have many outputs to lightningd.
 	555b8a2f7a2bd728efa15dda8302084e477aa8c9	# lightningd: don't always wrap each command in a db transaction.
-	fa7d732ba6f6cbba035f8162df3ad32ec8cabbd9:resolve-conflicts	# lightningd: allow a connection to specify db batching.
+	fa7d732ba6f6cbba035f8162df3ad32ec8cabbd9:scrub-stamps:resolve-conflicts	# lightningd: allow a connection to specify db batching.
 	05095313f5c30a2fc20e1b188f78398c7a717863:strip=contrib/pyln-testing/:scrub-stamps	# lightningd: listsendpays always has groupid.
 	f52ff07558709bd1f7ed0cdca65c891d80b1a785:strip=plugins/autoclean	# lightningd: allow delpay to delete a specific payment.
 	939a7b2b1881a0658ee9f9711cf6b808aedc9f29	# db/postgres: avoid memleak.
@@ -591,6 +613,138 @@ BACKPORTS=(
 	ec025344cc03140f18161cf3ce38e0c9e18c7695:scrub-stamps	# lightningd: don't announce names as DNS by default.
 	2ed10196d092d7aba22a700b0f26d248d04c36f7	# build(deps): bump secp256k1 from 0.22.1 to 0.22.2
 #	b3a1d01e51f913cff5fe68f4c79caa0bc9933f16	# meta: Add changelog for hotfix release v22.11.1
+#	41987ed379093b4bd61db9907b130d2f0279252f	# doc: check-manpages: add check for unescaped underscores
+	09d52b3cb4f5930036a5d4b6b32525fe6d4d917f:strip='.*\b\(delforward\|reckless\)':resolve-conflicts	# doc: escape more naughty underscores
+	31732f7825ab59878cb4704bc2a7b5384cf9c2a0:strip='.*\b\(autoclean\|delforward\)':scrub-stamps:resolve-conflicts	# fromschema.py: escape underscores in descriptions
+#	4d64374b857e97b4e1c3cc6ea068e5f3fca7e238	# doc: drive-by spelling corrections
+#	48cfc437c052c030d9f00aba00109dc76fc422a6	# docs: remove the table inside the reoribuild docs
+#	df2999045415c4786141bd3a6302bbcd586a8905	# docs: fix typo
+	28b7c704dcf8ddc0c3545371acd5f2eee6eb3c9c	# add reserve to the fundchannel docs
+#	80dacd183e6f8050595e661a33d5313118349501	# doc: replace deprecated parameter keyword "msatoshi" with "amount_msat"
+#	2afe7a1856b04177898e2dea6b1050d4c8477d87	# pay: remove description_hash without description.
+#	418bb3cb3bc3c9d5b33ed12296de1e2e8b0a8a45	# invoice: expiry must be in seconds.
+#	ae48c7b78d8a87b1c031a121d456f7bb99fb92df	# wallet: fundpsbt, utxopsbt reserve cannot be bool.
+#	66bde4bd9f96b41b02bbc36c02c19579f7d054c4	# lightningd: only allow closing to native segwit
+#	62333425c2fd62756bdf8e305a112d37b0c0e517	# sendpay: remove style `legacy` setting.
+#	5b3746172f06c235892e3b1c5fbef50b9a9d8c68	# lightningd: remove `setchannelfee`.
+	c79c9c73fcbf19f90d93d8ce7471d9340f17df46	# Properly raise ValueError message in wait_for
+	3c8ec25a6f5caa0827fe13cc56176b6b17f82a4f:scrub-stamps	# dox: fix "sphinx-build -b html" warning: reference target not found
+	93c966c649edbf7157845f287e4e73ccfdda7f09:scrub-stamps	# doc: sphinx-build fix external links (urls), language warning and broken footnote
+	6939671a1b14f30a3ff8742d6891d4df725b6bdc	# Adds helper functions to cast Value variants
+	68f3e3fba9b457e2d25063fe3efdde5655cf337f	# pyln: add datastore routines.
+	7b24ea60e3ffba21ce5aa5f7620febaa3bcfeff1	# libplugin: more datastore helpers.
+#	d1b5943e906d5c2822f0ac13e08d8e91922a0352	# tests: make test_libplugin use the datastore.
+#	3b56e90a13a695c2142387728bb661037e520183	# Turn on logging for key topics in bitcoind for black box tests
+	8e75232205499e584d35e30901ca17f045b379bf	# rs: Update outdated dependencies
+	c5608897ad0d4f68b26d9f3c5153a8219d2d99fe	# rs: Remove unused dependency from cln-plugin -> cln-rpc
+#	465d9121bff0f50564b0b03fc9e1eedd43cf3937	# rs: Bump crate versions for publication
+#	f63ec151162798b41b625455f72bdd79bf5adebc	# ci: Unconditionally install `protoc`
+#	3ae58c44291148506128132b2a74b62f34dd9f60	# ci: Add `protoc` compiler to setup
+#	141c836b3956a79c7e740b16b129b7fdad3d3374	# doc: note that grpc needs the protobuf-compiler
+	6c1e589ee803ee3c37b8e1a2d81b2fde39007b45	# cln-plugin: make available the configuration in plugin
+	77ad5525f5b2282466a6bd39328072cfe06a11f2	# cln-plugin: Re-export anyhow::anyhow macro
+	b6d334de1da9f573c2938a4388e60dc3b2ab6b7a	# rs: Update cargo dependencies
+#	09a96739b3c97ed1e9930c4a60254ceea6edccc3	# Fix link to github.com/lightningd/plugins not clickable in README
+	6f4601041747e218629e56199dc26a8581b37397	# pyln-client: make Millisatoshi comparable to int
+#	65170be5b4527dfaff2362de9690cc182e436ec2	# Update release tag
+#	af502eb625b51a4b8ced54722fa66f79d29ab45d	# pytest: adds test for msat to int comparison
+	845503f72ecd4ee72dd32a8350cea397c0b78fab	# db: Fix the ordering of `channel_htlcs` in postgres
+#	89534f749a617a8434018a1bc469b4424cfad2b9	# rs: Add cln-rpc metadata
+#	dd8fafd8345184961908c99e29fe936e678c3e29	# rs: Add cln-grpc metadata
+#	5a4c8402a718b0fb207f06f4810091c394cf20f7	# rs: Add cln-plugin metadata
+	22eac967502bc465cb63bfcf337e23e552ec0465	# connectd: don't ask DNS seeds for addresses on every reconnect.
+	9d5eab1b69d3d6ae23bf5d1350af65400afb4fed	# topology: fix memleak in listchannels
+	42e038b9ad876a945a6a4eb5584ef8bd1b0b7c27	# lightningd: Look for channels by alias when finding channels
+	241cd8d0124960d015ea89425d3f5e01faa5318c:strip=contrib/pyln-testing/	# generate composite fields in grpc
+#	f3f5d8db17c3ca20bd65a6bd7eb3637fbb7d7394	# git: Mark node_pb2.py as text so we can see changes
+	50adcf10289c756c3b138c95853df7fa5730f4d4	# remove unnecessary CPU_TO_LE32
+#	87a0cb16032e8cfeca249e5ff04439238ae5d943	# Replace head -n with sort -R for better random peer selection
+	a6db22ece213038ff7d7bc5177ff773f458c8ec5	# cli: fix buffer overflow in (currently unused!) code for progress bars.
+#	4b98df186d117d6c7a1e0096a35a9640887a110b	# common: update comments documenting the use of param()
+#	90956fa947745259c50f48ac1fd8fa0e77d84686	# change zlib download path
+#	f918a04738604c4e5842b9a95cbb092c1ad49c5a	# unify the zlib version
+#	d49aea376c28a3139e7c690d14729c0263420ba2	# doc: "--enable-experimental-features" hard-codes experimental-offers + experimental-onion-messages
+	efd7a5868bb7fec2166050afdef8151695576503	# common/test: fix typo in bolt12 test vector generation.
+	81213cafd72324ae3e317d395d53502077e72d6f	# doc: fix accept-htlc-tlv-types description
+	85ce78f7386dfc328df8645eb44bc87627adf64e	# build(deps): bump tokio from 1.23.0 to 1.23.1
+	879db694e117150c9498ef062eab62ac3d10c163:strip=contrib/pyln-testing/:scrub-stamps	# Ping request types are changed from number to u16
+#	ddfdab12311161a6beec57c135274aa81802c56f	# doc: channel_state_changed has a timestamp field
+#	9ed138f5e578ba96256ff3d3d69f01c8c4bc0d05	# pytest: add tests for devtools/mkfunding
+	2d8fff6b57b2e604e997df9151098cce4edb30f2	# libplugin: don't turn non-string JSON ids into strings.
+	a1e894a4455fc59c1818016d396fe0739493a8ce	# lightningd: treat JSON ids as direct tokens.
+	435f8d84dca79aa48d753773baf3324543b78abc	# lightning-cli: fix error code on invalid options, document them.
+	19db6a25e40c70fe7a95547d124dae4a0cfa155a	# commando: require that we have an `id` field in JSON request.
+	b3fa4b932e1abe6f9cd2ab4709ac80ad8075f670	# commando: send `id` inside JSON request.
+	0201e6977f285bd15d51aab536287ed699ec8d46	# commando: build ID of command based on the id they give us.
+	b75ada701759773ce68ff3bc60094e11cc66b300	# commando: track incoming and outgoing JSON IDs.  Get upset if they don't match!
+	1250806060e1067987b175b350c8ccbd96924818	# commando: correctly replace the `id` field in responses.
+	3f0c5b985beb9771ed3673c3a675c8685c6aa62d	# commando: add filtering support.
+	404e961bad774e37d09fa2c4ff09f01dde074e6e	# cli: add -c/--commando support.
+#	3f8199bbfdb0ac1872bff55c3767b712bf13fa30	# doc: document that we should annotate added and deprecated schemas.
+	b2148d0eabdf8e2ca8a1c62f829ec826ff8a0930:strip='.*\b\(autoclean\|delforward\)':scrub-stamps	# docs: handle "added": "version" and "deprecated": "version" from schemas.
+	717cb03f51f0920e67cb4adcc0ac546a2cc9c3ec:scrub-stamps	# doc: add recent additions, fix annotation on listpeers to actually deprecate.
+#	3a39c635b663cf9eb696ef6105de7b42bc903757	# CI: rough check that schema changes seem to mention added, don't delete non-deprcated.
+#	66a4d500988dc989040dff984872d372b479ef5d	# tests: mark test as dev (times out otherwise)
+#	42c6d490825d5be51501650d3f0b9fbb063b82d9	# tests: add account_id's and match by acct id, not test ordering
+	da5eb03baef2f3d10e76226f1f64acefe9da46c5	# lightningd/chaintopology: ensure htables are always tal objects.
+	763d02e42495be28618f203a2d884286a5e40024	# lightningd: ensure htlc htables are always tal objects.
+	4a570c9419a1e9c04b687f40ab1a755abd042e86	# gossmap: ensure htables are always tal objects.
+	81e57dce52c22e7e9bb00962214e3f7963be4ba3	# connectd: ensure htables are always tal objects.
+	851cbf6c83a1d2792dbadd62db746bf28471e21c	# memleak: prepare for htable to be a tal object.
+	4200371020844c24e97a363323959e1cea4c8d91	# gossipd: ensure htables are always tal objects.
+	94e8ce030a5ca8649304153bc99d191ebc3260c0	# gossipd: use pointer to hash table for channels in node.
+	3c4ce9e448aed2bb10086ff2822fc58256e683ba:resolve-conflicts	# plugins/pay: ensure htables are always tal objects.
+	0d93841cc7c79d3fc92163d327486498acd4dd25	# plugins/command: ensure htables are always tal objects.
+	f07e37018d61052f11ad2bf679a576fe183ccf39	# setup: make all htables use tal.
+	5dfcd1578215fa98b7a7937dc48088384c60bf1a	# all: no longer need to call htable_clear to free htable contents.
+	60441843233f80d74ae2337f2942a944abd3fcc9	# lightningd: don't call memcpy with NULL.
+	300f732bbe7fe04a2ad800785584b5e8cdf5de4d	# proposal_meets_depth tracked output always has a proposal
+	1d8b8995514b95846d74173d9317d6301694b04c	# lightningd: prepare internal json routines for listpeerchannels.
+	6fa904b4fb19941a98d99f526300085df478338c	# lightningd: add listpeerchannels command
+	cb5ee7e49caae35a3b825c942803e82201952151	# plugins: make bookkeeper use the new listpeerchannels command.
+	57dcf68c0b97f1d7d553f420451481147283461b	# plugins/libplugin: flatten return from json_to_listpeers_result.
+	5d5b9c6812f86646929e5655b2b211637d88f9a9	# libplugin: don't return unopened channels from json_to_listpeers_channels().
+	ff2d7e6833201e82748932f41af5580aa956e878	# pay: use json_to_listpeers_channels() for local_channel_hints.
+	a56c890ae5a7fba5f024d6f9afabf1c565069037	# plugins: use listpeerchannels instead of listpeers.
+	c48856128242ba6995fc1327fe1b0f288995a7b3	# plugins/topology: use listpeerchannels.
+#	f08d3516f7d5ecfb027f2d12f296163e1d29754f	# contrib/pyln-testing: use listpeerchannels.
+#	1fa32333b9cf1f1aec52b8e1327735da47a1064e	# tests/utils.py: use listpeerchannels.
+#	a2347c74526608e190c88dd1192deabf52b77455	# tests: use listpeerchannels.
+#	9ffaab7d2245661b7c5c01f562f6aad3ea9d1fcf	# pytest: fix race in test_bookkeeping_closing_subsat_htlcs
+#	6c0b9b0c789a5bc024d62ab200f9456525f5e523	# lightningd: deprecate listpeers.channels
+	f1373fd98ca0f2907d2f25434da344efb58a8e08	# doc: remove manual field descriptions from listpeerchannels(7).
+	6b977f0292fc2026ce79fc4f25bbd13d6db5f64f	# cln-grpc: update listpeers json fixing tests
+#	2b5f4d14d112d7eb755615c6f561298fd6aa0cd3	# CI: fix schema diff check.
+	e5d384a427011eb70d4968932c5964b1c37dc403	# gossip: Do not send warnings if we fail to parse a `channel_update`
+#	85fc46f76cf2f9577d338885b14d838d19d4b330	# pyln-testing: don't default openchannel and fundwallet to p2sh-segwit, use bech32.
+#	2f36c033075dad335fba44a52d0da36573da09bf	# pytest: use bech32 addresses everywhere.
+#	932ca9e91fb0d8ddcf69d18db0799f4e4fae6f94	# lightningd: deprecate p2sh-segwit addresses for `newaddr` `addresstype`
+#	9d5841a0e66ae19ff493b9c991e9b00023e15356	# pytest: fix flake in tests/test_closing.py::test_closing_specified_destination
+#	1fbf774e043ff4c17111027994154d05ccfdc58f	# gci: Split out the lnprototest from the larger CI run
+#	8c075c4cdaef60d794bf0274ec4993b1d472ab5e	# gci: Stop uploading unit test results
+#	a00190dce5bb97284dd0f0a90803949e3324f64b	# gci: Update Github Actions steps to their latest versions
+#	4d668e76a0e028d1032b3da1471d43adc00bf141	# gci: Split out the stages better
+#	6d67eb934dff4caf7cf367fe86d62af0b84e70f4	# py: Ignore missing whitespace after keyword for now
+#	10abb620a8379faaa405188819ebc43724fb394b	# gci: Clone BOLTs repository in pre-build checks
+#	69e37a886508451ba0ba19d070a4ed2e3677d50c	# gci: Re-add tests of pre-compiled binaries
+#	a20540eb15eceebbe51ef5426024c5174c9bfb55	# ci: Add a testpack.tar target to tranfer artifacts between CI jobs
+#	a650dcb26d22777b777a1147d388ecf01c1cd70c	# ci: Split the pre-flight checks into separate steps
+#	e7ee40e9516da34335a1671e9f68be523e24e90e	# ci: Split out the unit tests
+#	34f095407447f5018a72e5b35a8837b7da5de4e4	# ci: Automatically cancel CI runs if we push a new version to the PR
+#	6fe63956785adfe1f4ab6b6e9180d994c5657585	# ci: Add bitcoind to integration test job
+	bcc75b6e98c139e578bfa3dd7e85dc170f577559	# tests: Fix a small memory leak in the onion test vector tester
+#	ca3053707f425356a84dca281c9972dbcabb207f	# ci: Build and test in ubuntu:22.04 and install lowdown
+#	b40fd3efbd5ee42980c3f9352c5916de974847e4	# ci: Add gather step
+#	e76618e2a6697f5a37789e1692a61be4669c2608	# ci: Use bzip2 and release to reduce artifact size
+#	71b581da4d7057281b95543dbb75d874dba0245e	# make: Clean up duplicate cargo examples build rules
+#	e17611c570267430007b7866c59b9b4a78eb18a0	# gci: Split out installation of elements and bitcoin into a script
+#	383fca7d0ec82957f01786345614177436a4b328	# gci: Add an explicit name to the matrix for display
+#	b0e3d483e6549ec37866a163a0c8602a16206815	# gci: Add a test for the postgres backend
+#	e3a9bda301c9c83201a425ba0f96e551b5798e8c	# ci: Downgrade the upload-artifact action to v2.2.4
+#	1f2179645420eceb1e457ab8d7c1e92d37c12eec	# gha: Temporarily disable `test_notify`
+	288f5df8d11f225f0e1996f9092e3d1b8848c84f	# ccan: update to fix recent gcc "comparison will always evaluate as 'false'" warning
+	8d825ef0b7f858ee6f6c77a5bab92417660642c3	# lightningd: fix valgrind reported leak when we exit early.
+#	8f94e8b94315d17d9316146b5b3c5ae64184432f	# comm: make sure that our version check is reliable
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -606,7 +760,7 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer doc experimental +man postgres python +recent-libsecp256k1 rust sqlite test"
+IUSE="developer doc experimental +man postgres python rust sqlite test"
 RESTRICT="mirror !test? ( test )"
 
 CDEPEND="
@@ -771,12 +925,6 @@ src_prepare() {
 		-i doc/conf.py || die
 
 	use python && distutils-r1_src_prepare
-
-	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
-		# suppress transitive dependency on rustfmt
-		sed -e 's/^\(tonic-build = \)\(.*\)$/\1{ version = \2, default-features = false, features = ["prost", "transport"] }/' \
-			-i cln-grpc/Cargo.toml || die
-	fi
 }
 
 src_configure() {

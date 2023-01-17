@@ -324,19 +324,7 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
-	# don't require running in a Git worktree
-	sed -e '/^import subprocess$/d' \
-		-e 's/^\(version = \).*$/\1"'"$(ver_cut 1-3)"'"/' \
-		-e 's/^\(release = \).*$/\1"'"${MyPV}-gentoo-${PR}"'"/' \
-		-i doc/conf.py || die
-
 	use python && distutils-r1_src_prepare
-
-	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
-		# suppress transitive dependency on rustfmt
-		sed -e 's/^\(tonic-build = \)\(.*\)$/\1{ version = \2, default-features = false, features = ["prost", "transport"] }/' \
-			-i cln-grpc/Cargo.toml || die
-	fi
 }
 
 src_configure() {
@@ -463,7 +451,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-22.11.1.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
