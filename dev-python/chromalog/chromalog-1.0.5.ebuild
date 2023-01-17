@@ -25,6 +25,7 @@ RDEPEND="
 DEPEND=""
 BDEPEND="
 	test? (
+		dev-python/mock[${PYTHON_USEDEP}]
 		dev-python/parameterized[${PYTHON_USEDEP}]
 	)
 "
