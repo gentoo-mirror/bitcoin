@@ -1,0 +1,142 @@
+--- /var/cache/distfiles/ff2d7e6833201e82748932f41af5580aa956e878.patch	2023-01-12 23:58:59.151435424 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r112/temp/ff2d7e6833201e82748932f41af5580aa956e878.patch	2023-01-13 00:22:53.332190837 -0500
+@@ -21,15 +21,16 @@
+ index 02bacca9ce3..7584319bede 100644
+ --- a/plugins/libplugin-pay.c
+ +++ b/plugins/libplugin-pay.c
+-@@ -2350,73 +2350,39 @@ static struct command_result *
++@@ -2350,61 +2350,37 @@ static struct command_result *
+  local_channel_hints_listpeers(struct command *cmd, const char *buffer,
+  			      const jsmntok_t *toks, struct payment *p)
+  {
+ -	const jsmntok_t *peers, *peer, *channels, *channel, *spendsats, *scid,
+--	    *dir, *connected, *max_htlc, *htlcs, *state, *alias, *alias_local;
++-		*dir, *connected, *max_htlc, *htlcs, *state;
+ -	size_t i, j;
+ -	peers = json_get_member(buffer, toks, "peers");
+--
+++	struct listpeers_channel **chans;
++ 
+ -	if (peers == NULL)
+ -		goto done;
+ -        /* cppcheck-suppress uninitvar - cppcheck can't undestand these macros. */
+@@ -37,69 +38,42 @@
+ -		channels = json_get_member(buffer, peer, "channels");
+ -		if (channels == NULL)
+ -			continue;
+--
+++	chans = json_to_listpeers_channels(tmpctx, buffer, toks);
++ 
+ -		connected = json_get_member(buffer, peer, "connected");
+--
+++	for (size_t i = 0; i < tal_count(chans); i++) {
+++		struct short_channel_id scid;
+++		bool enabled;
+++		u16 htlc_budget;
++ 
+ -		json_for_each_arr(j, channel, channels) {
+ -			struct channel_hint h;
+ -			spendsats = json_get_member(buffer, channel, "spendable_msat");
+ -			scid = json_get_member(buffer, channel, "short_channel_id");
+-+	struct listpeers_channel **chans;
+- 
+--			alias = json_get_member(buffer, channel, "alias");
+--			if (alias != NULL)
+--				alias_local = json_get_member(buffer, alias, "local");
+--			else
+--				alias_local = NULL;
+--
+ -			dir = json_get_member(buffer, channel, "direction");
+ -			max_htlc = json_get_member(buffer, channel, "max_accepted_htlcs");
+ -			htlcs = json_get_member(buffer, channel, "htlcs");
+ -			state = json_get_member(buffer, channel, "state");
+--			if (spendsats == NULL ||
+--			    (scid == NULL && alias_local == NULL) ||
+--			    dir == NULL || max_htlc == NULL || state == NULL ||
++-			if (spendsats == NULL || scid == NULL || dir == NULL ||
++-			    max_htlc == NULL || state == NULL ||
+ -			    max_htlc->type != JSMN_PRIMITIVE || htlcs == NULL ||
+ -			    htlcs->type != JSMN_ARRAY)
+ -				continue;
+-+	chans = json_to_listpeers_channels(tmpctx, buffer, toks);
+++		/* Filter out local channels if they are
+++		 * either a) disconnected, or b) not in normal
+++		 * state. */
+++		enabled = chans[i]->connected && streq(chans[i]->state, "CHANNELD_NORMAL");
+  
+ -			/* Filter out local channels if they are
+ -			 * either a) disconnected, or b) not in normal
+ -			 * state. */
+ -			json_to_bool(buffer, connected, &h.enabled);
+ -			h.enabled &= json_tok_streq(buffer, state, "CHANNELD_NORMAL");
+-+	for (size_t i = 0; i < tal_count(chans); i++) {
+-+		struct short_channel_id scid;
+-+		bool enabled;
+-+		u16 htlc_budget;
+- 
+--			if (scid != NULL)
+--				json_to_short_channel_id(buffer, scid, &h.scid.scid);
+--			else
+--				json_to_short_channel_id(buffer, alias_local, &h.scid.scid);
+-+		/* Filter out local channels if they are
+-+		 * either a) disconnected, or b) not in normal
+-+		 * state. */
+-+		enabled = chans[i]->connected && streq(chans[i]->state, "CHANNELD_NORMAL");
+- 
+--			json_to_int(buffer, dir, &h.scid.dir);
+--
+--			json_to_msat(buffer, spendsats, &h.estimated_capacity);
+--
+--			/* Take the configured number of max_htlcs and
+--			 * subtract any HTLCs that might already be added to
+--			 * the channel. This is a best effort estimate and
+--			 * mostly considers stuck htlcs, concurrent payments
+--			 * may throw us off a bit. */
+--			json_to_u16(buffer, max_htlc, &h.htlc_budget);
+--			h.htlc_budget -= htlcs->size;
+--			h.local = true;
+ +		if (chans[i]->scid != NULL)
+ +			scid = *chans[i]->scid;
+-+		else
+-+			scid = *chans[i]->alias[LOCAL];
+-+
++ 
++-			json_to_short_channel_id(buffer, scid, &h.scid.scid);
++-			json_to_int(buffer, dir, &h.scid.dir);
+ +		/* Take the configured number of max_htlcs and
+ +		 * subtract any HTLCs that might already be added to
+ +		 * the channel. This is a best effort estimate and
+@@ -110,6 +84,17 @@
+ +		else
+ +			htlc_budget = chans[i]->max_accepted_htlcs - chans[i]->num_htlcs;
+  
++-			json_to_msat(buffer, spendsats, &h.estimated_capacity);
++-
++-			/* Take the configured number of max_htlcs and
++-			 * subtract any HTLCs that might already be added to
++-			 * the channel. This is a best effort estimate and
++-			 * mostly considers stuck htlcs, concurrent payments
++-			 * may throw us off a bit. */
++-			json_to_u16(buffer, max_htlc, &h.htlc_budget);
++-			h.htlc_budget -= htlcs->size;
++-			h.local = true;
++-
+ -			channel_hints_update(p, h.scid.scid, h.scid.dir,
+ -					     h.enabled, true, &h.estimated_capacity, &h.htlc_budget);
+ -		}
+@@ -126,11 +111,11 @@
+ --- a/plugins/libplugin.c
+ +++ b/plugins/libplugin.c
+ @@ -1912,7 +1912,9 @@ static struct listpeers_channel *json_to_listpeers_channel(const tal_t *ctx,
+- 			*tmsattok = json_get_member(buffer, tok, "total_msat"),
++ 			*tmsattok =
++ 			    json_get_member(buffer, tok, "total_msat"),
+  			*smsattok =
+- 			    json_get_member(buffer, tok, "spendable_msat"),
+--			*aliastok = json_get_member(buffer, tok, "alias");
+-+			*aliastok = json_get_member(buffer, tok, "alias"),
++-			    json_get_member(buffer, tok, "spendable_msat");
+++			    json_get_member(buffer, tok, "spendable_msat"),
+ +			*max_htlcs = json_get_member(buffer, tok, "max_accepted_htlcs"),
+ +			*htlcstok = json_get_member(buffer, tok, "htlcs");
+  
