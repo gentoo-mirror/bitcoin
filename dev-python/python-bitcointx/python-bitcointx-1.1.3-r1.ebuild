@@ -4,7 +4,6 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{9..11} )
-PYTHON_REQ_USE="ssl" # for ripemd160
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
@@ -18,13 +17,11 @@ SRC_URI="${HOMEPAGE}/archive/${PN}-v${MyPV}.tar.gz"
 LICENSE="LGPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 RDEPEND="
 	>=dev-libs/libsecp256k1-0.1_pre20211111
+	|| ( =dev-libs/openssl-compat-1.1* dev-libs/openssl:0/1.1 )
 "
-DEPEND=""
-BDEPEND=""
 
 S="${WORKDIR}/${PN}-${PN}-v${MyPV}"
 
@@ -32,6 +29,10 @@ distutils_enable_tests unittest
 
 src_prepare() {
 	default
+
+	# https://github.com/Simplexum/python-bitcointx/issues/76
+	sed -e 's/ctypes\.util\.find_library('\''ssl'\'')$/'\''libssl.so.1.1'\''/' \
+		-i bitcointx/core/key.py || die
 
 	# don't install the unit tests
 	sed -e 's/\(packages=find_packages\)()/\1(exclude=["bitcointx.tests"])/' \
