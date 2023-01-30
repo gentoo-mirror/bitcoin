@@ -28,25 +28,25 @@ REQUIRED_USE="qt5? ( client )"
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
-		dev-python/service_identity[${PYTHON_USEDEP}]
+		>=dev-python/service_identity-21.1.0[${PYTHON_USEDEP}]
 		>=dev-python/twisted-22.4.0[${PYTHON_USEDEP}]
 
 		client? (
 			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
-			dev-python/argon2-cffi[${PYTHON_USEDEP}]
-			>=dev-python/bencoder-pyx-2.0.0[${PYTHON_USEDEP}]
+			>=dev-python/argon2-cffi-21.3.0[${PYTHON_USEDEP}]
+			>=dev-python/bencoder-pyx-3.0.1[${PYTHON_USEDEP}]
 			>=dev-python/klein-20.6.0[${PYTHON_USEDEP}]
-			dev-python/mnemonic[${PYTHON_USEDEP}]
-			dev-python/pyaes[${PYTHON_USEDEP}]
+			>=dev-python/mnemonic-0.20[${PYTHON_USEDEP}]
+			>=dev-python/pyaes-1.6.1[${PYTHON_USEDEP}]
 			>=dev-python/pyjwt-2.4.0[${PYTHON_USEDEP}]
 			>=dev-python/python-bitcointx-1.1.3[${PYTHON_USEDEP}]
 		)
 
 		daemon? (
 			>=dev-python/cryptography-3.3.2[${PYTHON_USEDEP}]
-			dev-python/libnacl[${PYTHON_USEDEP}]
-			dev-python/pyopenssl[${PYTHON_USEDEP}]
-			dev-python/txtorcon[${PYTHON_USEDEP}]
+			>=dev-python/libnacl-1.8.0[${PYTHON_USEDEP}]
+			>=dev-python/pyopenssl-21.0.0[${PYTHON_USEDEP}]
+			>=dev-python/txtorcon-22.0.0[${PYTHON_USEDEP}]
 		)
 
 		qt5? (
@@ -68,7 +68,7 @@ BDEPEND="
 			dev-python/freezegun[${PYTHON_USEDEP}]
 			dev-python/mock[${PYTHON_USEDEP}]
 			dev-python/pexpect[${PYTHON_USEDEP}]
-			>=dev-python/pytest-5.3.5[${PYTHON_USEDEP}]
+			>=dev-python/pytest-6.2.5[${PYTHON_USEDEP}]
 			!!<dev-python/pytest-twisted-1.13.4-r1[${PYTHON_USEDEP}]
 		)
 	')
@@ -78,10 +78,6 @@ BDEPEND="
 		>=net-p2p/bitcoind-0.20
 	)
 "
-
-PATCHES=(
-	"${FILESDIR}/0.9.8-eliminate-urldecode-dependency.patch"
-)
 
 S="${WORKDIR}/${MyPN}-${PV}"
 
@@ -192,8 +188,6 @@ pkg_postinst() {
 		ewarn 'This release of JoinMarket moves the user data directory to ~/.joinmarket.'
 		ewarn 'You must manually move any existing data files. See the release notes:'
 		ewarn "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory"
-	elif [[ " ${REPLACING_VERSIONS} " == *' 0.9.7 '* ]] ; then
-		elog "There are no changes to the default ${PORTAGE_COLOR_HILITE-${HILITE}}joinmarket.cfg${PORTAGE_COLOR_NORMAL-${NORMAL}} since version 0.9.7."
 	else
 		elog "It is always a good idea to back up your ${PORTAGE_COLOR_HILITE-${HILITE}}joinmarket.cfg${PORTAGE_COLOR_NORMAL-${NORMAL}}, re-create a"
 		elog 'default one, and then reapply your changes, as this will populate any'
