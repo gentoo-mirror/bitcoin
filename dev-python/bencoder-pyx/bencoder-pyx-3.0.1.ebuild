@@ -22,9 +22,9 @@ IUSE=""
 RDEPEND=""
 DEPEND=""
 BDEPEND="
-	>=dev-python/cython-0.29.26[${PYTHON_USEDEP}]
+	>=dev-python/cython-0.29.32[${PYTHON_USEDEP}]
 	test? (
-		>=dev-python/pytest-6.2.5[${PYTHON_USEDEP}]
+		>=dev-python/pytest-7.2.0[${PYTHON_USEDEP}]
 	)
 "
 
