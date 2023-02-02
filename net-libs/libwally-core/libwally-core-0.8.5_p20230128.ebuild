@@ -1,13 +1,20 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit autotools multilib-minimal
+inherit autotools backports multilib-minimal
+
+MyPV=$(ver_cut 1-3)
+BACKPORTS=(
+	d839dbab4279e1d3d1ece4e52d4766f523b3f7ee	# script: merge back multisig fix to 0.8.5
+)
 
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
-SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz"
+BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
+SRC_URI="${HOMEPAGE}/archive/release_${MyPV}.tar.gz -> ${PN}-${MyPV}.tar.gz
+	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0"
 SLOT="0/0.8.2"
@@ -26,7 +33,7 @@ RDEPEND="${DEPEND}
 	!=net-p2p/core-lightning-9999
 "
 
-S="${WORKDIR}/${PN}-release_${PV}"
+S="${WORKDIR}/${PN}-release_${MyPV}"
 
 PATCHES=(
 	"${FILESDIR}/0.8.5-sys_libsecp256k1_zkp.patch"
@@ -48,7 +55,12 @@ the running lightningd daemon and then reattempt this installation."
 	fi
 }
 
+src_unpack() {
+	unpack "${PN}-${MyPV}.tar.gz"
+}
+
 src_prepare() {
+	backports_apply_patches
 	sed -e 's|\(#[[:space:]]*include[[:space:]]\+\)"\(src/\)\?secp256k1/include/\(.*\)"|\1<\3>|' \
 		-i src/*.{c,h} || die
 	rm -r src/secp256k1
