@@ -138,7 +138,7 @@ CRATES="
 	time-0.3.17
 	time-core-0.1.0
 	time-macros-0.2.6
-	tokio-1.23.1
+	tokio-1.24.2
 	tokio-io-timeout-1.2.0
 	tokio-macros-1.8.2
 	tokio-rustls-0.23.4
