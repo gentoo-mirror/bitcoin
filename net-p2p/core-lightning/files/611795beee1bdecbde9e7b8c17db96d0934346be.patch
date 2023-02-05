@@ -1,0 +1,30 @@
+--- /var/cache/distfiles/611795beee1bdecbde9e7b8c17db96d0934346be.patch	2023-02-04 17:55:28.170455632 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r102/temp/611795beee1bdecbde9e7b8c17db96d0934346be.patch	2023-02-04 18:27:20.420474273 -0500
+@@ -548,7 +546,7 @@
+  		", t.blockheight"
+  		", t.txindex"
+ -		", t.type as txtype"
+--		", c2.scid as txchan"
++-		", c2.short_channel_id as txchan"
+  		", a.location"
+  		", a.idx as ann_idx"
+  		", a.type as annotation_type"
+@@ -562,7 +560,7 @@
+  		"ORDER BY t.blockheight, t.txindex ASC"));
+  	db_query_prepared(stmt);
+  
+-@@ -4836,16 +4773,6 @@ struct wallet_transaction *wallet_transactions_get(struct wallet *w, const tal_t
++@@ -4724,17 +4661,6 @@ struct wallet_transaction *wallet_transactions_get(struct wallet *w, const tal_t
+  				cur->blockheight = 0;
+  				cur->txindex = 0;
+  			}
+@@ -572,7 +570,8 @@
+ -			else
+ -				cur->annotation.type = 0;
+ -			if (!db_col_is_null(stmt, "txchan"))
+--				db_col_scid(stmt, "txchan", &cur->annotation.channel);
++-				db_col_short_channel_id_str(stmt, "txchan",
++-							    &cur->annotation.channel);
+ -			else
+ -				cur->annotation.channel.u64 = 0;
+ -
