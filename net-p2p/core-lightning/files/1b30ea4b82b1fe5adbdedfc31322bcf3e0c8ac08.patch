@@ -1,0 +1,227 @@
+--- /var/cache/distfiles/1b30ea4b82b1fe5adbdedfc31322bcf3e0c8ac08.patch	2023-02-04 18:17:03.193111538 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r113/temp/1b30ea4b82b1fe5adbdedfc31322bcf3e0c8ac08.patch	2023-02-04 20:34:51.295233411 -0500
+@@ -145,27 +153,17 @@
+  
+  	if (!channel_id_eq(&chanid, &peer->channel_id))
+  		peer_failed_err(peer->pps, &chanid,
+-@@ -634,17 +634,17 @@ static void handle_peer_funding_locked(struct peer *peer, const u8 *msg)
++@@ -616,10 +616,10 @@ static void handle_peer_funding_locked(struct peer *peer, const u8 *msg)
+  					       &peer->channel_id));
+  
+  	peer->tx_sigs_allowed = false;
+ -	peer->funding_locked[REMOTE] = true;
+--	if (tlvs->alias != NULL) {
+ +	peer->channel_ready[REMOTE] = true;
+-+	if (tlvs->short_channel_id != NULL) {
+- 		status_debug(
+- 		    "Peer told us that they'll use alias=%s for this channel",
+- 		    type_to_string(tmpctx, struct short_channel_id,
+--				   tlvs->alias));
+--		peer->short_channel_ids[REMOTE] = *tlvs->alias;
+-+				   tlvs->short_channel_id));
+-+		peer->short_channel_ids[REMOTE] = *tlvs->short_channel_id;
+- 	}
+  	wire_sync_write(MASTER_FD,
+--			take(towire_channeld_got_funding_locked(
+--			    NULL, &peer->remote_per_commit, tlvs->alias)));
++-			take(towire_channeld_got_funding_locked(NULL,
++-						&peer->remote_per_commit)));
+ +			take(towire_channeld_got_channel_ready(
+-+			    NULL, &peer->remote_per_commit, tlvs->short_channel_id)));
+++			    NULL, &peer->remote_per_commit)));
+  
+  	channel_announcement_negotiate(peer);
+  	billboard_update(peer);
+@@ -240,18 +238,9 @@
+  					    &peer->channel_id,
+  					    &peer->next_local_per_commit, tlvs);
+  		peer_write(peer->pps, take(msg));
+-@@ -3229,7 +3231,7 @@ static void handle_funding_depth(struct peer *peer, const u8 *msg)
+- {
+- 	u32 depth;
+- 	struct short_channel_id *scid, *alias_local;
+--	struct tlv_funding_locked_tlvs *tlvs;
+-+	struct tlv_channel_ready_tlvs *tlvs;
+- 	struct pubkey point;
+- 
+- 	if (!fromwire_channeld_funding_depth(tmpctx,
+-@@ -3258,25 +3260,25 @@ static void handle_funding_depth(struct peer *peer, const u8 *msg)
+- 		else if (alias_local)
+- 			peer->short_channel_ids[LOCAL] = *alias_local;
++@@ -3224,21 +3226,21 @@ static void handle_funding_depth(struct peer *peer, const u8 *msg)
++ 		assert(scid);
++ 		peer->short_channel_ids[LOCAL] = *scid;
+  
+ -		if (!peer->funding_locked[LOCAL]) {
+ -			status_debug("funding_locked: sending commit index"
+@@ -261,20 +250,15 @@
+  				     peer->next_index[LOCAL],
+  				     type_to_string(tmpctx, struct pubkey,
+  						    &peer->next_local_per_commit));
+--			tlvs = tlv_funding_locked_tlvs_new(tmpctx);
+--			tlvs->alias = alias_local;
+-+			tlvs = tlv_channel_ready_tlvs_new(tmpctx);
+-+			tlvs->short_channel_id = alias_local;
+- 
+- 			/* Need to retrieve the first point again, even if we
+--			 * moved on, as funding_locked explicitly includes the
+-+			 * moved on, as channel_ready explicitly includes the
+- 			 * first one. */
+- 			get_per_commitment_point(1, &point, NULL);
+- 
+--			msg = towire_funding_locked(NULL, &peer->channel_id,
+-+			msg = towire_channel_ready(NULL, &peer->channel_id,
+- 						    &point, tlvs);
++-			struct tlv_funding_locked_tlvs *tlvs =
++-			    tlv_funding_locked_tlvs_new(tmpctx);
+++			struct tlv_channel_ready_tlvs *tlvs =
+++			    tlv_channel_ready_tlvs_new(tmpctx);
++ 
++-			msg = towire_funding_locked(
+++			msg = towire_channel_ready(
++ 			    NULL, &peer->channel_id,
++ 			    &peer->next_local_per_commit, tlvs);
+  			peer_write(peer->pps, take(msg));
+  
+ -			peer->funding_locked[LOCAL] = true;
+@@ -326,18 +310,16 @@
+  msgdata,channeld_init,funding_short_id,short_channel_id,
+  msgdata,channeld_init,reestablish,bool,
+  msgdata,channeld_init,send_shutdown,bool,
+-@@ -117,10 +117,10 @@ msgdata,channeld_fulfill_htlc,fulfilled_htlc,fulfilled_htlc,
++@@ -114,9 +114,9 @@ msgdata,channeld_fulfill_htlc,fulfilled_htlc,fulfilled_htlc,
+  msgtype,channeld_fail_htlc,1006
+  msgdata,channeld_fail_htlc,failed_htlc,failed_htlc,
+  
+ -# When we receive funding_locked.
+ -msgtype,channeld_got_funding_locked,1019
+ -msgdata,channeld_got_funding_locked,next_per_commit_point,pubkey,
+--msgdata,channeld_got_funding_locked,alias,?short_channel_id,
+ +# When we receive channel_ready.
+ +msgtype,channeld_got_channel_ready,1019
+ +msgdata,channeld_got_channel_ready,next_per_commit_point,pubkey,
+-+msgdata,channeld_got_channel_ready,alias,?short_channel_id,
+  
+  #include <common/penalty_base.h>
+  
+@@ -372,20 +354,6 @@
+   *   - no features (no bits set)
+   *   - `option_static_remotekey` (bit 12)
+   *   - `option_anchor_outputs` and `option_static_remotekey` (bits 20 and 12)
+-@@ -118,8 +118,11 @@ struct channel_type *channel_type_accept(const tal_t *ctx,
+- 		OPT_ZEROCONF,
+- 	};
+- 
+--	/* The basic channel_types can have any number of the
+--	 * following optional bits. */
+-+	/* BOLT #2:
+-+	 * Each basic type has the following variations allowed:
+-+	 *   - `option_scid_alias` (bit 46)
+-+	 *   - `option_zeroconf` (bit 50)
+-+	 */
+- 	static const size_t variants[] = {
+- 		OPT_ZEROCONF,
+- 	};
+ diff --git a/common/gossip_constants.h b/common/gossip_constants.h
+ index dac2562eb9f..3ce395eac70 100644
+ --- a/common/gossip_constants.h
+@@ -480,8 +448,8 @@
+ -	channel->remote_funding_locked = remote_funding_locked;
+ +	channel->remote_channel_ready = remote_channel_ready;
+  	channel->scid = tal_steal(channel, scid);
+- 	channel->alias[LOCAL] = tal_steal(channel, alias_local);
+- 	channel->alias[REMOTE] = tal_steal(channel, alias_remote);  /* Haven't gotten one yet. */
++ 	channel->cid = *cid;
++ 	channel->our_msat = our_msat;
+ diff --git a/lightningd/channel.h b/lightningd/channel.h
+ index eba34ffa083..a971b012e42 100644
+ --- a/lightningd/channel.h
+@@ -517,7 +485,7 @@
+  
+  	/* We might have already started shutting down */
+  	if (channel->state != CHANNELD_AWAITING_LOCKIN) {
+-@@ -225,41 +225,37 @@ static void lockin_complete(struct channel *channel)
++@@ -206,40 +206,36 @@ static void lockin_complete(struct channel *channel)
+  			    true);
+  }
+  
+@@ -553,11 +521,10 @@
+ +static void peer_got_channel_ready(struct channel *channel, const u8 *msg)
+  {
+  	struct pubkey next_per_commitment_point;
+- 	struct short_channel_id *alias_remote;
+  
+--	if (!fromwire_channeld_got_funding_locked(tmpctx,
+-+	if (!fromwire_channeld_got_channel_ready(tmpctx,
+- 		msg, &next_per_commitment_point, &alias_remote)) {
++-	if (!fromwire_channeld_got_funding_locked(msg,
+++	if (!fromwire_channeld_got_channel_ready(msg,
++ 						 &next_per_commitment_point)) {
+  		channel_internal_error(channel,
+ -				       "bad channel_got_funding_locked %s",
+ +				       "bad channel_got_channel_ready %s",
+@@ -569,7 +536,7 @@
+ +	if (!channel_on_channel_ready(channel, &next_per_commitment_point))
+  		return;
+  
+- 	if (channel->alias[REMOTE] == NULL)
++ 	if (channel->scid)
+ @@ -538,8 +534,8 @@ static unsigned channel_msg(struct subd *sd, const u8 *msg, const int *fds)
+  	case WIRE_CHANNELD_GOT_REVOKE:
+  		peer_got_revoke(sd->channel, msg);
+@@ -590,23 +557,19 @@
+  				       &scid,
+  				       reconnected,
+  				       /* Anything that indicates we are or have
+-@@ -859,12 +855,11 @@ bool channel_tell_depth(struct lightningd *ld,
+- 		      take(towire_channeld_funding_depth(
+- 			  NULL, channel->scid, channel->alias[LOCAL], depth)));
+- 
+--	if (channel->remote_funding_locked &&
+--		 channel->state == CHANNELD_AWAITING_LOCKIN &&
+--		 depth >= channel->minimum_depth)
++@@ -831,9 +827,9 @@ bool channel_tell_depth(struct lightningd *ld,
++ 		      take(towire_channeld_funding_depth(NULL, channel->scid,
++ 							 depth)));
++ 
++-	if (channel->remote_funding_locked
++-	    && channel->state == CHANNELD_AWAITING_LOCKIN
++-	    && depth >= channel->minimum_depth)
+ +	if (channel->remote_channel_ready &&
+ +	    channel->state == CHANNELD_AWAITING_LOCKIN &&
+-+	    depth >= channel->minimum_depth) {
+++	    depth >= channel->minimum_depth)
+  		lockin_complete(channel);
+--
+--	else if (depth == 1 && channel->minimum_depth == 0) {
+-+	} else if (depth == 1 && channel->minimum_depth == 0) {
+- 		/* If we have a zeroconf channel, i.e., no scid yet
+- 		 * but have exchange `channel_ready` messages, then we
+- 		 * need to fire a second time, in order to trigger the
++ 
++ 	return true;
+ diff --git a/lightningd/channel_control.h b/lightningd/channel_control.h
+ index 9008bed1d05..2f8b356e863 100644
+ --- a/lightningd/channel_control.h
+@@ -723,8 +686,8 @@
+ -			      false, /* !remote_funding_locked */
+ +			      false, /* !remote_channel_ready */
+  			      NULL, /* no scid yet */
+- 			      alias_local, /* But maybe we have an alias we want to use? */
+- 			      NULL, /* They haven't told us an alias yet */
++ 			      cid,
++ 			      /* The three arguments below are msatoshi_to_us,
+ @@ -539,7 +539,7 @@ static void opening_fundee_finished(struct subd *openingd,
+  
+  	/* Tell plugins about the success */
+@@ -756,8 +719,8 @@
+ -			      true, /* !remote_funding_locked */
+ +			      true, /* remote_channel_ready */
+  			      scid,
+- 			      scid,
+- 			      scid,
++ 			      &cid,
++ 			      /* The three arguments below are msatoshi_to_us,
+ diff --git a/openingd/dualopend.c b/openingd/dualopend.c
+ index c2de0716b3f..0c40c0fdc6a 100644
+ --- a/openingd/dualopend.c

@@ -138,7 +138,7 @@ CRATES="
 	time-0.3.17
 	time-core-0.1.0
 	time-macros-0.2.6
-	tokio-1.23.1
+	tokio-1.24.2
 	tokio-io-timeout-1.2.0
 	tokio-macros-1.8.2
 	tokio-rustls-0.23.4
@@ -764,8 +764,8 @@ BACKPORTS=(
 #	7df530d18463d3937cc5b188d2158b56dcf6cb2d	# builds: cleanup duplicate and unused code, fix spelling
 	ec95c7c18c9200145545de0b491db3cc2f51bb28	# peer_control: fix getinfo showing unannounced addr
 	c6858748bb7d9446d45275ab3f86f7cc8cabb28b	# cleanup: fix mixed indentation of json_getinfo
-#	e0259b246e6f372cf585446ce239b3a7bdc6d4b1	# test: fix tlvs test in funding_locked tlv.
-#	a56b17c759c53e7705fd6f002d53e809c03e4c26	# wire/test: neaten and complete tlv checks.
+	e0259b246e6f372cf585446ce239b3a7bdc6d4b1	# test: fix tlvs test in funding_locked tlv.
+	a56b17c759c53e7705fd6f002d53e809c03e4c26	# wire/test: neaten and complete tlv checks.
 	6c33f7db65caf619c2c9ceea1071b38c05e3357d	# common: remove unused parameter "allow_deprecated" from parse_wireaddr_internal.
 #	bfe342c64b5fb298f6739e940ddcaf778af3ba33	# lightningd: remove double-wrapped rpc_command hook.
 	43b037ab0b372397cecc477a50fef201b0b313ed	# lightningd: always require "jsonrpc": "2.0"  in request.
@@ -779,7 +779,7 @@ BACKPORTS=(
 #	1a0f7ddb0dd501d5eb69a9a836018b33f0f71c1c	# hsmtool: remove hsm_secret passwords on cmdline support in `dumponchaindescriptors`.
 #	fbcdf2c565b6b5fb59c761ca36bf8d5637d7b0f5	# devtools/bolt-catchup.sh: a tool to update the specs, one commit at a time.
 	341bbdfcbe75331d12d84410a5893d199d19b552	# doc: increase BOLT level to 03468e17563650fb9bfe58b2da4d1e5d28e92009
-#	1b30ea4b82b1fe5adbdedfc31322bcf3e0c8ac08	# doc: update BOLTs to bc86304b4b0af5fd5ce9d24f74e2ebbceb7e2730
+	1b30ea4b82b1fe5adbdedfc31322bcf3e0c8ac08:strip='lightningd/onchain_control\.c\|tests/':resolve-conflicts	# doc: update BOLTs to bc86304b4b0af5fd5ce9d24f74e2ebbceb7e2730
 #	5b7f14a7cb2cf4fd097a9169a115efb6575dd48e	# channeld/dualopend/lightningd: use channel_ready everywhere.
 #	b208c0d8dd4bc6d7b0291183c3e36cd87dac0de8	# doc: upgrade to BOLTs 2ecc091f3484f7a3450e7f5543ae851edd1e0761
 #	3cc6d0ec2c9cdcce975309382cf5c115c4a9c113	# doc: upgrade to BOLTs 341ec844f13c0c0abc4fe849059fbb98173f9766
@@ -1275,19 +1275,19 @@ BACKPORTS=(
 	60441843233f80d74ae2337f2942a944abd3fcc9	# lightningd: don't call memcpy with NULL.
 	300f732bbe7fe04a2ad800785584b5e8cdf5de4d	# proposal_meets_depth tracked output always has a proposal
 	1d8b8995514b95846d74173d9317d6301694b04c	# lightningd: prepare internal json routines for listpeerchannels.
-	6fa904b4fb19941a98d99f526300085df478338c	# lightningd: add listpeerchannels command
+	6fa904b4fb19941a98d99f526300085df478338c:scrub-stamps	# lightningd: add listpeerchannels command
 #	cb5ee7e49caae35a3b825c942803e82201952151	# plugins: make bookkeeper use the new listpeerchannels command.
 	57dcf68c0b97f1d7d553f420451481147283461b:resolve-conflicts	# plugins/libplugin: flatten return from json_to_listpeers_result.
 	5d5b9c6812f86646929e5655b2b211637d88f9a9:resolve-conflicts	# libplugin: don't return unopened channels from json_to_listpeers_channels().
 	ff2d7e6833201e82748932f41af5580aa956e878:strip=plugins/bkpr/:resolve-conflicts	# pay: use json_to_listpeers_channels() for local_channel_hints.
 	a56c890ae5a7fba5f024d6f9afabf1c565069037	# plugins: use listpeerchannels instead of listpeers.
-	c48856128242ba6995fc1327fe1b0f288995a7b3	# plugins/topology: use listpeerchannels.
+	c48856128242ba6995fc1327fe1b0f288995a7b3:scrub-stamps	# plugins/topology: use listpeerchannels.
 #	f08d3516f7d5ecfb027f2d12f296163e1d29754f	# contrib/pyln-testing: use listpeerchannels.
 #	1fa32333b9cf1f1aec52b8e1327735da47a1064e	# tests/utils.py: use listpeerchannels.
 #	a2347c74526608e190c88dd1192deabf52b77455	# tests: use listpeerchannels.
 #	9ffaab7d2245661b7c5c01f562f6aad3ea9d1fcf	# pytest: fix race in test_bookkeeping_closing_subsat_htlcs
 #	6c0b9b0c789a5bc024d62ab200f9456525f5e523	# lightningd: deprecate listpeers.channels
-	f1373fd98ca0f2907d2f25434da344efb58a8e08	# doc: remove manual field descriptions from listpeerchannels(7).
+	f1373fd98ca0f2907d2f25434da344efb58a8e08:scrub-stamps	# doc: remove manual field descriptions from listpeerchannels(7).
 	6b977f0292fc2026ce79fc4f25bbd13d6db5f64f	# cln-grpc: update listpeers json fixing tests
 #	2b5f4d14d112d7eb755615c6f561298fd6aa0cd3	# CI: fix schema diff check.
 	e5d384a427011eb70d4968932c5964b1c37dc403	# gossip: Do not send warnings if we fail to parse a `channel_update`
@@ -1320,6 +1320,126 @@ BACKPORTS=(
 #	288f5df8d11f225f0e1996f9092e3d1b8848c84f	# ccan: update to fix recent gcc "comparison will always evaluate as 'false'" warning
 	8d825ef0b7f858ee6f6c77a5bab92417660642c3	# lightningd: fix valgrind reported leak when we exit early.
 #	8f94e8b94315d17d9316146b5b3c5ae64184432f	# comm: make sure that our version check is reliable
+	82c94330a55d5925d802df86d43bf44e779d2738	# add PartialEq to ShortChannelId
+	acfb63e4bf19751167fbc69448f236ae413e690f	# channeld: remove dead HTLCs from htable and free them (eventually)
+#	0faa8397c3d3a725070740d2fba1364d16295ac0	# wallet: add dependency on lightningd/ headers.
+	6a95d3a25e1830a121176af7d1e048671dbee63a	# common: expose node_id_hash functions.
+#	17aa047b17a69e502df4d9f843d88769f5a56d2c	# pytest: fix output order assumption in test_setchannel_all
+	cfa632b0e94587dc41e6b4be143e7a8abdc09c04:resolve-conflicts	# lightningd: use hash map for peers instead of linked list.
+	0e25d563296dfde424bca2c1914917d935d7235d	# lightningd: use a hash table for peer->dbid.
+#	e932f05bc8b497a6a321bf94528103486e40b4e4	# ci: adds git fetch before doing schema checks
+	bd75f8ea6c6e764830fc9b7a2c6230a172bb133a	# opts: adds the autobool on/off/auto feature
+	3babbc52013de2fbe4021b4c29ea207afad41121	# opts: announce-addr-discovered on/off/auto switch
+	ee046662a72e22d54a4f7f0a1ea4d654cd65d6a2:scrub-stamps	# doc: announce-addr-discovered config switch
+#	a2b94f16f8acdee8993d6e289b3588933dee3591	# pytest: fix and adapt test_remote_addr_disabled
+	30dea0a4312fc8bbbc22923856e22e949190fc10:scrub-stamps	# opts: deprecate --disable-ip-discovery switch
+	34cfc93939d56e4009f10adc357807924669c58a	# cli: getinfo output to regard --ip-discovery
+	ca9e3e4cc1df92e1f55f9c5b614e5383c033ac94	# opts: adds --announce-addr-discovered-port config option
+	a62c74be7b6fc2e909554db30fc22fd6dc01378b:scrub-stamps	# doc: usage of --announce-addr-discovered-port option
+#	1fb1e0eec4616153c8f48063443d9d16a84281d4	# pytest: test ip discovery for custom port
+	d9fed06b900368e59f4d1f432b87d40fd28ce8d3:strip=plugins/bkpr/	# common/bolt11: const cleanup, fix parsing errors.
+	cbd0ef4192f1140c25ad39a5bd81a8ebb6bc9ef5	# common/bolt11: add pull_all helper for common case of entire field.
+	fa4b61d13d19daba938cecae4d1d37de5958b3b3	# common/bolt11: convert to table-driven.
+	182a9cdcb61fa388dd58d468c8981a67e882b6e6:resolve-conflicts	# cln-rpc: use serde rename instead of alias
+#	9482e0619c005bb183e4d120844b9ade545fdd0a	# docker: Install protobuf-compiler for builder
+#	f29343d740c087e2b7c477386025b82c22341d82	# hsmd: add hsmd_preapprove_invoice and check_preapproveinvoice pay modifier
+#	a4dc714cdcf409afcee24c540730ae3bc8bcf82c	# hsmd: add hsmd_preapprove_keysend and check_preapprovekeysend pay modifier
+#	7b2c5617c16dab22f94a51955b5bdea38f284a12	# hsmd: increase HSM_MAX_VERSION to 3
+	13fe27c65f7be09ab7d1a105fabbadc6488ec609	# gossipd: Do not send warning when node_announcement parsing fails
+	5958c9c3d64a1f713e1cf8f4e4f0abe289c7072f	# common/test: remove unused padding in bolt04/blinded-onion-message-onion-test.json
+	da3506e6a0e63990b492a703af326c670e7b50c6	# wire: use correct number of update_add_tlvs blinding field.
+	885506765e27ce798768454c14f57aec014e933a	# tools/check-bolt.c: don't leak open directory.
+	d5c19b23d8df7a1bda149905485d44f125fb2f50	# common/onion_decode: put final flag in onion_payload.
+	e9eb5f493be93efbe539c0f69d2df3b399cf511f	# common: update to latest route-blinding spec.
+	8e630e7c5341b4ce4ec0ea3f8e26940145aa441f	# common/test: fix up name of test file to match latest version.
+	9aefe3d40a399e2c1201a76af403d83d69517baa	# common: update to latest onion-message spec.
+#	6eb7a4cbf2caf60aac9cc2f7264fc8fa93a66ff2	# plugins: update to match latest offers text.
+	2dec805465fb3c812be5f6e4bd3c280d34bf53bf:scrub-stamps	# decode: fix handling of blinded_payinfo.
+	a3ca3fb047fd79088dbaef5765786f28bab9c875	# common/bolt11: fix 32-bit compilation.
+#	f2f05117aa7ecfe2a255d06a2c543a9c89010f36	# pytest: gossipd: test resumption of pruned channels
+	ed4815527aba7a3d11bd9f33b441372edd56310e	# gossipd: avoid gossipd crash due to double freeing timer
+	6bff10cd40a886594f16f3fe906ccc6bef7f567f	# gossip_store: add a flag for zombie entries
+	1bae8cd28a30ff7762789901ed3f0c245cd99892	# gossipd: zombify inactive channels instead of pruning
+#	98bfd23fff7d2be8096413209c4ff84a4e5739f3	# pytest: test_channel_resurrection now succeeds
+#	4b9cb7eb760849e4166307c2658f28379f60edd0	# doc: remove unused offerout schema.
+	578f07540744d924f9d8f4907a22c20638a82cd9	# wallet: remove unused TX_ANNOTATION type in transaction_annotations table.
+	611795beee1bdecbde9e7b8c17db96d0934346be:strip='.*\bpreapprove':scrub-stamps:resolve-conflicts	# listtransactions: get rid of per-tx type annotations.
+	9ab488fc41ea5f57efbd2eccfd58511755938549:scrub-stamps	# plugins/topology: add direction field to listchannels.
+#	d6f46e237398bdedb4dd8b8410ce00439b0f5a62	# lightningd: fix type of listhtlcs payment_hash.
+	83c690fe5f7b9312a4c29b1c045ce1facafd3e0b:scrub-stamps	# doc: fix listsendpays man page.
+	0274d88bad83049ba9a4a2355ed6d88bb0f2f109	# common/gossip_store: clean up header.
+	7e8b93daa1b2765373124bc660d94e070cc99815	# common/gossip_store: expose routine to read one header.
+	153b7bf192942086f565127565b31f40635993be	# common/gossip_store: move subdaemon-only routines to connectd.
+	eb6b8551d41ffcec8c98c89d39b47bfc6db50076:strip='.*\b\(autoclean\|bkpr\|commando\|delforward\|listhtlcs\|preapprove\)':scrub-stamps	# tools/fromschema.py: don't try to handle more complex cases.
+	9589ea02402875b2dc8d0391c29975bc911765b7	# common: add routine to get double from JSON.
+	fa127a40715f3361f86ca522490be6fbbb2f437c:scrub-stamps	# doc/schemas: remove unnecessary length restrictions.
+	2c41c5d52d4e92f77d059ff30f4be6180f5cd3b3:scrub-stamps	# doc: use specific types in schema rather than "hex".
+#	24d86a85c3af99ee7408c3cedfb1b346ffb49dbb	# plugins/sql: initial commit of new plugin.
+#	260643157d902cfd7690c6efffb4b6fe6a528c06	# plugins/sql: create `struct column` to encode column details.
+#	c230291141a2ba74532bac6e134c36139147a134	# plugins/sql: rework to parse schemas.
+#	51ae7118f11cfca0697d46afb28b4ea00e50c884	# plugins/sql: make tables for non-object arrays.
+#	8a0ee5f56ef917c0569615654952daa5f7773dc0	# plugins/sql: add listpeerchannels support.
+#	68370a203eea01d3248efcefba896e510de1f5d2	# pytest: perform more thorough testing.
+#	aa3a1131aa3a9d2a549a15b62f36241e91bdc3c6	# plugins/sql: include the obvious indexes.
+#	9b08c4f25a0c9c7a574e0ebd7378c57c98119f19	# plugins/sql: refresh listnodes and listchannels by monitoring the gossip_store.
+	40fe893172ba27610409151667b474bbca699af6:scrub-stamps:resolve-conflicts	# doc/schemas: fix old deprecations.
+#	20654ebd49f5e98b15cd94a130cf1fda21ade2a2	# plugins/sql: pay attention to `deprecated` in schema.
+#	adb8de3e071ea06aea01f438cd406be44802a675	# plugins/sql: print out part of man page referring to schemas.
+#	14aac0769cf1d6a4105ca502e2a117010a8d8386	# doc: document the sql command.
+#	9a591277f5a3e2452c2ec3e075da2e5b1dc3b139	# plugins/sql: allow some simple functions.
+#	d8320f015fc6f6b474941816873d91bada62fba9	# plugins/sql: add bkpr-listaccountevents and bkpr-listincome support.
+#	0240c2493622a9d757d47fb24fac9cc48126816a	# plugins/sql: listsqlschemas command to retrieve schemas.
+#	259dd2a652f28da01d77529ea787705c5ad94dbc	# doc: add examples for sql plugin.
+#	fea73680d70a97422c434ce8d9f03445cc9fd60c	# typo fixes found by @niftynei
+#	959678244caa56b1935ca9fa616009c532d75024	# doc: remove sections on litestream, .dump and vacuum into
+	80250f9b60c984d886fec8867255c7ac6d08a903	# datastore: Add check for empty key array
+	a9eb17adf95c216976aa004a5431a3d1be1db222	# db: catch postgres error on uninitialized database
+#	dcb9b4b8d157b6b2a609f3d82fac683d6c7f56a8	# make: fix make doc error
+	18397c0b878eca2d540971204058d6bb14e42a56:scrub-stamps	# doc-schema: make address field in getinfo response required
+#	12761c38e31fe37eccbf253ef5b26898fbb01c08	# libwally: update to cln_0.8.5_patch
+	6176912683ef10e86c3fc119f6641f3a9d0ef56d	# plugins/pay: fix htlc_budget calc when we get temporary_channel_failure
+	4502340daca76093634720ea23252801bbe73afc	# lightningd: flag false-positive memleak in lightningd
+#	3dde1ca39923169a7b5df2e053b493f32142db71	# pyln-testing: fix wait_for_htlcs helper
+#	f87c7ed43951dfc0b63981ef99a97cd76fec99fb	# plugins/sql: fix foreign keys.
+#	38510202c4a34febd70b35c0e52c8afe4d3599d4	# pytest: fix flake in test_closing_simple when we mine too fast.
+#	7c7e32b32436f1d85b647d3527f846ed3499ed5d	# tests: add Carl Dong's example exhaustive zeroconf channel pay test.
+#	0cbd9e02de9fe32d1904d4737b2f3ada2f508339	# pytest: limit test_cln_sendpay_weirdness to only failures.
+	ec8aab7cb2b3172841126be521aa525ca47ab4bc:resolve-conflicts	# libplugin-pay: fix (transitory) memleak which memleak detection complains about.
+	9e9686df207b7ebe9793d72e68358c8c0956465e:strip=tests/	# pay: specify the channel to send the first hop.
+#	ff1d537b87b4116c85507e25768face686f7c474	# pytest: neaten test_cln_sendpay_weirdness, rename.
+	6347ee73087734068197ab17036ecf9902d133bc	# lightningd: don't run more than one reconnect timer at once.
+	ff0a63a0d7149100bff9c00ba5cf120e8daead7a	# valgrind-fix: patch valgrind error on log statement in pay plugin
+	3efbc12706326d1b83c072484589d1b96806f7ba	# pyln-client: adds utils cln_parse_rpcversion
+#	e8f9366a29de3514524675b9752ce6c329ad8069	# pytest: add test for using offers with allow-deprecated-apis=True
+	35acdc112f1325b236942fc0fb331aea0123039f:strip=tests/	# offers: fix pay where we are using deprecated apis.
+	ad249607d69443856d54813b7735bc22c7a1853e	# dual-fund: update extracted CSVs to latest bolt draft
+	4da0d6230e5c81ea3c7d450397a9c9f7b7a4fed7	# dual-fund: update to latest, add in updates to rbf amounts
+	db448df277928ee550a1454167dc41599f6b6c97	# dual-fund: on re-init, re-populate opener_funding/accepter_funding
+#	976f6ef51ad32dac45e9e9b730dd9b3e0d7d4ad3	# df tests: use the amount from the logs to check for!
+	46dc37dff113795b3d34bb3d5866f28642860ce1:resolve-conflicts	# openingd: pull out validation for shutdown script
+	ef3f05b52ae40f84d8e9f601b2660917e9d0bd0a	# dual-fund: validate upfront shutdown using taproot + anchors
+	ad1893f83f644ba4ae68703dd744bfe838510832	# opening: helper for anchor flagged, use in dualopend also
+	efe66f96897ef4424ef0ce5fbb2922e5cc0f7b17	# dual-fund: check features to print (anchors not assumed)
+	c9c367d770ac16065ebe95cc350578000d92c88e:strip=tests/	# dual-fund: remove anchor assumption for all dual-funded channels
+	89f382cf399e2dbe9a5457a9aff1207d59e159ac	# dual-fund: only allow for liquidity ads if both nodes support anchors
+	0b8ea2299a8812fa79573db79b40536c6dd1c91d	# connectd: patch valgrind error w/ buffers for error msgs
+#	cbe38dd3506e0e56f360a63d8980c447881ac488	# tests: anchors is only EXPERIMENTAL_FEATURES
+#	4fe8e1eccf41923c3eeb07bd61a39250ed2c9951	# tests: check that non-anchor opens can't use liquidity ads
+	df4bd6287a7c06c24a7663ee5dda7d7a37667cd8	# dual-fund: patch in channel_type logic
+#	314c021e2c182a50a9fa8d0f4333c2e19ee217a6	# test: restart node during rbf
+#	4c467500012599bd0f3a6b712f6d0e6bebf66ad1	# dual-open-rbf: remember the requested lease amount btw restarts
+	679a473f9a6cf36d729c16184e0bb40b1fd1267b	# fundpsbt: add option to filter out wrapped p2sh inputs
+	35f12b4ca10a4387f8ad02322ff616600faff298:strip=tests/	# upgradewallet: JSONRPC call to update p2sh outputs to a native segwit
+	278fa7a0a473b681a231b836d1d826a529feaa8c	# v2 opens: don't use p2sh inputs for v2 opens
+	554cbf08c39cdbc68a977868f1101341acbb7aa0	# build(deps): bump tokio from 1.23.1 to 1.24.2
+#	296cf181afef3c924b8512704c2c6876e175d2de	# Update CI to Bitcoin Core 24.0.1
+#	72b83efc4b22b07a6ecf2647ee9df51bbfdbbcf0	# Use Python 3.7.8 Instead of 3.7.4 for macOS Install
+#	091e8cefd1d25d836557424a777c1f3205edddeb	# Must Specify pip3 on macOS
+#	57874574ae365316ecc797cb07a541471486c9be	# Add protobuf as a Dependency
+#	0d1ee8d7f59d4f167aa81e372a42e829b5ea7519	# Need `sudo` for `make install`
+#	f2cd635175f0bff4654fc13ee606f55d0e36f83a	# gci: Re-Add `TEST_NETWORK=liquid-regtest` to CI run
+#	eee7ad3e1c1309364cdcdc9982f1d6e1d53bbfe4	# relax log check for test_closing_higherfee
+	8315c7c906a0d54f2157009665d0b091d746dcbe	# lightningd: don't send channeld message to onchaind.
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -1342,7 +1462,7 @@ CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.8.5:0/0.8.2[elements]
+	>=net-libs/libwally-core-0.8.5_p20230128:0/0.8.2[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.12:=
 	postgres? ( ${POSTGRES_DEP} )

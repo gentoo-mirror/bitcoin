@@ -1,0 +1,15 @@
+--- /var/cache/distfiles/40fe893172ba27610409151667b474bbca699af6.patch	2023-02-04 18:17:03.546114659 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r113/temp/40fe893172ba27610409151667b474bbca699af6.patch	2023-02-04 20:18:41.479695728 -0500
+@@ -674,9 +674,9 @@
+ -                "htlc_minimum_msat": {
+ -                  "deprecated": true
+ -                },
+-                 "alias": {
+-                   "type": "object",
+-                   "required": [],
++                 "state_changes": {
++                   "type": "array",
++                   "description": "Prior state changes",
+ @@ -578,9 +545,6 @@
+                    "type": "msat",
+                    "description": "Total amount of incoming payment attempts"

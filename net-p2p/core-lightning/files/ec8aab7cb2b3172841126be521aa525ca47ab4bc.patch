@@ -1,0 +1,15 @@
+--- /var/cache/distfiles/ec8aab7cb2b3172841126be521aa525ca47ab4bc.patch	2023-02-04 17:55:33.498501940 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r113/temp/ec8aab7cb2b3172841126be521aa525ca47ab4bc.patch	2023-02-04 20:25:00.825120251 -0500
+@@ -38,9 +38,9 @@
+ --- a/plugins/libplugin-pay.c
+ +++ b/plugins/libplugin-pay.c
+ @@ -3270,6 +3270,7 @@ static struct command_result *direct_pay_listpeerchannels(struct command *cmd,
+- 		/* Must have either a local alias for zeroconf
+- 		 * channels or a final scid. */
+- 		assert(chan->alias[LOCAL] || chan->scid);
++ 		if (!streq(chan->state, "CHANNELD_NORMAL"))
++ 			continue;
++ 
+ +		tal_free(d->chan);
+  		d->chan = tal(d, struct short_channel_id_dir);
+  		if (chan->scid) {

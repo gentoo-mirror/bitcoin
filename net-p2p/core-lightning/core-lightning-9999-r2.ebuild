@@ -201,7 +201,7 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer doc experimental +man postgres python +recent-libsecp256k1 rust sqlite test"
+IUSE="developer doc experimental +man postgres python rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
