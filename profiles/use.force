@@ -1,4 +1,0 @@
-# Force to signal our support for more recent dev-libs/libsecp256k1.
-# Recent versions of dev-libs/libsecp256k1 can block non-compliant reverse
-# dependencies by discriminating on this flag.
-recent-libsecp256k1

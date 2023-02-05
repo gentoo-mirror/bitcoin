@@ -8,7 +8,6 @@
 	<use>
 		<flag name="developer">Enable dangerous commands intended for developer use only.</flag>
 		<flag name="experimental">Enable dangerous experimental features.</flag>
-		<flag name="recent-libsecp256k1">Support recent versions of dev-libs/libsecp256k1</flag>
 		<flag name="rust">Build Rust components</flag>
 	</use>
 	<upstream>
