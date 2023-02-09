@@ -184,25 +184,31 @@ CRATES="
 	yasna-0.5.1
 "
 
-inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
+inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
+MyPV=${PV/_}
+PATCH_HASHES=(
+)
+PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
+	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
-	rust? ( $(cargo_crate_uris) )"
-EGIT_REPO_URI="${HOMEPAGE}.git"
-EGIT_SUBMODULES=( '-*' 'external/gheap' )
+SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
+	rust? ( $(cargo_crate_uris) )
+	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
 IUSE="developer doc experimental +man postgres python rust sqlite test"
-RESTRICT="!test? ( test )"
+RESTRICT="mirror !test? ( test )"
 
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
@@ -261,7 +267,8 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
-DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
+S=${WORKDIR}/${MyPN}-${MyPV}
+DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
 
 python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
@@ -279,6 +286,23 @@ python_foreach_subdir() {
 	done
 }
 
+pkg_pretend() {
+	if [[ ! "${REPLACE_RUNNING_CLIGHTNING}" ]] &&
+		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
+		{ has_version "<${CATEGORY}/${PN}-$(ver_cut 1-3)" ||
+			has_version ">=${CATEGORY}/${PN}-$(ver_cut 1-2).$(($(ver_cut 3)+1))" ; } &&
+		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ||
+			-x "${EROOT%/}/run/openrc/started/lightningd" ]]
+	then
+		eerror "A potentially incompatible version of the lightningd daemon is currently" \
+			'\n'"running. Installing version ${PV} would likely cause the running daemon" \
+			'\n'"to fail when it next spawns a subdaemon process. Please stop the running" \
+			'\n'"daemon and reattempt this installation, or set REPLACE_RUNNING_CLIGHTNING=1" \
+			'\n'"if you are certain you know what you are doing."
+		die 'lightningd is running'
+	fi
+}
+
 pkg_setup() {
 	if use postgres ; then
 		postgres_pkg_setup
@@ -289,11 +313,12 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_src_unpack
-	find "${S}/external" -depth -mindepth 1 -maxdepth 1 -type d ! -name 'gheap' -delete || die
+	unpack "${P}.tar.gz"
 	cd "${S}/external" || die
-	unpack jsmn-1.0.0.tar.gz
+	rm -r */ || die
+	unpack jsmn-1.0.0.tar.gz gheap-67fc83b.tar.gz
 	mv jsmn{-1.0.0,} || die
+	mv gheap{-*,} || die
 
 	if use rust ; then
 		set ${CRATES}
@@ -324,6 +349,17 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
+	# don't require running in a Git worktree
+	sed -e '/^import subprocess$/d' \
+		-e 's/^\(version = \).*$/\1"'"$(ver_cut 1-3)"'"/' \
+		-e 's/^\(release = \).*$/\1"'"${MyPV}-gentoo-${PR}"'"/' \
+		-i doc/conf.py || die
+
+	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
+	[[ ${PV} != *([.[:digit:]]) ]] ||
+		sed -ne '/^static bool is_released_version(void)/{a { return true; }
+			p;:x;n;/^}$/d;bx};p' -i wallet/db.c || die
+
 	use python && distutils-r1_src_prepare
 }
 
@@ -332,6 +368,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
+		VERSION="${MyPV}-gentoo-${PR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
