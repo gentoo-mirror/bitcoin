@@ -1,4 +1,4 @@
-From 7e7fb744850f9f5f5995b3a4b8d54f49fb880a7f Mon Sep 17 00:00:00 2001
+From c6727387a7a6c8b7900910524b99e3f3ff8ae193 Mon Sep 17 00:00:00 2001
 From: Matt Whitlock <c-lightning@mattwhitlock.name>
 Date: Sat, 8 Oct 2022 22:07:13 -0400
 Subject: [PATCH 2/2] swig_python: link dynamically to libwallycore.so
@@ -8,10 +8,10 @@ Subject: [PATCH 2/2] swig_python: link dynamically to libwallycore.so
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index c3392d5..2c3be77 100644
+index 3cf2169..c1a7c10 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -81,12 +81,10 @@ wally_ext = Extension(
+@@ -79,12 +79,10 @@ wally_ext = Extension(
      '_wallycore',
      define_macros=define_macros,
      include_dirs=include_dirs,
@@ -19,12 +19,12 @@ index c3392d5..2c3be77 100644
      extra_compile_args=extra_compile_args,
      sources=[
          'src/swig_python/swig_wrap.c' if is_windows else 'src/swig_python/swig_python_wrap.c',
--        'src/wrap_js/src/combined.c',
--        'src/wrap_js/src/combined_ccan.c',
--        'src/wrap_js/src/combined_ccan2.c',
+-        'src/amalgamation/combined.c',
+-        'src/amalgamation/combined_ccan.c',
+-        'src/amalgamation/combined_ccan2.c',
          ],
      )
  pkgconfig.configure_extension(wally_ext, 'libsecp256k1_zkp')
 -- 
-2.38.0
+2.39.1
 

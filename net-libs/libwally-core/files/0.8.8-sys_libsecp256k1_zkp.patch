@@ -1,22 +1,21 @@
-From a6118596b609969630b614d0301fdf4564230421 Mon Sep 17 00:00:00 2001
+From 471891b6366eda1ec4288a408b5013429fdce321 Mon Sep 17 00:00:00 2001
 From: Matt Whitlock <c-lightning@mattwhitlock.name>
 Date: Sat, 8 Oct 2022 14:22:42 -0400
 Subject: [PATCH 1/2] build: support linking against system-installed
  libsecp256k1
 
 ---
- configure.ac                 | 45 ++++++++++++++++++------------------
- setup.py                     |  5 ++--
- src/Makefile.am              | 15 ++++++------
- src/wrap_js/binding.gyp.tmpl |  2 +-
- src/wrap_js/src/combined.c   | 18 ---------------
- 5 files changed, 33 insertions(+), 52 deletions(-)
+ configure.ac                | 45 ++++++++++++++++++-------------------
+ setup.py                    |  5 ++---
+ src/Makefile.am             | 15 +++++++------
+ src/amalgamation/combined.c | 18 ---------------
+ 4 files changed, 32 insertions(+), 51 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 3098fdc..a32f529 100644
+index 8b2d6fa..7f68623 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -236,29 +236,29 @@ if test "x$ac_have_pthread" == "xyes"; then
+@@ -237,29 +237,29 @@ if test "x$ac_have_pthread" == "xyes"; then
      AC_CHECK_HEADERS([asm/page.h])
  fi
  
@@ -68,7 +67,7 @@ index 3098fdc..a32f529 100644
  
  #
  # Python facilities
-@@ -411,7 +411,6 @@ export AR_FLAGS
+@@ -392,7 +392,6 @@ export AR_FLAGS
  export LD
  export LDFLAGS
  ac_configure_args="${ac_configure_args} --disable-shared --with-pic --with-bignum=no --enable-experimental --enable-module-ecdh --enable-module-recovery --enable-module-ecdsa-s2c --enable-module-rangeproof --enable-module-surjectionproof --enable-module-whitelist --enable-module-generator --enable-module-extrakeys ${secp256k1_test_opt} --enable-openssl-tests=no --enable-exhaustive-tests=no --enable-benchmark=no --disable-dependency-tracking ${secp_asm}"
@@ -77,7 +76,7 @@ index 3098fdc..a32f529 100644
  
  AC_OUTPUT
 diff --git a/setup.py b/setup.py
-index 0ed7c6d..c3392d5 100644
+index 66e56d4..3cf2169 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -2,6 +2,7 @@
@@ -104,9 +103,9 @@ index 0ed7c6d..c3392d5 100644
 -    './src/secp256k1/src/'
      ]
  if is_windows:
-     # Borrowing config from wrap_js
-@@ -91,6 +89,7 @@ wally_ext = Extension(
-         'src/wrap_js/src/combined_ccan2.c',
+     include_dirs = ['./src/amalgamation/windows_config'] + include_dirs
+@@ -89,6 +87,7 @@ wally_ext = Extension(
+         'src/amalgamation/combined_ccan2.c',
          ],
      )
 +pkgconfig.configure_extension(wally_ext, 'libsecp256k1_zkp')
@@ -114,18 +113,18 @@ index 0ed7c6d..c3392d5 100644
  kwargs = {
      'name': 'wallycore',
 diff --git a/src/Makefile.am b/src/Makefile.am
-index 0f6ad1e..2f2df18 100644
+index 9c54e95..602f9f1 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -14,7 +14,6 @@ include_HEADERS += $(top_srcdir)/include/wally_bip38.h
- include_HEADERS += $(top_srcdir)/include/wally_bip39.h
+@@ -15,7 +15,6 @@ include_HEADERS += $(top_srcdir)/include/wally_bip39.h
  include_HEADERS += $(top_srcdir)/include/wally_core.h
  include_HEADERS += $(top_srcdir)/include/wally_crypto.h
+ include_HEADERS += $(top_srcdir)/include/wally_descriptor.h
 -include_HEADERS += $(top_srcdir)/include/wally_elements.h
  include_HEADERS += $(top_srcdir)/include/wally_map.h
  include_HEADERS += $(top_srcdir)/include/wally_psbt.h
  include_HEADERS += $(top_srcdir)/include/wally_psbt_members.h
-@@ -37,7 +36,7 @@ if USE_SWIG_PYTHON
+@@ -38,7 +37,7 @@ if USE_SWIG_PYTHON
  noinst_LTLIBRARIES += libswig_python.la
  libswig_python_la_SOURCES = swig_python/swig_python_wrap.c
  
@@ -134,7 +133,7 @@ index 0f6ad1e..2f2df18 100644
  if PYTHON_MANYLINUX
  else
  libswig_python_la_LIBADD = $(PYTHON_LIBS)
-@@ -131,7 +130,7 @@ noinst_LTLIBRARIES += libswig_java.la
+@@ -81,7 +80,7 @@ noinst_LTLIBRARIES += libswig_java.la
  libswig_java_la_SOURCES = \
      swig_java/swig_java_wrap.c
  
@@ -143,23 +142,23 @@ index 0f6ad1e..2f2df18 100644
  
  SWIG_JOPT = $(SWIG_JAVA_OPT) -outdir swig_java -noproxy -package com.blockstream.libwally
  
-@@ -193,7 +192,6 @@ libwallycore_la_SOURCES = \
-     bip39.c \
+@@ -145,7 +144,6 @@ libwallycore_la_SOURCES = \
      bech32.c \
+     descriptor.c \
      ecdh.c \
 -    elements.c \
      blech32.c \
      hex.c \
      hmac.c \
-@@ -224,7 +222,6 @@ libwallycore_la_INCLUDES = \
-     include/wally_bip39.h \
+@@ -177,7 +175,6 @@ libwallycore_la_INCLUDES = \
      include/wally_core.h \
      include/wally_crypto.h \
+     include/wally_descriptor.h \
 -    include/wally_elements.h \
      include/wally_map.h \
      include/wally_psbt.h \
      include/wally_script.h \
-@@ -239,10 +236,14 @@ libwallycore_la_LDFLAGS =
+@@ -192,10 +189,14 @@ libwallycore_la_LDFLAGS =
  endif
  endif # SHARED_BUILD_ENABLED
  
@@ -176,29 +175,16 @@ index 0f6ad1e..2f2df18 100644
  
  TESTS =
  noinst_PROGRAMS =
-diff --git a/src/wrap_js/binding.gyp.tmpl b/src/wrap_js/binding.gyp.tmpl
-index 39fe572..3fd45e7 100644
---- a/src/wrap_js/binding.gyp.tmpl
-+++ b/src/wrap_js/binding.gyp.tmpl
-@@ -4,7 +4,7 @@
-       "target_name": "deps",
-       "sources": [ "src/combined.c", "src/combined_ccan.c", "src/combined_ccan2.c" ],
-       "defines": [ "SWIG_JAVASCRIPT_BUILD", "HAVE_CONFIG_H" ],
--      "include_dirs": [ "<(platform_include_dirs)", "<(libwally_dir)", "<(libwally_dir)/src", "<(libwally_dir)/src/secp256k1", "<(libwally_dir)/src/secp256k1/src", "<(libwally_dir)/src/ccan" ],
-+      "include_dirs": [ "<(platform_include_dirs)", "<(libwally_dir)", "<(libwally_dir)/src", "<(libwally_dir)/src/ccan" ],
-       "type": "static_library"
-     },
-     {
-diff --git a/src/wrap_js/src/combined.c b/src/wrap_js/src/combined.c
-index 6a7d90b..4b43b71 100644
---- a/src/wrap_js/src/combined.c
-+++ b/src/wrap_js/src/combined.c
+diff --git a/src/amalgamation/combined.c b/src/amalgamation/combined.c
+index b5877f8..1f5fea0 100644
+--- a/src/amalgamation/combined.c
++++ b/src/amalgamation/combined.c
 @@ -1,4 +1,3 @@
 -#define SECP256K1_BUILD 1
  #include "internal.c"
  #include "address.c"
  #include "aes.c"
-@@ -34,10 +33,6 @@
+@@ -35,10 +34,6 @@
  #undef PACKAGE_URL
  #undef PACKAGE_VERSION
  #undef VERSION
@@ -209,7 +195,7 @@ index 6a7d90b..4b43b71 100644
  #include "ccan/ccan/crypto/sha256/sha256.c"
  
  void wally_silence_unused_warnings(void)
-@@ -46,19 +41,6 @@ void wally_silence_unused_warnings(void)
+@@ -47,19 +42,6 @@ void wally_silence_unused_warnings(void)
      assert_bip32_assumptions();
      assert_bip38_assumptions();
      assert_tx_assumptions();
@@ -230,5 +216,5 @@ index 6a7d90b..4b43b71 100644
      tx_elements_output_proof_init(NULL, NULL, 0, NULL, 0);
      witness_stack_from_bytes(NULL, NULL, NULL);
 -- 
-2.38.0
+2.39.1
 
