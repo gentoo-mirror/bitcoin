@@ -1,0 +1,29 @@
+--- /var/cache/distfiles/9c35f9c13a04ef4d6e529411c091567ca890f596.patch	2023-02-10 15:44:58.708637460 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r103/temp/9c35f9c13a04ef4d6e529411c091567ca890f596.patch	2023-02-10 17:26:30.541928001 -0500
+@@ -69,7 +69,7 @@
+ +            bolt11: c.bolt11, // Rule #2 for type string?
+ +            payment_secret: c.payment_secret.map(|v| v.to_vec()), // Rule #2 for type secret?
+ +            partid: c.partid.map(|v| v.into()), // Rule #2 for type u16?
+-+            localinvreqid: c.localinvreqid.map(|v| hex::decode(v).unwrap()), // Rule #2 for type hex?
+++            localofferid: c.localofferid.map(|v| hex::decode(v).unwrap()), // Rule #2 for type hex?
+ +            groupid: c.groupid, // Rule #2 for type u64?
+ +        }
+ +    }
+@@ -280,7 +280,7 @@
+ +            bolt11: c.bolt11, // Rule #2 for type string?
+ +            amount_msat: c.amount_msat.map(|f| f.into()), // Rule #2 for type msat?
+ +            destination: c.destination.map(|v| v.serialize().to_vec()), // Rule #2 for type pubkey?
+-+            localinvreqid: c.localinvreqid.map(|v| v.to_vec()), // Rule #2 for type hash?
+++            localofferid: c.localofferid.map(|v| v.to_vec()), // Rule #2 for type hash?
+ +            groupid: c.groupid, // Rule #2 for type u64?
+ +        }
+ +    }
+@@ -317,7 +317,7 @@
+ +            retry_for: c.retry_for.map(|v| v.into()), // Rule #2 for type u16?
+ +            maxdelay: c.maxdelay.map(|v| v.into()), // Rule #2 for type u16?
+ +            exemptfee: c.exemptfee.map(|f| f.into()), // Rule #2 for type msat?
+-+            localinvreqid: c.localinvreqid.map(|v| hex::decode(v).unwrap()), // Rule #2 for type hex?
+++            localofferid: c.localofferid.map(|v| hex::decode(v).unwrap()), // Rule #2 for type hex?
+ +            exclude: c.exclude.map(|arr| arr.into_iter().map(|i| i.into()).collect()).unwrap_or(vec![]), // Rule #3 
+ +            maxfee: c.maxfee.map(|f| f.into()), // Rule #2 for type msat?
+ +            description: c.description, // Rule #2 for type string?
