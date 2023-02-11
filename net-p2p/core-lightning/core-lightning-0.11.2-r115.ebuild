@@ -1168,8 +1168,8 @@ BACKPORTS=(
 	3ca1c70c4439955d523467bac032622cce5105bd:strip=tests/	# lightningd: don't cap spendable_msat/receivable_msat for wumbo channels.
 #	280b49a6771ed70ee421b2647c060409866086f4	# meta: Update changelog for v22.11 final
 	d7cd3e1cb5614b3973e70884d463ed736fd4565b	# pyln: Fix an issue with the LightningConnection short-reading
-#	744d111ceaf3d32121b10370c7043dd0fa4bb6a1	# doc: Create a blockreplace tool to update generated blocks in docs
-#	a31575ca0b5a6d53ac8c8ed949d3a8686e1f690c	# tools: Add multi-language support to blockreplace.py
+	744d111ceaf3d32121b10370c7043dd0fa4bb6a1:resolve-conflicts	# doc: Create a blockreplace tool to update generated blocks in docs
+	a31575ca0b5a6d53ac8c8ed949d3a8686e1f690c	# tools: Add multi-language support to blockreplace.py
 #	4613b2981544addb2d5c3f1da409c4718b94bde1	# doc: document autoclean-once command.
 #	24d7aad3d0ae16995056f489fbe675b7f01d75ff	# autoclean: fix uncleaned stats when we don't clean due to being too new.
 	9751502ff5382dc0bc77d46fcff29a13419ef4fd	# jsonrpc: fix error when we abort batching due to timeout.
@@ -1230,7 +1230,7 @@ BACKPORTS=(
 	22eac967502bc465cb63bfcf337e23e552ec0465	# connectd: don't ask DNS seeds for addresses on every reconnect.
 	9d5eab1b69d3d6ae23bf5d1350af65400afb4fed	# topology: fix memleak in listchannels
 #	42e038b9ad876a945a6a4eb5584ef8bd1b0b7c27	# lightningd: Look for channels by alias when finding channels
-	241cd8d0124960d015ea89425d3f5e01faa5318c:strip=contrib/pyln-testing/	# generate composite fields in grpc
+	241cd8d0124960d015ea89425d3f5e01faa5318c:strip=contrib/pyln-testing/:resolve-conflicts	# generate composite fields in grpc
 #	f3f5d8db17c3ca20bd65a6bd7eb3637fbb7d7394	# git: Mark node_pb2.py as text so we can see changes
 	50adcf10289c756c3b138c95853df7fa5730f4d4	# remove unnecessary CPU_TO_LE32
 #	87a0cb16032e8cfeca249e5ff04439238ae5d943	# Replace head -n with sort -R for better random peer selection
@@ -1286,7 +1286,7 @@ BACKPORTS=(
 #	1fa32333b9cf1f1aec52b8e1327735da47a1064e	# tests/utils.py: use listpeerchannels.
 #	a2347c74526608e190c88dd1192deabf52b77455	# tests: use listpeerchannels.
 #	9ffaab7d2245661b7c5c01f562f6aad3ea9d1fcf	# pytest: fix race in test_bookkeeping_closing_subsat_htlcs
-#	6c0b9b0c789a5bc024d62ab200f9456525f5e523	# lightningd: deprecate listpeers.channels
+	6c0b9b0c789a5bc024d62ab200f9456525f5e523:scrub-stamps	# lightningd: deprecate listpeers.channels
 	f1373fd98ca0f2907d2f25434da344efb58a8e08:scrub-stamps	# doc: remove manual field descriptions from listpeerchannels(7).
 	6b977f0292fc2026ce79fc4f25bbd13d6db5f64f	# cln-grpc: update listpeers json fixing tests
 #	2b5f4d14d112d7eb755615c6f561298fd6aa0cd3	# CI: fix schema diff check.
@@ -1440,6 +1440,84 @@ BACKPORTS=(
 #	f2cd635175f0bff4654fc13ee606f55d0e36f83a	# gci: Re-Add `TEST_NETWORK=liquid-regtest` to CI run
 #	eee7ad3e1c1309364cdcdc9982f1d6e1d53bbfe4	# relax log check for test_closing_higherfee
 	8315c7c906a0d54f2157009665d0b091d746dcbe	# lightningd: don't send channeld message to onchaind.
+#	b375a35fa0296e830e0cd26d13e61376565f1bf4	# v2 open tests: don't drop connection when an openchannel fails
+	96b3b40765905a6d76c7915f5d13bc473ba5f6aa	# lightningd: remove duplicate routine `fail_transient_delayreconnect`
+	195a2cf44b45d0d3db463be6482ba6a00b76a7c2:strip='\(lightningd/test/run-invoice\|tests/\)'	# dual-open: use tx-abort instead of warning/errors
+	ef4802f74be9c04db929dd372800d14b6e19bcc1	# df: echo back "tx-abort" when we receive 'tx-abort'
+#	43420433829fb3f4ea5bf6ac52c9960dc7ee259b	# tests: de-flake test that was failing on cltv expiry
+#	28b31c19dd67ad9709c9eee649298dbe08f0a8dd	# pytest: fix flake in test_bolt11_null_after_pay
+	05ac74fc4450b93481619a50c80704d8fa070619	# connectd: keep array of our listening sockets.
+	2209d0149f03caaf402817a5fdcdb5297aeef134	# connectd: add new start_shutdown message.
+	456078150a204a3217aa5466007bc19595add19b	# lightningd: tell connectd we're shutting down.
+#	bcab3f7e8399608e66b6c181d684bcdd03d66a15	# Makefile: don't try to build sql plugin if there's no sqlite3 support.
+#	d06c1871a962f3d90776f6c8b928500c12200d65	# pytest: fix flake in test_closing_disconnected_notify
+#	e29fd2a8e26d655a7fb0f8b1c18092c2cdd787da	# SECURITY.md: Tell them to spam me, and include our GPG fingerprints.
+	7b9f1b72c6d7e8a56e262b562e2b85c004ed2b98	# lightningd: don't print zero blockheight while we're syncing.
+#	59ed23e6cf8fefc9680a7d4809765e8868b0b6ac	# make: Add doc/index.rst to generated files
+	8369ca71b109f56290e6a6eb2e0cbd0ad7621407	# cli: accepts long paths as options
+	f0b8544eba19feb55cc95769028f84271c736581	# doc: Correct `createinvoice`'s `invstring` description
+	1dbc29b8c08241797b35b921728760be605abdf9:resolve-conflicts	# lightningd: Add `signinvoice` to sign a BOLT11 invoice.
+	11227d37ba02d4e7d9fc95d89088f1e33a438ec4	# msggen: Enable SignInvoice
+	dc4ae9deb4dfb7231974ce216fb290fa8911ff94:strip=contrib/pyln-testing/	# msggen: Regenerate for addition of SignInvoice
+	eef0c087fc86c08bac0bde5187f5a0fd4d587e20:strip=tests/	# More accurate elements commitment tx size estimation
+	640edf3955e441eba711fb3dc0817a7e0b89ae7a	# grpc: Silence a warning about `nonnumericids` being unused
+	e5d57379274f7b027e43de36fcd542d8d1e759e0:strip=contrib/pyln-testing/	# grpc: Allow conversion code to use deprecated fields
+	a418615b7f36c7c1fa9dc67447996559ad9033ab	# rpc: adds num_channels to listpeers
+	e736c4d5f403032e3a668391020af7db0cdfe0a1:strip='.*\bsql':scrub-stamps	# doc: listpeers new attribute num_channels
+#	30454ddf199e52edb4c7029212b746b5b58d4f75	# pytest: listpeers new attribute num_channels
+	1e951a9479e4b2eddb35064570b594ffd34c3dfd	# mssgen: adds num_channels
+	b67fde8106bf0185768a4887295a6755e42e4b43	# Fix 'extreme cases' logging of many commit timer failures
+#	813401b2a6b811a5dfce08ec5d66565fea1fb4d7	# Update Bitcoin Core to 24.0.1 in other git ci locations
+	739d3c7b472ec9c0748c01f4c6fdfb88566607ca	# v2 open: if flagged, check that all our inputs are confirmed
+	3eecbaee4da4c3a798b0700ab81d1435176205e4	# tx_roles: allow to be serialized btw processes
+#	f05d4500982c142a47f8ab2dd4bca257d42862d3	# df: persist channel open preference to database
+#	9f53e3c7f5d2dd1b3d3df4af7967ce40134413b9	# df: wire up peer's "require-confirmed-inputs"
+#	cea7fe3f0594df59c2ad4ddb1195ec70360d74a6	# df: push back psbt to validate iff peer requests confirmed inputs
+#	0da2729ce609dc05724519971fc70ef39367fcdc	# df: for dryruns, inform on requires-confirmation value
+#	abb50c462708599133b6e7e2872e3f9e36c9eabd	# df: reuse psbt validation for the psbts incoming from dualopend
+#	442b479d2cd0c91f6fdc6df4861ca4a69d289fab	# df: add new config option for v2 opens `--require_confirmed_inputs`
+#	fa80f15f85c0cde42395e9b6ed5f117a280f05f4	# dualopend: if required, validate inputs rcvd from peer
+#	beec51791060279d676f339e2e09b8d0a05a42a4	# df: persist our setting to disk, read back to dualopend at reinit
+#	3586559facd533679400948b47b9a326e708169d	# test (df): check 'require-confirmed-inputs' for v2 opens
+	f465032f6fe56aed84327788c8f74a74c5f1fbb8	# rfc-dual-fund: update to latest spec for dual-funding
+	c0cc285a0f9f694913cfca63f06940ab217863c9	# df: fetch both the first+second commitment point
+	911700ff948a82a83f66624a9e37745fa669ebeb	# df: remove minimum witness weight for input calculations
+	35d02a784bcc6085d34d80ffed4e5874783dc944	# df: remove static remote key dependency
+	d6b553cfa0cf825b179d55e26a4c27c3ecfd3ae6	# lightningd: fix leak report from peer_connected.
+	c0b898e8605d03ea1999cc26cda0e03f327385e5	# lightningd: don't access peer after free if it disconnects during peer_connected hook.
+	d7bcac2ae740c87e40d4daa2aba754ed7d853dd3	# lightningd: allow sendcustommsg even if plugins are still processing peer_connected.
+	5f481aaf96b0a0a0dc2a006daecc1ab7fecfb891	# wire: Add patch file for peer storage bkp
+	5ef49143e053223af6583d627bb80c524429f9cd	# feature(PEER_STORAGE and YOUR_PEER_STORAGE) added in feature.c and internal message.
+	66d98c327fa0614fef53b91cd35433ba591f2476	# peer_wire_is_internal helper.
+	709ff01fd2cc5b91512252b9537f057993c9ee18	# connectd: make exception for peer storage msgs.
+	93d03bf9e8516a160d38e279a0e0b2f0b3db2c40	# plugins/chanbackup: PLUGIN_RESTARTABLE to PLUGIN_STATIC...
+	2b1867aca38456b63284215474b0f05859bcc490	# Plugins/chanbackup: Add featurebit Peerstrg and YourPeerStrg.
+	ff777e3238af672ded4bd79046912aa4e0381f3c	# plugins/chanbackup: Define FILENAME globally (Good Manners)
+	33f0c4ec0bd2a382461d70b4f3e5c047c04bb9f5	# plugins/chanbackup: use grab_file.
+	01cafe478befbf92eaed45a0401653848637a360	# Plugins/chanbackup: Add SCB on CHANNELD_AWAITING_LOCKING stage
+	d205f489bd178482756836cac513f2d1823be3cf	# Plugins/chanbackup: Add hook for receiving custommsg
+	7affaff728bc6795e0159d0f91917d715dd2086e	# Plugins/chanbackup: Add hook for exchanging msgs on connect with a peer
+	e637e843e7e0ab5a60e87f04bbf78d1e64989342	# Plugins/chanbackup: Add RPC for recovering from the latestscb received from peers.
+#	fc382dd87e860f5b0f6fcfd1e3cdaffcf9efb1f6	# tests/test_misc.py: Add test_restorefrompeer.
+	68d9b21aecde0ea03a4a2e02bd1456493a93042e	# plugins/chanbackup: switch to normal indentation.
+	f1fed40ac295c6027f506de1b58600c8e6e859bb	# features: make name of peer storage features match spec.
+	17c35819d84a0c0984c048777298dcb3d6d93565	# plugins/chanbackup: neaten a little.
+	c60ea5bcbb268f6cc89c90961a683c21edaf5df4	# plugins/chanbackup: make get_file_data take ctx.
+	a71bd3ea37dbcb4edf905b7c3f739ba40939c92f:strip=tests/:scrub-stamps	# options: create enable/disable option for peer storage.
+	9c35f9c13a04ef4d6e529411c091567ca890f596:resolve-conflicts	# Implement conversion JSON->GRPC also for requests type
+	21a8342289a8a8836b7043b7ae565cb8f4eebc39:resolve-conflicts	# Implement GRPC -> JSON conversions also for response types
+	913f9da5a88a3eb4ebbb303a1669176f521c70f4	# cln-rpc: explicitly enumerate ChannelState enum
+	510abb934ca21436b08e7b6bb2ef58dd38f8a07a:strip=contrib/pyln-testing/	# cln-grpc: add roundtrip tests for test_getinfo and test_listppers
+#	ca1fa844588ea2416d0dad85e8680cc87fd8ce7a	# ignore sql binary plugin
+	473c631ceb3594cb328cdff09f6537372d906d9d	# fix(grpc): add the num_channels field inside the tests
+#	b7ab80963d9109f35acc1a440d08d5c6a53f024a	# ci: include rust tests inside the pre build checks
+	49b3459be50f1d23b91260e8eec2be509f6a7dba:scrub-stamps	# lightningd: don't put old deprecated `local_msat` and `remote_msat` in listpeerchannels.
+	ef51ae3c6dbd9c880d82ae11c94f405de2898e8c	# msggen: Enable SendCustomMsg
+	b83a19164cbd8fd87c0b754b5acb55b44a6cbc75:strip=contrib/pyln-testing/	# msggen: Regenerate for addition of SendCustomMsg
+#	b6a7532625b061a291cf87d0f317294a1d981aaf	# meta: Add changelog for 23.02rc1
+	a610f28ad46beb7daccaa274c7ee0c0147616373	# add a log message when it is not possible upgrade the db
+	822db6acc26f1a55a0a97bc485ec38ae40a49f40	# gossipd: don't resurrect deleted half_chans
+	dd9400df992c4c08219b809b7e9cbdbd32bc9303:resolve-conflicts	# fix: compilation error on armv7l 32 bit
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"

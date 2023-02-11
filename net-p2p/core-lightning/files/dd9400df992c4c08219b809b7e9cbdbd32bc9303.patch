@@ -1,0 +1,16 @@
+--- /var/cache/distfiles/dd9400df992c4c08219b809b7e9cbdbd32bc9303.patch	2023-02-10 17:50:05.591385262 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r103/temp/dd9400df992c4c08219b809b7e9cbdbd32bc9303.patch	2023-02-10 17:50:33.203628694 -0500
+@@ -37,8 +37,9 @@
+  		u64 serial;
+  
+  		if (!psbt_get_serial_id(&pv->psbt->inputs[i].unknowns, &serial)) {
+--			err = tal_fmt(pv, "PSBT input at index %"PRIu64
+-+			err = tal_fmt(pv, "PSBT input at index %zu"
+- 				      " missing serial id", i);
+- 			pv->invalid_input(pv, err);
++ 			was_pending(command_fail(pv->cmd, FUNDING_PSBT_INVALID,
++-					    "PSBT input at index %"PRIu64
+++					    "PSBT input at index %zu"
++ 					    " missing serial id", i));
+  			return;
++ 		}

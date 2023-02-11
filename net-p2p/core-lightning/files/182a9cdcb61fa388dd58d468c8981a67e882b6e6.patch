@@ -1,5 +1,5 @@
 --- /var/cache/distfiles/182a9cdcb61fa388dd58d468c8981a67e882b6e6.patch	2023-02-04 17:55:22.541406709 -0500
-+++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r102/temp/182a9cdcb61fa388dd58d468c8981a67e882b6e6.patch	2023-02-04 18:20:23.483882455 -0500
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r103/temp/182a9cdcb61fa388dd58d468c8981a67e882b6e6.patch	2023-02-10 16:04:44.759978606 -0500
 @@ -86,9 +86,9 @@
  -	    #[serde(alias = "partid", skip_serializing_if = "Option::is_none")]
  +	    #[serde(skip_serializing_if = "Option::is_none")]
@@ -36,38 +36,16 @@
  -	    #[serde(alias = "exclude", skip_serializing_if = "crate::is_none_or_empty")]
  +	    #[serde(skip_serializing_if = "crate::is_none_or_empty")]
   	    pub exclude: Option<Vec<String>>,
-@@ -980,7 +980,7 @@
-  	    pub message: String,
-  	}
-  
--@@ -1675,150 +1585,139 @@ pub mod responses {
-+@@ -1678,149 +1588,137 @@ pub mod responses {
-  	#[derive(Clone, Debug, Deserialize, Serialize)]
-  	pub struct ListpeersPeersChannelsHtlcs {
-  	    // Path `ListPeers.peers[].channels[].htlcs[].direction`
-@@ -1163,10 +1163,8 @@
- -	    #[serde(alias = "log", skip_serializing_if = "crate::is_none_or_empty")]
- +	    #[serde(skip_serializing_if = "crate::is_none_or_empty")]
-  	    pub log: Option<Vec<ListpeersPeersLog>>,
-- 	    #[deprecated]
---	    #[serde(alias = "channels", skip_serializing_if = "crate::is_none_or_empty")]
--+	    #[serde(skip_serializing_if = "crate::is_none_or_empty")]
-- 	    pub channels: Option<Vec<ListpeersPeersChannels>>,
-+-	    #[serde(alias = "channels")]
-+ 	    pub channels: Vec<ListpeersPeersChannels>,
- -	    #[serde(alias = "netaddr", skip_serializing_if = "crate::is_none_or_empty")]
- +	    #[serde(skip_serializing_if = "crate::is_none_or_empty")]
-  	    pub netaddr: Option<Vec<String>>,
-@@ -1242,7 +1240,7 @@
+@@ -1242,7 +1242,7 @@
   	    pub channels: Vec<ListfundsChannels>,
   	}
   
 -@@ -1941,36 +1825,31 @@ pub mod responses {
-+@@ -1940,34 +1823,29 @@ pub mod responses {
++@@ -1941,34 +1825,29 @@ pub mod responses {
   	}
   	#[derive(Clone, Debug, Deserialize, Serialize)]
   	pub struct SendpayResponse {
-@@ -1264,9 +1262,6 @@
+@@ -1264,9 +1264,6 @@
   	    pub destination: Option<PublicKey>,
  -	    #[serde(alias = "created_at")]
   	    pub created_at: u64,
@@ -77,16 +55,16 @@
  -	    #[serde(alias = "amount_sent_msat")]
   	    pub amount_sent_msat: Amount,
  -	    #[serde(alias = "label", skip_serializing_if = "Option::is_none")]
-@@ -1915,7 +1910,7 @@
+@@ -1915,7 +1912,7 @@
   	    pub payment_preimage: Option<Secret>,
   	}
   
 -@@ -3116,34 +2903,29 @@ pub mod responses {
-+@@ -3113,32 +2899,27 @@ pub mod responses {
++@@ -3114,32 +2901,27 @@ pub mod responses {
   	}
   	#[derive(Clone, Debug, Deserialize, Serialize)]
   	pub struct WaitsendpayResponse {
-@@ -1937,9 +1932,6 @@
+@@ -1937,9 +1934,6 @@
   	    pub destination: Option<PublicKey>,
  -	    #[serde(alias = "created_at")]
   	    pub created_at: u64,
@@ -96,12 +74,12 @@
  -	    #[serde(alias = "amount_sent_msat")]
   	    pub amount_sent_msat: Amount,
  -	    #[serde(alias = "label", skip_serializing_if = "Option::is_none")]
-@@ -1959,14 +1951,13 @@
+@@ -1959,14 +1953,13 @@
   	    pub payment_preimage: Option<Secret>,
   	}
   
 -@@ -3160,10 +2942,11 @@ pub mod responses {
-+@@ -3155,9 +2936,10 @@ pub mod responses {
++@@ -3156,9 +2938,10 @@ pub mod responses {
   
   	#[derive(Clone, Debug, Deserialize, Serialize)]
   	pub struct NewaddrResponse {
@@ -112,12 +90,12 @@
  -	    #[serde(alias = "p2sh-segwit", skip_serializing_if = "Option::is_none")]
  +	    #[serde(rename = "p2sh-segwit")]
  +	    #[serde(skip_serializing_if = "Option::is_none")]
-@@ -2265,15 +2256,14 @@
+@@ -2265,15 +2258,14 @@
   	    pub route: Vec<GetrouteRoute>,
   	}
   
 -@@ -3646,32 +3370,27 @@ pub mod responses {
-+@@ -3640,32 +3363,26 @@ pub mod responses {
++@@ -3641,32 +3365,26 @@ pub mod responses {
   	}
   	#[derive(Clone, Debug, Deserialize, Serialize)]
   	pub struct ListforwardsForwards {
@@ -131,16 +109,16 @@
  -	    #[serde(alias = "in_msat")]
   	    pub in_msat: Amount,
   	    // Path `ListForwards.forwards[].status`
-@@ -2303,7 +2293,7 @@
+@@ -2303,7 +2295,7 @@
   	    pub forwards: Vec<ListforwardsForwards>,
   	}
   
 -@@ -3710,36 +3429,32 @@ pub mod responses {
-+@@ -3704,34 +3421,30 @@ pub mod responses {
++@@ -3705,34 +3423,30 @@ pub mod responses {
   	}
   	#[derive(Clone, Debug, Deserialize, Serialize)]
   	pub struct ListpaysPays {
-@@ -2317,9 +2307,6 @@
+@@ -2317,9 +2309,6 @@
   	    pub destination: Option<PublicKey>,
  -	    #[serde(alias = "created_at")]
   	    pub created_at: u64,
