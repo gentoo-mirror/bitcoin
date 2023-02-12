@@ -11,10 +11,10 @@ done < <(cat "${PORTAGE_CONFIGROOT%/}/etc/portage/savedconfig/${CATEGORY}/"{"${P
 for var in $(sed -ne 's/^COMPAT_CFLAGS=//p' Makefile) ; do
 	val=${var#*=} ; var=${var%%=*}
 	case "${var}" in
-	-DCOMPAT_V[0-9][0-9][0-9])
+	-DCOMPAT_V0[0-9][0-9])
 		ver="${var: -3:1}.${var: -2:1}.$((${var: -1:1}+1))"
 		;;
-	-DCOMPAT_V[0-9][0-9][0-9][0-9])
+	-DCOMPAT_V0[0-9][0-9][0-9])
 		ver="${var: -4:1}.${var: -3:2}.$((${var: -1:1}+1))"
 		;;
 	*)
