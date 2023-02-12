@@ -357,8 +357,8 @@ src_prepare() {
 
 	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
 	[[ ${PV} != *([.[:digit:]]) ]] ||
-		sed -ne '/^static bool is_released_version(void)/{a { return true; }
-			p;:x;n;/^}$/d;bx};p' -i wallet/db.c || die
+		sed -ne '/^bool is_released_version(void)/{a { return true; }
+			p;:x;n;/^}$/d;bx};p' -i common/version.c || die
 
 	use python && distutils-r1_src_prepare
 }
