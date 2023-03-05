@@ -985,7 +985,7 @@ BACKPORTS=(
 #	6aca9f665b580aa9ad2beed8ab10f511e56ac180	# devtools: Make fund_nodes compatible w/zsh
 	335f52d1a8b002018270194654c9e53c5a65fa5d	# cln-rpc: implement from Secret to slice conversion
 #	e7e7a7186f7b2ae145f756a757d576b7ac0c51e1	# tests/test_misc.py: Check if funds are getting recovered on reconnecting... Changelog-None: Increasing test scope
-#	e855ac2f9e6453913df64602b680b3644d847a6c	# keysend: just strip even unknown fields.
+	e855ac2f9e6453913df64602b680b3644d847a6c:strip=tests/	# keysend: just strip even unknown fields.
 #	a99509db36188bac5b8008e6005404cc96dd29ab	# py: Update protobuf dependency to silence dependabot
 #	2136d5912f08dd8dd5589844de45dbc919220089	# update package dependencies for Alpine Linux
 #	74652f7cf45e93df57b24ba67a5516863f492199	# move alpine build dependencies to virtual package
@@ -1518,6 +1518,42 @@ BACKPORTS=(
 	a610f28ad46beb7daccaa274c7ee0c0147616373	# add a log message when it is not possible upgrade the db
 	822db6acc26f1a55a0a97bc485ec38ae40a49f40	# gossipd: don't resurrect deleted half_chans
 	dd9400df992c4c08219b809b7e9cbdbd32bc9303:resolve-conflicts	# fix: compilation error on armv7l 32 bit
+	70aee529037e074c4cd2f034b97536ec04103b3b:strip='\(tests/\|.*\b\(autoclean\|commando\)\)'	# libplugin: don't spew datastore errors to LOG_DEBUG.
+#	15a744be8c1b1314822dc95529dfae827f3ff28e	# commando: don't try putting an integer as the 'string' parameter to "datastore".
+	9a77a995a89cacbfa68e79941307a51f48ca2ec6	# lightningd: unescape JSON strings for db.
+#	698eb0408f3550e6360dabf9a4fcbf3c54b83f2d	# pytest: adds xfail test that shows datastore issues
+#	1800139dbeace9d7de62b56aefd6075f224d2040	# meta: Add changelog for 23.02rc2
+	2c7ceb8a21517a9374b8b14b361092ca0cae6e48	# peer storage: advertise features as optional
+#	eea4781606cfe7387bb9a594a9586b4911fecb03	# pytest: allow ipv6 in test_announce_dns_suppressed
+	a104380e49676e5b517f5c8ec72d414ceaef327f	# fix: fixes `FATAL SIGNAL 11` on gossmap node
+#	0110026190ae014b73d7714f0e8646435bda5694	# Change year to 2023 in LICENSE
+	73e50b26f9e8cc20d7cb1d5022c30bae3b13c36e	# devtools: fix ZOMBIE detection in devtools/dump-gossipstore.
+	9e93826eeaab1e9c1362362ae4c541f3765e462f	# gossipd: neaten node_has_broadcastable_channels logic.
+	167209d595d53c6e112a3b0e4cd097cdf8ab8092	# gossipd: don't broadcast node_announcement if we have no public channels.
+	4fc3c26671332b0f007f6c978bac75b63388cd53	# gossipd: don't complain about unknown node_announcements if it's a zombie.
+	2e7c08824a2bbeb4b8ef5529d3582712c21170a7	# gossipd: don't zombify node_announcements, just forget them.
+	baeebf2863e592c80621265b1ded97aef1c80629	# gossipd: remove any zombified node_announcements on load.
+	69cd04318906cb683d7aebfe98f11ded8bc3d7cf	# gossipd: remove redundant is_node_zombie() in routing_add_node_announcement.
+	463355de59b2df9b5df1088a24d44fdb010ca5b5	# gossipd: remember to squelch node announcements when shuffling
+#	7079fb506f4bb7b68b3e9c2d66280aa7ef557012	# meta: Update changelog for 23.02rc3
+#	e315f30728cbb1c259b27a943080f7c110366179	# db-fix: update NULL lease_satoshi fields to zero
+#	38d90b250596d38a777ab064c3788a730f14d753	# autoclean: fix timer crash when we're cleaning two things at once.
+	355a7ae8272edae02c7ee0fe3b6ee64aab861a1c:strip=tests/	# pay: fix delpay to actually delete.
+	bcc94b2d43b1765ffc40a9b7ff1ed6865a283cac	# fix: do not send send peerstorage msg when disabled
+#	855980641c50d977702978e5d669b95997537f43	# sql: fix schema tests since num_channels added to listpeers.
+#	f3baa3e510b6e1e27e34e835df4df16d9b62ca98	# sql: fix crash on fresh node_announcment.
+#	1426ac881b74542d3a07ad84730a9c3518cb1cc4	# pytest: remove openchannel('v2') marker from test_sql
+	4a38e37b590732322f5bd9a4f6261e43b8a89bd6	# json: Add method to parse a u64 array
+	29031c02cac4173e5aaf30f5926a1722de5b55a7	# libplugin: Expose the `jsonrpc_request_sync` method
+	5dc85d185a27469d7078caf9c76c9e8d308a0f95	# keysend: Extract `accept-extra-tlv-types` from `listconfigs`
+	f1c29aa3bde65da04d821b95ae0e14f4c2f7c06e:strip=tests/	# keysend: Do not strip even TLV types that were allowlisted
+	07c04d247eb2bb1da318aa7486119abbb8c1c1f6	# gossipd: correct node_announcement order when zombifying channels
+	d5246e43bbe4b1059ad9b618837bb32bf9ba3f63	# gossipd: flag zombie channels when loading from gossip_store
+	d1402e06f9a8c18244d854ccc159326f0bab749a	# gossipd: load and store node_announcements correctly
+#	c7fd13a4602d30e5a1392f223b69fdfc59874440	# repro: Add `protoc` dependency to repro-build
+#	0707ffcab41c4974cf80338db5f1baf8ab34a473	# reprobuild: use pyenv for python installation
+#	538a8d5c570ccd2a853ac5f1dace145c99b10ea7	# meta: update changelog and pyln version for 23.02 release
+	8c3baa98cf53b8c9aeccb044aca8d9fb6c1f9009	# gossipd: remove zombie spam cupdate when resurrecting
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
