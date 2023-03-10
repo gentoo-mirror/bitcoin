@@ -189,7 +189,6 @@ inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 MyPN=lightning
 MyPV=${PV/_}
 PATCH_HASHES=(
-	b5c614069bec50ae0e084ad8ac24c17a8729b619	# connectd: fix crash on freed context for new connections.
 )
 PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
 PATCHES=(
