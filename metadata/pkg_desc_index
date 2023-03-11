@@ -22,7 +22,7 @@ net-libs/libwally-core 0.8.5_p20230128 0.8.8: Collection of useful primitives fo
 net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0 23.0: Command-line JSON-RPC client specifically for interfacing with bitcoind
 net-p2p/bitcoin-qt 21.2-r1 22.0-r2 23.0: An end-user Qt GUI for the Bitcoin crypto-currency
 net-p2p/bitcoind 21.2-r1 22.0-r2 23.0: Original Bitcoin crypto-currency wallet for automated services
-net-p2p/core-lightning 0.11.2-r2 0.11.2-r117 0.12.1-r1 0.12.1-r106 22.11.1-r1 22.11.1-r101 23.02-r1 9999-r2: An implementation of Bitcoin's Lightning Network in C
+net-p2p/core-lightning 0.11.2-r2 0.11.2-r117 0.12.1-r1 0.12.1-r106 22.11.1-r1 22.11.1-r101 23.02.1 9999-r2: An implementation of Bitcoin's Lightning Network in C
 net-p2p/joinmarket 0.9.9: JoinMarket CoinJoin client and daemon
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
 virtual/bitcoin-leveldb 0 0-r1: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
