@@ -71,7 +71,7 @@ PATCHES+=(
 	"${FILESDIR}/0.8.8-python-module-dynamic-link.patch"
 )
 
-distutils_enable_sphinx docs/source dev-python/sphinx_rtd_theme
+distutils_enable_sphinx docs/source dev-python/sphinx-rtd-theme
 
 pkg_pretend() {
 	if has_version "<${CATEGORY}/${PN}-0.8.2" &&

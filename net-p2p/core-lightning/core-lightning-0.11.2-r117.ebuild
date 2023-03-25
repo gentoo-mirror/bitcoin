@@ -1614,7 +1614,7 @@ BDEPEND="
 	doc? ( $(python_gen_any_dep '
 		dev-python/recommonmark[${PYTHON_USEDEP}]
 		dev-python/sphinx[${PYTHON_USEDEP}]
-		dev-python/sphinx_rtd_theme[${PYTHON_USEDEP}]
+		dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
 	') )
 	python? (
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
@@ -1642,7 +1642,7 @@ python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
 		"dev-python/mako[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
-		dev-python/{recommonmark,sphinx{,_rtd_theme}}"[${PYTHON_USEDEP}]" ; }
+		dev-python/{recommonmark,sphinx{,-rtd-theme}}"[${PYTHON_USEDEP}]" ; }
 }
 
 python_foreach_subdir() {
