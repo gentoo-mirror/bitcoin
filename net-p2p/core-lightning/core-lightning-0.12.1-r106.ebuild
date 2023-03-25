@@ -1067,7 +1067,7 @@ python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
 		"dev-python/mako[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
-		dev-python/{recommonmark,sphinx{,_rtd_theme}}"[${PYTHON_USEDEP}]" ; }
+		dev-python/{recommonmark,sphinx{,-rtd-theme}}"[${PYTHON_USEDEP}]" ; }
 }
 
 python_foreach_subdir() {
