@@ -225,7 +225,7 @@ BDEPEND="
 	doc? ( $(python_gen_any_dep '
 		dev-python/recommonmark[${PYTHON_USEDEP}]
 		dev-python/sphinx[${PYTHON_USEDEP}]
-		dev-python/sphinx_rtd_theme[${PYTHON_USEDEP}]
+		dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
 	') )
 	python? (
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
