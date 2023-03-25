@@ -201,7 +201,7 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer doc experimental +man postgres python rust sqlite test"
+IUSE="developer doc experimental +man +mkdocs postgres python rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -237,11 +237,19 @@ BDEPEND="
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
-	doc? ( $(python_gen_any_dep '
-		dev-python/recommonmark[${PYTHON_USEDEP}]
-		dev-python/sphinx[${PYTHON_USEDEP}]
-		dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
-	') )
+	doc? (
+		$(python_gen_any_dep '
+			dev-python/recommonmark[${PYTHON_USEDEP}]
+			dev-python/sphinx[${PYTHON_USEDEP}]
+			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
+		')
+		mkdocs? ( $(python_gen_any_dep '
+			>=dev-python/jinja-3.1.0[${PYTHON_USEDEP}]
+			dev-python/mkdocs[${PYTHON_USEDEP}]
+			dev-python/mkdocs-exclude[${PYTHON_USEDEP}]
+			dev-python/mkdocs-material[${PYTHON_USEDEP}]
+		') )
+	)
 	python? (
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
 		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
@@ -266,6 +274,8 @@ DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
 python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
 		"dev-python/mako[${PYTHON_USEDEP}]" ; } &&
+	{ [[ " ${python_need} " != *' mkdocs '* ]] || python_has_version \
+		{'>=dev-python/jinja-3.1.0',dev-python/mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
 		dev-python/{recommonmark,sphinx{,-rtd-theme}}"[${PYTHON_USEDEP}]" ; }
 }
@@ -398,9 +408,21 @@ src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
 	if use doc ; then
-		local python_need='sphinx'
-		python_setup
-		build_sphinx doc
+		if use mkdocs ; then
+			local python_need='mkdocs'
+			python_setup
+			"${EPYTHON}" -m mkdocs build || die 'mkdocs failed'
+			rm -f site/sitemap.xml.gz  # avoid QA notice
+			HTML_DOCS+=( site/. )
+			if use python ; then
+				python_need='sphinx'
+				python_setup
+			fi
+		else
+			local python_need='sphinx'
+			python_setup
+			build_sphinx doc
+		fi
 	fi
 
 	use python && distutils-r1_src_compile

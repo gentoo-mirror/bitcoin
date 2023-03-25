@@ -8,6 +8,7 @@
 	<use>
 		<flag name="developer">Enable dangerous commands intended for developer use only.</flag>
 		<flag name="experimental">Enable dangerous experimental features.</flag>
+		<flag name="mkdocs">Use dev-python/mkdocs to build documentation.</flag>
 		<flag name="rust">Build Rust components</flag>
 	</use>
 	<upstream>
