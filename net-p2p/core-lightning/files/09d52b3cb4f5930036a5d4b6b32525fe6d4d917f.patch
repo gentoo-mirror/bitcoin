@@ -51,5 +51,5 @@
 - A routing failure object has the fields below:
 - -   *erring\_index*. The index of the node along the route that reported
  diff --git a/doc/lightning-setchannel.7.md b/doc/lightning-setchannel.7.md
- index 602cf3f72b1..0df477cc16b 100644
+ index 602cf3f72b153f863909f6332b08848e5c804425..0df477cc16bf8bbfa03542f3de34606e6fabf7ca 100644
  --- a/doc/lightning-setchannel.7.md

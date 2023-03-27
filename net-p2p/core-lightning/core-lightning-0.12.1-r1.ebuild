@@ -158,29 +158,26 @@ CRATES="
 	yasna-0.4.0
 "
 
-inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
-PATCH_HASHES=(
+BACKPORTS=(
 	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
 	6a48ed9e826efed1ea53b18a8308f97c2d5bbe34	# gossmap: fail to get capacity of locally-added chans (don't crash!).
 	6518f6f26ab61ec33a796e57125ca8bad4b6c632	# make: Make the Makefile make 4.4 compatible
 	ed4815527aba7a3d11bd9f33b441372edd56310e	# gossipd: avoid gossipd crash due to double freeing timer
 	8315c7c906a0d54f2157009665d0b091d746dcbe	# lightningd: don't send channeld message to onchaind.
 )
-PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
-PATCHES=(
-	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
-)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
+BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
-	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
+	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -312,6 +309,8 @@ src_prepare() {
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
+
+	backports_apply_patches
 
 	default
 

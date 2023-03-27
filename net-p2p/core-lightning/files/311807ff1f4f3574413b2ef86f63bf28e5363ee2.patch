@@ -41,7 +41,7 @@
 + 		cur->received_time = db_col_timeabs(stmt, "f.received_time");
   
  diff --git a/wallet/wallet.h b/wallet/wallet.h
- index dfc66e14b0b..94ec5c0825f 100644
+ index dfc66e14b0b723025be5ef374f2ab262b69d919f..94ec5c0825f972ab2296289d76ef02a8456bae5a 100644
  --- a/wallet/wallet.h
  +++ b/wallet/wallet.h
 -@@ -272,9 +272,11 @@ static inline enum htlc_state htlc_state_in_db(enum htlc_state s)

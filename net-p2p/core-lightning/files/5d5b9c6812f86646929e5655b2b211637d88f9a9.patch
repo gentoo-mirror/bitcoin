@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/5d5b9c6812f86646929e5655b2b211637d88f9a9.patch	2023-01-12 23:58:58.805432343 -0500
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r112/temp/5d5b9c6812f86646929e5655b2b211637d88f9a9.patch	2023-01-13 00:14:17.731550440 -0500
 @@ -17,45 +17,35 @@
- index d47430aab66..02bacca9ce3 100644
+ index d47430aab663a0c2b18e539700151d6df991b55d..02bacca9ce3f4bb2e3b972bb6dfff24a15dc2acd 100644
  --- a/plugins/libplugin-pay.c
  +++ b/plugins/libplugin-pay.c
 -@@ -3302,11 +3302,10 @@ static struct command_result *direct_pay_listpeers(struct command *cmd,
@@ -22,7 +22,7 @@
   
   	direct_pay_override(p);
  diff --git a/plugins/libplugin.c b/plugins/libplugin.c
- index 19d9b3f2515..cebee85c67a 100644
+ index 19d9b3f2515d5fec03140938f44a48f1be9a590c..cebee85c67ac4934a9084adca6e0e029b7eb32a4 100644
  --- a/plugins/libplugin.c
  +++ b/plugins/libplugin.c
 -@@ -1925,14 +1925,6 @@ static struct listpeers_channel *json_to_listpeers_channel(const tal_t *ctx,
@@ -60,7 +60,7 @@
  +
  +	json_to_int(buffer, dirtok, &chan->direction);
 @@ -75,12 +65,9 @@
- index bd74f5827a9..a846317f1bd 100644
+ index bd74f5827a9ff1192f5ebfee8bb70200ef830f19..a846317f1bde4316a62c719feed483e39181f63b 100644
  --- a/plugins/libplugin.h
  +++ b/plugins/libplugin.h
 -@@ -438,9 +438,10 @@ struct listpeers_channel {

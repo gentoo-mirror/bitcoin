@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: backports.eclass
@@ -66,15 +66,28 @@ esac
 # https://github.com/acme/frobnicator/commit/
 
 # @FUNCTION: backports_patch_uris
+# @USAGE: [<suffix>]
 # @RETURN: A whitespace-separated list of URIs to be added to SRC_URI.
 # @DESCRIPTION:
-# Must be called only after setting BACKPORTS.
+# Must be called only after setting BACKPORTS.  If suffix is omitted, it
+# defaults to ".patch", except if BACKPORTS_BASE_URI matches the pattern
+# https://github.com/*/commit/, in which case suffix defaults to
+# ".patch?full_index=1".
 backports_patch_uris() {
 	[[ -n "${BACKPORTS_BASE_URI}" ]] || die 'BACKPORTS_BASE_URI not set'
-	local spec
-	for spec in "${BACKPORTS[@]}" ; do
-		echo "${BACKPORTS_BASE_URI}${spec%%:*}.patch"
-	done
+	local spec suffix='.patch'
+	[[ "${BACKPORTS_BASE_URI}" == https://github.com/*/commit/ ]] && suffix+='?full_index=1'
+	suffix="${1-${suffix}}"
+	if [[ "${suffix}" == '.patch' ]] ; then
+		for spec in "${BACKPORTS[@]}" ; do
+			echo "${BACKPORTS_BASE_URI}${spec%%:*}.patch"
+		done
+	else
+		for spec in "${BACKPORTS[@]}" ; do
+			spec="${spec%%:*}"
+			echo "${BACKPORTS_BASE_URI}${spec}${suffix} -> ${spec}.patch"
+		done
+	fi
 }
 
 # @FUNCTION: backports_apply_patches

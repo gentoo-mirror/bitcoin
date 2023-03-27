@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/31732f7825ab59878cb4704bc2a7b5384cf9c2a0.patch	2022-12-21 21:17:08.092350752 -0500
 +++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r101/temp/31732f7825ab59878cb4704bc2a7b5384cf9c2a0.patch	2022-12-21 22:38:42.269546797 -0500
 @@ -598,7 +598,7 @@
- index 4568ebfbb9c..9414040d576 100644
+ index 4568ebfbb9c02eb5c0aaa451f9812aab8c28da46..9414040d5763ccccf13b767cfdbb85dc97a16192 100644
  --- a/doc/lightning-delpay.7.md
  +++ b/doc/lightning-delpay.7.md
 -@@ -42,7 +42,7 @@ payments will be returned -- one payment object for each partid.
@@ -22,7 +22,7 @@
  +- **groupid** (u64, optional): Grouping key to disambiguate multiple attempts to pay an invoice or the same payment\_hash
   - **payment\_preimage** (hex, optional): proof of payment (always 64 characters)
 @@ -986,19 +985,16 @@
- index 88570c472e2..7fa489a96ba 100644
+ index 88570c472e2775b89e64ed8878113153fc71a9bc..7fa489a96bac5695651ba380ae247971323c901f 100644
  --- a/doc/lightning-listforwards.7.md
  +++ b/doc/lightning-listforwards.7.md
 -@@ -26,23 +26,23 @@ On success, an object containing **forwards** is returned.  It is an array of ob

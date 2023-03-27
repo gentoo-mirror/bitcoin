@@ -14,7 +14,7 @@
 + 	doc/lightning-checkmessage.7 \
 + 	doc/lightning-close.7 \
  diff --git a/doc/index.rst b/doc/index.rst
- index 13bdbb48a7a..ad6b847f939 100644
+ index 13bdbb48a7a318ca0ea0087d4cf6b62a089b1455..ad6b847f939b59efebf2fab90eb57ecf80ad7d1e 100644
  --- a/doc/index.rst
  +++ b/doc/index.rst
  @@ -31,6 +31,7 @@ Core Lightning Documentation
@@ -31,9 +31,9 @@
 +    lightning-cli <lightning-cli.1.md>
  diff --git a/doc/lightning-batching.7.md b/doc/lightning-batching.7.md
  new file mode 100644
- index 00000000000..d69d8b29013
+ index 0000000000000000000000000000000000000000..d69d8b2901302b3eda2a030d7ced22eb8e6c8d9a
 @@ -287,11 +287,10 @@
- index 8993e107874..dcbb5a64d5b 100644
+ index 8993e1078742db73ebfcfccdc2a4a8d5551d7d35..dcbb5a64d5b3f3ce319991b3d599af3136602795 100644
  --- a/plugins/autoclean.c
  +++ b/plugins/autoclean.c
 -@@ -552,6 +552,9 @@ static const char *init(struct plugin *p,

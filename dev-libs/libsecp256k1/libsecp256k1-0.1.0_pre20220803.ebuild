@@ -11,8 +11,8 @@ HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
 COMMITHASH="694ce8fb2d1fd8a3d641d7c33705691d41a2a860"
 SRC_URI="
 	${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tgz
-	${HOMEPAGE}/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch -> ${PN}-PR1159-772e74.patch
-	${HOMEPAGE}/commit/54e290ddaf3499002d9ce06bc4adbae05ac32e9e.patch -> ${PN}-PR1160-54e290.patch
+	${HOMEPAGE}/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch?full_index=1 -> ${PN}-PR1159-772e74.patch
+	${HOMEPAGE}/commit/54e290ddaf3499002d9ce06bc4adbae05ac32e9e.patch?full_index=1 -> ${PN}-PR1160-54e290.patch
 "
 
 LICENSE="MIT"

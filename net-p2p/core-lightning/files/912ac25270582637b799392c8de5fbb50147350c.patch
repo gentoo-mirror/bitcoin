@@ -30,5 +30,5 @@
 - channel_scid_or_local_alias(const struct channel *chan)
 - {
  diff --git a/lightningd/channel.h b/lightningd/channel.h
- index 8851bd72ff0..c872bd1cc34 100644
+ index 8851bd72ff08c3f472c447eedaabfb9d4ca5b7a8..c872bd1cc340b4b3acb1a701f1e652d305b2b8c5 100644
  --- a/lightningd/channel.h

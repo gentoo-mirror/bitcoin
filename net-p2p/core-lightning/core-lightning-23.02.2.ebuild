@@ -188,20 +188,13 @@ inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/_}
-PATCH_HASHES=(
-)
-PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
-PATCHES=(
-	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
-)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
-	rust? ( $(cargo_crate_uris) )
-	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
+	rust? ( $(cargo_crate_uris) )"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"

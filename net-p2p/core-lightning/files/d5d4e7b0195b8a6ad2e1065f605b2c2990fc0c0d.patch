@@ -10,5 +10,5 @@
 - 		"option_zeroconf", /* 50/51, https://github.com/lightning/bolts/pull/910 */
 + 		NULL, /* 50/51 */
  diff --git a/common/features.h b/common/features.h
- index d5da02fdf79..ccb914020bf 100644
+ index d5da02fdf79f4d95de2f924fdaa794e37597348e..ccb914020bfd1a3c80a390661c3b884728dfa562 100644
  --- a/common/features.h
