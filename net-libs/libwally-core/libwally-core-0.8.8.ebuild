@@ -9,17 +9,9 @@ DISTUTILS_USE_PEP517=setuptools
 
 inherit autotools distutils-r1 java-pkg-opt-2 multilib-minimal
 
-PATCH_HASHES=(
-)
-PATCH_FILES=( "${PATCH_HASHES[@]/%/.patch}" )
-PATCHES=(
-	"${PATCH_FILES[@]/#/${DISTDIR%/}/}"
-)
-
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
-SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
-	${PATCH_FILES[@]/#/${HOMEPAGE}/commit/}"
+SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT CC0-1.0"
 SLOT="0/0.8.7"
@@ -66,7 +58,7 @@ REQUIRED_USE="
 
 S="${WORKDIR}/${PN}-release_${PV}"
 
-PATCHES+=(
+PATCHES=(
 	"${FILESDIR}/0.8.8-sys_libsecp256k1_zkp.patch"
 	"${FILESDIR}/0.8.8-python-module-dynamic-link.patch"
 )

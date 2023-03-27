@@ -11,7 +11,7 @@ HOMEPAGE="https://github.com/ElementsProject/secp256k1-zkp"
 COMMITHASH="6c0aecf72b1f4290f50302440065392715d6240a"
 SRC_URI="
 	${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${PN}-v${PV}.tgz
-	https://github.com/bitcoin-core/secp256k1/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch -> libsecp256k1-PR1159-772e74.patch
+	https://github.com/bitcoin-core/secp256k1/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch?full_index=1 -> libsecp256k1-PR1159-772e74.patch
 "
 
 LICENSE="MIT"

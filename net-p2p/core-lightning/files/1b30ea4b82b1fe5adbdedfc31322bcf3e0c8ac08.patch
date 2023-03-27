@@ -123,7 +123,7 @@
 - 		OPT_ZEROCONF,
 - 	};
  diff --git a/common/gossip_constants.h b/common/gossip_constants.h
- index dac2562eb9f..3ce395eac70 100644
+ index dac2562eb9fb3f46956035a586fab412b9c641db..3ce395eac70e52848957ba4332920a5a060507b8 100644
  --- a/common/gossip_constants.h
 @@ -480,8 +448,8 @@
  -	channel->remote_funding_locked = remote_funding_locked;
@@ -134,7 +134,7 @@
 + 	channel->cid = *cid;
 + 	channel->our_msat = our_msat;
  diff --git a/lightningd/channel.h b/lightningd/channel.h
- index eba34ffa083..a971b012e42 100644
+ index eba34ffa083604e289d2a8d01ee2e56cc3f7cf12..a971b012e42fcd1db54b0a065921abef0164911b 100644
  --- a/lightningd/channel.h
 @@ -517,7 +485,7 @@
   
@@ -201,7 +201,7 @@
 + 
 + 	return true;
  diff --git a/lightningd/channel_control.h b/lightningd/channel_control.h
- index 9008bed1d05..2f8b356e863 100644
+ index 9008bed1d055d9f38eb5fac3f32e2e081165bd90..2f8b356e863d7d7f2655b45d12bbde7fccf2071b 100644
  --- a/lightningd/channel_control.h
 @@ -723,8 +686,8 @@
  -			      false, /* !remote_funding_locked */
@@ -223,5 +223,5 @@
 + 			      &cid,
 + 			      /* The three arguments below are msatoshi_to_us,
  diff --git a/openingd/dualopend.c b/openingd/dualopend.c
- index c2de0716b3f..0c40c0fdc6a 100644
+ index c2de0716b3ffaa25b41250c07bd5f325aaed96d3..0c40c0fdc6aab4dd6ee45560fafe0c32c730bdae 100644
  --- a/openingd/dualopend.c

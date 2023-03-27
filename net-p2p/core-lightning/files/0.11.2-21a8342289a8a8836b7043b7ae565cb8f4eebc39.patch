@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/21a8342289a8a8836b7043b7ae565cb8f4eebc39.patch	2023-02-10 15:44:59.029640259 -0500
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r114/temp/21a8342289a8a8836b7043b7ae565cb8f4eebc39.patch	2023-02-10 18:53:59.365266924 -0500
 @@ -13,7 +13,7 @@
- index 0d34dafb304..b2cb07204da 100644
+ index 0d34dafb3047f60f528c4a9b4d9ecbab79c1fb29..b2cb07204dab17a9c540648d937969ec299a55cd 100644
  --- a/cln-grpc/src/convert.rs
  +++ b/cln-grpc/src/convert.rs
 -@@ -2318,3 +2318,1111 @@ impl From<pb::StopRequest> for requests::StopRequest {

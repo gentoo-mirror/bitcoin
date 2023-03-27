@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/ff2d7e6833201e82748932f41af5580aa956e878.patch	2023-01-12 23:58:59.151435424 -0500
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r112/temp/ff2d7e6833201e82748932f41af5580aa956e878.patch	2023-01-13 00:22:53.332190837 -0500
 @@ -21,15 +21,16 @@
- index 02bacca9ce3..7584319bede 100644
+ index 02bacca9ce3f4bb2e3b972bb6dfff24a15dc2acd..7584319bede66ae4733144a6803a92b428922ac8 100644
  --- a/plugins/libplugin-pay.c
  +++ b/plugins/libplugin-pay.c
 -@@ -2350,73 +2350,39 @@ static struct command_result *

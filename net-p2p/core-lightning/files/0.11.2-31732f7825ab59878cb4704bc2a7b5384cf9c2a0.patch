@@ -12,7 +12,7 @@
   
   If **type** is "bolt12 offer", and **valid** is *true*:
 @@ -461,7 +462,7 @@
- index 4568ebfbb9c..9414040d576 100644
+ index 4568ebfbb9c02eb5c0aaa451f9812aab8c28da46..9414040d5763ccccf13b767cfdbb85dc97a16192 100644
  --- a/doc/lightning-delpay.7.md
  +++ b/doc/lightning-delpay.7.md
 -@@ -42,7 +42,7 @@ payments will be returned -- one payment object for each partid.
@@ -44,7 +44,7 @@
  +- **announce-addr-dns** (boolean, optional): Whether we put DNS entries into node\_announcement
   
 @@ -849,19 +859,16 @@
- index 88570c472e2..7fa489a96ba 100644
+ index 88570c472e2775b89e64ed8878113153fc71a9bc..7fa489a96bac5695651ba380ae247971323c901f 100644
  --- a/doc/lightning-listforwards.7.md
  +++ b/doc/lightning-listforwards.7.md
 -@@ -26,23 +26,23 @@ On success, an object containing **forwards** is returned.  It is an array of ob

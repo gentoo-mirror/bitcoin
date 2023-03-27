@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/57dcf68c0b97f1d7d553f420451481147283461b.patch	2023-01-12 23:58:58.532429912 -0500
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r112/temp/57dcf68c0b97f1d7d553f420451481147283461b.patch	2023-01-13 00:09:08.941822798 -0500
 @@ -22,7 +22,7 @@
- index 30ac1f700c7..d47430aab66 100644
+ index 30ac1f700c7e09db76c8ccd0c495faf4859d202f..d47430aab663a0c2b18e539700151d6df991b55d 100644
  --- a/plugins/libplugin-pay.c
  +++ b/plugins/libplugin-pay.c
 -@@ -3284,34 +3284,31 @@ static struct command_result *direct_pay_listpeers(struct command *cmd,

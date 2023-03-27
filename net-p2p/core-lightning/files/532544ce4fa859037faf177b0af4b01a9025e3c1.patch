@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/532544ce4fa859037faf177b0af4b01a9025e3c1.patch	2022-09-25 08:06:46.202386594 -0400
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r104/temp/532544ce4fa859037faf177b0af4b01a9025e3c1.patch	2022-09-25 09:06:28.980275211 -0400
 @@ -234,19 +234,7 @@
- index a3aa98eb6f2..b2cb8c0410e 100644
+ index a3aa98eb6f24986377ec971375ff42c1d2005b97..b2cb8c0410eb7837dbd26da22827201b3be2bdad 100644
  --- a/wallet/test/run-wallet.c
  +++ b/wallet/test/run-wallet.c
 -@@ -611,11 +611,6 @@ struct command_result *param_short_channel_id(struct command *cmd UNNEEDED,

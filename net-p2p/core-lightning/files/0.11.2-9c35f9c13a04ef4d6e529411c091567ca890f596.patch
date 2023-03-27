@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/9c35f9c13a04ef4d6e529411c091567ca890f596.patch	2023-02-10 15:44:58.708637460 -0500
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r114/temp/9c35f9c13a04ef4d6e529411c091567ca890f596.patch	2023-02-10 18:51:55.444143036 -0500
 @@ -15,6 +15,14 @@
- index 71b6f101fd1..0d34dafb304 100644
+ index 71b6f101fd1b2b33b2615c4578c1c1e742eef15e..0d34dafb3047f60f528c4a9b4d9ecbab79c1fb29 100644
  --- a/cln-grpc/src/convert.rs
  +++ b/cln-grpc/src/convert.rs
 +@@ -186,7 +186,6 @@ impl From<responses::ListpeersPeersChannels> for pb::ListpeersPeersChannels {

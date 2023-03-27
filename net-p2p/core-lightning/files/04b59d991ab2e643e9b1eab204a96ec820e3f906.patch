@@ -26,7 +26,7 @@
   
   Main web site: <https://github.com/ElementsProject/lightning>
 @@ -1428,10 +1400,10 @@
- index ab9dbe7a15a..6445cff5de5 100644
+ index ab9dbe7a15a796f4c238833b551a2fdc531e59a0..6445cff5de5a04fe96f1460529fb94ec3ecafdd5 100644
  --- a/doc/lightning-listpeers.7.md
  +++ b/doc/lightning-listpeers.7.md
 -@@ -48,81 +48,81 @@ On success, an object containing **peers** is returned.  It is an array of objec

@@ -1,7 +1,7 @@
 --- /var/cache/distfiles/bcabb3825fd9daa351f1d56db23eb7dde8c9ab21.patch	2022-10-07 10:19:26.912806392 -0400
 +++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r105/temp/bcabb3825fd9daa351f1d56db23eb7dde8c9ab21.patch	2022-10-07 11:59:33.134911316 -0400
 @@ -243,22 +243,6 @@
- index b6464ab9b2b..ad2b21006fa 100644
+ index b6464ab9b2b1ebd196fe3acb4714522b029d2ac1..ad2b21006fab657aa58e7c0cf18759ce425962f1 100644
  --- a/doc/lightning-decode.7.md
  +++ b/doc/lightning-decode.7.md
 -@@ -172,6 +172,7 @@ If **type** is "bolt11 invoice", and **valid** is *true*:
