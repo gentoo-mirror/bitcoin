@@ -208,7 +208,7 @@ CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.8.8:=[elements]
+	>=net-libs/libwally-core-0.8.8:0/0.8.7[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )

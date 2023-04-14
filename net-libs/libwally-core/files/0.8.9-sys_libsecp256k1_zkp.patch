@@ -1,0 +1,220 @@
+From 216ed2c96dc713d7aaae285bb35513358dabe7da Mon Sep 17 00:00:00 2001
+From: Matt Whitlock <c-lightning@mattwhitlock.name>
+Date: Sat, 8 Oct 2022 14:22:42 -0400
+Subject: [PATCH 1/2] build: support linking against system-installed
+ libsecp256k1
+
+---
+ configure.ac                | 45 ++++++++++++++++++-------------------
+ setup.py                    |  5 ++---
+ src/Makefile.am             | 15 +++++++------
+ src/amalgamation/combined.c | 18 ---------------
+ 4 files changed, 32 insertions(+), 51 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 96f82ff..1068f4d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -243,29 +243,29 @@ if test "x$ac_have_pthread" == "xyes"; then
+     AC_CHECK_HEADERS([asm/page.h])
+ fi
+ 
+-#
+-# libsecp256k1
+-#
+-# FIXME: This is needed to force libtool to use all object files from secp.
+-#        We can only build secp properly by recursively invoking
+-#        configure/make, and can't include it as a noinst_ library. Libtool
+-#        assumes that such libraries will be installed along with our library
+-#        target and so won't force all object files in the library to be
+-#        included in ours - despite the fact that we are making a shared
+-#        library and linking to a static one. This is broken and we work
+-#        around it by hacking the secp objects directly into the library
+-#        via the _LDADD variable for wallycore.
+-#        We previously achieved this by adding the libsecp256k1.a archive,
+-#        but changes to libtool and apples linkers mean that
+-#        archives-within-archives no longer work.
+-#        Because automake tries to police its users very strictly and fails
+-#        hard when flags are passed in this way, we have to substitute the
+-#        flags here.
+-#        Because libtool both intercepts -Wl and arbitrarily re-orders its
+-#        command line inputs, we have to concoct a single expression to
+-#        enforce linking that cannot be split, hence the below expression.
+-LIBADD_SECP256K1="-Wl,secp256k1/src/libsecp256k1_la-secp256k1.${OBJEXT},secp256k1/src/libsecp256k1_precomputed_la-precomputed_ecmult_gen.${OBJEXT},secp256k1/src/libsecp256k1_precomputed_la-precomputed_ecmult.${OBJEXT}"
++saved_LIBS=$LIBS
++AS_IF([test "x$standard_secp" = "xyes"],[
++    PKG_CHECK_MODULES([libsecp256k1],[libsecp256k1],[])
++    LIBS="$libsecp256k1_LIBS $LIBS"
++    AC_CHECK_FUNCS([secp256k1_ecdh secp256k1_xonly_pubkey_parse secp256k1_ecdsa_recoverable_signature_parse_compact],[],[
++        AC_MSG_ERROR([libsecp256k1 does not support required ecdh, extrakeys, and recovery modules])
++    ])
++],[
++    PKG_CHECK_MODULES([libsecp256k1],[libsecp256k1_zkp],[])
++    LIBS="$libsecp256k1_LIBS $LIBS"
++    AC_CHECK_FUNCS([secp256k1_ecdh secp256k1_ecdsa_s2c_sign secp256k1_xonly_pubkey_parse secp256k1_ecdsa_recoverable_signature_parse_compact],[],[
++        AC_MSG_ERROR([libsecp256k1_zkp does not support required ecdh, ecdsa-s2c, extrakeys, and recovery modules])
++    ])
++    AS_IF([test "x$elements" = "xyes"],[
++        AC_CHECK_FUNCS([secp256k1_generator_parse secp256k1_pedersen_commitment_parse secp256k1_surjectionproof_initialize secp256k1_whitelist_sign],[],[
++            AC_MSG_ERROR([libsecp256k1_zkp does not support generator, rangeproof, surjectionproof, and whitelist modules; required for Elements asset support (you specified --enable-elements)])
++        ])
++    ])
++])
++LIBS=$saved_LIBS
++LIBADD_SECP256K1="${libsecp256k1_LIBS}"
+ AC_SUBST([LIBADD_SECP256K1])
++AC_SUBST([libsecp256k1_CFLAGS])
+ 
+ #
+ # Python facilities
+@@ -398,7 +398,6 @@ export AR_FLAGS
+ export LD
+ export LDFLAGS
+ ac_configure_args="${ac_configure_args} --disable-shared --with-pic --with-bignum=no --enable-experimental --enable-module-ecdh --enable-module-recovery --enable-module-ecdsa-s2c --enable-module-rangeproof --enable-module-surjectionproof --enable-module-whitelist --enable-module-generator --enable-module-extrakeys --enable-module-schnorrsig ${secp256k1_test_opt} --enable-openssl-tests=no --enable-exhaustive-tests=no --enable-benchmark=no --disable-dependency-tracking ${secp_asm}"
+-AC_CONFIG_SUBDIRS([src/secp256k1])
+ 
+ 
+ AC_OUTPUT
+diff --git a/setup.py b/setup.py
+index 1a588a9..9de4163 100644
+--- a/setup.py
++++ b/setup.py
+@@ -2,6 +2,7 @@
+ from setuptools import setup, Extension
+ import copy, os, platform
+ import distutils.sysconfig
++import pkgconfig
+ 
+ CONFIGURE_ARGS = '--enable-swig-python --enable-python-manylinux --enable-elements'
+ CONFIGURE_ARGS += ' --disable-swig-java --disable-tests --disable-dependency-tracking'
+@@ -57,7 +58,6 @@ define_macros=[
+     ('SWIG_PYTHON_BUILD', None),
+     ('WALLY_CORE_BUILD', None),
+     ('HAVE_CONFIG_H', None),
+-    ('SECP256K1_BUILD', None),
+     ('BUILD_ELEMENTS', None)
+     ]
+ if is_windows:
+@@ -69,8 +69,6 @@ include_dirs=[
+     './src',
+     './include',
+     './src/ccan',
+-    './src/secp256k1',
+-    './src/secp256k1/src/'
+     ]
+ if is_windows:
+     include_dirs = ['./src/amalgamation/windows_config'] + include_dirs
+@@ -89,6 +87,7 @@ wally_ext = Extension(
+         'src/amalgamation/combined_ccan2.c',
+         ],
+     )
++pkgconfig.configure_extension(wally_ext, 'libsecp256k1_zkp')
+ 
+ kwargs = {
+     'name': 'wallycore',
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 9c54e95..602f9f1 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -15,7 +15,6 @@ include_HEADERS += $(top_srcdir)/include/wally_bip39.h
+ include_HEADERS += $(top_srcdir)/include/wally_core.h
+ include_HEADERS += $(top_srcdir)/include/wally_crypto.h
+ include_HEADERS += $(top_srcdir)/include/wally_descriptor.h
+-include_HEADERS += $(top_srcdir)/include/wally_elements.h
+ include_HEADERS += $(top_srcdir)/include/wally_map.h
+ include_HEADERS += $(top_srcdir)/include/wally_psbt.h
+ include_HEADERS += $(top_srcdir)/include/wally_psbt_members.h
+@@ -38,7 +37,7 @@ if USE_SWIG_PYTHON
+ noinst_LTLIBRARIES += libswig_python.la
+ libswig_python_la_SOURCES = swig_python/swig_python_wrap.c
+ 
+-libswig_python_la_CFLAGS = -I$(top_srcdir) $(AM_CFLAGS) $(SWIG_PYTHON_CPPFLAGS) $(SWIG_WARN_CFLAGS) $(NOALIAS_CFLAGS)
++libswig_python_la_CFLAGS = -I$(top_srcdir) $(AM_CFLAGS) $(SWIG_PYTHON_CPPFLAGS) $(SWIG_WARN_CFLAGS) $(NOALIAS_CFLAGS) $(libsecp256k1_CFLAGS)
+ if PYTHON_MANYLINUX
+ else
+ libswig_python_la_LIBADD = $(PYTHON_LIBS)
+@@ -81,7 +80,7 @@ noinst_LTLIBRARIES += libswig_java.la
+ libswig_java_la_SOURCES = \
+     swig_java/swig_java_wrap.c
+ 
+-libswig_java_la_CFLAGS = -I$(top_srcdir) $(AM_CFLAGS) $(SWIG_JAVA_CPPFLAGS) $(SWIG_WARN_CFLAGS)
++libswig_java_la_CFLAGS = -I$(top_srcdir) $(AM_CFLAGS) $(SWIG_JAVA_CPPFLAGS) $(SWIG_WARN_CFLAGS) $(libsecp256k1_CFLAGS)
+ 
+ SWIG_JOPT = $(SWIG_JAVA_OPT) -outdir swig_java -noproxy -package com.blockstream.libwally
+ 
+@@ -145,7 +144,6 @@ libwallycore_la_SOURCES = \
+     bech32.c \
+     descriptor.c \
+     ecdh.c \
+-    elements.c \
+     blech32.c \
+     hex.c \
+     hmac.c \
+@@ -177,7 +175,6 @@ libwallycore_la_INCLUDES = \
+     include/wally_core.h \
+     include/wally_crypto.h \
+     include/wally_descriptor.h \
+-    include/wally_elements.h \
+     include/wally_map.h \
+     include/wally_psbt.h \
+     include/wally_script.h \
+@@ -192,10 +189,14 @@ libwallycore_la_LDFLAGS =
+ endif
+ endif # SHARED_BUILD_ENABLED
+ 
+-libwallycore_la_CFLAGS = -I$(top_srcdir) -I$(srcdir)/ccan -DWALLY_CORE_BUILD=1 $(AM_CFLAGS)
++libwallycore_la_CFLAGS = -I$(top_srcdir) -I$(srcdir)/ccan -DWALLY_CORE_BUILD=1 $(AM_CFLAGS) $(libsecp256k1_CFLAGS)
+ libwallycore_la_LIBADD = $(LIBADD_SECP256K1) $(noinst_LTLIBRARIES)
+ 
+-SUBDIRS = secp256k1
++if BUILD_ELEMENTS
++include_HEADERS += $(top_srcdir)/include/wally_elements.h
++libwallycore_la_SOURCES += elements.c
++libwallycore_la_INCLUDES += include/wally_elements.h
++endif
+ 
+ TESTS =
+ noinst_PROGRAMS =
+diff --git a/src/amalgamation/combined.c b/src/amalgamation/combined.c
+index b5877f8..1f5fea0 100644
+--- a/src/amalgamation/combined.c
++++ b/src/amalgamation/combined.c
+@@ -1,4 +1,3 @@
+-#define SECP256K1_BUILD 1
+ #include "internal.c"
+ #include "address.c"
+ #include "aes.c"
+@@ -35,10 +34,6 @@
+ #undef PACKAGE_URL
+ #undef PACKAGE_VERSION
+ #undef VERSION
+-#undef SECP256K1_BUILD
+-#include "src/secp256k1/src/secp256k1.c"
+-#include "src/secp256k1/src/precomputed_ecmult_gen.c"
+-#include "src/secp256k1/src/precomputed_ecmult.c"
+ #include "ccan/ccan/crypto/sha256/sha256.c"
+ 
+ void wally_silence_unused_warnings(void)
+@@ -47,19 +42,6 @@ void wally_silence_unused_warnings(void)
+     assert_bip32_assumptions();
+     assert_bip38_assumptions();
+     assert_tx_assumptions();
+-    secp256k1_fe_get_bounds(NULL, 0);
+-    secp256k1_fe_inv_var(NULL, NULL);
+-    secp256k1_ge_set_all_gej_var(NULL, NULL, 0);
+-    secp256k1_gej_has_quad_y_var(NULL);
+-    secp256k1_ge_is_valid_var(NULL);
+-    secp256k1_ge_set_infinity(NULL);
+-    secp256k1_ec_commit_verify(NULL, NULL, NULL, NULL, 0);
+-    secp256k1_ecmult_multi_var(NULL, NULL, NULL, NULL, NULL, NULL, 0);
+-    secp256k1_ecmult_strauss_batch_single(NULL, NULL, NULL, NULL, NULL, NULL, 0);
+-    secp256k1_ecmult_pippenger_batch_single(NULL, NULL, NULL, NULL, NULL, NULL, 0);
+-    secp256k1_pippenger_scratch_size(0, 0);
+-    secp256k1_scalar_chacha20(NULL, NULL, NULL, 0);
+-    secp256k1_sha256_initialize_tagged(NULL, NULL, 0);
+     tx_elements_input_issuance_proof_init(NULL, NULL, 0, NULL, 0);
+     tx_elements_output_proof_init(NULL, NULL, 0, NULL, 0);
+     witness_stack_from_bytes(NULL, NULL, NULL);
+-- 
+2.40.0
+
