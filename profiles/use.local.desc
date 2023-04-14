@@ -13,6 +13,7 @@ dev-libs/libsecp256k1:schnorr - Enable Schnorr signature module
 dev-libs/libsecp256k1:test-openssl - Enable OpenSSL comparison tests
 dev-libs/libsecp256k1:valgrind - Compile in valgrind memory hints
 dev-libs/libsecp256k1-zkp:asm - Enable x86_64 assembly optimisation
+dev-libs/libsecp256k1-zkp:bppp - Enable Bulletproofs++ module
 dev-libs/libsecp256k1-zkp:ecdh - Enable ECDH shared secret computation
 dev-libs/libsecp256k1-zkp:ecdsa-adaptor - Enable ECDSA adaptor module
 dev-libs/libsecp256k1-zkp:ecdsa-s2c - Enable ECDSA sign-to-contract module
