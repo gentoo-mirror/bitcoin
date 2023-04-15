@@ -88,6 +88,11 @@ assertion failures in newly spawned Core Lightning subdaemons. Please stop
 the running lightningd daemon and then reattempt this installation."
 		die 'lightningd is running'
 	fi
+
+	if use minimal ; then
+		ewarn "You have enabled the ${PORTAGE_COLOR_HILITE-${HILITE}}minimal${PORTAGE_COLOR_NORMAL-${NORMAL}} USE flag, which is intended for embedded
+environments and may adversely affect performance on standard systems."
+	fi
 }
 
 pkg_setup() {

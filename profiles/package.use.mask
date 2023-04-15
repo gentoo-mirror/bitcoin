@@ -1,0 +1,3 @@
+# Intended for embedded systems; may degrade performance.
+# Unmask only if you accept this trade-off.
+net-libs/libwally-core minimal
