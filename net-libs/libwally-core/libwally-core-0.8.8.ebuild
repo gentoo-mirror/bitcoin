@@ -7,11 +7,17 @@ PYTHON_COMPAT=( python3_{9..11} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit autotools distutils-r1 java-pkg-opt-2 multilib-minimal
+inherit autotools backports distutils-r1 java-pkg-opt-2 multilib-minimal
+
+BACKPORTS=(
+	1df31613045a1c5ce2a6ecf27608c9bdec450e7d	# bip39: fix test for --enable-minimal builds
+)
 
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
-SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz"
+BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
+SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
+	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0"
 SLOT="0/0.8.7"
@@ -90,6 +96,7 @@ src_unpack() {
 }
 
 src_prepare() {
+	backports_apply_patches
 	sed -e 's|\(#[[:space:]]*include[[:space:]]\+\)"\(src/\)\?secp256k1/include/\(.*\)"|\1<\3>|' \
 		-i src/*.{c,h} || die
 	rm -r src/secp256k1
