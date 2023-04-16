@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{9..11} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit autotools backports distutils-r1 java-pkg-opt-2 multilib-minimal
+inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
 BACKPORTS=(
 	9bbd44018c054dc15e12bbeb4376851de53c3cd1	# tx: fix hashPrevouts test for non-SWIG builds
@@ -93,10 +93,14 @@ the running lightningd daemon and then reattempt this installation."
 		ewarn "You have enabled the ${PORTAGE_COLOR_HILITE-${HILITE}}minimal${PORTAGE_COLOR_NORMAL-${NORMAL}} USE flag, which is intended for embedded
 environments and may adversely affect performance on standard systems."
 	fi
+
+	# test/test_scrypt.py is a real memory hog
+	use test && CHECKREQS_MEMORY="1G" check-reqs_pkg_pretend
 }
 
 pkg_setup() {
 	use java && java-pkg-opt-2_pkg_setup
+	use test && CHECKREQS_MEMORY="1G" check-reqs_pkg_setup
 }
 
 src_unpack() {
