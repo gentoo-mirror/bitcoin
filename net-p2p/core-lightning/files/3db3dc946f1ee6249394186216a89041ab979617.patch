@@ -1,0 +1,15 @@
+--- /var/cache/distfiles/3db3dc946f1ee6249394186216a89041ab979617.patch	2023-04-16 01:06:54.717823400 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r106/temp/3db3dc946f1ee6249394186216a89041ab979617.patch	2023-04-16 23:25:42.776454448 -0400
+@@ -374,9 +374,9 @@
+ +				    const char * buffer UNNEEDED, const jsmntok_t *tok UNNEEDED,
+ +				    const char **str UNNEEDED)
+ +{ fprintf(stderr, "param_string called!\n"); abort(); }
+- /* Generated stub for param_u64 */
+- struct command_result *param_u64(struct command *cmd UNNEEDED, const char *name UNNEEDED,
+- 				 const char *buffer UNNEEDED, const jsmntok_t *tok UNNEEDED,
++ /* Generated stub for parse_onionpacket */
++ struct onionpacket *parse_onionpacket(const tal_t *ctx UNNEEDED,
++ 				      const u8 *src UNNEEDED,
+ @@ -786,9 +829,21 @@ u8 *towire_final_incorrect_htlc_amount(const tal_t *ctx UNNEEDED, struct amount_
+  /* Generated stub for towire_gossipd_discovered_ip */
+  u8 *towire_gossipd_discovered_ip(const tal_t *ctx UNNEEDED, const struct wireaddr *discovered_ip UNNEEDED)

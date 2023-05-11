@@ -1,0 +1,85 @@
+--- /var/cache/distfiles/d28815f7b8bcbfcd5f440e1b1f18d418db101f7c.patch	2023-05-11 14:33:13.269076694 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r118/temp/d28815f7b8bcbfcd5f440e1b1f18d418db101f7c.patch	2023-05-11 16:17:08.004878116 -0400
+@@ -16,7 +16,7 @@
+ index e03a20816b06215867c499f2b65f334ecd69e439..052269e451763c5233c296101b04362a5c1f34b3 100644
+ --- a/cln-grpc/src/convert.rs
+ +++ b/cln-grpc/src/convert.rs
+-@@ -2527,1285 +2527,3 @@ impl From<pb::StopRequest> for requests::StopRequest {
++@@ -2521,1275 +2521,3 @@ impl From<pb::StopRequest> for requests::StopRequest {
+      }
+  }
+  
+@@ -71,6 +71,7 @@
+ -            our_features: c.our_features.map(|v| v.into()),
+ -            blockheight: c.blockheight, // Rule #1 for type u32
+ -            network: c.network, // Rule #1 for type string
++-            msatoshi_fees_collected: c.msatoshi_fees_collected, // Rule #1 for type u64?
+ -            fees_collected_msat: c.fees_collected_msat.unwrap().into(), // Rule #1 for type msat
+ -            address: c.address.into_iter().map(|s| s.into()).collect(), // Rule #4
+ -            binding: Some(c.binding.into_iter().map(|s| s.into()).collect()), // Rule #4
+@@ -123,6 +124,8 @@
+ -impl From<pb::ListpeersPeersChannelsFunding> for responses::ListpeersPeersChannelsFunding {
+ -    fn from(c: pb::ListpeersPeersChannelsFunding) -> Self {
+ -        Self {
++-            local_msat: c.local_msat.map(|a| a.into()), // Rule #1 for type msat?
++-            remote_msat: c.remote_msat.map(|a| a.into()), // Rule #1 for type msat?
+ -            pushed_msat: c.pushed_msat.map(|a| a.into()), // Rule #1 for type msat?
+ -            local_funds_msat: c.local_funds_msat.unwrap().into(), // Rule #1 for type msat
+ -            remote_funds_msat: c.remote_funds_msat.unwrap().into(), // Rule #1 for type msat
+@@ -133,16 +136,6 @@
+ -}
+ -
+ -#[allow(unused_variables,deprecated)]
+--impl From<pb::ListpeersPeersChannelsAlias> for responses::ListpeersPeersChannelsAlias {
+--    fn from(c: pb::ListpeersPeersChannelsAlias) -> Self {
+--        Self {
+--            local: c.local.map(|v| cln_rpc::primitives::ShortChannelId::from_str(&v).unwrap()), // Rule #1 for type short_channel_id?
+--            remote: c.remote.map(|v| cln_rpc::primitives::ShortChannelId::from_str(&v).unwrap()), // Rule #1 for type short_channel_id?
+--        }
+--    }
+--}
+--
+--#[allow(unused_variables,deprecated)]
+ -impl From<pb::ListpeersPeersChannelsHtlcs> for responses::ListpeersPeersChannelsHtlcs {
+ -    fn from(c: pb::ListpeersPeersChannelsHtlcs) -> Self {
+ -        Self {
+@@ -198,7 +191,6 @@
+ -            their_to_self_delay: c.their_to_self_delay, // Rule #1 for type u32?
+ -            our_to_self_delay: c.our_to_self_delay, // Rule #1 for type u32?
+ -            max_accepted_htlcs: c.max_accepted_htlcs, // Rule #1 for type u32?
+--            alias: c.alias.map(|v| v.into()),
+ -state_changes: None,            status: Some(c.status.into_iter().map(|s| s.into()).collect()), // Rule #4
+ -            in_payments_offered: c.in_payments_offered, // Rule #1 for type u64?
+ -            in_offered_msat: c.in_offered_msat.map(|a| a.into()), // Rule #1 for type msat?
+@@ -294,7 +286,6 @@
+ -            amount_msat: c.amount_msat.map(|a| a.into()), // Rule #1 for type msat?
+ -            destination: c.destination.map(|v| PublicKey::from_slice(&v).unwrap()), // Rule #1 for type pubkey?
+ -            created_at: c.created_at, // Rule #1 for type u64
+--            completed_at: c.completed_at, // Rule #1 for type u64?
+ -            amount_sent_msat: c.amount_sent_msat.unwrap().into(), // Rule #1 for type msat
+ -            label: c.label, // Rule #1 for type string?
+ -            partid: c.partid, // Rule #1 for type u64?
+@@ -760,7 +751,6 @@
+ -            amount_msat: c.amount_msat.map(|a| a.into()), // Rule #1 for type msat?
+ -            destination: c.destination.map(|v| PublicKey::from_slice(&v).unwrap()), // Rule #1 for type pubkey?
+ -            created_at: c.created_at, // Rule #1 for type u64
+--            completed_at: c.completed_at, // Rule #1 for type number?
+ -            amount_sent_msat: c.amount_sent_msat.unwrap().into(), // Rule #1 for type msat
+ -            label: c.label, // Rule #1 for type string?
+ -            partid: c.partid, // Rule #1 for type u64?
+@@ -1158,6 +1148,7 @@
+ -            id: PublicKey::from_slice(&c.id).unwrap(), // Rule #1 for type pubkey
+ -            channel: cln_rpc::primitives::ShortChannelId::from_str(&c.channel).unwrap(), // Rule #1 for type short_channel_id
+ -            direction: c.direction, // Rule #1 for type u32
++-            msatoshi: c.msatoshi, // Rule #1 for type u64?
+ -            amount_msat: c.amount_msat.unwrap().into(), // Rule #1 for type msat
+ -            delay: c.delay, // Rule #1 for type u32
+ -            style: c.style.try_into().unwrap(),
+@@ -1209,7 +1200,6 @@
+ -            status: c.status.try_into().unwrap(),
+ -            destination: c.destination.map(|v| PublicKey::from_slice(&v).unwrap()), // Rule #1 for type pubkey?
+ -            created_at: c.created_at, // Rule #1 for type u64
+--            completed_at: c.completed_at, // Rule #1 for type u64?
+ -            label: c.label, // Rule #1 for type string?
+ -            bolt11: c.bolt11, // Rule #1 for type string?
+ -            description: c.description, // Rule #1 for type string?

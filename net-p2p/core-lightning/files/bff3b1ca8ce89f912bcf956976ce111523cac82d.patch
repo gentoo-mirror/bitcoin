@@ -1,0 +1,22 @@
+--- /var/cache/distfiles/bff3b1ca8ce89f912bcf956976ce111523cac82d.patch	2023-05-11 14:33:13.754081161 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-23.02.2-r100/temp/bff3b1ca8ce89f912bcf956976ce111523cac82d.patch	2023-05-11 14:41:53.159865106 -0400
+@@ -623,19 +622,6 @@
+  }
+  
+  # A map of schema type to rust primitive types.
+-diff --git a/contrib/msggen/msggen/patch.py b/contrib/msggen/msggen/patch.py
+-index f25693bee0275075a0895bf796cfd258034bb6a5..293c88ff749e6d0839204b6d0f364ce5ae3cb95c 100644
+---- a/contrib/msggen/msggen/patch.py
+-+++ b/contrib/msggen/msggen/patch.py
+-@@ -62,7 +62,7 @@ def visit(self, f: model.Field) -> None:
+-         # the default value only on the first run. Code left commented
+-         # to show how it was done
+-         # if f.added is None and 'added' not in m:
+--        #     m['added'] = 'pre-v0.10.1'
+-+        #    m['added'] = 'pre-v0.10.1'
+- 
+-         added = m.get('added', None)
+-         deprecated = m.get('deprecated', None)
+ diff --git a/contrib/msggen/msggen/utils/utils.py b/contrib/msggen/msggen/utils/utils.py
+ index bf0975bc683ca0bed10fa44d08aa9c3ce128e754..cfebbf7892473deac6ea88ccbc595ea76a2fbbc7 100644
+ --- a/contrib/msggen/msggen/utils/utils.py

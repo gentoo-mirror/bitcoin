@@ -39,12 +39,12 @@ esac
 # pick=<regex> - Removes from the patch all hunks whose source file path,
 # excluding the leading `a/`, does not match the specified regular expression.
 #
-# resolve-conflicts - Applies a patch to the patch, typically to resolve
-# conflicts that would occur when applying the patch to the source files.  The
-# patch patch is read from "${FILESDIR}/${COMMITHASH}.patch", where
+# resolve-conflicts[=<prefix>] - Applies a patch to the patch, typically to
+# resolve conflicts that would occur when applying the patch to the source
+# files.  The patch patch is read from "${FILESDIR}/${COMMITHASH}.patch", where
 # ${COMMITHASH} is the commit hash given at the beginning of the current patch
-# specification.  If "${FILESDIR}/${PV}-${COMMITHASH}.patch" exists, then it
-# takes precedence.
+# specification.  If "${FILESDIR}/<prefix>${COMMITHASH}.patch" exists, then it
+# takes precedence.  "<prefix>" defaults to "${PV}-".
 #
 # Eclass users may define additional patch mods by defining functions named
 # backports_mod_MODNAME, where MODNAME is the name of the mod to define.  This
@@ -135,15 +135,14 @@ backports_mod_pick() {
 }
 
 # @FUNCTION: backports_mod_resolve-conflicts
-# @USAGE: <patch>
+# @USAGE: <patch> [<prefix>]
 # @INTERNAL
 # @DESCRIPTION:
 # The predefined "resolve-conflicts" patch mod.
 # See the description of backports_apply_patches().
 backports_mod_resolve-conflicts() {
-	(( ${#} == 1 )) || die 'resolve-conflicts mod takes no argument'
-	if [[ -f "${FILESDIR}/${PV}-${1##*/}" ]] ; then
-		patch "${1}" "${FILESDIR}/${PV}-${1##*/}" || die
+	if [[ -f "${FILESDIR}/${2:-${PV}-}${1##*/}" ]] ; then
+		patch "${1}" "${FILESDIR}/${2:-${PV}-}${1##*/}" || die
 	else
 		patch "${1}" "${FILESDIR}/${1##*/}" || die
 	fi

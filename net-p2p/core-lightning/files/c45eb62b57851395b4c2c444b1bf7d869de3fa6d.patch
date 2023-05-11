@@ -1,0 +1,19 @@
+--- /var/cache/distfiles/c45eb62b57851395b4c2c444b1bf7d869de3fa6d.patch	2023-04-16 01:07:32.661208800 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r117/temp/c45eb62b57851395b4c2c444b1bf7d869de3fa6d.patch	2023-04-17 22:58:03.791527583 -0400
+@@ -25,7 +25,7 @@
+ index 026a4c2868a01a2b193291cbf3e3eda5b14ffca0..1d0396f994d9ffe3f31f7a5954d649f924e967c6 100644
+ --- a/lightningd/channel.c
+ +++ b/lightningd/channel.c
+-@@ -12,13 +12,13 @@
++@@ -12,12 +12,12 @@
+  #include <lightningd/channel.h>
+  #include <lightningd/channel_state_names_gen.h>
+  #include <lightningd/connect_control.h>
+@@ -35,7 +35,6 @@
+  #include <lightningd/peer_control.h>
+  #include <lightningd/subd.h>
+  #include <wallet/txfilter.h>
+- #include <wire/peer_wire.h>
+ -#include <wire/wire_sync.h>
+  
+  void channel_set_owner(struct channel *channel, struct subd *owner)

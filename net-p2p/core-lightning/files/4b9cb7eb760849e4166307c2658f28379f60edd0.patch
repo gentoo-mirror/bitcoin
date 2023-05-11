@@ -1,0 +1,13 @@
+--- /var/cache/distfiles/4b9cb7eb760849e4166307c2658f28379f60edd0.patch	2023-04-16 02:28:20.760106318 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r117/temp/4b9cb7eb760849e4166307c2658f28379f60edd0.patch	2023-04-17 18:13:40.049395388 -0400
+@@ -67,8 +67,8 @@
+  SEE ALSO
+  --------
+  
+--lightning-pay(7), lightning-offer(7), lightning-offerout(7), lightning-fetchinvoice(7), lightning-sendinvoice(7), lightning-commando-rune(7)
+-+lightning-pay(7), lightning-offer(7), lightning-fetchinvoice(7), lightning-sendinvoice(7), lightning-commando-rune(7)
++-lightning-pay(7), lightning-offer(7), lightning-offerout(7), lightning-fetchinvoice(7), lightning-sendinvoice(7)
+++lightning-pay(7), lightning-offer(7), lightning-fetchinvoice(7), lightning-sendinvoice(7)
+  
+  [BOLT #11](https://github.com/lightning/bolts/blob/master/11-payment-encoding.md)
+  

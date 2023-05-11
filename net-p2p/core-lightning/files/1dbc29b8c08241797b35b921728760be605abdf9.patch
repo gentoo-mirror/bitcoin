@@ -11,15 +11,3 @@
  +   lightning-signinvoice <lightning-signinvoice.7.md>
      lightning-signmessage <lightning-signmessage.7.md>
      lightning-signpsbt <lightning-signpsbt.7.md>
-@@ -153,9 +153,9 @@
- --- a/lightningd/invoice.c
- +++ b/lightningd/invoice.c
- @@ -1897,3 +1897,57 @@ static const struct json_command preapprovekeysend_command = {
-- 	"Ask the HSM to preapprove a keysend payment."
-  };
-- AUTODATA(json_command, &preapprovekeysend_command);
-+ 
-+ AUTODATA(json_command, &createinvoice_command);
- +
- +static struct command_result *json_signinvoice(struct command *cmd,
- +						 const char *buffer,

@@ -343,9 +343,9 @@ BACKPORTS=(
 	fa4b61d13d19daba938cecae4d1d37de5958b3b3	# common/bolt11: convert to table-driven.
 	182a9cdcb61fa388dd58d468c8981a67e882b6e6:resolve-conflicts	# cln-rpc: use serde rename instead of alias
 #	9482e0619c005bb183e4d120844b9ade545fdd0a	# docker: Install protobuf-compiler for builder
-#	f29343d740c087e2b7c477386025b82c22341d82	# hsmd: add hsmd_preapprove_invoice and check_preapproveinvoice pay modifier
-#	a4dc714cdcf409afcee24c540730ae3bc8bcf82c	# hsmd: add hsmd_preapprove_keysend and check_preapprovekeysend pay modifier
-#	7b2c5617c16dab22f94a51955b5bdea38f284a12	# hsmd: increase HSM_MAX_VERSION to 3
+	f29343d740c087e2b7c477386025b82c22341d82	# hsmd: add hsmd_preapprove_invoice and check_preapproveinvoice pay modifier
+	a4dc714cdcf409afcee24c540730ae3bc8bcf82c	# hsmd: add hsmd_preapprove_keysend and check_preapprovekeysend pay modifier
+	7b2c5617c16dab22f94a51955b5bdea38f284a12	# hsmd: increase HSM_MAX_VERSION to 3
 	13fe27c65f7be09ab7d1a105fabbadc6488ec609	# gossipd: Do not send warning when node_announcement parsing fails
 	5958c9c3d64a1f713e1cf8f4e4f0abe289c7072f	# common/test: remove unused padding in bolt04/blinded-onion-message-onion-test.json
 	da3506e6a0e63990b492a703af326c670e7b50c6	# wire: use correct number of update_add_tlvs blinding field.
@@ -362,7 +362,7 @@ BACKPORTS=(
 	6bff10cd40a886594f16f3fe906ccc6bef7f567f	# gossip_store: add a flag for zombie entries
 	1bae8cd28a30ff7762789901ed3f0c245cd99892	# gossipd: zombify inactive channels instead of pruning
 #	98bfd23fff7d2be8096413209c4ff84a4e5739f3	# pytest: test_channel_resurrection now succeeds
-#	4b9cb7eb760849e4166307c2658f28379f60edd0	# doc: remove unused offerout schema.
+	4b9cb7eb760849e4166307c2658f28379f60edd0:scrub-stamps	# doc: remove unused offerout schema.
 	578f07540744d924f9d8f4907a22c20638a82cd9	# wallet: remove unused TX_ANNOTATION type in transaction_annotations table.
 	611795beee1bdecbde9e7b8c17db96d0934346be:strip='.*\bpreapprove':scrub-stamps	# listtransactions: get rid of per-tx type annotations.
 	9ab488fc41ea5f57efbd2eccfd58511755938549:scrub-stamps	# plugins/topology: add direction field to listchannels.
@@ -392,7 +392,7 @@ BACKPORTS=(
 	0240c2493622a9d757d47fb24fac9cc48126816a:strip=tests/	# plugins/sql: listsqlschemas command to retrieve schemas.
 	259dd2a652f28da01d77529ea787705c5ad94dbc	# doc: add examples for sql plugin.
 	fea73680d70a97422c434ce8d9f03445cc9fd60c	# typo fixes found by @niftynei
-#	959678244caa56b1935ca9fa616009c532d75024	# doc: remove sections on litestream, .dump and vacuum into
+	959678244caa56b1935ca9fa616009c532d75024	# doc: remove sections on litestream, .dump and vacuum into
 	80250f9b60c984d886fec8867255c7ac6d08a903	# datastore: Add check for empty key array
 	a9eb17adf95c216976aa004a5431a3d1be1db222	# db: catch postgres error on uninitialized database
 	dcb9b4b8d157b6b2a609f3d82fac683d6c7f56a8	# make: fix make doc error
@@ -561,6 +561,285 @@ BACKPORTS=(
 	aaa14846c6a9987b4a0eb0e7b29093b177992cb0	# gossipd: ignore zombie flag when loading gossip_store.
 	194d37b70fd201ec361ffd88f22ade73a00d801e	# gossipd: don't make new zombies, just prune channels as we did before.
 	b5c614069bec50ae0e084ad8ac24c17a8729b619	# connectd: fix crash on freed context for new connections.
+	6c4a438afdf86cebd26f8aa18f868564c8f64189	# wallet: really allow broken migrations.
+	df10c62508aecb7aaee0fdc4166face87663f8b9	# chanbackup: even if they enable experimental-peer-storage, check peers
+	5e394ef53f3e6463e4e6e624cc33ecd87d3b7e08	# doc: add documentation for invoicerequest commands.
+	aea8184e582bf7d75e07749f12f0cef10672d30c	# doc: fix modern usage of sendinvoice (changed in v22.11)
+	cfbfe5d7eea53278fcbb601376e65b41ef0dce40	# doc: update documentation for fetchinvoice(7) and offer(7).
+	9e2287415f58b807202ad0b55f82ce7063774a1d	# offers: enable label for invoicerequest
+#	be8ed8c7f00e9747cf199b85a3a5a38b0bb0fa48	# meta: update changelog for v23.02.1
+#	cdf803cd6f84b0ec32afcce0e95ecf74017d97aa	# plugins/pay: revert removal of paying invoice without description.
+#	bfc6fedfbfc7f8006fc6d3c40d558f7d6abfa2bd	# CHANGELOG.md: v23.03.2
+
+#	dcc66d58abb186572d1edd9826c11b0bd30d9672	# doc: update release procedure
+#	4f3f3deab621a0890d61455be7ed66500e977b71	# fix: partial fix lnprototest runner
+	fd04f46a921504ac8455e1244cbf5b2505b08897	# common/hsm_version: list sha256 for every known version.
+	1c4f6ab2c579e8decd3308f6c15febda33707b4d	# hsmd: deprecate reply_v1.
+	06b9009dd8d2de7deaed8adee345517f8f393297	# lightningd: remove deprecated behavior where checkmessage would fail quietly.
+#	67f23c19f763c2820714409a67b17eb8d6c6336b	# lightningd: remove deprecated local_msat, remote_msat from listpeers.
+#	780f32dfc683ccf0eb18110223679ddd2989c3c5	# global: remove deprecated non-msat-named msat fields.
+#	983542f2a760798788213098b927b6fa1e476eea	# global: remove deprecated "msat" suffix on msat fields.
+#	9366e6b39f41ebb956ad992102b7d0179d1f6765	# cleanup: rename json_add_amount_msat_only to json_add_amount_msat
+#	658bae30d5f159a4f5da82aff67f7af95dc5cfb9	# lightningd: require "jsonrpc": "2.0" as per JSONRPC spec.
+#	acf01f4c09796fa0fa24509eabe4a145fa2a6569	# pytest: don't run test_backfill_scriptpubkeys under valgrind in CI.
+	57d21206dbeb05f085e288b9324c7bb8d76b7180	# cln_plugin: add `shutdown()` method to `Plugin`
+#	ba4f0c8dab8f36c964ac547e6c2d00d347a3236a	# ci: add timeout field to 2h for each task
+#	6c641bdbbb1454e1176f78e942b3f4b7265083fe	# test_backfill_scriptpubkeys: stop first cln node before second sub-test
+	fca62113f5f166a1877907f870620c5df6680e5d:strip=tests/	# plugin: fetchinvoice: set the quantity in invreq
+	906279a46e6b795f61056abb8a5e19d83cd3774b:scrub-stamps	# Output channel_id in listfunds
+	9a3f69aecfbe2c9c4734ac051073949ebc619a33	# connectd: log status_failed on TOR problems
+#	2f188622b7545b99178060451beb31cdf7b2e525	# pytest: add timeout to test_feerate_stress.
+	03c153ac0bc4847b8bc523170d8c8e75a5e9185a	# channeld: don't spin trying to send commitment while waiting.
+#	48c334dc81085f2518186328c81248812b9092b5	# build(deps): bump werkzeug from 2.2.2 to 2.2.3
+	21a1b4e6aabc26d5210d09699dc921e8c6f108ea	# common: update HSM_MIN_VERSION to reflect reality.
+	e02f5f5bb8ec2e101e5284c2a0a37fbb8e56fd22	# hsmd: new version, which tells us the HSM version, and capabilities.
+	91a9cf351290ecccd4a75925c59e22e334798bc6	# hsmd: capability addition: ability to check pubkeys.
+	3f02797e88c4d4f955f3ae7ad007ff275f89fcda:strip=common/test/	# lightningd: move bip32_base pointer into struct lightningd.
+	3db3dc946f1ee6249394186216a89041ab979617	# lightningd: move bip32_pubkey here from common/, add hsm check.
+	df085a8a875e1a02f93bd823ef2cb915563f21dd:resolve-conflicts	# wallet/db: don't use migration_context.
+#	07527d9fbbecdc5bce1f3501cdd8037fa9246e0a	# fuzz: avoid buffer overflow in bech32 target
+#	3192be5c2355e12db5215ac6d882d1507e9caf33	# fuzz: fix UBSan nullability error
+#	5eddf3cd737be583bd36fd54aca04d62e1d8cc11	# test: add PSBT field that doesn't collide with PSBTv2 fields
+#	908f834d66218b52132c22af78a7ff87ad7ddec1	# Update libwally to 0.8.8, support PSBTv2
+#	cb7caa31396e998443000cfc4d86250a08587021	# Re-enable PSBT tests for Liquid except test_sign_and_send_psbt
+#	887c6f71cf90e6bcc63b15bd7d82ab3dc9e7431b	# Add PSBT version setting RPC to aid with debugging and compatibility
+#	cf662e55a7dc1ae26f2cfba835ec8d118c8661e9	# Make startup_regtest.sh more robust to bitcoind wallet state
+#	e7bf52980b4e22480c3236d27b078dcdb15fc153	# test_closing_different_fees: b vs balance in loop
+	c85bce94bec34f7f5ae5f42b127829e419d119b8	# Report failure to sign psbt inputs by hsmd
+#	aa1a0e31fd902b6b04fc713ce8faa5a1beceee31	# Docker: run directory for post-start if present.
+	3424f70585e61103eaaae3bf5f443c57407abf97	# plugin: autoclean: cleanup the forwards with localfailed
+	97de4f8e0f34665ba6c531cf5ad78f1026856b46	# grpc: make the mTLS private keys user-readable only
+	7d7b2abd0203b3b3616866294c267acb55c94114	# msggen: Allow using deprecated fields in the rpc -> grpc conversion
+#	98d425f1f40d90078f9efb7a613207f7875293e0	# wallet: add comment on db noting that `ON DELETE CASCADE` is never used.
+	09011177a88ded25eacf63dc5c26eb73416b7a25	# wallet: only delete peer from db if it's unused.
+	ae861d17931179c319665a40496ffdd00e63d788	# wallet: don't clear reference from channel to peers table when we close channel.
+	d9e274cee2610f8c8881ec70ab5e3b944e1ea988	# db_bind_scid: rename to db_bind_short_channel_id
+	aae77802efa5a821dfcb76bdac59c2528f124276	# db_col_optional: wrapper for case where a field is allowed to be NULL.
+	f720e0ff0be1b2c8eb73ddb4153972086189eb54	# wallet: use db_col_optional.
+	6e1eafbb0bb1baf5d57308dcc505c250a20a969d	# wallet: make it clear that `enum state_change` is in db.
+	4b6e9649ebfa680138086f7a7373607e8e4aa462	# wallet: add accessor for closed channels.
+	454900210593384bcca35338b5819ad493d969c0	# common: expose routine to map channel_type to feature names.
+	c9ddf9d1c3bbc5910b691e7aef1cfdd4391820e9	# plugins/sql: handle case of subobject with sub-arrays.
+	d818614aa9e67419c03760fa9f05245da255b281	# plugins/sql: recurse correctly into complex objects during processing.
+	e75cf2e7fbc143a927f404f70a4c254bd5a4129e:strip=tests/:scrub-stamps	# listpeerchannels: add channel_type, both in hex and as array of names.
+	89f91b9bb4174b258db237b3dfd78bf3cd3791c0:strip=tests/:resolve-conflicts	# lightningd: add listclosedchannels command.
+	b8519a6a1a4cf90e2c9b6d93499e112a1a7041e5:strip=tests/:scrub-stamps	# plugins/sql: add listclosedchannels
+	a80c1ae40cc87b3e6f3b7f04478a990c17e7e3c7	# docs: Switch to mkdocs for documentation
+	178e0b64636f18fc939f65aa3f28df62368ab69f	# docs: Structure the files in mkdocs
+	458195c29faa0330b603fd3a0cd9cbf273902108	# docs: Fix a number of broken links in the generated docs
+	f1293ed0e679bfcc185e512d337f889caa4ad47b	# docs: Add LICENSE to the About section
+	67a39b59e7eb00fc4b047fd79844d48ac2cb4629	# tools: Add yml mode to `blockreplace.py`
+	f19792c241ff9e56507a02e09756acd19fbba4b7	# docs: Remove redundant ToC in FAQs
+	826c7465683964cc0488d332534b046ae12e6b89	# docs: Use blockreplace.py to include all manpages
+	7153beff28106c3e2849301ec5d7c89c5feb693c	# docs: Use admonition markup for warnings and notes
+#	f4efe6c899803caf1f0bcf1a24ad01b59bbe13c9	# docs: Add docs on code generation
+	4c6966d16aab96a9d86a2a03a4a98c6b1dba2c20:scrub-stamps	# docs: update autogenerate file
+#	7174d06a707b442cb6c508f4664fcb577e9b640c	# wallet/psbt_fixup: routine to fix invalid PBSTs which modern libwally won't load.
+#	f1fa75fa0660d35ee8b7bf4e8025be19807da6ed	# wallet/test/run-psbt_fixup.c: test for psbt fixups.
+#	5bb0270492f99567fa0fdd774afb3f333170552d	# wallet: fix up PSBTs as a migration.
+	2cb96a8d775a31a41d32aef64a84203d41f980b7	# wallet: don't silently load invalid last_tx psbts.
+#	415b7d5d7d75ccb78e34e18b1cb25b8662f0cbdb	# gitignore: Somebody uses vscode: make their life easier!
+	080a4dd86c1d38f008f6d5144d5c46c1322f09a0	# commando: save runes as we generate them
+	183fbb4c14e91754994b2d0f7e882e1db6dac78e	# commando: listrunes command
+	fb865291b6f5be4f433dd74cad2d7b5886988cf9	# commando: blacklist support
+	a4ed3ae72e45f9cf45997e94ccc1b2469c8e559c	# commando: make blacklist effective.
+	7ad04a994922923007333e6561d2d48486fc2db9	# commando: Save blacklist runes to datastore
+	ecb173738acbf5b22de264b44bfd6f8143d01327	# commando: add restrictions information in listrune command
+	af2c1f1881a88c9679ff13df2c840973d64dead2	# doc: schemas for commando-listrunes & commando-blacklist
+	3e310a3d3e39809dcecdd91e9c7b3eabb07446a6	# doc: commando-listrunes & commando-blacklist
+#	9d7afba35724f5bf12e364758229f686ba3e9b1d	# tests: commando-listrunes
+#	61b063440c498ac462ad3aa722323f892b898e8c	# tests: commando-blacklist
+#	5ea1fade603a574dbd5f6077d4f56db01bcbeef2	# fuzz: fix invalid pubkey error
+	801c678cb924b31a386765cc010ddf493963ae3c	# ccan: update to include versions which pass -fsanitize=address and -fsanitize=undefined
+#	3be36a66e32c1a660fa2067a0ac05992a4dfc466	# configure: support sanitizers properly.
+	2005ca436ea3089a48a4f1d9182ea09ccd556726	# common/gossmap: don't memcpy NULL, 0, and don't add 0 to NULL pointer.
+	1f8a4bed3960d864b1ccd5197f113f6606c05ef3	# bitcoin/script: don't memcmp NULL.
+	37971fb61fa6906ea19e4c5ebad989adb6a863cf	# plugins/pay: fix capacity bias.
+	b6a3f93b755c5719f22b0a8a96ba0dcb09114a4d	# channeld: don't asort(NULL).
+#	5787e18e698bce6d23aa81a8e8a3f8393ac7a50a	# fuzz: fix check-src/includes when fuzzing enabled.
+	f4b8a401cd64dc099209c2753f32bfaa9e6a331f	# pyln-proto: shorten ShortChannelId.from_str()
+#	407d4d2922a775c85c1855a6560e42184f9e7c88	# pyln-testing: remove deprecated fund_channel
+#	fb0027e314535cffe8fc2de8d464267f03aa41ec	# pyln-testing: fundbalancedchannel default total_capacity to FUNDAMOUNT
+#	882cafd3c779f37fad41a5c2a3e84afb03d66594	# pytest: adds skipped test_create_gossip_mesh
+	3f651b08d58fcc34cf4bdf3771e3953f59bb131d	# pygossmap: cleanups and optimizations
+	be60f2ac332f33d2c72c4f94dd95d0f9589fb85f	# pygossmap: adds GossmapHalfchannel to module exports
+	eb9cb5ef313a8ef75ea9435df50042656a49e3a1	# pygossmap: adds missing __str__, __eq__ and __hash__
+#	d50722d26beaae803967c3690e454ff94093cf61	# pygossmap: adds a more complete mesh testcase
+	5a9a3d83c973be74ae29c0cf124b30e0db3d002f	# pygossmap: adds get_halfchannel
+	9409f2f1ea1d438b24259f82f82adb5ec20bc93b:strip=contrib/pyln-client/tests/	# pygossmap: adds get_neighbors and get_neighbors_hc flodding method
+	6a16a31a9897bee9508ea60243e2bdec92742cd6	# pygossmap: parse node addresses and other data
+	3130f4ec27232312ca6ea72e2f63d5f1226488fb	# pygossmap: read .disabled from channel_flags
+	f1b6047d69a96010d4487d624f4a3380133e9cd8	# pygossmap: store features for nodes and channels
+	6e46a63c5738798eb303698d34833cbbe7038196	# pygossmap: adds statistic and filter module
+	04ea37d88f0f97dc3aae2109330a0c37eb5fd950	# pygossmap: rename GossipStoreHeader to GossipStoreMsgHeader
+	b92b9f074dc2fa26df3bde4a8f9f5896dd6f059a	# delpay: delete the payment by status from the db
+#	1507e87197ad5232851864146bdf25e2be092ad0	# fix helloworld.py example in README for pyln-client
+#	3c83aed9d1dcb0bffa13426f6203d974d9f4fa1b	# doc: fix commando-listrunes SHA256SUM line.
+#	00431779a6baad19d36b9027db8d36a5aeb293a2	# pytest: add connection test for gratuitous transient failure message.
+	64d3f3be26d9dc8a9f9220ae1ff074f18efdbdad:strip=tests/	# channel: don't log scary disconnect message on unowned channels.
+	aef5b1b844362ce2a245dffe8bab06e79825e852	# chaintopology: rename broadcast_tx callback name.
+	528f44c2d32bedd1c1e3170da0b4877e3fded479	# bitcoin: helpers to clone a bitcoin_tx, and format one.
+	0b7c2bf5193f9be9d9b038d6e05cda2e75bd8fde	# lightningd: rebroadcast code save actual tx, not just hex encoding.
+	fc54c197166f1eb404b61cf43683905f603491ec	# lightningd: provide callback in broadcast_tx() for refreshing tx.
+	4757c965e0a4d49d0ebd32456c11a7dbb8ba01ba	# lightningd: don't use notleak in chaintopology.c
+	f2f02f9de6184010af30c16268ad18ebd53df15b	# chaintopology: allow minblock for broadcast_tx.
+	538854fdce689b2648b278d718695997a75e1242	# bitcoin: add tx_feerate() to reverse-calculate feerate a tx paid.
+	eff513aa44467c93f60e79be56630643bf12c24e	# lightningd: use tx_feerate() for calculating fallback feerate for onchaind.
+	7e592f27d48656d6d03a67e2f4b401f2069bb0a0	# onchaind: simplify lightningd message handling into a switch statement.
+	e51f629e349d69dfe0a1f913c4c1f526dcd86d40	# bitcoind: fix clone_bitcoin_tx() when tx is take().
+	3a61f3a3504cd25f4587f9012f07e5309752f70d	# onchaind: helper to read and queue unwanted messages.
+	38bc04907ba1257eb1a92cab8f71c439ae4308f8	# onchaind: two minor tidyups.
+	e6db0eafc2843b79a1d535fb388e7e30821701de	# plugins/bcli: use getmempoolinfo to determine minimum possible fee.
+#	1e24d4a0a0b42e082ec4003545e8d5f81a4b636d	# Makefile: fix check-gen-update to diff *all* files.
+#	13ae1a51688e1a04bf056dd1b1bfe89080865e0d	# pyln.testing: remove Throttler.
+	d2176e3385297c0b4d2df2176c5bd5446ef73707	# postgres: add missing 'update_count' to stmt
+	9bcf28afb369e05bb0f339c0ce84c27cc3149f52	# db: catch SQL errors unless we're expecting them.
+	df9552bcc1779b0327d7832e485d24010c2548eb	# db: make db_exec_prepared_v2 return void.
+	eee3965d02a1a69a77dc90ef3a8bc19a39cdada6	# db: db_set_intvar/db_get_var should take a const char *.
+	5df469cfca74a2b32cb4d9bdd41cba170f2e33e3:strip=contrib/pyln-testing/:resolve-conflicts	# msggen: Add patching system, add `added` and `deprecated` to Field
+	392cacac8170f71f8e1bcffa8673b91964a53bd2	# msggen: Add an optional patch
+	60b12ec096dae01aabde25a8ba835a2933f8d70c:strip=contrib/pyln-testing/	# msggen: Use the inferred optional field
+	168bc547001f4abc7a6f2cc96fa9517e53b2669f	# msggen: Add VersioningCheck
+	efeb030eefdc4d0724ccf0ea725333d02db0c143	# common: fix build of run-channel_type.c
+#	30335e1dc3938d4c0e2d75fd20be2dd9b9d6c005	# tests: test for stopping node while it's starting.
+	45193db7ea2195095bd8512aa21628a576219297:strip=tests/	# lightningd: add initializing state.
+	87264540c3843c3138b3ee3d1125be0f3644f4c6	# hsmd: add support for lightningd signing onchain txs.
+	956e6c4055e90f3452ef8e9f50918475a3895a95	# lightningd: handle first case of onchaind handing a tx to us to create.
+	86e044a9a8b0bc96ed803258f1525bc21f83364e	# onchaind: infrastructure to offload tx creation to lightningd.
+#	3e83bed46097f8c7b9a7d453db653c715c3e0855	# pyln-testing: adapt wait_for_onchaind_broadcast function for when onchaind uses lightningd for broadcast.
+	07413c20b9f19362f437fc22fcda655777426c09	# onchaind: use lightningd to send "delayed_output_to_us" from HTLC txs.
+	9d5dfa7bddb0fda9335c1b1d3de05c0b0ae42f04	# onchaind: use lightningd for spending our unilateral "to us" output.
+	80cd6f0afe75968e4dab7b3a0e720fca04f1e3c4	# lightningd: remember depth of closing transaction.
+	36dd70e67760c97cfcd44c7a740fe07806e05feb	# onchaind, pytest: disable RBF logic.
+	3e53c6e359223384ae56319c19cc48c914e375d6:strip=tests/	# onchaind: have lightningd create our penalty txs.
+	2f6be4e6bb8e3c3e9587e2d9846d918cbd66c0f3	# common: expose low-level htlc_tx function.
+	a9dfec0e713053eb3b35bc82f3df1d08170bb969	# onchaind: use lightningd to sign and broadcast htlc_success transactions.
+	868fa8ae814b990b664b1e1b89811b04e12c88d8	# onchaind: use lightningd to sign and broadcast htlc spending txs.
+	5bdd532e708265afb92866176d1e9714bcfc28c1	# onchaind: use lightningd to sign and broadcast htlc_timeout transactions.
+	0c27acc705e4c1348eab74e686a92b1f2f387121	# onchaind: use lightningd to sign and broadcast htlc expired txs.
+#	c5b7dbcd98d49efa82e8c111a00611cb8f78b67b	# pytest: clean up wait_for_onchaind_tx interface, remove wait_for_onchaind_broadcast
+	9496e9fbef86d48dc313c7facdb4f38a4d0c0d7d:strip=tests/	# onchaind: propose_ignore specifically to ignore if output reaches depth.
+	c1bc4d0ead93ec1b0401edb3024488245a00e025	# onchaind: remove now-unused direct tx creation.
+	a3b81ba17fdd85b5debc82b74dffc48e3148cd66	# onchaind: no longer need information about current feerates.
+#	dae92c5830456c8e0582cf1d97933432eb45d885	# Update INSTALL.md
+#	bf9c4df0de7f369d442ad93033a75bac42deb98c	# test: add the timeout to the waitpay command
+#	a3ebc1bac49cc8cf022525bbad5ff75d1638c673	# lightningd: update comments now channel-type is merged.
+	06d42694d5ed0c168a5df29648f17919a51ee62b	# wire: fix extracted patch.
+	15f8e1e63c6a7dbfcf638ae8c967d6774e10dee0	# Makefile: update bolts to 60cfb5972ad4bec4c49ee0f9e729fb3352fcdc6a.
+	fdf9b13bdbd8dc112798bc75c282d54cb8bfe9e2	# Makefile: update bolts fc40879995ebc61cc50dfd729512f17afb15b355.
+	dfa6c0ca5226a33c6045b1fd25e69dc05c7276d5	# Makefile: bolt version b38156b9510c0562cf50f8758a64602cc0315c19
+	f26b1166b7ca8d72d03c8e4d88de1301897bcfcc	# Makefile: update bolts a0bbe47b0278b4f152dbaa4f5fab2562413a217c
+	458a85042b88ddddf96a7aed0ebf1b4add0e09c9	# Makefile: update to BOLT 20066dc2aba906f37f3be5a810ae67040f265377
+	d4ffc756916b16d19cca6522b6f8ec422f32f24b	# Makefile: update to latest BOLT text.
+#	88905e83729cf8bd2a247b0cc4526833ca6245d6	# tests: split fetchinvoice recurrence tests into separate test.
+	e61401aab9962e3e0d5ac96955fa7d1173db4a0c	# reckless: don't crash on subprocess calls
+	55cddcd3506acf674dc9515525f500e3227e4f41	# reckless: add support for additional networks
+	cf203369bc4aee3fc21b328d39e01a2d41ffcfe5	# reckless: use environment variable redirects
+#	2f050621b01f7435aac509d76a5fc530bb0bf8b2	# pytest: add blackbox tests for reckless
+#	9384692e2a154f66e9d26fbd0e4b34d8c291310a	# fuzz: add initial seed corpora
+#	a1a1373090064d6f38b02981ad6309f2d0e04dd3	# fuzz: improve corpus merging
+#	fa988d29420ace0ab7940167ed5cc3c78b87beec	# fuzz: add check-fuzz.sh
+#	14afa6efe7e66fcc30218ac5b01badc1f6f8bf41	# make: add check-fuzz target
+#	6e11a2e4160eba493e7cac1d7643202a934e9e98	# doc: document "make check-fuzz"
+#	ca80dee5145ff9240aa6b4e342e14332bec9973b	# doc: add section about improving fuzzing corpora
+	b53cc69cfd4c2cdc6be5e62fc8e706e1b8c43054	# msggen: fix incorrect assertion.
+	6799cd5d0b2bc270183660c8944d56daa8661626:scrub-stamps:resolve-conflicts	# plugins/bcli: move commit-fee (dev-max-fee-multiplier) and into core.
+	a2ca34ccf5da599d36d3c62f290e1d1021e32e15	# common: add tal_arr_insert helper to utils.h
+	7aa8c7600272b9833aae2e6e55e4df69f0f8e3e5:strip=tests/:scrub-stamps	# pytest: test parsefeerate explicitly.
+	faae44713bd724f6e254b67ebf5a9e05773f5efb	# lightningd: clarify uses of dynamic (mempool) feerate floor, and static.
+	cdb85d561898c424105930ff08a695d0982ea033	# lightningd: handle fees as blockcount + range.
+	64b1ddd761de30152154714433974b72bfb7f278:strip=tests/:scrub-stamps	# lightningd: clean up feerate handling, deprecate old terms.
+	c46473e61549e6d927914c8496dfdabea073badf:strip=tests/	# lightningd: allow "NNblocks" and "minimum" as feerates.
+	9e2d4240b1635770ff25cbf21c7fb2a30bbdd1aa	# lightningd: handle bcli plugins returning fee_floor and feerates parameters.
+	812a5a14c0c733404c46778887dde2861015df93	# plugins/bcli: use the new feerate levels, and the floor.
+	3a3370f4c12ecf41c0d6e6be782d30745a758e05:strip=tests/:scrub-stamps	# feerates: add `floor` field for the current minimum feerate bitcoind will accept
+	819d9882aaaf8c1eea354f14c6df907e2a8d0e14	# lightningd: base feerate for onchain txs on deadlines, not fixed fees.
+	5582970715038f8e417d473fb8e1ec773f990d53	# lightningd: split the simple onchain tx signing code.
+	3754e283f868385a5803b76c5355a7def5cc7676	# lightningd: remember if they set "allowhighfees" when we rebroadcast.
+	62fa91e23b0ae253136aad5ba12d24aaa108d47c	# lightningd: rebroadcast all pending txs each 30-60 seconds.
+	a000ee015af7235e0a4ebc14c88ce3cb0f663ce1:strip=tests/	# lightningd: do RBF again for all the txs.
+	295557ac50240b179224211b72c651daa8a77db7	# connectd: don't try to set TCP_CORK on websocket pipe.
+	ed58c24bc77e7776fb7d0dcc1d9ae1022a274a78	# connectd: log broken if TCP_CORK fails.
+	3e49cb01bd25759e94076296eeb0a6179d27942b	# connectd: don't leak fds if we have both IPv4 and IPv6.
+	e514a5d43c2c3477941e2548d8a01be0e1294b0e	# common: lookup function for symnames.
+	cf80f0520adacf1cf108b8e077ec7bb435478577	# connectd: dev-report-fds to do file descriptor audit.
+	c45eb62b57851395b4c2c444b1bf7d869de3fa6d	# lightningd: create small hsm_sync_req() helper for hsm queries.
+	8493ee5e1a40f1ef65ced91be50c9f4976af8c69	# db: print nice message and not just backtrace on bad column name.
+	57b2cbcb320e6ab427988aefb5f72241ede946f7	# lightningd: expose default_locktime for wider usage.
+	2fb942d21cf86b20395518c2eebda3bcdf9f6e14:resolve-conflicts	# bitcoin: rename confusing functions.
+#	89b96e8ac0c384e222de7517b819b5f022782e4d	# pyln-testing: add support to tell bitcoind not to include txs if fee is too low.
+	34f25db435e8b1a6fd369883e3fa1f81919b8fe9	# lightningd: fix parent reporting for memleaks.
+	d502a7ecbb8778e7549721b8118e02c4114a8b90	# bitcoin: bitcoin_tx_remove_output()
+	f1deeda1231c66f8b64ba7e85715353a3307c5d5:resolve-conflicts	# wallet: allow psbt_using_utxos to take a starter psbt.
+	7e5146ab0cd05428688632fcb602a4edc59d3020:scrub-stamps	# common/channel_type: routines to set known variants, set scid_alias.
+	355aa8f497a207475dc0fd60af4f203111225b3e	# zeroconf: don't accept channel_type with option_zeroconf unless we're really zeroconf.
+#	7acaccfb36963efe133f1fe06742020f60c68458	# wallet: add channel_type field to db.
+	75ec1bebee28d79ca242fe30dbba55964fef4437	# lightningd: use channel_type as we're supposed to for forward descisions.
+#	b42984afe15fb9ab936e1dc5f2b0290c4152865d	# pytest: Reproduce #6143
+	6d76642f7e65e9fb4af0c8bd1225e1d1fd09e4e0:strip=tests/	# cln: Fix routehints conversion from cln-rpc and cln-grpc
+	650443e4d50eb55f1fc1fd96b388d78e8dd80c64	# ld: Add a couple of logging statements when forwarding
+#	e30f2cb4a463ff2770548716381d9b297b04a86d	# have towire_wally_psbt and fromwire_wally_psbt set safe psbt version
+#	c0d3eeb7894a30d6c9050d7dbbe773f3895b50c2	# Fix Typo in startup_regtest.sh
+	e5c76f829e7a47091aeab310894aa6e07739b83c	# hsmtool: rework common hsm_secret fetch/decode.
+	441b38c9eae2be8eacc8da383e47bf0f70fe8aa3	# hsmtool: move sodium_init() to top level.
+	62d9ecb6d30fcba766a23aabb445d6607d559a91:strip=tests/	# hsmtool: makerune command.
+	49b7afe58fd0709f24f9203ecde901f435c1abb5	# doc: give helpful examples for feerate values.
+	3f95b559a3180a18c3e77e3027362473e9e22c09	# doc: document that urgent doesn't use the 2-block estimate, but the 6-block.
+#	3c4b20e3a395f1b1cebd99987267cf118cc821b1	# ci: run fuzz regression tests
+	2de5b84370115a481f887445c56c2aedbe190391	# plugins/Makefile: don't use echo -n.
+#	2c9b043be97ee4aeca1334d29c2f0ad99da69d34	# Makefile: remove plugins/sql-schema_gen.h and plugins on `make clean`
+	6f17d8bf0c68f13da5f572f176eb354fed4092ef	# lightningd: fix 100% CPU hang on shutdown.
+#	2e7ecb98f4a488692993f89c135991e6097aa00e	# pytest: make sure we wait for all feerates to be gathered.
+#	58c624d067419989b30e532d24362fd2faa16780	# pytest: fix test_penalty_htlc_tx_timeout accounting flake.
+#	ba7901bebd3b61d063db6ef34cf76d169534adbf	# pytest: fix up test_gossip_ratelimit.
+	8ef4b36a1fdbf55dea764c8914d3ecf0aa731018	# gossipd: send our own gossip aggressively when a new peer connects.
+	46bb6beee7b531eef3bac0be225bf7565c60a95f	# gossipd: make sure we also spam private channels with the peer involved.
+	00f75d6ee11290fa1c6431b69ce4fc6f1680a232	# connectd: no longer stream our own generated gossip, let gossipd do it.
+	6a446a94c6fef61423e5daf2ae9872b2b3143fb4	# connectd: implement timestamp-as-trinary.
+	bec8586dceee1c13329387954da453daebf5a291	# connectd: remove handling of push only gossip
+	54bd0249108dcddebfbb630862d8170e33038b11	# gossip_store: remove now-redundant push bit
+#	db3707f957199d27fd69d65394efe944ed981379	# pytest: Highlight the re-entrancy issue for cln-plugin events
+	f69da84256f4820704cefc1d02cfcd561e67e088:strip=tests/	# rs: Run hooks, methods and notification handlers in tokio tasks
+#	0687fecf0d0153065fa8923a7a5b60784c271f65	# make: Use the CLN_PLUGIN_EXAMPLES variable for testbin
+#	2e5ad0f417f6aa7ad248d826cb26c271553c2dce	# pyln: Exclude all `cln-` plugins from valgrind
+#	cc7d9f39bef21c506df635b08f063aab5e9fcb8b	# Update libwally to 0.8.9
+	b59b6b9cec0402d497a523f35e07c0171fdca0dd	# reckless: fix CLI redirect, minor cleanup
+	61631384203fda2a3ef04407d88b53c1af589dde	# reckless: avoid superfluous config rewrites
+	f5a132314a96d29d2cc9fc4d31621e2220d1b273	# reckless: remove extraneous web request
+	6ac0842aa1709bd75d777cc7e5d074c35b804a33	# reckless: fix crash on non-verbose output
+	d5df26f61312d176c93f51410a5004137c8ec77e	# reckless: add Installer class to support additional languages
+	32dd8258d4788b8152d9c28a62f627b1eaba6587	# reckless: add installer methods
+	2577096e71e05aa5d7f47f35717d7b99b693e859	# reckless: install command now uses `Installer` class methods
+	347e7237f89e23ff163844297bc3fe3092f09558	# reckless: match name using installer entry formats
+	d279da551b90d48139244487515709f3625c96ef	# reckless: add missing type hints
+	233f05e0e221d9a762b5fe2884e7f8b524cf1b24:strip=tests/	# reckless: enable case-insensitive searching
+	f7316954308ae1169b3a51813f775314afb6da77	# reckless: provide response when failing to add source
+#	15795c969a7f33d25b9b605b64098f40e9d32bf9	# meta: Add changelog for 23.05rc1
+	8163bfc7bd767e3e997fe5c12cd271f418ce29bd	# reckless: simplify installer registration
+#	782c17996e31b5b32695f7db6a887a108a9a6076	# pytest: ignore pip warning
+	f382ec0452065391269d1d76cc78ecf51c6334e2	# connectd: pass correct buflen to memmem
+	ca2a162d70d0907966896634ea5b8df1aa673775	# fix: build with gcc 13 with enum and int mismatch
+#	21cc16fb5bfe116bd0430a19c1301ef606c424b9	# meta: Add changelog for 23.05rc2
+	2a52e52015f2386ead5999464edd457736906659:strip=contrib/pyln-testing/:scrub-stamps	# jsonrpc: Add versioning annotation to listpeerchannels
+	65f513464341e3ed5a4bd223053a162504d1a10d:strip=contrib/pyln-testing/	# msggen: Add ListPeerChannels to generated interfaces
+	e7a96cac110812752b275528be222a88b7e91f3c	# msggen: Normalize enum and field names if they contain a '/'
+	d28815f7b8bcbfcd5f440e1b1f18d418db101f7c:resolve-conflicts	# msggen: Disable grpc response -> json response temporarily
+#	318f35b24372f8c6dd382b668ec4e53d08c2b93a	# pytest: Add a test for the grpc conversion of listpeerchannels
+	bff3b1ca8ce89f912bcf956976ce111523cac82d:strip=contrib/pyln-testing/:resolve-conflicts	# msggen: Add ListClosedChannels and overrides
+	b41cb2f0050cb94ed671f605e8e7c33eaf10e814	# cln-grpc: Rename the ChannelSide variants
+#	90ede052ad3b6f5f10c6aed551a220fc33194cc7	# pytest: Extend ListPeerChannels test to include ListClosedChannels
+	1e614dfb8a9d700d6bca812cf8d207bb02f6ca4a	# jsonrpc: Add request schemas for decode and decodepay
+	db843159eadf5f638b92d609dbc687046875328c	# msggen: Move overrides into the model itself
+	0031f1160bf479906195ceca3628b0c6c090380b	# msggen: Map arrays of hashes and add HtlcState enum
+	fc26675336eeee5ed22590f60087af8cfc0ccc63:strip=contrib/pyln-testing/	# msggen: Add DecodePay to the mappings
+#	ef9e0fcf6079f096461cf8d561f4f18f5fbf88d0	# pyln: Set the correct envvar for logging for rust plugins
+	acc3bb2276ae0b3a7e6f9788519a40cd67ed6765:strip=contrib/pyln-testing/	# msggen: Switch signatures to string instead of bytes
+#	708fb17fa2817440fa37764c881ea32d3ecb17c0	# pytest: Add helper to get a grpc stub and test decode
+#	ea23122880ba125a7f14049cd274c5ef2069140a	# meta: Add changelog for 23.05rc3
+#	fe5f3cef510fc8d793ba7db8714f73e03e3c0007	# pyln: remove unused variable
+#	3a2b703ff8f0696b2358ba67b884ff9931932c2a	# jsonrpc: Remove the old "_msat" prefix in the listpeerchannels command
+#	4f258a935499d040f8096ccbbdf752e6a7b5e97a	# meta: Add changelog for 23.05rc4
+#	d1cf88c62e8ff10485f3b40cddb93fc0063ba92a	# meta: update changelog and pyln version for 23.05 release
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"

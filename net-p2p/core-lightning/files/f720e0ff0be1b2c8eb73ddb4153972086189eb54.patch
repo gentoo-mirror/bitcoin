@@ -1,0 +1,82 @@
+--- /var/cache/distfiles/f720e0ff0be1b2c8eb73ddb4153972086189eb54.patch	2023-04-16 01:06:57.783854543 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.12.1-r106/temp/f720e0ff0be1b2c8eb73ddb4153972086189eb54.patch	2023-04-17 00:05:05.734418354 -0400
+@@ -90,17 +90,10 @@
+  		utxo->close_info->option_anchor_outputs
+  			= db_col_int(stmt, "option_anchor_outputs");
+  		utxo->close_info->csv = db_col_int(stmt, "csv_lock");
+-@@ -1315,26 +1312,11 @@ static struct channel *wallet_stmt2channel(struct wallet *w, struct db_stmt *stm
+- 		}
++@@ -1299,19 +1296,10 @@ static struct channel *wallet_stmt2channel(struct wallet *w, struct db_stmt *stm
++ 		scid = NULL;
+  	}
+  
+--	if (!db_col_is_null(stmt, "scid")) {
+--		scid = tal(tmpctx, struct short_channel_id);
+--		db_col_short_channel_id(stmt, "scid", scid);
+--	} else {
+--		scid = NULL;
+--	}
+--
+ -	if (!db_col_is_null(stmt, "alias_local")) {
+ -		alias[LOCAL] = tal(tmpctx, struct short_channel_id);
+ -		db_col_short_channel_id(stmt, "alias_local", alias[LOCAL]);
+@@ -114,7 +107,6 @@
+ -	} else {
+ -		alias[REMOTE] = NULL;
+ -	}
+-+	scid = db_col_optional(tmpctx, stmt, "scid", short_channel_id);
+ +	alias[LOCAL] = db_col_optional(tmpctx, stmt, "alias_local",
+ +				       short_channel_id);
+ +	alias[REMOTE] = db_col_optional(tmpctx, stmt, "alias_remote",
+@@ -223,17 +215,17 @@
+  	else
+  		payment->partid = 0;
+  
+--	if (!db_col_is_null(stmt, "local_invreq_id")) {
+--		payment->local_invreq_id = tal(payment, struct sha256);
+--		db_col_sha256(stmt, "local_invreq_id", payment->local_invreq_id);
++-	if (!db_col_is_null(stmt, "local_offer_id")) {
++-		payment->local_offer_id = tal(payment, struct sha256);
++-		db_col_sha256(stmt, "local_offer_id", payment->local_offer_id);
+ -	} else
+--		payment->local_invreq_id = NULL;
+-+	payment->local_invreq_id = db_col_optional(payment, stmt,
+-+						   "local_invreq_id", sha256);
+- 
+- 	if (!db_col_is_null(stmt, "completed_at")) {
+- 		payment->completed_at = tal(payment, u32);
+-@@ -3471,21 +3422,13 @@ void wallet_payment_get_failinfo(const tal_t *ctx,
++-		payment->local_offer_id = NULL;
+++	payment->local_offer_id = db_col_optional(payment, stmt,
+++						  "local_offer_id", sha256);
++ 
++ 	payment->groupid = db_col_u64(stmt, "groupid");
++ 
++@@ -3421,12 +3378,7 @@ void wallet_payment_get_failinfo(const tal_t *ctx,
+  	*faildestperm = db_col_int(stmt, "faildestperm") != 0;
+  	*failindex = db_col_int(stmt, "failindex");
+  	*failcode = (enum onion_wire) db_col_int(stmt, "failcode");
+@@ -243,20 +235,7 @@
+ -		*failnode = tal(ctx, struct node_id);
+ -		db_col_node_id(stmt, "failnode", *failnode);
+ -	}
+--	if (db_col_is_null(stmt, "failscid")) {
+--		db_col_ignore(stmt, "faildirection");
+--		*failchannel = NULL;
+--	} else {
+--		*failchannel = tal(ctx, struct short_channel_id);
+--		db_col_short_channel_id(stmt, "failscid", *failchannel);
+--
+ +	*failnode = db_col_optional(ctx, stmt, "failnode", node_id);
+-+	*failchannel = db_col_optional(ctx, stmt, "failscid", short_channel_id);
+-+	if (*failchannel) {
+- 		/* For pre-0.6.2 dbs, direction will be 0 */
+- 		*faildirection = db_col_int(stmt, "faildirection");
+-+	} else {
+-+		db_col_ignore(stmt, "faildirection");
+- 	}
+- 	if (db_col_is_null(stmt, "failupdate"))
+- 		*failupdate = NULL;
++ 	if (db_col_is_null(stmt, "failchannel")) {
++ 		db_col_ignore(stmt, "faildirection");
++ 		*failchannel = NULL;
