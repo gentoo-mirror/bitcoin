@@ -1,0 +1,40 @@
+--- /var/cache/distfiles/9e2d4240b1635770ff25cbf21c7fb2a30bbdd1aa.patch	2023-04-16 01:07:28.764169217 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-0.11.2-r117/temp/9e2d4240b1635770ff25cbf21c7fb2a30bbdd1aa.patch	2023-04-17 22:52:48.568658428 -0400
+@@ -22,7 +22,11 @@
+  Polled by `lightningd` to get the current feerate, all values must be passed in sat/kVB.
+  
+ -If fee estimation fails, the plugin must set all the fields to `null`.
+--
+++The plugin must return `feerate_floor` (e.g. 1000 if mempool is
+++empty), and an array of 0 or more `feerates`.  Each element of
+++`feerates` is an object with `blocks` and `feerate`, in
+++ascending-blocks order, for example:
++ 
+ -The plugin, if fee estimation succeeds, must respond with the following fields:
+ -    - `opening` (number), used for funding and also misc transactions
+ -    - `mutual_close` (number), used for the mutual close transaction
+@@ -32,11 +36,6 @@
+ -    - `penalty` (number), used for resolving revoked transactions
+ -    - `min_acceptable` (number), used as the minimum acceptable feerate
+ -    - `max_acceptable` (number), used as the maximum acceptable feerate
+-+The plugin must return `feerate_floor` (e.g. 1000 if mempool is
+-+empty), and an array of 0 or more `feerates`.  Each element of
+-+`feerates` is an object with `blocks` and `feerate`, in
+-+ascending-blocks order, for example:
+-+
+ +```
+ +{
+ +	"feerate_floor": <sat per kVB>,
+@@ -214,11 +213,9 @@
+ index 93f1777594e3ff2ab6996c175fa2b53bcc4ae95f..5a995f960ce83ac56d7dbbf8601e0c85685ea8fa 100644
+ --- a/tests/test_misc.py
+ +++ b/tests/test_misc.py
+-@@ -1942,9 +1942,8 @@ def mock_fail(*args):
+- 
++@@ -1786,7 +1786,7 @@ def test_bitcoind_fail_first(node_factory, bitcoind, executor):
+  
+  @unittest.skipIf(TEST_NETWORK == 'liquid-regtest', "Fees on elements are different")
+--@unittest.skip("FIXME: temporarily broken")
+  def test_bitcoind_feerate_floor(node_factory, bitcoind):
+ -    """Don't return a feerate less than minrelaytxfee/mempoolnifee."""
+ +    """Don't return a feerate less than minrelaytxfee/mempoolminfee."""

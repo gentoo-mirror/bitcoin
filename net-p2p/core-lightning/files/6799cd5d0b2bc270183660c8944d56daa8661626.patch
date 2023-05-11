@@ -1,0 +1,68 @@
+--- /var/cache/distfiles/6799cd5d0b2bc270183660c8944d56daa8661626.patch	2023-04-16 01:07:26.537146597 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-22.11.1-r101/temp/6799cd5d0b2bc270183660c8944d56daa8661626.patch	2023-04-16 03:49:10.728630807 -0400
+@@ -26,9 +26,9 @@
+ --- a/doc/lightning-listconfigs.7.md
+ +++ b/doc/lightning-listconfigs.7.md
+ @@ -106,6 +106,7 @@ On success, an object is returned, containing:
++ - **tor-service-password** (string, optional): `tor-service-password` field from config or cmdline, if any
+  - **dev-allowdustreserve** (boolean, optional): Whether we allow setting dust reserves
+  - **announce-addr-dns** (boolean, optional): Whether we put DNS entries into node\_announcement *(added v22.11.1)*
+- - **require-confirmed-inputs** (boolean, optional): Request peers to only send confirmed inputs (dual-fund only)
+ +- **commit-fee** (u64, optional): The percentage of the 6-block fee estimate to use for commitment transactions *(added v23.05)*
+  
+  [comment]: # (GENERATE-FROM-SCHEMA-END)
+@@ -56,10 +56,14 @@
+ index b2ebdd003c68529158602a66f2aa15c52f7a1c7a..32e7b096d514aed1b07a71ef5874e535c8a98176 100644
+ --- a/doc/schemas/listconfigs.schema.json
+ +++ b/doc/schemas/listconfigs.schema.json
+-@@ -319,6 +319,11 @@
+-     "require-confirmed-inputs": {
++@@ -313,8 +313,13 @@
++     },
++     "announce-addr-dns": {
+        "type": "boolean",
+-       "description": "Request peers to only send confirmed inputs (dual-fund only)"
++-      "description": "Whether we put DNS entries into node_announcement",
++-      "added": "v22.11.1"
+++      "added": "v22.11.1",
+++      "description": "Whether we put DNS entries into node_announcement"
+ +    },
+ +    "commit-fee": {
+ +      "type": "u64",
+@@ -96,9 +100,9 @@
+ --- a/lightningd/lightningd.h
+ +++ b/lightningd/lightningd.h
+ @@ -85,6 +85,13 @@ struct config {
+- 
+- 	/* Require peer to send confirmed inputs */
+- 	bool require_confirmed_inputs;
++ 	 * slight spec incompatibility, but implementations do this
++ 	 * already. */
++ 	bool allowdustreserve;
+ +
+ +	/* The factor to time the urgent feerate by to get the maximum
+ +	 * acceptable feerate.  (10, but can be overridden by dev-max-fee-multiplier) */
+@@ -130,19 +134,19 @@
+  #endif /* DEVELOPER */
+  
+ @@ -860,6 +869,9 @@ static const struct config testnet_config = {
+- 	.allowdustreserve = false,
++ 	.exp_offers = IFEXPERIMENTAL(true, false),
+  
+- 	.require_confirmed_inputs = false,
++ 	.allowdustreserve = false,
+ +
+ +	.max_fee_multiplier = 10,
+ +	.commit_fee_percent = 100,
+  };
+  
+  /* aka. "Dude, where's my coins?" */
+ @@ -931,6 +943,9 @@ static const struct config mainnet_config = {
+- 	.allowdustreserve = false,
++ 	.exp_offers = IFEXPERIMENTAL(true, false),
+  
+- 	.require_confirmed_inputs = false,
++ 	.allowdustreserve = false,
+ +
+ +	.max_fee_multiplier = 10,
+ +	.commit_fee_percent = 100,

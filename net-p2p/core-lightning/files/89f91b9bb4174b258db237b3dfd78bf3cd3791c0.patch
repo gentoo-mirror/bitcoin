@@ -1,0 +1,29 @@
+--- /var/cache/distfiles/89f91b9bb4174b258db237b3dfd78bf3cd3791c0.patch	2023-04-16 01:06:59.833875365 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-23.02.2-r100/temp/89f91b9bb4174b258db237b3dfd78bf3cd3791c0.patch	2023-04-16 01:41:45.811993328 -0400
+@@ -421,20 +421,20 @@
+ +	json_add_bool(response, "leased", channel->leased);
+ +	if (channel->leased) {
+ +		if (channel->opener == LOCAL)
+-+			json_add_amount_msat(response, "funding_fee_paid_msat",
+++			json_add_amount_msat_only(response, "funding_fee_paid_msat",
+ +					     channel->push);
+ +		else
+-+			json_add_amount_msat(response, "funding_fee_rcvd_msat",
+++			json_add_amount_msat_only(response, "funding_fee_rcvd_msat",
+ +					     channel->push);
+ +	} else if (!amount_msat_eq(channel->push, AMOUNT_MSAT(0)))
+-+		json_add_amount_msat(response, "funding_pushed_msat",
+++		json_add_amount_msat_only(response, "funding_pushed_msat",
+ +				     channel->push);
+ +
+ +	json_add_amount_sat_msat(response, "total_msat", channel->funding_sats);
+-+	json_add_amount_msat(response, "final_to_us_msat", channel->our_msat);
+-+	json_add_amount_msat(response, "min_to_us_msat",
+++	json_add_amount_msat_only(response, "final_to_us_msat", channel->our_msat);
+++	json_add_amount_msat_only(response, "min_to_us_msat",
+ +			     channel->msat_to_us_min);
+-+	json_add_amount_msat(response, "max_to_us_msat",
+++	json_add_amount_msat_only(response, "max_to_us_msat",
+ +			     channel->msat_to_us_max);
+ +	if (channel->last_tx && !invalid_last_tx(channel->last_tx)) {
+ +		struct bitcoin_txid txid;

@@ -1,0 +1,27 @@
+--- /var/cache/distfiles/2fb942d21cf86b20395518c2eebda3bcdf9f6e14.patch	2023-04-16 01:07:33.532217647 -0400
++++ /var/tmp/portage/net-p2p/core-lightning-23.02.2-r100/temp/2fb942d21cf86b20395518c2eebda3bcdf9f6e14.patch	2023-04-16 01:23:54.944172674 -0400
+@@ -28,17 +28,15 @@
+ index f73c0aef4843edf8b252812b186dac4a86839c2a..7281fc2742bdf99d5e6180bd40680f56ea88f2a6 100644
+ --- a/bitcoin/psbt.c
+ +++ b/bitcoin/psbt.c
+-@@ -611,8 +611,8 @@ bool psbt_finalize(struct wally_psbt *psbt)
+- 		const struct wally_map_item *iws;
+- 
+- 		iws = wally_map_get_integer(&input->psbt_fields, /* PSBT_IN_WITNESS_SCRIPT */ 0x05);
+--		if (!iws || !is_anchor_witness_script(iws->value,
+--					      iws->value_len))
+-+		if (!iws || !is_to_remote_anchored_witness_script(iws->value,
+-+								  iws->value_len))
++@@ -617,7 +617,7 @@ bool psbt_finalize(struct wally_psbt *psbt)
++ 		struct wally_psbt_input *input = &psbt->inputs[i];
++ 		struct wally_tx_witness_stack *stack;
++ 
++-		if (!is_anchor_witness_script(input->witness_script,
+++		if (!is_to_remote_anchored_witness_script(input->witness_script,
++ 					      input->witness_script_len))
+  			continue;
+  
+- 		if (input->signatures.num_items != 1)
+ diff --git a/bitcoin/script.c b/bitcoin/script.c
+ index a66c26f976a684c33d8f6be53b64f64a25545e4e..a127ce96c004101349c953010fd2657c25d77381 100644
+ --- a/bitcoin/script.c
