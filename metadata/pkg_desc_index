@@ -2,7 +2,7 @@ acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/lightning 0: System-wide Lightning services user
 app-text/mrkd 0.2.0-r1: Write man pages using Markdown, and convert them to Roff or HTML
 dev-libs/libsecp256k1 0.1_pre20211216 0.1.0_pre20220803 9999: Optimized C library for EC operations on curve secp256k1
-dev-libs/libsecp256k1-zkp 0.1.0_pre20230412: A fork of libsecp256k1 with support for advanced and experimental features such as Confidential Assets and MuSig2
+dev-libs/libsecp256k1-zkp 0.1.0_pre20230515: A fork of libsecp256k1 with support for advanced and experimental features such as Confidential Assets and MuSig2
 dev-libs/univalue 1.0.3 1.0.4 1.0.5: C++ universal value object and JSON library
 dev-python/base58 2.1.1: Base58 and Base58Check implementation compatible with what is used by the bitcoin network
 dev-python/bencoder-pyx 3.0.1: A fast bencode implementation in Cython
@@ -19,7 +19,7 @@ dev-python/txtorcon 23.5.0: Twisted-based Tor controller client, with state-trac
 dev-util/bitcoin-tx 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2-r1 22.0-r3 23.0: Command-line Bitcoin transaction tool
 net-libs/libbitcoinconsensus 21.2-r1 22.0-r1 23.0: Bitcoin Core consensus library
 net-libs/libblkmaker 0.4.2 0.4.3 0.5.1 0.5.2 0.5.3 0.6.0: C implementation of Bitcoin's getblocktemplate interface
-net-libs/libwally-core 0.8.5_p20230128 0.8.8 0.8.9: Collection of useful primitives for cryptocurrency wallets
+net-libs/libwally-core 0.8.5_p20230128 0.8.8 0.9.0: Collection of useful primitives for cryptocurrency wallets
 net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0 23.0: Command-line JSON-RPC client specifically for interfacing with bitcoind
 net-p2p/bitcoin-qt 21.2-r1 22.0-r2 23.0: An end-user Qt GUI for the Bitcoin crypto-currency
 net-p2p/bitcoind 21.2-r1 22.0-r2 23.0: Original Bitcoin crypto-currency wallet for automated services
