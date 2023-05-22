@@ -10,10 +10,6 @@ DISTUTILS_USE_PEP517=setuptools
 inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
 BACKPORTS=(
-	9bbd44018c054dc15e12bbeb4376851de53c3cd1	# tx: fix hashPrevouts test for non-SWIG builds
-	1df31613045a1c5ce2a6ecf27608c9bdec450e7d	# bip39: fix test for --enable-minimal builds
-	b1890616a86dc0dc596c3fdeb2674e96627a5ffd	# tx: really fix hashPrevouts test for non-SWIG builds
-	870c0207084f76d8e08499b6af7f5c578d54d85a	# tx: skip hashPrevouts test for non-elements builds
 )
 
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
@@ -23,7 +19,7 @@ SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
 	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0"
-SLOT="0/0.8.9"
+SLOT="0/0.9.0"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE+=" +asm elements minimal python test"
 RESTRICT="!test? ( test )"
