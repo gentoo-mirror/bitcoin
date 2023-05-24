@@ -205,7 +205,6 @@ IUSE="developer doc +man +mkdocs postgres python rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
-	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
 	>=net-libs/libwally-core-0.9.0:=[elements]
