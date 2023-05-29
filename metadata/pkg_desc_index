@@ -26,6 +26,7 @@ net-p2p/bitcoind 21.2-r1 22.0-r2 23.0: Original Bitcoin crypto-currency wallet f
 net-p2p/core-lightning 0.11.2-r2 0.11.2-r118 0.12.1-r1 0.12.1-r107 22.11.1-r1 22.11.1-r102 23.02.2 23.02.2-r100 23.05 9999-r2: An implementation of Bitcoin's Lightning Network in C
 net-p2p/joinmarket 0.9.9: JoinMarket CoinJoin client and daemon
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
+sys-libs/libbacktrace 1.0_p20230329: C library that may be linked into a C/C++ program to produce symbolic backtraces
 virtual/bitcoin-leveldb 0 0-r1: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
 virtual/python-serviceproxy 0: Virtual for jsonrpc.proxy.ServiceProxy
 x11-libs/amd-adl-sdk 3.0 4.0: API to access display driver functionality for ATI graphics cards

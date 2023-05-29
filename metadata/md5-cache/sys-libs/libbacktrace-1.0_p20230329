@@ -1,0 +1,14 @@
+BDEPEND=test? ( app-arch/xz-utils sys-libs/zlib ) sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.5:1.16 ) >=sys-devel/autoconf-2.71-r5 >=sys-devel/libtool-2.4.7
+DEFINED_PHASES=configure install prepare
+DESCRIPTION=C library that may be linked into a C/C++ program to produce symbolic backtraces
+EAPI=8
+HOMEPAGE=https://github.com/ianlancetaylor/libbacktrace
+INHERIT=autotools
+IUSE=static-libs test
+KEYWORDS=~amd64 ~arm ~arm64 ~mips ~ppc64 ~riscv ~x86
+LICENSE=BSD
+RESTRICT=!test? ( test )
+SLOT=0
+SRC_URI=https://github.com/ianlancetaylor/libbacktrace/archive/cdb64b688dda93bbbacbc2b1ccf50ce9329d4748.tar.gz -> libbacktrace-1.0_p20230329.tar.gz https://github.com/ianlancetaylor/libbacktrace/commit/6674aadb6f2be925e89b253f1b380ecdbc69777b.patch?full_index=1 -> libbacktrace-libtool-no-wrap-tests.patch
+_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	14a8ae365191b518fad51caad7a08f3e	multilib	104e1332efb829e2f7cbf89307a474f1	libtool	9d3a9a889a6fa62ae794f817c156491b	autotools	f0d3196128225dee3220e65f3371bc7a
+_md5_=fefbc3d38ffa30bac5177cf9ac4a312b
