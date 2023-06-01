@@ -3,14 +3,15 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
 DESCRIPTION="Twisted-based Tor controller client, with state-tracking and config abstractions"
 HOMEPAGE="https://github.com/meejah/txtorcon https://pypi.org/project/txtorcon/ https://txtorcon.readthedocs.org"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz
+	https://github.com/meejah/txtorcon/commit/9f098a89c78199af26b17cb2adcf10c9057e62d8.patch?full_index=1 -> ${PN}-fix-tests-python3_12.patch"
 
 LICENSE="MIT"
 SLOT="0"
@@ -45,6 +46,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/txtorcon-0.19.3-Removeunconditionalexamples.patch"
 	"${FILESDIR}/txtorcon-0.19.3-Removeinstalldocs.patch"
+	"${DISTDIR}/${PN}-fix-tests-python3_12.patch"
 )
 
 python_check_deps() {
