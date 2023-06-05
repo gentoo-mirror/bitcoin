@@ -1,7 +1,7 @@
 # Copyright 2010-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 POSTGRES_COMPAT=( {10..15} )
 
@@ -12,198 +12,214 @@ DISTUTILS_USE_PEP517=poetry
 
 CARGO_OPTIONAL=1
 CRATES="
-	aho-corasick-0.7.18
-	anyhow-1.0.58
+	aho-corasick-0.7.20
+	anyhow-1.0.68
+	asn1-rs-0.5.1
+	asn1-rs-derive-0.4.0
+	asn1-rs-impl-0.1.0
 	async-stream-0.3.3
 	async-stream-impl-0.3.3
-	async-trait-0.1.56
-	atty-0.2.14
+	async-trait-0.1.60
 	autocfg-1.1.0
-	base64-0.13.0
+	axum-0.6.1
+	axum-core-0.3.0
+	base64-0.13.1
+	bech32-0.9.1
+	bitcoin-0.29.2
+	bitcoin_hashes-0.11.0
 	bitflags-1.3.2
-	bumpalo-3.10.0
-	bytes-1.1.0
-	cc-1.0.73
+	bumpalo-3.11.1
+	bytes-1.3.0
+	cc-1.0.78
 	cfg-if-1.0.0
-	chrono-0.4.19
-	core-foundation-0.9.3
-	core-foundation-sys-0.8.3
-	data-encoding-2.3.2
-	der-oid-macro-0.5.0
-	der-parser-6.0.1
-	either-1.6.1
-	env_logger-0.9.0
-	fastrand-1.7.0
-	fixedbitset-0.2.0
+	data-encoding-2.3.3
+	der-parser-8.1.0
+	displaydoc-0.2.3
+	either-1.8.0
+	env_logger-0.10.0
+	errno-0.2.8
+	errno-dragonfly-0.1.2
+	fastrand-1.8.0
+	fixedbitset-0.4.2
 	fnv-1.0.7
-	foreign-types-0.3.2
-	foreign-types-shared-0.1.1
-	futures-0.3.21
-	futures-channel-0.3.21
-	futures-core-0.3.21
-	futures-executor-0.3.21
-	futures-io-0.3.21
-	futures-macro-0.3.21
-	futures-sink-0.3.21
-	futures-task-0.3.21
-	futures-util-0.3.21
-	getrandom-0.2.7
-	h2-0.3.13
-	hashbrown-0.12.1
-	heck-0.3.3
-	hermit-abi-0.1.19
+	futures-0.3.25
+	futures-channel-0.3.25
+	futures-core-0.3.25
+	futures-executor-0.3.25
+	futures-io-0.3.25
+	futures-macro-0.3.25
+	futures-sink-0.3.25
+	futures-task-0.3.25
+	futures-util-0.3.25
+	getrandom-0.2.8
+	h2-0.3.15
+	hashbrown-0.12.3
+	heck-0.4.0
+	hermit-abi-0.2.6
 	hex-0.4.3
 	http-0.2.8
 	http-body-0.4.5
-	httparse-1.7.1
+	http-range-header-0.3.0
+	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
-	hyper-0.14.19
+	hyper-0.14.23
 	hyper-timeout-0.4.1
-	indexmap-1.9.1
+	indexmap-1.9.2
 	instant-0.1.12
-	itertools-0.10.3
-	itoa-1.0.2
-	js-sys-0.3.58
+	io-lifetimes-1.0.3
+	is-terminal-0.4.2
+	itertools-0.10.5
+	itoa-1.0.5
+	js-sys-0.3.60
 	lazy_static-1.4.0
-	libc-0.2.126
+	libc-0.2.139
+	linux-raw-sys-0.1.4
 	log-0.4.17
+	matchit-0.7.0
 	memchr-2.5.0
+	mime-0.3.16
 	minimal-lexical-0.2.1
-	mio-0.8.4
+	mio-0.8.5
 	multimap-0.8.3
-	native-tls-0.2.10
 	nom-7.1.1
 	num-bigint-0.4.3
 	num-integer-0.1.45
 	num-traits-0.2.15
-	num_cpus-1.13.1
-	oid-registry-0.2.0
-	once_cell-1.12.0
-	openssl-0.10.40
-	openssl-macros-0.1.0
-	openssl-probe-0.1.5
-	openssl-src-111.21.0+1.1.1p
-	openssl-sys-0.9.74
-	pem-1.0.2
-	percent-encoding-2.1.0
-	petgraph-0.5.1
-	pin-project-1.0.10
-	pin-project-internal-1.0.10
+	num_cpus-1.15.0
+	oid-registry-0.6.1
+	once_cell-1.16.0
+	pem-1.1.0
+	percent-encoding-2.2.0
+	petgraph-0.6.2
+	pin-project-1.0.12
+	pin-project-internal-1.0.12
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
-	pkg-config-0.3.25
-	ppv-lite86-0.2.16
-	proc-macro2-1.0.40
-	prost-0.8.0
-	prost-build-0.8.0
-	prost-derive-0.8.0
-	prost-types-0.8.0
-	quote-1.0.20
+	ppv-lite86-0.2.17
+	prettyplease-0.1.22
+	proc-macro2-1.0.49
+	prost-0.11.5
+	prost-build-0.11.5
+	prost-derive-0.11.5
+	prost-types-0.11.5
+	quote-1.0.23
 	rand-0.8.5
 	rand_chacha-0.3.1
-	rand_core-0.6.3
-	rcgen-0.8.14
-	redox_syscall-0.2.13
-	regex-1.5.6
-	regex-syntax-0.6.26
+	rand_core-0.6.4
+	rcgen-0.10.0
+	redox_syscall-0.2.16
+	regex-1.7.0
+	regex-syntax-0.6.28
 	remove_dir_all-0.5.3
 	ring-0.16.20
 	rusticata-macros-4.1.0
-	rustls-0.19.1
-	ryu-1.0.10
-	schannel-0.1.20
-	sct-0.6.1
-	security-framework-2.6.1
-	security-framework-sys-2.6.1
-	serde-1.0.137
-	serde_derive-1.0.137
-	serde_json-1.0.81
-	slab-0.4.6
-	socket2-0.4.4
+	rustix-0.36.5
+	rustls-0.20.7
+	rustls-pemfile-1.0.1
+	rustversion-1.0.11
+	ryu-1.0.12
+	sct-0.7.0
+	secp256k1-0.24.2
+	secp256k1-sys-0.6.1
+	serde-1.0.151
+	serde_derive-1.0.151
+	serde_json-1.0.91
+	slab-0.4.7
+	socket2-0.4.7
 	spin-0.5.2
-	syn-1.0.98
+	syn-1.0.107
+	sync_wrapper-0.1.1
+	synstructure-0.12.6
 	tempfile-3.3.0
 	termcolor-1.1.3
-	thiserror-1.0.31
-	thiserror-impl-1.0.31
-	tokio-1.19.2
+	thiserror-1.0.38
+	thiserror-impl-1.0.38
+	time-0.3.17
+	time-core-0.1.0
+	time-macros-0.2.6
+	tokio-1.24.2
 	tokio-io-timeout-1.2.0
-	tokio-macros-1.8.0
-	tokio-rustls-0.22.0
-	tokio-stream-0.1.9
-	tokio-util-0.6.10
-	tokio-util-0.7.3
-	tonic-0.5.2
-	tonic-build-0.5.2
+	tokio-macros-1.8.2
+	tokio-rustls-0.23.4
+	tokio-stream-0.1.11
+	tokio-util-0.7.4
+	tonic-0.8.3
+	tonic-build-0.8.4
 	tower-0.4.13
-	tower-layer-0.3.1
+	tower-http-0.3.5
+	tower-layer-0.3.2
 	tower-service-0.3.2
-	tracing-0.1.35
-	tracing-attributes-0.1.21
-	tracing-core-0.1.28
+	tracing-0.1.37
+	tracing-attributes-0.1.23
+	tracing-core-0.1.30
 	tracing-futures-0.2.5
 	try-lock-0.2.3
-	unicode-ident-1.0.1
-	unicode-segmentation-1.9.0
+	unicode-ident-1.0.6
+	unicode-xid-0.2.4
 	untrusted-0.7.1
-	vcpkg-0.2.15
 	want-0.3.0
 	wasi-0.11.0+wasi-snapshot-preview1
-	wasm-bindgen-0.2.81
-	wasm-bindgen-backend-0.2.81
-	wasm-bindgen-macro-0.2.81
-	wasm-bindgen-macro-support-0.2.81
-	wasm-bindgen-shared-0.2.81
-	web-sys-0.3.58
-	webpki-0.21.4
-	which-4.2.5
+	wasm-bindgen-0.2.83
+	wasm-bindgen-backend-0.2.83
+	wasm-bindgen-macro-0.2.83
+	wasm-bindgen-macro-support-0.2.83
+	wasm-bindgen-shared-0.2.83
+	web-sys-0.3.60
+	webpki-0.22.0
+	which-4.3.0
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.5
 	winapi-x86_64-pc-windows-gnu-0.4.0
-	windows-sys-0.36.1
-	windows_aarch64_msvc-0.36.1
-	windows_i686_gnu-0.36.1
-	windows_i686_msvc-0.36.1
-	windows_x86_64_gnu-0.36.1
-	windows_x86_64_msvc-0.36.1
-	x509-parser-0.12.0
-	yasna-0.4.0
+	windows-sys-0.42.0
+	windows_aarch64_gnullvm-0.42.0
+	windows_aarch64_msvc-0.42.0
+	windows_i686_gnu-0.42.0
+	windows_i686_msvc-0.42.0
+	windows_x86_64_gnu-0.42.0
+	windows_x86_64_gnullvm-0.42.0
+	windows_x86_64_msvc-0.42.0
+	x509-parser-0.14.0
+	yasna-0.5.1
 "
 
-inherit backports bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
+EGIT_OPT_DEFAULT=1
+
+inherit bash-completion-r1 cargo distutils-r1 git-opt-r3 postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV/[-_]rc/rc}
-BACKPORTS=(
-	6518f6f26ab61ec33a796e57125ca8bad4b6c632	# make: Make the Makefile make 4.4 compatible
-	ed4815527aba7a3d11bd9f33b441372edd56310e	# gossipd: avoid gossipd crash due to double freeing timer
-	8315c7c906a0d54f2157009665d0b091d746dcbe	# lightningd: don't send channeld message to onchaind.
-)
+MyPV=${PV/_}-gentoo-${PR}
+BASE_COMMIT=v${PV/_}
+HEAD_COMMIT=v23.05
+EGIT_COMMIT=v${MyPV}
+EGIT_REPO_URI=( https://github.com/{ElementsProject,whitslack}/"${MyPN}".git )
+EGIT_BRANCH="${PV}/backports"
+EGIT_SUBMODULES=( '-*' )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
-HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
-SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
+SRC_URI="
+	!git-src? ( https://github.com/whitslack/${MyPN}/archive/${EGIT_COMMIT}.tar.gz -> ${PF}.tar.gz )
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
-	$(backports_patch_uris)"
+"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+KEYWORDS=""
 IUSE="developer doc experimental +man postgres python rust sqlite test"
-RESTRICT="!test? ( test )"
+RESTRICT="mirror !test? ( test )"
 
 CDEPEND="
 	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.8.5:0/0.8.2[elements]
+	>=net-libs/libwally-core-0.8.5_p20230128:0/0.8.2[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
-	>=sys-libs/zlib-1.2.12:=
+	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( >=dev-db/sqlite-3.29.0:= )
@@ -214,7 +230,7 @@ PYTHON_DEPEND="
 	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
-	>=dev-python/pycparser-2.20[${PYTHON_USEDEP}]
+	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
 	acct-group/lightning
@@ -226,16 +242,19 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	acct-group/lightning
 	acct-user/lightning
-	man? ( >=app-text/mrkd-0.2.0 )
+	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
+		rust? ( >=dev-python/grpcio-tools-1.47.0[${PYTHON_USEDEP}] )
 	')
 	doc? ( $(python_gen_any_dep '
 		dev-python/recommonmark[${PYTHON_USEDEP}]
 		dev-python/sphinx[${PYTHON_USEDEP}]
 		dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
 	') )
+	git-src? ( net-misc/curl[ssl] )
 	python? (
+		${DISTUTILS_DEPS}
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
 		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
 		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
@@ -246,6 +265,7 @@ BDEPEND="
 	)
 	rust? ( ${RUST_DEPEND} )
 	sys-devel/gettext
+	virtual/pkgconfig
 "
 REQUIRED_USE="
 	|| ( postgres sqlite )
@@ -254,12 +274,18 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
+PATCHES=(
+	"${FILESDIR}/Makefile-grouped-targets.patch"
+)
+
 S=${WORKDIR}/${MyPN}-${MyPV}
+EGIT_CHECKOUT_DIR=${S}
 DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
 
 python_check_deps() {
-	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
-		"dev-python/mako[${PYTHON_USEDEP}]" ; } &&
+	{ [[ " ${python_need} " != *' mako '* ]] || {
+		python_has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
+		{ ! use rust || python_has_version "dev-python/grpcio-tools[${PYTHON_USEDEP}]" ; } ; } ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
 		dev-python/{recommonmark,sphinx{,-rtd-theme}}"[${PYTHON_USEDEP}]" ; }
 }
@@ -271,6 +297,16 @@ python_foreach_subdir() {
 		"${@}"
 		popd >/dev/null || die
 	done
+}
+
+show_backports_warning() {
+	ewarn "You are installing an" \
+		    "${PORTAGE_COLOR_WARN-${WARN}}UNOFFICIAL${PORTAGE_COLOR_NORMAL-${NORMAL}}" \
+		    "branch of Core Lightning that is kept as" \
+		'\n'"closely in sync with the latest official release as possible without" \
+		'\n'"introducing any database schema migrations relative to ${BASE_COMMIT}." \
+		'\n'"You should proceed only if you trust the branch maintainer or have" \
+		'\n'"carefully audited the differences versus the upstream release:"
 }
 
 pkg_pretend() {
@@ -288,6 +324,11 @@ pkg_pretend() {
 			'\n'"if you are certain you know what you are doing."
 		die 'lightningd is running'
 	fi
+
+	if ! use git-src ; then
+		show_backports_warning
+		ewarn '\n'"${EGIT_REPO_URI[0]%.git}/compare/${HEAD_COMMIT}...whitslack:lightning:${EGIT_COMMIT}"
+	fi
 }
 
 pkg_setup() {
@@ -299,10 +340,42 @@ pkg_setup() {
 	use test && tc-ld-disable-gold	# mock magic doesn't support gold
 }
 
+audit_backports() {
+	local - any
+	set -o pipefail
+
+	ebegin 'Verifying that all revert commits are tree-same as their grandparents'
+	git rev-list --no-merges --grep='^Revert "' "${HEAD_COMMIT}..${EGIT_COMMIT}" |
+		while read -r rev ; do git diff --exit-code "${rev}"{^^,} || exit ; done >/dev/null
+	eend "${?}" || die 'revert commit audit failed'
+
+	ebegin "Verifying that no database migrations are introduced since ${BASE_COMMIT}"
+	count_migrations() {
+		git show "${1}:wallet/db.c" | sed -ne '/dbmigrations\[\] = {$/,/^};/{/},/p}' | wc -l
+	}
+	(( "$(count_migrations "${EGIT_COMMIT}")" == "$(count_migrations "${BASE_COMMIT}")" ))
+	eend "${?}" || die 'database migrations audit failed'
+	unset count_migrations
+
+	show_backports_warning
+	ewarn '\n'"\$ export GIT_DIR=${EGIT_DIR@Q}" \
+		'\n'"\$ HEAD=\$(git ls-remote --tags ${EGIT_REPO_URI[0]} ${HEAD_COMMIT} | cut -f1)" \
+		'\n'"\$ git diff \"\${HEAD}..${EGIT_COMMIT}\"" \
+		'\n'"\$ git log --reverse --merges --cc \"\${HEAD}..${EGIT_COMMIT}\""
+}
+
 src_unpack() {
-	unpack "${P}.tar.gz"
-	rm -r "${S}/external"/*/ || die
+	if use git-src ; then
+		git-r3_fetch "${EGIT_REPO_URI[0]}" "refs/tags/${HEAD_COMMIT}"
+		git-r3_fetch "${EGIT_REPO_URI[0]}" "refs/tags/${BASE_COMMIT}"
+		git-r3_src_unpack
+		cd "${S}" || die
+		audit_backports
+	else
+		unpack "${PF}.tar.gz"
+	fi
 	cd "${S}/external" || die
+	rm -r */ || die
 	unpack jsmn-1.0.0.tar.gz gheap-67fc83b.tar.gz
 	mv jsmn{-1.0.0,} || die
 	mv gheap{-*,} || die
@@ -322,7 +395,11 @@ src_prepare() {
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
 
-	backports_apply_patches
+	# delete all pre-generated files; they're often stale anyway
+	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
+		cln-rpc/src/model.rs \
+		contrib/pyln-testing/pyln/testing/{node_pb2{,_grpc},primitives_pb2}.py \
+		doc/*.[0-9] || die
 
 	default
 
@@ -331,8 +408,12 @@ src_prepare() {
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local
-	sed -e 's: *\(-[IL]/usr/local/[^/ ]\+ *\)\+: :g' \
+	sed -e '/"Darwin-arm64"/,/^$/d' \
+		-e 's/ *\(-[IL]\$(\?\(CPATH\|LIBRARY_PATH\))\? *\)\+/ /g' \
 		-i configure Makefile || die
+
+	# we'll strip the binaries ourselves
+	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
 	# don't require running in a Git worktree
 	sed -e '/^import subprocess$/d' \
@@ -341,12 +422,6 @@ src_prepare() {
 		-i doc/conf.py || die
 
 	use python && distutils-r1_src_prepare
-
-	if use rust && ! has_version -b 'virtual/rust[rustfmt]' ; then
-		# suppress transitive dependency on rustfmt
-		sed -e 's/^\(tonic-build = \)\(.*\)$/\1{ version = \2, default-features = false, features = ["prost", "transport"] }/' \
-			-i cln-grpc/Cargo.toml || die
-	fi
 }
 
 src_configure() {
@@ -354,7 +429,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}-gentoo-${PR}"
+		VERSION="${MyPV}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
@@ -474,7 +549,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.11.0.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
@@ -490,30 +565,14 @@ src_install() {
 }
 
 pkg_preinst() {
-	has_version "<${CATEGORY}/${PN}-0.8" && had_pre_0_8_0=1
-
 	if [[ -e ${EROOT%/}/etc/lightning/config && ! -e ${EROOT%/}/etc/lightning/lightningd.conf ]] ; then
 		elog "Moving your /etc/lightning/config to /etc/lightning/lightningd.conf"
 		mv --no-clobber -- "${EROOT%/}/etc/lightning/"{config,lightningd.conf}
 	fi
-
-	[[ -e ${EROOT%/}/usr/bin/hsmtool ]] && had_hsmtool=1
 }
 
 pkg_postinst() {
 	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
 	elog " - Add your user(s) to the 'lightning' group."
 	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
-
-	# warn when upgrading from pre-0.8.0
-	if [[ ${had_pre_0_8_0} || -e ${EROOT%/}/var/lib/lightning/hsm_secret ]] ; then
-		ewarn 'This version of Core Lightning maintains its data files in network-specific'
-		ewarn 'subdirectories of its base directory. Your existing data files will be'
-		ewarn 'migrated automatically upon first startup of the new version.'
-	fi
-
-	if [[ ${had_hsmtool} ]] ; then
-		ewarn "Upstream has renamed the ${PORTAGE_COLOR_HILITE-${HILITE}}hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}} executable to ${PORTAGE_COLOR_HILITE-${HILITE}}lightning-hsmtool${PORTAGE_COLOR_NORMAL-${NORMAL}}."
-		ewarn 'Please adjust your scripts and workflows accordingly.'
-	fi
 }
