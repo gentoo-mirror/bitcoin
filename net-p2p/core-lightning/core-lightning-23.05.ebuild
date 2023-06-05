@@ -249,6 +249,7 @@ BDEPEND="
 		') )
 	)
 	python? (
+		${DISTUTILS_DEPS}
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
 		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
 		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
@@ -259,6 +260,7 @@ BDEPEND="
 	)
 	rust? ( ${RUST_DEPEND} )
 	sys-devel/gettext
+	virtual/pkgconfig
 "
 REQUIRED_USE="
 	|| ( postgres sqlite )
