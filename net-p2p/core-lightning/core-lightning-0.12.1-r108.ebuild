@@ -263,7 +263,10 @@ BDEPEND="
 			${PYTHON_DEPEND}
 		)
 	)
-	rust? ( ${RUST_DEPEND} )
+	rust? (
+		${RUST_DEPEND}
+		>=dev-libs/protobuf-3.20.3
+	)
 	sys-devel/gettext
 	virtual/pkgconfig
 "
