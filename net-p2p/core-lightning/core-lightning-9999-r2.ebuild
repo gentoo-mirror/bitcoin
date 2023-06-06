@@ -197,15 +197,13 @@ CRATES="
 inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
-PATCHES=(
-)
+EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
+EGIT_SUBMODULES=( '-*' external/gheap )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
-HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
+HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
 SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	rust? ( $(cargo_crate_uris) )"
-EGIT_REPO_URI="${HOMEPAGE}.git"
-EGIT_SUBMODULES=( '-*' 'external/gheap' )
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -245,6 +243,7 @@ BDEPEND="
 	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
+		rust? ( >=dev-python/grpcio-tools-1.51.0[${PYTHON_USEDEP}] )
 	')
 	doc? (
 		$(python_gen_any_dep '
@@ -259,6 +258,7 @@ BDEPEND="
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
 		') )
 	)
+	net-misc/curl[ssl]
 	python? (
 		${DISTUTILS_DEPS}
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
@@ -280,11 +280,16 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
+PATCHES=(
+	"${FILESDIR}/Makefile-grouped-targets.patch"
+)
+
 DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
 
 python_check_deps() {
-	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
-		"dev-python/mako[${PYTHON_USEDEP}]" ; } &&
+	{ [[ " ${python_need} " != *' mako '* ]] || {
+		python_has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
+		{ ! use rust || python_has_version "dev-python/grpcio-tools[${PYTHON_USEDEP}]" ; } ; } ; } &&
 	{ [[ " ${python_need} " != *' mkdocs '* ]] || python_has_version \
 		dev-python/{jinja,mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
@@ -332,6 +337,12 @@ src_prepare() {
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
+
+	# delete all pre-generated files; they're often stale anyway
+	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
+		cln-rpc/src/model.rs \
+		contrib/pyln-testing/pyln/testing/{node_pb2{,_grpc},primitives_pb2}.py \
+		doc/*.[0-9] || die
 
 	# only run 'install' command if there are actually files to install
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
