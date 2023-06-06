@@ -388,6 +388,8 @@ src_unpack() {
 }
 
 src_prepare() {
+	default
+
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile || die
 
@@ -400,8 +402,6 @@ src_prepare() {
 		cln-rpc/src/model.rs \
 		contrib/pyln-testing/pyln/testing/{node_pb2{,_grpc},primitives_pb2}.py \
 		doc/*.[0-9] || die
-
-	default
 
 	# only run 'install' command if there are actually files to install
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \

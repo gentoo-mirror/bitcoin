@@ -305,6 +305,8 @@ src_unpack() {
 }
 
 src_prepare() {
+	default
+
 	# hack to suppress tools/refresh-submodules.sh
 	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile || die
 
@@ -313,8 +315,6 @@ src_prepare() {
 	fi
 
 	backports_apply_patches
-
-	default
 
 	# only run 'install' command if there are actually files to install
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
