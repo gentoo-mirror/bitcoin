@@ -226,7 +226,7 @@ PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
 	>=dev-python/bitstring-3.1.9[${PYTHON_USEDEP}]
 	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
-	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-41.0.1[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
