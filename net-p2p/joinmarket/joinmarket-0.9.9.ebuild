@@ -28,7 +28,7 @@ REQUIRED_USE="qt5? ( client )"
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
-		>=dev-python/service_identity-21.1.0[${PYTHON_USEDEP}]
+		>=dev-python/service-identity-21.1.0[${PYTHON_USEDEP}]
 		>=dev-python/twisted-22.4.0[${PYTHON_USEDEP}]
 
 		client? (
