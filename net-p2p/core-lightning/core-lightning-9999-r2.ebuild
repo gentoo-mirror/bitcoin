@@ -363,7 +363,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local BUNDLED_LIBS="external/${CHOST}/libjsmn.a"
+	local BUNDLED_LIBS="external/build-${CHOST}/libjsmn.a"
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
