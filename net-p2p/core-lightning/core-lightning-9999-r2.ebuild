@@ -284,7 +284,6 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 PATCHES=(
-	"${FILESDIR}/Makefile-grouped-targets.patch"
 )
 
 DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
