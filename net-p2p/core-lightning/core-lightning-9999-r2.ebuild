@@ -224,10 +224,10 @@ CDEPEND="
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
-	>=dev-python/bitstring-3.1.9[${PYTHON_USEDEP}]
-	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
-	>=dev-python/cryptography-41.0.1[${PYTHON_USEDEP}]
-	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
+	>=dev-python/bitstring-3[${PYTHON_USEDEP}]
+	>=dev-python/coincurve-18[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-41[${PYTHON_USEDEP}]
+	>=dev-python/PySocks-1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
@@ -243,7 +243,10 @@ BDEPEND="
 	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
-		rust? ( >=dev-python/grpcio-tools-1.51.0[${PYTHON_USEDEP}] )
+		rust? (
+			>=dev-python/grpcio-tools-1[${PYTHON_USEDEP}]
+			>=dev-python/protobuf-python-4.21.12[${PYTHON_USEDEP}]
+		)
 	')
 	doc? (
 		$(python_gen_any_dep '
@@ -265,13 +268,13 @@ BDEPEND="
 		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
 		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 		test? (
-			>=dev-python/pytest-7.0.1[${PYTHON_USEDEP}]
+			>=dev-python/pytest-7[${PYTHON_USEDEP}]
 			${PYTHON_DEPEND}
 		)
 	)
 	rust? (
 		${RUST_DEPEND}
-		>=dev-libs/protobuf-3.20.3
+		>=dev-libs/protobuf-4
 	)
 	sys-devel/gettext
 	virtual/pkgconfig
@@ -291,7 +294,7 @@ DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
 python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || {
 		python_has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
-		{ ! use rust || python_has_version "dev-python/grpcio-tools[${PYTHON_USEDEP}]" ; } ; } ; } &&
+		{ ! use rust || python_has_version dev-python/{grpcio-tools,protobuf-python}"[${PYTHON_USEDEP}]" ; } ; } ; } &&
 	{ [[ " ${python_need} " != *' mkdocs '* ]] || python_has_version \
 		dev-python/{jinja,mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
