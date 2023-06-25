@@ -1,6 +1,5 @@
 acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/lightning 0: System-wide Lightning services user
-app-text/mrkd 0.2.0-r1: Write man pages using Markdown, and convert them to Roff or HTML
 dev-libs/libsecp256k1 0.1_pre20211216 0.1.0_pre20220803 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/libsecp256k1-zkp 0.1.0_pre20230515: A fork of libsecp256k1 with support for advanced and experimental features such as Confidential Assets and MuSig2
 dev-libs/protobuf 21.12: Google's Protocol Buffers - Extensible mechanism for serializing structured data
@@ -9,7 +8,6 @@ dev-python/base58 2.1.1: Base58 and Base58Check implementation compatible with w
 dev-python/bencoder-pyx 3.0.1: A fast bencode implementation in Cython
 dev-python/chromalog 1.0.5: Enhance Python with colored logging
 dev-python/coincurve 18.0.0: Cross-platform Python CFFI bindings for libsecp256k1
-dev-python/mistune 0.8.4-r1: The fastest markdown parser in pure Python
 dev-python/mkdocs-exclude 1.0.2: A mkdocs plugin that lets you exclude files or trees from your output.
 dev-python/mnemonic 0.20: Mnemonic code for generating deterministic keys, BIP39
 dev-python/protobuf-python 4.21.12: Google's Protocol Buffers - Python bindings
