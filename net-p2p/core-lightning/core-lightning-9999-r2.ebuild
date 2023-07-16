@@ -209,7 +209,7 @@ LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer doc +man +mkdocs postgres python rust sqlite test"
+IUSE="developer doc +man postgres python rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -249,17 +249,17 @@ BDEPEND="
 		)
 	')
 	doc? (
-		$(python_gen_any_dep '
+		python? ( $(python_gen_any_dep '
 			dev-python/recommonmark[${PYTHON_USEDEP}]
 			dev-python/sphinx[${PYTHON_USEDEP}]
 			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
-		')
-		mkdocs? ( $(python_gen_any_dep '
+		') )
+		$(python_gen_any_dep '
 			>=dev-python/jinja-3.1.0[${PYTHON_USEDEP}]
 			dev-python/mkdocs[${PYTHON_USEDEP}]
 			dev-python/mkdocs-exclude[${PYTHON_USEDEP}]
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
-		') )
+		')
 	)
 	net-misc/curl[ssl]
 	python? (
@@ -289,7 +289,7 @@ REQUIRED_USE="
 PATCHES=(
 )
 
-DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
+DOCS=( CHANGELOG.md README.md SECURITY.md )
 
 python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || {
@@ -434,20 +434,14 @@ src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
 	if use doc ; then
-		if use mkdocs ; then
-			local python_need='mkdocs'
+		local python_need='mkdocs'
+		python_setup
+		"${EPYTHON}" -m mkdocs build || die 'mkdocs failed'
+		rm -f site/sitemap.xml.gz  # avoid QA notice
+		HTML_DOCS+=( site/. )
+		if use python ; then
+			python_need='sphinx'
 			python_setup
-			"${EPYTHON}" -m mkdocs build || die 'mkdocs failed'
-			rm -f site/sitemap.xml.gz  # avoid QA notice
-			HTML_DOCS+=( site/. )
-			if use python ; then
-				python_need='sphinx'
-				python_setup
-			fi
-		else
-			local python_need='sphinx'
-			python_setup
-			build_sphinx doc
 		fi
 	fi
 
