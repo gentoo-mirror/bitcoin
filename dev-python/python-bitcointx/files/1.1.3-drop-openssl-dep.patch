@@ -1,0 +1,506 @@
+Adapted from https://github.com/Simplexum/python-bitcointx/commit/737a3f978b38153a6d35128c07b206ad37d6950c
+
+diff -Naur a/README.md b/README.md
+--- a/README.md	2022-02-14 09:20:46.000000000 +0000
++++ b/README.md	2023-07-28 19:27:42.584313843 +0000
+@@ -45,7 +45,6 @@
+ - Python >= 3.6
+ - [libsecp256k1](https://github.com/bitcoin-core/secp256k1)
+ - [libbitcoinconsensus](https://github.com/bitcoin/bitcoin/blob/master/doc/shared-libraries.md) (optional, for consensus-compatible script verification)
+-- [openssl](https://github.com/openssl/openssl) (optional, only for historical signatures verification)
+ 
+ It is recommended to build the libsecp256k1 library by hand, using the following commit:
+ 
+diff -Naur a/bitcointx/__init__.py b/bitcointx/__init__.py
+--- a/bitcointx/__init__.py	2022-02-14 09:20:46.000000000 +0000
++++ b/bitcointx/__init__.py	2023-07-28 19:27:42.586313863 +0000
+@@ -329,26 +329,6 @@
+     return bitcointx.util._secp256k1_library_path
+ 
+ 
+-def set_custom_openssl_path(path: str) -> None:
+-    """Set the custom path that will be used to load openssl library
+-    by bitcointx.core.key module (used only for non-strict signature checking).
+-    For the calling of this function to have any effect, it has to be called
+-    before importing any other modules except 'bitcointx' and 'bitcointx.util'
+-    """
+-
+-    if not os.path.isfile(path):
+-        raise ValueError('supplied path does not point to a file')
+-
+-    bitcointx.util._openssl_library_path = path
+-
+-
+-def get_custom_openssl_path() -> Optional[str]:
+-    """Return the path set earlier by set_custom_openssl_path().
+-    If custom path was not set, None is returned."""
+-
+-    return bitcointx.util._openssl_library_path
+-
+-
+ class ChainParamsContextVar(bitcointx.util.ContextVarsCompat):
+     params: ChainParamsBase
+ 
+diff -Naur a/bitcointx/core/_ripemd160.py b/bitcointx/core/_ripemd160.py
+--- a/bitcointx/core/_ripemd160.py	2022-02-14 09:20:46.000000000 +0000
++++ b/bitcointx/core/_ripemd160.py	2023-07-28 19:27:42.587313873 +0000
+@@ -11,14 +11,15 @@
+ """
+ Pure Python RIPEMD160 implementation.
+ The code is taken from Bitcoin Core's test framework.
+-This is needed because the openssl has deprecated ripemd160 algorithm
+-and it might not be available from hashlib anymore.
++This is needed because ripemd160 algorithm might not be available
++from hashlib anymore.
+ Runtime performance will be slow, but the alternative is having a compiled
+ dependency, which is too heavy.
+ 
+ IMPORTANT: code is not constant-time! This should NOT be used for working
+ with secret data, such as, for example  building a MAC (message
+ authentication code), etc.
++(btw, you cannot expect constant-time behavior from python code at all)
+ """
+ 
+ from typing import Tuple
+diff -Naur a/bitcointx/core/ecdasig_parse_der_lax.py b/bitcointx/core/ecdasig_parse_der_lax.py
+--- a/bitcointx/core/ecdasig_parse_der_lax.py	1970-01-01 00:00:00.000000000 +0000
++++ b/bitcointx/core/ecdasig_parse_der_lax.py	2023-07-28 19:27:42.588313884 +0000
+@@ -0,0 +1,185 @@
++# Copyright (C) 2018 The python-bitcointx developers
++#
++# This file is part of python-bitcointx.
++#
++# It is subject to the license terms in the LICENSE file found in the top-level
++# directory of this distribution.
++#
++# No part of python-bitcointx, including this file, may be copied, modified,
++# propagated, or distributed except according to the terms contained in the
++# LICENSE file.
++#
++# This code is ported from Bitcoin Core, and it was ported to there from
++# libsecp256k1 library
++# Original C code was Copyright (c) 2015 Pieter Wuille
++# Original C code was licensed under MIT software license.
++
++# This function is ported from the libsecp256k1 distribution and implements
++# DER parsing for ECDSA signatures, while supporting an arbitrary subset of
++# format violations.
++#
++# Supported violations include negative integers, excessive padding, garbage
++# at the end, and overly long length descriptors. This is safe to use in
++# Bitcoin because since the activation of BIP66, signatures are verified to be
++# strict DER before being passed to this module, and we know it supports all
++# violations present in the blockchain before that point.
++
++import ctypes
++
++from bitcointx.core.secp256k1 import (
++    _secp256k1, COMPACT_SIGNATURE_SIZE, secp256k1_context_verify
++)
++
++
++def ecdsa_signature_parse_der_lax(laxinput: bytes) -> bytes | None:  # noqa
++    rpos: int
++    rlen: int
++    spos: int
++    slen: int
++    pos: int = 0
++    lenbyte: int
++    tmpsig = bytearray([0 for _ in range(64)])
++    overflow: int = 0
++
++    inputlen = len(laxinput)
++
++    sig = ctypes.create_string_buffer(COMPACT_SIGNATURE_SIZE)
++
++    # Hack to initialize sig with a correctly-parsed but invalid signature. */
++    _secp256k1.secp256k1_ecdsa_signature_parse_compact(
++        secp256k1_context_verify, sig, bytes(tmpsig))
++
++    # Sequence tag byte
++    if pos == inputlen or laxinput[pos] != 0x30:
++        return None
++
++    pos += 1
++
++    # Sequence length bytes
++    if pos == inputlen:
++        return None
++
++    lenbyte = laxinput[pos]
++    pos += 1
++
++    if lenbyte & 0x80:
++        lenbyte -= 0x80
++        if lenbyte > inputlen - pos:
++            return None
++
++        pos += lenbyte
++
++    # Integer tag byte for R
++    if pos == inputlen or laxinput[pos] != 0x02:
++        return None
++
++    pos += 1
++
++    # Integer length for R
++    if pos == inputlen:
++        return None
++
++    lenbyte = laxinput[pos]
++    pos += 1
++
++    if lenbyte & 0x80:
++        lenbyte -= 0x80
++        if lenbyte > inputlen - pos:
++            return None
++
++        while lenbyte > 0 and laxinput[pos] == 0:
++            pos += 1
++            lenbyte -= 1
++
++        if lenbyte >= 4:
++            return None
++
++        rlen = 0
++        while lenbyte > 0:
++            rlen = (rlen << 8) + laxinput[pos]
++            pos += 1
++            lenbyte -= 1
++
++    else:
++        rlen = lenbyte
++
++    if rlen > inputlen - pos:
++        return None
++
++    rpos = pos
++    pos += rlen
++
++    # Integer tag byte for S
++    if pos == inputlen or laxinput[pos] != 0x02:
++        return None
++
++    pos += 1
++
++    # Integer length for S
++    if pos == inputlen:
++        return None
++
++    lenbyte = laxinput[pos]
++    pos += 1
++
++    if lenbyte & 0x80:
++        lenbyte -= 0x80
++        if lenbyte > inputlen - pos:
++            return None
++
++        while lenbyte > 0 and laxinput[pos] == 0:
++            pos += 1
++            lenbyte -= 1
++
++        if lenbyte >= 4:
++            return None
++
++        slen = 0
++        while lenbyte > 0:
++            slen = (slen << 8) + laxinput[pos]
++            pos += 1
++            lenbyte -= 1
++
++    else:
++        slen = lenbyte
++
++    if slen > inputlen - pos:
++        return None
++
++    spos = pos
++
++    # Ignore leading zeroes in R
++    while rlen > 0 and laxinput[rpos] == 0:
++        rlen -= 1
++        rpos += 1
++
++    # Copy R value
++    if rlen > 32:
++        overflow = 1
++    else:
++        tmpsig[32-rlen:32] = laxinput[rpos:rpos+rlen]
++
++    # Ignore leading zeroes in S
++    while slen > 0 and laxinput[spos] == 0:
++        slen -= 1
++        spos += 1
++
++    # Copy S value
++    if slen > 32:
++        overflow = 1
++    else:
++        tmpsig[64-slen:64] = laxinput[spos:spos+slen]
++
++    if not overflow:
++        parse_result = _secp256k1.secp256k1_ecdsa_signature_parse_compact(
++            secp256k1_context_verify, sig, bytes(tmpsig))
++        overflow = int(not(parse_result))
++
++    if overflow:
++        # Overwrite the result again with a correctly-parsed but invalid
++        # signature if parsing failed.
++        tmpsig = bytearray([0 for _ in range(64)])
++        _secp256k1.secp256k1_ecdsa_signature_parse_compact(
++            secp256k1_context_verify, sig, bytes(tmpsig))
++
++    return sig.raw
+diff -Naur a/bitcointx/core/key.py b/bitcointx/core/key.py
+--- a/bitcointx/core/key.py	2022-02-14 09:20:46.000000000 +0000
++++ b/bitcointx/core/key.py	2023-07-28 19:27:42.595313955 +0000
+@@ -23,7 +23,6 @@
+ import struct
+ import ctypes
+ import ctypes.util
+-import platform
+ import hashlib
+ import warnings
+ from abc import abstractmethod
+@@ -33,9 +32,7 @@
+ )
+ 
+ import bitcointx.core
+-from bitcointx.util import (
+-    no_bool_use_as_property, ensure_isinstance, _openssl_library_path
+-)
++from bitcointx.util import no_bool_use_as_property, ensure_isinstance
+ from bitcointx.core.secp256k1 import (
+     _secp256k1, secp256k1_context_sign, secp256k1_context_verify,
+     SIGNATURE_SIZE, COMPACT_SIGNATURE_SIZE,
+@@ -44,6 +41,7 @@
+     secp256k1_has_pubkey_recovery, secp256k1_has_ecdh,
+     secp256k1_has_privkey_negate, secp256k1_has_pubkey_negate
+ )
++from bitcointx.core.ecdasig_parse_der_lax import ecdsa_signature_parse_der_lax
+ 
+ BIP32_HARDENED_KEY_OFFSET = 0x80000000
+ 
+@@ -53,88 +51,10 @@
+ T_CExtPubKeyBase = TypeVar('T_CExtPubKeyBase', bound='CExtPubKeyBase')
+ T_unbounded = TypeVar('T_unbounded')
+ 
+-_openssl_library_handle: Optional[ctypes.CDLL] = None
+-
+-
+-class OpenSSLException(EnvironmentError):
+-    pass
+-
+-
+ class KeyDerivationFailException(RuntimeError):
+     pass
+ 
+ 
+-# Thx to Sam Devlin for the ctypes magic 64-bit fix (FIXME: should this
+-# be applied to every OpenSSL call whose return type is a pointer?)
+-def _check_res_openssl_void_p(val, func, args):  # type: ignore
+-    if val == 0:
+-        _ssl = _openssl_library_handle
+-        assert _ssl is not None
+-        errno = _ssl.ERR_get_error()
+-        errmsg = ctypes.create_string_buffer(120)
+-        _ssl.ERR_error_string_n(errno, errmsg, 120)
+-        raise OpenSSLException(errno, str(errmsg.value))
+-
+-    return ctypes.c_void_p(val)
+-
+-
+-def load_openssl_library(path: Optional[str] = None) -> Optional[ctypes.CDLL]:
+-
+-    if path is None:
+-        path_generic = ctypes.util.find_library('ssl')
+-        if platform.system() == 'Darwin':
+-            # Fix for bug in MacOSX 10.15 where libssl is not a real
+-            # library, and causes SIGABRT on load.
+-            # libssl.35 should be the most compatible lib available there.
+-            path = ctypes.util.find_library('ssl.35') or path_generic
+-        elif platform.system() == 'Windows':
+-            path = path_generic or 'libeay32'
+-        else:
+-            path = path_generic
+-
+-        if path is None:
+-            raise ImportError(
+-                "ssl library is required for non-strict signature "
+-                "verification, but it was not found")
+-
+-    try:
+-        handle: Optional[ctypes.CDLL] = ctypes.cdll.LoadLibrary(path)
+-        if handle and not getattr(handle, 'EC_KEY_new_by_curve_name', None):
+-            handle = None
+-    except OSError:
+-        handle = None
+-
+-    if not handle:
+-        return None
+-
+-    handle.EC_KEY_new_by_curve_name.errcheck = _check_res_openssl_void_p  # type: ignore
+-    handle.EC_KEY_new_by_curve_name.restype = ctypes.c_void_p
+-    handle.EC_KEY_new_by_curve_name.argtypes = [ctypes.c_int]
+-
+-    handle.ECDSA_SIG_free.restype = None
+-    handle.ECDSA_SIG_free.argtypes = [ctypes.c_void_p]
+-
+-    handle.ERR_error_string_n.restype = None
+-    handle.ERR_error_string_n.argtypes = [ctypes.c_ulong, ctypes.c_char_p, ctypes.c_size_t]
+-
+-    handle.ERR_get_error.restype = ctypes.c_ulong
+-    handle.ERR_get_error.argtypes = []
+-
+-    handle.d2i_ECDSA_SIG.restype = ctypes.c_void_p
+-    handle.d2i_ECDSA_SIG.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_long]
+-
+-    handle.i2d_ECDSA_SIG.restype = ctypes.c_int
+-    handle.i2d_ECDSA_SIG.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
+-
+-    # this specifies the curve used with ECDSA.
+-    _NIDsecp256k1 = 714  # from openssl/obj_mac.h
+-
+-    # test that OpenSSL supports secp256k1
+-    handle.EC_KEY_new_by_curve_name(_NIDsecp256k1)
+-
+-    return handle
+-
+-
+ def _raw_sig_has_low_r(raw_sig: bytes) -> bool:
+     compact_sig = ctypes.create_string_buffer(64)
+     result = _secp256k1.secp256k1_ecdsa_signature_serialize_compact(
+@@ -542,56 +462,31 @@
+     def verify_nonstrict(self, hash: bytes, sig: bytes) -> bool:
+         """Verify a non-strict DER signature"""
+ 
+-        global _openssl_library_handle
+-
+-        if not _openssl_library_handle:
+-            _openssl_library_handle = load_openssl_library(_openssl_library_path)
+-
+-        _ssl = _openssl_library_handle
+-
+-        if not _ssl:
+-            raise RuntimeError('openssl library is not available. verify_nonstrict is not functional.')
+-
+         ensure_isinstance(sig, (bytes, bytearray), 'signature')
+         ensure_isinstance(hash, (bytes, bytearray), 'hash')
+ 
+         if not sig:
+             return False
+ 
+-        # bitcoind uses ecdsa_signature_parse_der_lax() to load signatures that
+-        # may be not properly encoded, but is still accepted by openssl.
+-        # it allows a strict subset of violations what OpenSSL will accept.
+-        # ecdsa_signature_parse_der_lax() is present in secp256k1 contrib/
+-        # directory, but is not compiled by default. Bundling it with this
+-        # library will mean that it have to use C compiler at build stage, and
+-        # I would like to avoid this build-dependency.
+-        #
+-        # secp256k1_ecdsa_verify won't accept encoding violations for
+-        # signatures, so instead of ecdsa_signature_parse_der_lax() we use
+-        # decode-openssl/encode-openssl/decode-secp256k cycle
+-        # this means that we allow all encoding violatons that openssl allows.
+-        #
+-        # extra encode/decode is wasteful, but the result is that verification
+-        # is still roughly 4 times faster than with openssl's ECDSA_verify()
+-        norm_sig = ctypes.c_void_p(0)
+-        result = _ssl.d2i_ECDSA_SIG(ctypes.byref(norm_sig), ctypes.byref(ctypes.c_char_p(sig)), len(sig))
+-        if not result:
+-            return False
+-
+-        derlen = _ssl.i2d_ECDSA_SIG(norm_sig, 0)
+-        if derlen == 0:
+-            _ssl.ECDSA_SIG_free(norm_sig)
++        raw_sig = ecdsa_signature_parse_der_lax(sig)
++        if raw_sig is None:
+             return False
+ 
+-        norm_der = ctypes.create_string_buffer(derlen)
+-        result = _ssl.i2d_ECDSA_SIG(norm_sig, ctypes.byref(ctypes.pointer(norm_der)))
++        sig_size0 = ctypes.c_size_t()
++        sig_size0.value = SIGNATURE_SIZE
++        mb_sig = ctypes.create_string_buffer(SIGNATURE_SIZE)
+ 
+-        _ssl.ECDSA_SIG_free(norm_sig)
++        result = _secp256k1.secp256k1_ecdsa_signature_serialize_der(
++            secp256k1_context_verify, mb_sig, ctypes.byref(sig_size0), raw_sig)
++        if 1 != result:
++            assert(result == 0)
++            raise RuntimeError('secp256k1_ecdsa_signature_parse_der returned failure')
+ 
+-        if not result:
+-            return False
++        # secp256k1 creates signatures already in lower-S form, no further
++        # conversion needed.
++        norm_der = mb_sig.raw[:sig_size0.value]
+ 
+-        return self.verify(hash, norm_der.raw)
++        return self.verify(hash, norm_der)
+ 
+     @classmethod
+     def combine(cls: Type[T_CPubKey], *pubkeys: T_CPubKey,
+@@ -1024,7 +919,7 @@
+     _hardened_marker: str
+     _is_partial_path: bool  # True if path does not start from master (no 'm/')
+ 
+-    def __init__(
++    def __init__(  # noqa
+         self, path: Union[
+             str, 'BIP32PathGeneric[T_BIP32PathIndex]',  # noqa
+             Sequence[T_BIP32PathIndex],
+@@ -1139,7 +1034,7 @@
+     def __iter__(self) -> Iterator[T_BIP32PathIndex]:
+         return (n for n in self._indexes)
+ 
+-    def _parse_string(self, path: str, hardened_marker: Optional[str] = None
++    def _parse_string(self, path: str, hardened_marker: Optional[str] = None  # noqa
+                       ) -> Tuple[List[T_BIP32PathIndex], Optional[str], bool]:
+         """Parse bip32 derivation path.
+         returns a tuple (list_of_indexes, actual_hardened_marker).
+@@ -1304,7 +1199,7 @@
+ class BIP32PathTemplate(BIP32PathGeneric[BIP32PathTemplateIndex]):
+ 
+     @classmethod
+-    def _index_from_str(cls, index_str: str, *, is_hardened: bool
++    def _index_from_str(cls, index_str: str, *, is_hardened: bool  # noqa
+                         ) -> BIP32PathTemplateIndex:
+ 
+         if any(ch.isspace() for ch in index_str):
+diff -Naur a/bitcointx/core/secp256k1.py b/bitcointx/core/secp256k1.py
+--- a/bitcointx/core/secp256k1.py	2022-02-14 09:20:46.000000000 +0000
++++ b/bitcointx/core/secp256k1.py	2023-07-28 19:27:42.595313955 +0000
+@@ -142,6 +142,9 @@
+     _secp256k1.secp256k1_ecdsa_signature_parse_der.restype = ctypes.c_int
+     _secp256k1.secp256k1_ecdsa_signature_parse_der.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_size_t]
+ 
++    _secp256k1.secp256k1_ecdsa_signature_parse_compact.restype = ctypes.c_int
++    _secp256k1.secp256k1_ecdsa_signature_parse_compact.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p]
++
+     _secp256k1.secp256k1_ecdsa_signature_normalize.restype = ctypes.c_int
+     _secp256k1.secp256k1_ecdsa_signature_normalize.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p]
+ 
+diff -Naur a/bitcointx/util.py b/bitcointx/util.py
+--- a/bitcointx/util.py	2022-02-14 09:20:46.000000000 +0000
++++ b/bitcointx/util.py	2023-07-28 19:27:42.596313965 +0000
+@@ -28,7 +28,6 @@
+ )
+ 
+ _secp256k1_library_path: Optional[str] = None
+-_openssl_library_path: Optional[str] = None
+ 
+ _attributes_of_ABC = dir(ABC)
+ 
+diff -Naur a/release-notes.md b/release-notes.md
+--- a/release-notes.md	2022-02-14 09:20:46.000000000 +0000
++++ b/release-notes.md	2023-07-28 19:27:42.596313965 +0000
+@@ -2,6 +2,8 @@
+ 
+ ## v1.1.3
+ 
++Removed openssl dependency (ported `ecdsa_signature_parse_der_lax` from Bitcoin Core)
++
+ Fixed base58 and bech32 prefixes for signet addresses and keys (they had values based on some early
+ signet branch of Bitcoin Core, and they were changed afterwards, now they are the same as for testnet)
+ 

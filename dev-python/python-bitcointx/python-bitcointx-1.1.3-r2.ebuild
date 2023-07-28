@@ -20,8 +20,11 @@ KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
 	>=dev-libs/libsecp256k1-0.1_pre20211111
-	|| ( =dev-libs/openssl-compat-1.1* dev-libs/openssl:0/1.1 )
 "
+
+PATCHES=(
+	"${FILESDIR}/1.1.3-drop-openssl-dep.patch"
+)
 
 S="${WORKDIR}/${PN}-${PN}-v${MyPV}"
 
@@ -29,10 +32,6 @@ distutils_enable_tests unittest
 
 src_prepare() {
 	default
-
-	# https://github.com/Simplexum/python-bitcointx/issues/76
-	sed -e 's/ctypes\.util\.find_library('\''ssl'\'')$/'\''libssl.so.1.1'\''/' \
-		-i bitcointx/core/key.py || die
 
 	# don't install the unit tests
 	sed -e 's/\(packages=find_packages\)()/\1(exclude=["bitcointx.tests"])/' \
