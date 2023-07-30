@@ -11,5 +11,5 @@ LICENSE=MIT
 RDEPEND=>=dev-libs/boost-1.52.0:=[threads(+)] dev-libs/libevent:= >=dev-libs/univalue-1.0.4:=
 SLOT=0
 SRC_URI=https://github.com/bitcoin/bitcoin/archive/a62f0ed64f8bbbdfe6467ac5ce92ef5b5222d1bd.tar.gz -> bitcoin-v0.20.0.tar.gz https://bitcoinknots.org/files/0.20.x/0.20.0.knots20200614/bitcoin-0.20.0.knots20200614.patches.txz -> bitcoin-0.20.0.knots20200614.patches.tar.xz
-_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	8e3fb781f3258ae2757d1dfc2c7c170e	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	9d3a9a889a6fa62ae794f817c156491b	autotools	6ae9a4347149b19a112caa1182d03bde	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff
+_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	e356bb9aa600fd4b0dc539d33513bba7	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	9d3a9a889a6fa62ae794f817c156491b	autotools	6ae9a4347149b19a112caa1182d03bde	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff
 _md5_=836d47399e688556d22338e146164f79
