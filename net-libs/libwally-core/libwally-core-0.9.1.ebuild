@@ -10,6 +10,7 @@ DISTUTILS_USE_PEP517=setuptools
 inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
 BACKPORTS=(
+	0131dd7d746ed4c1ecfc0ebd9ea5b168cf15c7f9	# tests: fix test_transaction when built without swig support
 )
 
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
@@ -111,11 +112,6 @@ src_prepare() {
 	default
 	sed -e 's/==/=/g' -i configure.ac || die
 	sed -e '/^if not is_windows/,/make -j/d' -i setup.py || die
-
-	# work around https://github.com/ElementsProject/libwally-core/issues/407
-	sed -e '/^    def test_serialization/i\    @unittest.skipUnless(hasattr(libwally, "wally_tx_get_num_inputs"), "requires SWIG build")' \
-		-i src/test/test_transaction.py || die
-
 	eautoreconf
 	use java && java-pkg-opt-2_src_prepare
 }
