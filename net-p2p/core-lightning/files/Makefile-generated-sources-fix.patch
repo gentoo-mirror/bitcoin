@@ -1,0 +1,72 @@
+From 1eb7004c398d4a58932e62da29e37da5bda56577 Mon Sep 17 00:00:00 2001
+From: Matt Whitlock <c-lightning@mattwhitlock.name>
+Date: Wed, 9 Aug 2023 02:23:12 -0400
+Subject: [PATCH] Makefile: unconditionally define rules to regenerate sources
+
+Even if we're not building the Rust components, we still need to know
+how to regenerate the protobuf Python components.
+
+Fixes: https://github.com/ElementsProject/lightning/issues/6536
+Changelog-None
+---
+ Makefile          | 6 ++----
+ cln-grpc/Makefile | 2 ++
+ cln-rpc/Makefile  | 3 +++
+ 3 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index bb4bf5ee2..831e6e5c4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -363,9 +363,8 @@ include tests/plugins/Makefile
+ ifneq ($(FUZZING),0)
+ 	include tests/fuzz/Makefile
+ endif
+-ifneq ($(RUST),0)
+-	include cln-rpc/Makefile
+-	include cln-grpc/Makefile
++include cln-rpc/Makefile
++include cln-grpc/Makefile
+ 
+ $(MSGGEN_GENALL)&: doc/schemas/*.request.json doc/schemas/*.schema.json
+ 	PYTHONPATH=contrib/msggen python3 contrib/msggen/msggen/__main__.py
+@@ -388,7 +387,6 @@ $(GRPC_GEN)&: cln-grpc/proto/node.proto cln-grpc/proto/primitives.proto
+ 	python -m grpc_tools.protoc -I cln-grpc/proto cln-grpc/proto/primitives.proto --python_out=$(GRPC_PATH)/ --experimental_allow_proto3_optional
+ 	find $(GRPC_DIR)/ -type f -name "*.py" -print0 | xargs -0 sed -i'.bak' -e 's/^import \(.*\)_pb2 as .*__pb2/from pyln.grpc import \1_pb2 as \1__pb2/g'
+ 	find $(GRPC_DIR)/ -type f -name "*.py.bak" -delete
+-endif
+ 
+ # We make pretty much everything depend on these.
+ ALL_GEN_HEADERS := $(filter %gen.h,$(ALL_C_HEADERS))
+diff --git a/cln-grpc/Makefile b/cln-grpc/Makefile
+index 214579c23..10d8d8583 100644
+--- a/cln-grpc/Makefile
++++ b/cln-grpc/Makefile
+@@ -6,7 +6,9 @@ CLN_GRPC_GENALL = cln-grpc/proto/node.proto \
+ 	cln-grpc/src/convert.rs \
+ 	cln-grpc/src/server.rs
+ 
++ifneq ($(RUST),0)
+ DEFAULT_TARGETS += $(CLN_GRPC_EXAMPLES) $(CLN_GRPC_GENALL)
++endif
+ 
+ MSGGEN_GENALL += $(CLN_GRPC_GENALL) contrib/pyln-testing/pyln/testing/grpc2py.py
+ 
+diff --git a/cln-rpc/Makefile b/cln-rpc/Makefile
+index 3582eeb79..3fadf413d 100644
+--- a/cln-rpc/Makefile
++++ b/cln-rpc/Makefile
+@@ -4,7 +4,10 @@ cln-rpc-wrongdir:
+ CLN_RPC_EXAMPLES := target/${RUST_PROFILE}/examples/cln-rpc-getinfo
+ CLN_RPC_GENALL = cln-rpc/src/model.rs
+ CLN_RPC_SOURCES = $(shell find cln-rpc -name *.rs) ${CLN_RPC_GENALL}
++
++ifneq ($(RUST),0)
+ DEFAULT_TARGETS += $(CLN_RPC_EXAMPLES) $(CLN_RPC_GENALL)
++endif
+ 
+ MSGGEN_GENALL += $(CLN_RPC_GENALL)
+ 
+-- 
+2.41.0
+

@@ -287,6 +287,7 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 PATCHES=(
+	"${FILESDIR}/Makefile-generated-sources-fix.patch"
 )
 
 DOCS=( CHANGELOG.md README.md SECURITY.md )
@@ -346,7 +347,7 @@ src_prepare() {
 	# delete all pre-generated files; they're often stale anyway
 	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
 		cln-rpc/src/model.rs \
-		contrib/pyln-testing/pyln/testing/{node_pb2{,_grpc},primitives_pb2}.py \
+		contrib/pyln-grpc-proto/pyln/grpc/{node_pb2{,_grpc},primitives_pb2}.py \
 		doc/*.[0-9] || die
 
 	# only run 'install' command if there are actually files to install
