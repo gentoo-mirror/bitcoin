@@ -354,7 +354,10 @@ src_prepare() {
 	default
 
 	# hack to suppress tools/refresh-submodules.sh
-	sed -e '/^submodcheck:/,/^$/{/^\t/d}' -i external/Makefile || die
+	# and spurious rebuilds due to missing lowdown sources
+	sed -e '/^submodcheck:/,/^$/{/^\t/d}' \
+		-e '/\bexternal\/lowdown\b/d' \
+		-i external/Makefile || die
 
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
