@@ -6,11 +6,11 @@ EAPI=7
 PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Twisted-based Tor controller client, with state-tracking and config abstractions"
 HOMEPAGE="https://github.com/meejah/txtorcon https://pypi.org/project/txtorcon/ https://txtorcon.readthedocs.org"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz
+SRC_URI+="
 	https://github.com/meejah/txtorcon/commit/9f098a89c78199af26b17cb2adcf10c9057e62d8.patch?full_index=1 -> ${PN}-fix-tests-python3_12.patch"
 
 LICENSE="MIT"
