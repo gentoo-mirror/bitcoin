@@ -10,7 +10,6 @@ DISTUTILS_USE_PEP517=setuptools
 inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
 BACKPORTS=(
-	0131dd7d746ed4c1ecfc0ebd9ea5b168cf15c7f9	# tests: fix test_transaction when built without swig support
 )
 
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
