@@ -12,201 +12,211 @@ DISTUTILS_USE_PEP517=poetry
 
 CARGO_OPTIONAL=1
 CRATES="
-	aho-corasick-0.7.20
-	anyhow-1.0.68
-	asn1-rs-0.5.1
+	aho-corasick-1.0.1
+	anyhow-1.0.71
+	asn1-rs-0.5.2
 	asn1-rs-derive-0.4.0
 	asn1-rs-impl-0.1.0
-	async-stream-0.3.3
-	async-stream-impl-0.3.3
-	async-trait-0.1.60
+	async-stream-0.3.5
+	async-stream-impl-0.3.5
+	async-trait-0.1.68
 	autocfg-1.1.0
-	axum-0.6.1
-	axum-core-0.3.0
+	axum-0.6.18
+	axum-core-0.3.4
 	base64-0.13.1
+	base64-0.21.2
 	bech32-0.9.1
 	bitcoin-0.29.2
 	bitcoin_hashes-0.11.0
 	bitflags-1.3.2
-	bumpalo-3.11.1
-	bytes-1.3.0
-	cc-1.0.78
+	bumpalo-3.13.0
+	bytes-1.4.0
+	cc-1.0.79
 	cfg-if-1.0.0
-	data-encoding-2.3.3
-	der-parser-8.1.0
-	displaydoc-0.2.3
-	either-1.8.0
+	data-encoding-2.4.0
+	der-parser-8.2.0
+	displaydoc-0.2.4
+	either-1.8.1
 	env_logger-0.10.0
-	errno-0.2.8
+	errno-0.3.1
 	errno-dragonfly-0.1.2
-	fastrand-1.8.0
+	fastrand-1.9.0
 	fixedbitset-0.4.2
 	fnv-1.0.7
-	futures-0.3.25
-	futures-channel-0.3.25
-	futures-core-0.3.25
-	futures-executor-0.3.25
-	futures-io-0.3.25
-	futures-macro-0.3.25
-	futures-sink-0.3.25
-	futures-task-0.3.25
-	futures-util-0.3.25
-	getrandom-0.2.8
-	h2-0.3.15
+	futures-0.3.28
+	futures-channel-0.3.28
+	futures-core-0.3.28
+	futures-executor-0.3.28
+	futures-io-0.3.28
+	futures-macro-0.3.28
+	futures-sink-0.3.28
+	futures-task-0.3.28
+	futures-util-0.3.28
+	getrandom-0.2.9
+	h2-0.3.19
 	hashbrown-0.12.3
-	heck-0.4.0
+	heck-0.4.1
 	hermit-abi-0.2.6
+	hermit-abi-0.3.1
 	hex-0.4.3
-	http-0.2.8
+	http-0.2.9
 	http-body-0.4.5
-	http-range-header-0.3.0
 	httparse-1.8.0
 	httpdate-1.0.2
 	humantime-2.1.0
-	hyper-0.14.23
+	hyper-0.14.26
 	hyper-timeout-0.4.1
-	indexmap-1.9.2
+	indexmap-1.9.3
 	instant-0.1.12
-	io-lifetimes-1.0.3
-	is-terminal-0.4.2
+	io-lifetimes-1.0.11
+	is-terminal-0.4.7
 	itertools-0.10.5
-	itoa-1.0.5
-	js-sys-0.3.60
+	itoa-1.0.6
+	js-sys-0.3.63
 	lazy_static-1.4.0
-	libc-0.2.139
-	linux-raw-sys-0.1.4
-	log-0.4.17
+	libc-0.2.144
+	linux-raw-sys-0.3.8
+	log-0.4.18
 	matchit-0.7.0
 	memchr-2.5.0
-	mime-0.3.16
+	mime-0.3.17
 	minimal-lexical-0.2.1
-	mio-0.8.5
+	mio-0.8.8
 	multimap-0.8.3
-	nom-7.1.1
+	nom-7.1.3
 	num-bigint-0.4.3
 	num-integer-0.1.45
 	num-traits-0.2.15
 	num_cpus-1.15.0
 	oid-registry-0.6.1
-	once_cell-1.16.0
-	pem-1.1.0
+	once_cell-1.17.2
+	pem-1.1.1
 	percent-encoding-2.2.0
-	petgraph-0.6.2
-	pin-project-1.0.12
-	pin-project-internal-1.0.12
+	petgraph-0.6.3
+	pin-project-1.1.0
+	pin-project-internal-1.1.0
 	pin-project-lite-0.2.9
 	pin-utils-0.1.0
 	ppv-lite86-0.2.17
-	prettyplease-0.1.22
-	proc-macro2-1.0.49
-	prost-0.11.5
-	prost-build-0.11.5
-	prost-derive-0.11.5
-	prost-types-0.11.5
-	quote-1.0.23
+	prettyplease-0.1.25
+	proc-macro2-1.0.59
+	prost-0.11.9
+	prost-build-0.11.9
+	prost-derive-0.11.9
+	prost-types-0.11.9
+	quote-1.0.28
 	rand-0.8.5
 	rand_chacha-0.3.1
 	rand_core-0.6.4
 	rcgen-0.10.0
-	redox_syscall-0.2.16
-	regex-1.7.0
-	regex-syntax-0.6.28
-	remove_dir_all-0.5.3
+	redox_syscall-0.3.5
+	regex-1.8.3
+	regex-syntax-0.7.2
 	ring-0.16.20
 	rusticata-macros-4.1.0
-	rustix-0.36.5
-	rustls-0.20.7
-	rustls-pemfile-1.0.1
-	rustversion-1.0.11
-	ryu-1.0.12
+	rustix-0.37.19
+	rustls-0.20.8
+	rustls-pemfile-1.0.2
+	rustversion-1.0.12
+	ryu-1.0.13
 	sct-0.7.0
-	secp256k1-0.24.2
+	secp256k1-0.24.3
 	secp256k1-sys-0.6.1
-	serde-1.0.151
-	serde_derive-1.0.151
-	serde_json-1.0.91
-	slab-0.4.7
-	socket2-0.4.7
+	serde-1.0.163
+	serde_derive-1.0.163
+	serde_json-1.0.96
+	slab-0.4.8
+	socket2-0.4.9
 	spin-0.5.2
-	syn-1.0.107
-	sync_wrapper-0.1.1
+	syn-1.0.109
+	syn-2.0.18
+	sync_wrapper-0.1.2
 	synstructure-0.12.6
-	tempfile-3.3.0
-	termcolor-1.1.3
-	thiserror-1.0.38
-	thiserror-impl-1.0.38
-	time-0.3.17
-	time-core-0.1.0
-	time-macros-0.2.6
-	tokio-1.24.2
+	tempfile-3.5.0
+	termcolor-1.2.0
+	thiserror-1.0.40
+	thiserror-impl-1.0.40
+	time-0.3.21
+	time-core-0.1.1
+	time-macros-0.2.9
+	tokio-1.28.2
 	tokio-io-timeout-1.2.0
-	tokio-macros-1.8.2
+	tokio-macros-2.1.0
 	tokio-rustls-0.23.4
-	tokio-stream-0.1.11
-	tokio-util-0.7.4
+	tokio-stream-0.1.14
+	tokio-util-0.7.8
 	tonic-0.8.3
 	tonic-build-0.8.4
 	tower-0.4.13
-	tower-http-0.3.5
 	tower-layer-0.3.2
 	tower-service-0.3.2
 	tracing-0.1.37
-	tracing-attributes-0.1.23
-	tracing-core-0.1.30
+	tracing-attributes-0.1.24
+	tracing-core-0.1.31
 	tracing-futures-0.2.5
-	try-lock-0.2.3
-	unicode-ident-1.0.6
+	try-lock-0.2.4
+	unicode-ident-1.0.9
 	unicode-xid-0.2.4
 	untrusted-0.7.1
 	want-0.3.0
 	wasi-0.11.0+wasi-snapshot-preview1
-	wasm-bindgen-0.2.83
-	wasm-bindgen-backend-0.2.83
-	wasm-bindgen-macro-0.2.83
-	wasm-bindgen-macro-support-0.2.83
-	wasm-bindgen-shared-0.2.83
-	web-sys-0.3.60
+	wasm-bindgen-0.2.86
+	wasm-bindgen-backend-0.2.86
+	wasm-bindgen-macro-0.2.86
+	wasm-bindgen-macro-support-0.2.86
+	wasm-bindgen-shared-0.2.86
+	web-sys-0.3.63
 	webpki-0.22.0
-	which-4.3.0
+	which-4.4.0
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.5
 	winapi-x86_64-pc-windows-gnu-0.4.0
-	windows-sys-0.42.0
-	windows_aarch64_gnullvm-0.42.0
-	windows_aarch64_msvc-0.42.0
-	windows_i686_gnu-0.42.0
-	windows_i686_msvc-0.42.0
-	windows_x86_64_gnu-0.42.0
-	windows_x86_64_gnullvm-0.42.0
-	windows_x86_64_msvc-0.42.0
+	windows-sys-0.45.0
+	windows-sys-0.48.0
+	windows-targets-0.42.2
+	windows-targets-0.48.0
+	windows_aarch64_gnullvm-0.42.2
+	windows_aarch64_gnullvm-0.48.0
+	windows_aarch64_msvc-0.42.2
+	windows_aarch64_msvc-0.48.0
+	windows_i686_gnu-0.42.2
+	windows_i686_gnu-0.48.0
+	windows_i686_msvc-0.42.2
+	windows_i686_msvc-0.48.0
+	windows_x86_64_gnu-0.42.2
+	windows_x86_64_gnu-0.48.0
+	windows_x86_64_gnullvm-0.42.2
+	windows_x86_64_gnullvm-0.48.0
+	windows_x86_64_msvc-0.42.2
+	windows_x86_64_msvc-0.48.0
 	x509-parser-0.14.0
-	yasna-0.5.1
+	yasna-0.5.2
 "
 
-inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
+inherit bash-completion-r1 cargo distutils-r1 git-r3 postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV/_}
+EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
+EGIT_SUBMODULES=( '-*' external/gheap )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
-HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
-	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
-	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
+HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
+SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	rust? ( $(cargo_crate_uris) )"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE="developer doc experimental +man +mkdocs postgres python rust sqlite test"
-RESTRICT="mirror !test? ( test )"
+#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+KEYWORDS=""
+IUSE="developer doc +man postgres python rust sqlite test"
+RESTRICT="!test? ( test )"
 
 CDEPEND="
-	>=dev-libs/gmp-6.1.2:=
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.8.9:=[elements]
+	>=net-libs/libwally-core-0.9.0:0/0.9.0[elements]
+	!>=net-libs/libwally-core-0.9.1
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )
@@ -215,10 +225,10 @@ CDEPEND="
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
-	>=dev-python/bitstring-3.1.9[${PYTHON_USEDEP}]
-	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
-	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
-	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
+	>=dev-python/bitstring-3[${PYTHON_USEDEP}]
+	>=dev-python/coincurve-18[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}]
+	>=dev-python/PySocks-1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
@@ -234,33 +244,38 @@ BDEPEND="
 	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
+		rust? (
+			>=dev-python/grpcio-tools-1[${PYTHON_USEDEP}]
+			>=dev-python/protobuf-python-4.21.12[${PYTHON_USEDEP}]
+		)
 	')
 	doc? (
-		$(python_gen_any_dep '
+		python? ( $(python_gen_any_dep '
 			dev-python/recommonmark[${PYTHON_USEDEP}]
 			dev-python/sphinx[${PYTHON_USEDEP}]
 			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
-		')
-		mkdocs? ( $(python_gen_any_dep '
+		') )
+		$(python_gen_any_dep '
 			>=dev-python/jinja-3.1.0[${PYTHON_USEDEP}]
 			dev-python/mkdocs[${PYTHON_USEDEP}]
 			dev-python/mkdocs-exclude[${PYTHON_USEDEP}]
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
-		') )
+		')
 	)
+	net-misc/curl[ssl]
 	python? (
 		${DISTUTILS_DEPS}
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
 		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
 		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 		test? (
-			>=dev-python/pytest-7.0.1[${PYTHON_USEDEP}]
+			>=dev-python/pytest-7[${PYTHON_USEDEP}]
 			${PYTHON_DEPEND}
 		)
 	)
 	rust? (
 		${RUST_DEPEND}
-		>=dev-libs/protobuf-3.20.3
+		>=dev-libs/protobuf-4
 	)
 	sys-devel/gettext
 	virtual/pkgconfig
@@ -272,12 +287,16 @@ REQUIRED_USE="
 "
 # FIXME: bundled deps: ccan
 
-S=${WORKDIR}/${MyPN}-${MyPV}
-DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,GOSSIP_STORE,PLUGINS,TOR}.md )
+PATCHES=(
+	"${FILESDIR}/Makefile-generated-sources-fix.patch"
+)
+
+DOCS=( CHANGELOG.md README.md SECURITY.md )
 
 python_check_deps() {
-	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
-		"dev-python/mako[${PYTHON_USEDEP}]" ; } &&
+	{ [[ " ${python_need} " != *' mako '* ]] || {
+		python_has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
+		{ ! use rust || python_has_version dev-python/{grpcio-tools,protobuf-python}"[${PYTHON_USEDEP}]" ; } ; } ; } &&
 	{ [[ " ${python_need} " != *' mkdocs '* ]] || python_has_version \
 		dev-python/{jinja,mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
@@ -293,23 +312,6 @@ python_foreach_subdir() {
 	done
 }
 
-pkg_pretend() {
-	if [[ ! "${REPLACE_RUNNING_CLIGHTNING}" ]] &&
-		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
-		{ has_version "<${CATEGORY}/${PN}-$(ver_cut 1-3)" ||
-			has_version ">=${CATEGORY}/${PN}-$(ver_cut 1-2).$(($(ver_cut 3)+1))" ; } &&
-		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ||
-			-x "${EROOT%/}/run/openrc/started/lightningd" ]]
-	then
-		eerror "A potentially incompatible version of the lightningd daemon is currently" \
-			'\n'"running. Installing version ${PV} would likely cause the running daemon" \
-			'\n'"to fail when it next spawns a subdaemon process. Please stop the running" \
-			'\n'"daemon and reattempt this installation, or set REPLACE_RUNNING_CLIGHTNING=1" \
-			'\n'"if you are certain you know what you are doing."
-		die 'lightningd is running'
-	fi
-}
-
 pkg_setup() {
 	if use postgres ; then
 		postgres_pkg_setup
@@ -320,12 +322,11 @@ pkg_setup() {
 }
 
 src_unpack() {
-	unpack "${P}.tar.gz"
+	git-r3_src_unpack
+	find "${S}/external" -depth -mindepth 1 -maxdepth 1 -type d ! -name 'gheap' -delete || die
 	cd "${S}/external" || die
-	rm -r */ || die
-	unpack jsmn-1.0.0.tar.gz gheap-67fc83b.tar.gz
+	unpack jsmn-1.0.0.tar.gz
 	mv jsmn{-1.0.0,} || die
-	mv gheap{-*,} || die
 
 	if use rust ; then
 		set ${CRATES}
@@ -347,6 +348,12 @@ src_prepare() {
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
 
+	# delete all pre-generated files; they're often stale anyway
+	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
+		cln-rpc/src/model.rs \
+		contrib/pyln-grpc-proto/pyln/grpc/{node_pb2{,_grpc},primitives_pb2}.py \
+		doc/*.[0-9] || die
+
 	# only run 'install' command if there are actually files to install
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
 		-i Makefile || die
@@ -359,26 +366,14 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
-	# don't require running in a Git worktree
-	sed -e '/^import subprocess$/d' \
-		-e 's/^\(version = \).*$/\1"'"$(ver_cut 1-3)"'"/' \
-		-e 's/^\(release = \).*$/\1"'"${MyPV}-gentoo-${PR}"'"/' \
-		-i doc/conf.py || die
-
-	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
-	[[ ${PV} != *([.[:digit:]]) ]] ||
-		sed -ne '/^bool is_released_version(void)/{a { return true; }
-			p;:x;n;/^}$/d;bx};p' -i common/version.c || die
-
 	use python && distutils-r1_src_prepare
 }
 
 src_configure() {
-	local BUNDLED_LIBS="external/${CHOST}/libjsmn.a"
+	local BUNDLED_LIBS="external/build-${CHOST}/libjsmn.a"
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}-gentoo-${PR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
@@ -425,7 +420,6 @@ src_configure() {
 		COPTFLAGS="${CFLAGS}" \
 		--prefix="${EPREFIX}"/usr \
 		$(use_enable developer) \
-		$(use_enable experimental{,-features}) \
 		--disable-compat \
 		--disable-valgrind \
 		--disable-static \
@@ -445,20 +439,14 @@ src_compile() {
 	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
 	if use doc ; then
-		if use mkdocs ; then
-			local python_need='mkdocs'
+		local python_need='mkdocs'
+		python_setup
+		"${EPYTHON}" -m mkdocs build || die 'mkdocs failed'
+		rm -f site/sitemap.xml.gz  # avoid QA notice
+		HTML_DOCS+=( site/. )
+		if use python ; then
+			python_need='sphinx'
 			python_setup
-			"${EPYTHON}" -m mkdocs build || die 'mkdocs failed'
-			rm -f site/sitemap.xml.gz  # avoid QA notice
-			HTML_DOCS+=( site/. )
-			if use python ; then
-				python_need='sphinx'
-				python_setup
-			fi
-		else
-			local python_need='sphinx'
-			python_setup
-			build_sphinx doc
 		fi
 	fi
 
@@ -510,7 +498,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-23.02.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-23.08.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
