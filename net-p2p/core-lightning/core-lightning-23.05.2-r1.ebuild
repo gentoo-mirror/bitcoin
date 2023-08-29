@@ -222,6 +222,13 @@ PYTHON_DEPEND="
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
+SPHINX_DEPEND="
+	$(python_gen_any_dep '
+		dev-python/recommonmark[${PYTHON_USEDEP}]
+		dev-python/sphinx[${PYTHON_USEDEP}]
+		dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
+	')
+"
 RDEPEND="${CDEPEND}
 	acct-group/lightning
 	acct-user/lightning
@@ -237,17 +244,14 @@ BDEPEND="
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
 	')
 	doc? (
-		$(python_gen_any_dep '
-			dev-python/recommonmark[${PYTHON_USEDEP}]
-			dev-python/sphinx[${PYTHON_USEDEP}]
-			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
-		')
 		mkdocs? ( $(python_gen_any_dep '
 			>=dev-python/jinja-3.1.0[${PYTHON_USEDEP}]
 			dev-python/mkdocs[${PYTHON_USEDEP}]
 			dev-python/mkdocs-exclude[${PYTHON_USEDEP}]
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
 		') )
+		!mkdocs? ( ${SPHINX_DEPEND} )
+		python? ( ${SPHINX_DEPEND} )
 	)
 	python? (
 		${DISTUTILS_DEPS}
