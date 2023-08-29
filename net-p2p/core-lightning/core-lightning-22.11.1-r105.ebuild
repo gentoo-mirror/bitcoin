@@ -245,7 +245,6 @@ BDEPEND="
 	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
-		rust? ( >=dev-python/grpcio-tools-1.47.0[${PYTHON_USEDEP}] )
 	')
 	doc? ( $(python_gen_any_dep '
 		dev-python/recommonmark[${PYTHON_USEDEP}]
@@ -286,9 +285,8 @@ EGIT_CHECKOUT_DIR=${S}
 DOCS=( CHANGELOG.md README.md doc/{BACKUP,FAQ,PLUGINS,TOR}.md )
 
 python_check_deps() {
-	{ [[ " ${python_need} " != *' mako '* ]] || {
-		python_has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
-		{ ! use rust || python_has_version "dev-python/grpcio-tools[${PYTHON_USEDEP}]" ; } ; } ; } &&
+	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
+		dev-python/mako"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
 		dev-python/{recommonmark,sphinx{,-rtd-theme}}"[${PYTHON_USEDEP}]" ; }
 }
@@ -410,7 +408,9 @@ src_prepare() {
 		doc/*.[0-9] || die
 
 	# only run 'install' command if there are actually files to install
+	# and don't unconditionally regenerate Python sources
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
+		-e '/^default:/s/\bgen\b\|\$(PYTHON_GENERATED)//g' \
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local

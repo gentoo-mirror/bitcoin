@@ -244,10 +244,6 @@ BDEPEND="
 	man? ( app-text/lowdown )
 	$(python_gen_any_dep '
 		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
-		rust? (
-			>=dev-python/grpcio-tools-1[${PYTHON_USEDEP}]
-			>=dev-python/protobuf-python-4.21.12[${PYTHON_USEDEP}]
-		)
 	')
 	doc? (
 		python? ( $(python_gen_any_dep '
@@ -262,7 +258,6 @@ BDEPEND="
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
 		')
 	)
-	net-misc/curl[ssl]
 	python? (
 		${DISTUTILS_DEPS}
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
@@ -291,9 +286,8 @@ S=${WORKDIR}/${MyPN}-${MyPV}
 DOCS=( CHANGELOG.md README.md SECURITY.md )
 
 python_check_deps() {
-	{ [[ " ${python_need} " != *' mako '* ]] || {
-		python_has_version "dev-python/mako[${PYTHON_USEDEP}]" &&
-		{ ! use rust || python_has_version dev-python/{grpcio-tools,protobuf-python}"[${PYTHON_USEDEP}]" ; } ; } ; } &&
+	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
+		dev-python/mako"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' mkdocs '* ]] || python_has_version \
 		dev-python/{jinja,mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
@@ -364,7 +358,9 @@ src_prepare() {
 	fi
 
 	# only run 'install' command if there are actually files to install
+	# and don't unconditionally regenerate Python sources
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
+		-e '/^default:/s/\bgen\b\|\$(PYTHON_GENERATED)//g' \
 		-i Makefile || die
 
 	# don't look for headers or libraries beneath /usr/local
