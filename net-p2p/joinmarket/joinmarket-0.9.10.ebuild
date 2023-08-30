@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
-PYTHON_REQ_USE="sqlite"
+PYTHON_REQ_USE="sqlite,ssl"
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
@@ -21,15 +21,20 @@ SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="+client daemon qt5"
-REQUIRED_USE="qt5? ( client )"
+KEYWORDS="~amd64 ~arm64 ~x86"
+IUSE="+client +daemon qt5"
+REQUIRED_USE="
+	client? ( daemon )
+	qt5? ( client )
+"
 
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
+		>=dev-python/pyaes-1.6.1[${PYTHON_USEDEP}]
 		>=dev-python/service-identity-21.1.0[${PYTHON_USEDEP}]
 		>=dev-python/twisted-22.4.0[${PYTHON_USEDEP}]
+		>=dev-python/txtorcon-22.0.0[${PYTHON_USEDEP}]
 
 		client? (
 			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
@@ -37,16 +42,17 @@ RDEPEND="
 			>=dev-python/bencoder-pyx-3.0.1[${PYTHON_USEDEP}]
 			>=dev-python/klein-20.6.0[${PYTHON_USEDEP}]
 			>=dev-python/mnemonic-0.20[${PYTHON_USEDEP}]
-			>=dev-python/pyaes-1.6.1[${PYTHON_USEDEP}]
 			>=dev-python/pyjwt-2.4.0[${PYTHON_USEDEP}]
 			>=dev-python/python-bitcointx-1.1.3[${PYTHON_USEDEP}]
+			>=dev-python/werkzeug-2.2.3[${PYTHON_USEDEP}]
 		)
 
 		daemon? (
 			>=dev-python/cryptography-3.3.2[${PYTHON_USEDEP}]
+			amd64? ( >=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}] )
+			arm64? ( >=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}] )
 			>=dev-python/libnacl-1.8.0[${PYTHON_USEDEP}]
-			>=dev-python/pyopenssl-21.0.0[${PYTHON_USEDEP}]
-			>=dev-python/txtorcon-22.0.0[${PYTHON_USEDEP}]
+			>=dev-python/pyopenssl-23.2.0[${PYTHON_USEDEP}]
 		)
 
 		qt5? (
@@ -73,9 +79,13 @@ BDEPEND="
 		)
 	')
 
+	qt5? (
+		dev-qt/qtwidgets
+	)
+
 	test? (
 		>=net-p2p/bitcoin-cli-0.20
-		>=net-p2p/bitcoind-0.20
+		>=net-p2p/bitcoind-0.20[berkdb,wallet]
 	)
 "
 
@@ -165,8 +175,10 @@ src_install() {
 		} | sort | uniq -u
 	}
 
-	python_domodule $(scripts_to_install)
-	python_doscript $(scripts_to_install !)
+	local install=( $(scripts_to_install) )
+	(( ${#install[@]} )) && python_domodule "${install[@]}"
+	local install=( $(scripts_to_install !) )
+	(( ${#install[@]} )) && python_doscript "${install[@]}"
 
 	dodoc -r README.md docs/{*.md,images,release-notes}
 	newdoc scripts{/,-}README.md
@@ -184,16 +196,15 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
+	elog "It is always a good idea to back up your ${PORTAGE_COLOR_HILITE-${HILITE}}joinmarket.cfg${PORTAGE_COLOR_NORMAL-${NORMAL}}, re-create a"
+	elog 'default one, and then reapply your changes, as this will populate any'
+	elog 'newly introduced config settings and update any default values. Please'
+	elog 'see the release notes for more information and important announcements:'
+	elog "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-${PV}.md"
 	if [[ ${had_pre_0_6_2} ]] ; then
 		ewarn 'This release of JoinMarket moves the user data directory to ~/.joinmarket.'
 		ewarn 'You must manually move any existing data files. See the release notes:'
 		ewarn "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-0.6.2.md#move-user-data-to-home-directory"
-	else
-		elog "It is always a good idea to back up your ${PORTAGE_COLOR_HILITE-${HILITE}}joinmarket.cfg${PORTAGE_COLOR_NORMAL-${NORMAL}}, re-create a"
-		elog 'default one, and then reapply your changes, as this will populate any'
-		elog 'newly introduced config settings and update any default values. Please'
-		elog 'see the release notes for more information and important announcements:'
-		elog "${HOMEPAGE}/blob/master/docs/release-notes/release-notes-${PV}.md"
 	fi
 	if [[ ${had_pre_0_8_0} ]] ; then
 		ewarn 'JoinMarket is migrating to native SegWit wallets and transactions.'
