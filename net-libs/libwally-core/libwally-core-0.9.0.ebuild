@@ -19,7 +19,7 @@ SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
 	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0"
-SLOT="0/0.9.0"
+SLOT="0/${PV}"
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE+=" +asm elements minimal python test"
 RESTRICT="!test? ( test )"

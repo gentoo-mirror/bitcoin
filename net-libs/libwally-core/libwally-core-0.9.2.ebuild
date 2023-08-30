@@ -10,7 +10,6 @@ DISTUTILS_USE_PEP517=setuptools
 inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
 BACKPORTS=(
-	0131dd7d746ed4c1ecfc0ebd9ea5b168cf15c7f9	# tests: fix test_transaction when built without swig support
 )
 
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
@@ -30,7 +29,7 @@ RESTRICT="!test? ( test )"
 JAVA_PKG_NV_DEPEND=">=virtual/jdk-1.7"
 DEPEND+="
 	!elements? ( >=dev-libs/libsecp256k1-0.3.1[${MULTILIB_USEDEP},ecdh,extrakeys,recovery,schnorr] )
-	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20230412[${MULTILIB_USEDEP},ecdh,ecdsa-s2c,extrakeys,generator,rangeproof,recovery,schnorrsig,surjectionproof,whitelist] )
+	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20230515[${MULTILIB_USEDEP},ecdh,ecdsa-s2c,extrakeys,generator,rangeproof,recovery,schnorrsig,surjectionproof,whitelist] )
 "
 RDEPEND="${DEPEND}
 	!<net-p2p/core-lightning-0.9.3-r2
@@ -72,20 +71,6 @@ PATCHES=(
 distutils_enable_sphinx docs/source dev-python/sphinx-rtd-theme
 
 pkg_pretend() {
-	if has_version "<${CATEGORY}/${PN}-0.8.2" &&
-		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
-		{ has_version '<net-p2p/core-lightning-0.9.3-r2' || has_version '=net-p2p/core-lightning-9999' ; } &&
-		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ||
-			-x "${EROOT%/}/run/openrc/started/lightningd" ]]
-	then
-		eerror "${CATEGORY}/${PN}-0.8.2 introduced a binary-incompatible change.
-Installing version ${PV} while running an instance of Core Lightning that
-was compiled against a pre-0.8.2 version of ${PN} will cause
-assertion failures in newly spawned Core Lightning subdaemons. Please stop
-the running lightningd daemon and then reattempt this installation."
-		die 'lightningd is running'
-	fi
-
 	if use minimal ; then
 		ewarn "You have enabled the ${PORTAGE_COLOR_HILITE-${HILITE}}minimal${PORTAGE_COLOR_NORMAL-${NORMAL}} USE flag, which is intended for embedded
 environments and may adversely affect performance on standard systems."
