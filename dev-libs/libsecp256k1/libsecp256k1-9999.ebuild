@@ -1,10 +1,10 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 EGIT_REPO_URI="https://github.com/bitcoin-core/secp256k1.git"
-inherit git-r3 autotools eutils
+inherit git-r3 autotools
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
