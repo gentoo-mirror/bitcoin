@@ -32,6 +32,9 @@ RDEPEND="${DEPEND}
 	!<net-p2p/core-lightning-0.9.3-r2
 	!=net-p2p/core-lightning-9999
 "
+BDEPEND="
+	virtual/pkgconfig
+"
 
 S="${WORKDIR}/${PN}-release_${MyPV}"
 

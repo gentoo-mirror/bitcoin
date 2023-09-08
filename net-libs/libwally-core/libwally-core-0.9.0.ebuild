@@ -41,6 +41,7 @@ DEPEND+="
 	java? ( ${JAVA_PKG_NV_DEPEND} )
 "
 BDEPEND+="
+	virtual/pkgconfig
 	java? (
 		dev-lang/swig[pcre]
 		${JAVA_PKG_NV_DEPEND}
