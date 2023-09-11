@@ -1,7 +1,7 @@
 # Copyright 2010-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 POSTGRES_COMPAT=( {10..15} )
 
@@ -194,29 +194,41 @@ CRATES="
 	yasna-0.5.2
 "
 
-inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
+EGIT_MIN_CLONE_TYPE=single
+EGIT_OPT_DEFAULT=1
+
+inherit bash-completion-r1 cargo distutils-r1 git-opt-r3 postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV/_}
+MyPV=${PV/_}-gentoo-${PR}
+BASE_COMMIT=v${PV/_}
+HEAD_COMMIT=v23.08
+DEADEND_COMMITS=( v23.05.2 ) # reachable from EGIT_COMMIT but not from HEAD_COMMIT
+EGIT_COMMIT=v${MyPV}
+EGIT_REPO_URI=( https://github.com/{ElementsProject,whitslack}/"${MyPN}".git )
+EGIT_BRANCH="${PV}/backports"
+EGIT_SUBMODULES=( '-*' )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
-HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
-SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
+SRC_URI="
+	!git-src? ( https://github.com/whitslack/${MyPN}/archive/${EGIT_COMMIT}.tar.gz -> ${PF}.tar.gz )
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
-	rust? ( $(cargo_crate_uris) )"
+	rust? ( $(cargo_crate_uris) )
+"
 
 LICENSE="MIT CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+KEYWORDS=""
 IUSE="developer doc +man postgres python rust sqlite test"
 RESTRICT="mirror !test? ( test )"
 
 CDEPEND="
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-0.9.0:0/0.9.0[elements]
-	!>=net-libs/libwally-core-0.9.1
+	>=net-libs/libwally-core-0.8.5_p20230128:0/0.8.2[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )
@@ -258,6 +270,7 @@ BDEPEND="
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
 		')
 	)
+	git-src? ( net-misc/curl[ssl] )
 	python? (
 		${DISTUTILS_DEPS}
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
@@ -283,10 +296,12 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 PATCHES=(
+	"${FILESDIR}/Makefile-generated-sources-fix.patch"
 	"${FILESDIR}/23.08-move-test-logs-to-TMPDIR.patch"
 )
 
 S=${WORKDIR}/${MyPN}-${MyPV}
+EGIT_CHECKOUT_DIR=${S}
 DOCS=( CHANGELOG.md README.md SECURITY.md )
 
 python_check_deps() {
@@ -307,6 +322,16 @@ python_foreach_subdir() {
 	done
 }
 
+show_backports_warning() {
+	ewarn "You are installing an" \
+		    "${PORTAGE_COLOR_WARN-${WARN}}UNOFFICIAL${PORTAGE_COLOR_NORMAL-${NORMAL}}" \
+		    "branch of Core Lightning that is kept as" \
+		'\n'"closely in sync with the latest official release as possible without" \
+		'\n'"introducing any database schema migrations relative to ${BASE_COMMIT}." \
+		'\n'"You should proceed only if you trust the branch maintainer or have" \
+		'\n'"carefully audited the differences versus the upstream release:"
+}
+
 pkg_pretend() {
 	if [[ ! "${REPLACE_RUNNING_CLIGHTNING}" ]] &&
 		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
@@ -322,6 +347,11 @@ pkg_pretend() {
 			'\n'"if you are certain you know what you are doing."
 		die 'lightningd is running'
 	fi
+
+	if ! use git-src ; then
+		show_backports_warning
+		ewarn '\n'"${EGIT_REPO_URI[0]%.git}/compare/${HEAD_COMMIT}...whitslack:lightning:${EGIT_COMMIT}"
+	fi
 }
 
 pkg_setup() {
@@ -333,8 +363,40 @@ pkg_setup() {
 	use test && tc-ld-disable-gold	# mock magic doesn't support gold
 }
 
+audit_backports() {
+	local - any
+	set -o pipefail
+
+	ebegin 'Verifying that all revert commits are tree-same as their grandparents'
+	git rev-list --no-merges "${HEAD_COMMIT}..${EGIT_COMMIT}" "${DEADEND_COMMITS[@]/#/^}" |
+		while read -r rev ; do git diff --exit-code "${rev}"{^^,} || exit ; done >/dev/null
+	eend "${?}" || die 'revert commit audit failed'
+
+	ebegin "Verifying that no database migrations are introduced since ${BASE_COMMIT}"
+	count_migrations() {
+		git show "${1}:wallet/db.c" | sed -ne '/dbmigrations\[\] = {$/,/^};/{/},/p}' | wc -l
+	}
+	(( "$(count_migrations "${EGIT_COMMIT}")" == "$(count_migrations "${BASE_COMMIT}")" ))
+	eend "${?}" || die 'database migrations audit failed'
+	unset count_migrations
+
+	show_backports_warning
+	ewarn '\n'"\$ export GIT_DIR=${EGIT_DIR@Q}" \
+		'\n'"\$ HEAD=\$(git ls-remote --tags ${EGIT_REPO_URI[0]} ${HEAD_COMMIT} | cut -f1)" \
+		'\n'"\$ git diff \"\${HEAD}..${EGIT_COMMIT}\"" \
+		'\n'"\$ git log --reverse --merges --cc \"\${HEAD}..${EGIT_COMMIT}\""
+}
+
 src_unpack() {
-	unpack "${P}.tar.gz"
+	if use git-src ; then
+		git-r3_fetch "${EGIT_REPO_URI[0]}" "refs/tags/${HEAD_COMMIT}"
+		git-r3_fetch "${EGIT_REPO_URI[0]}" "refs/tags/${BASE_COMMIT}"
+		git-r3_src_unpack
+		cd "${S}" || die
+		audit_backports
+	else
+		unpack "${PF}.tar.gz"
+	fi
 	cd "${S}/external" || die
 	rm -r */ || die
 	unpack jsmn-1.0.0.tar.gz gheap-67fc83b.tar.gz
@@ -361,6 +423,12 @@ src_prepare() {
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
 
+	# delete all pre-generated files; they're often stale anyway
+	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
+		cln-rpc/src/model.rs \
+		contrib/pyln-grpc-proto/pyln/grpc/{node_pb2{,_grpc},primitives_pb2}.py \
+		doc/*.[0-9] || die
+
 	# only run 'install' command if there are actually files to install
 	# and don't unconditionally regenerate Python sources
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
@@ -375,11 +443,6 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
-	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
-	[[ ${PV} != *([.[:digit:]]) ]] ||
-		sed -ne '/^bool is_released_version(void)/{a { return true; }
-			p;:x;n;/^}$/d;bx};p' -i common/version.c || die
-
 	use python && distutils-r1_src_prepare
 }
 
@@ -388,7 +451,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}-gentoo-${PR}"
+		VERSION="${MyPV}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
@@ -513,7 +576,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-23.08.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-22.11.1.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
