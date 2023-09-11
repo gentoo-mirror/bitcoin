@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
@@ -19,7 +19,6 @@ IUSE=""
 
 RDEPEND="
 	>=dev-python/colorama-0.3.7[${PYTHON_USEDEP}]
-	>=dev-python/future-0.14.3[${PYTHON_USEDEP}]
 	>=dev-python/six-1.9.0[${PYTHON_USEDEP}]
 "
 DEPEND=""
@@ -30,7 +29,7 @@ BDEPEND="
 	)
 "
 
-distutils_enable_tests nose
+distutils_enable_tests pytest
 
 src_prepare() {
 	default
