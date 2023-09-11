@@ -1,11 +1,12 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_EXT=1
 
 inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
@@ -69,7 +70,22 @@ PATCHES=(
 	"${FILESDIR}/0.8.8-python-module-dynamic-link.patch"
 )
 
+# https://github.com/ElementsProject/libwally-core/pull/409#issuecomment-1713069590
+RDEPEND="${RDEPEND//'dev-lang/python:3.12'/'>=dev-lang/python-3.12.0_rc2:3.12'}"
+DEPEND="${DEPEND//'dev-lang/python:3.12'/'>=dev-lang/python-3.12.0_rc2:3.12'}"
+BDEPEND="${BDEPEND//'dev-lang/python:3.12'/'>=dev-lang/python-3.12.0_rc2:3.12'}"
+
 distutils_enable_sphinx docs/source dev-python/sphinx-rtd-theme
+
+eval "distutils-r1_$(declare -f python_check_deps)"
+python_check_deps() {
+	case "${EBUILD_PHASE}" in
+		compile)
+			distutils-r1_python_check_deps ;;
+		test)
+			[[ "${EPYTHON}" != 'python3.12' ]] || python_has_version '>=dev-lang/python-3.12.0_rc2:3.12' ;;
+	esac
+}
 
 pkg_pretend() {
 	if has_version "<${CATEGORY}/${PN}-0.8.2" &&
