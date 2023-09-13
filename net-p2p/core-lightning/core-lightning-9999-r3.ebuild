@@ -1,7 +1,7 @@
 # Copyright 2010-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 POSTGRES_COMPAT=( {10..15} )
 
@@ -425,8 +425,8 @@ src_configure() {
 		--disable-ub-sanitize \
 		--disable-fuzzing \
 		$(use_enable rust)
-	echo PYTHON="${EPYTHON@Q}" "${@}"
-	PYTHON="${EPYTHON}" "${@}" || die 'configure failed'
+	echo "${@}"
+	"${@}" || die 'configure failed'
 
 	use python && distutils-r1_src_configure
 	use rust && cargo_src_configure
