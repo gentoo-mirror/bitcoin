@@ -202,7 +202,7 @@ inherit bash-completion-r1 cargo distutils-r1 git-opt-r3 postgres toolchain-func
 MyPN=lightning
 MyPV=${PV/_}-gentoo-${PR}
 BASE_COMMIT=v${PV/_}
-HEAD_COMMIT=v23.08
+HEAD_COMMIT=v23.08.1
 DEADEND_COMMITS=( v23.05.2 ) # reachable from EGIT_COMMIT but not from HEAD_COMMIT
 EGIT_COMMIT=v${MyPV}
 EGIT_REPO_URI=( https://github.com/{ElementsProject,whitslack}/"${MyPN}".git )
