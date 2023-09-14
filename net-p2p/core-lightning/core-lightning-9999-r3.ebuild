@@ -284,7 +284,6 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 PATCHES=(
-	"${FILESDIR}/Makefile-generated-sources-fix.patch"
 	"${FILESDIR}/23.08-move-test-logs-to-TMPDIR.patch"
 )
 
