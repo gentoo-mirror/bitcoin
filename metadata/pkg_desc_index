@@ -16,13 +16,14 @@ dev-python/qt5reactor 0.6.3: Twisted and PyQt5 eventloop integration
 dev-python/repoze-sphinx-autointerface 1.0.0: Sphinx extension: auto-generates API docs from Zope interfaces
 dev-python/secp256k1 0.14.0: HMAC-based Extract-and-Expand Key Derivation Function (HKDF) implemented in Python
 dev-python/txtorcon 23.5.0: Twisted-based Tor controller client, with state-tracking and config abstractions
-dev-util/bitcoin-tx 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2-r1 22.0-r3 23.0: Command-line Bitcoin transaction tool
+dev-util/bitcoin-tx 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2-r1 22.0-r3 23.0 25.0: Transitional package for net-p2p/bitcoin-core
 net-libs/libbitcoinconsensus 21.2-r1 22.0-r1 23.0: Bitcoin Core consensus library
 net-libs/libblkmaker 0.4.2 0.4.3 0.5.1 0.5.2 0.5.3 0.6.0: C implementation of Bitcoin's getblocktemplate interface
 net-libs/libwally-core 0.8.5_p20230128 0.8.8 0.9.0 0.9.1-r1 0.9.2: Collection of useful primitives for cryptocurrency wallets
-net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0 23.0: Command-line JSON-RPC client specifically for interfacing with bitcoind
-net-p2p/bitcoin-qt 21.2-r1 22.0-r2 23.0: An end-user Qt GUI for the Bitcoin crypto-currency
-net-p2p/bitcoind 21.2-r1 22.0-r2 23.0: Original Bitcoin crypto-currency wallet for automated services
+net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0.18.1 0.19.0.1 0.19.1 0.20.0 0.20.1 0.21.0 0.21.1 21.2 22.0 23.0 25.0: Transitional package for net-p2p/bitcoin-core[bitcoin-cli]
+net-p2p/bitcoin-core 25.0: Reference implementation of the Bitcoin cryptocurrency
+net-p2p/bitcoin-qt 21.2-r1 22.0-r2 23.0 25.0: Transitional package for net-p2p/bitcoin-core[qt5]
+net-p2p/bitcoind 21.2-r1 22.0-r2 23.0 25.0: Transitional package for net-p2p/bitcoin-core[daemon]
 net-p2p/core-lightning 0.12.1-r1 0.12.1-r112 22.11.1-r1 22.11.1-r107 23.02.2 23.02.2-r105 23.05.2-r1 23.05.2-r101 23.08.1 9999-r3: An implementation of Bitcoin's Lightning Network in C
 net-p2p/joinmarket 0.9.10: JoinMarket CoinJoin client and daemon
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
