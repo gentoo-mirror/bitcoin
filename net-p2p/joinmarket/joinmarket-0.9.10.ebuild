@@ -84,8 +84,10 @@ BDEPEND="
 	)
 
 	test? (
-		>=net-p2p/bitcoin-cli-0.20
-		>=net-p2p/bitcoind-0.20[berkdb,wallet]
+		|| (
+			>=net-p2p/bitcoin-core-0.20[berkdb,bitcoin-cli,daemon]
+			( >=net-p2p/bitcoin-cli-0.20 >=net-p2p/bitcoind-0.20[berkdb,wallet] )
+		)
 	)
 "
 
