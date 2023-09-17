@@ -11,6 +11,7 @@
 		<flag name="bitcoin-cli">Build and install bitcoin-cli command line interface</flag>
 		<flag name="daemon">Build and install bitcoind daemon</flag>
 		<flag name="external-signer">Include support for external wallet signer programs</flag>
+		<flag name="libs">Build and install libbitcoinconsensus</flag>
 		<flag name="nat-pmp">Enable NAT-PMP port forwarding</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
 		<flag name="qt5">Build and install Bitcoin-Qt GUI</flag>

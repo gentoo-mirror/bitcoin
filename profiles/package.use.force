@@ -1,5 +1,6 @@
 # Forced flag for transitional packages
 >=dev-util/bitcoin-tx-25 bitcoin-core
+>=net-libs/libbitcoinconsensus-25 bitcoin-core
 >=net-p2p/bitcoin-cli-25 bitcoin-core
 >=net-p2p/bitcoind-25 bitcoin-core
 >=net-p2p/bitcoin-qt-25 bitcoin-core

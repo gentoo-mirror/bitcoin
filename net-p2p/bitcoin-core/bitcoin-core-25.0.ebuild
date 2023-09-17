@@ -14,7 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 # IUSE="+cli" doesn't work due to https://bugs.gentoo.org/831045#c3
-IUSE="+asm +berkdb +bitcoin-cli +daemon dbus examples +external-signer kde +man nat-pmp +qrcode qt5 +sqlite system-leveldb +system-libsecp256k1 systemtap test upnp zeromq"
+IUSE="+asm +berkdb +bitcoin-cli +daemon dbus examples +external-signer kde libs +man nat-pmp +qrcode qt5 +sqlite system-leveldb +system-libsecp256k1 systemtap test upnp zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -37,6 +37,7 @@ RDEPEND="
 		acct-group/bitcoin
 		acct-user/bitcoin
 	)
+	libs? ( !net-libs/libbitcoinconsensus[-bitcoin-core(-)] )
 	nat-pmp? ( >=net-libs/libnatpmp-20220705:= )
 	qrcode? ( >=media-gfx/qrencode-4.1.1:= )
 	qt5? (
@@ -137,7 +138,7 @@ src_configure() {
 		--enable-util-tx
 		--${wallet}-util-wallet
 		--disable-util-util
-		--without-libs
+		$(use_with libs)
 		$(use_with daemon)
 		$(use_with qt5 gui qt5)
 		$(use_with dbus qtdbus)
@@ -150,11 +151,13 @@ src_configure() {
 src_install() {
 	use external-signer && DOCS+=( doc/external-signer.md )
 	use berkdb || use sqlite && DOCS+=( doc/managing-wallets.md )
+	use libs && DOCS+=( doc/shared-libraries.md )
 	use systemtap && DOCS+=( doc/tracing.md )
 	use zeromq && DOCS+=( doc/zmq.md )
 
 	default
 
+	! use libs || find "${ED}" -name '*.la' -delete || die
 	! use test || rm -f -- "${ED}"/usr/bin/test_bitcoin{,-qt} || die
 
 	newbashcomp contrib/completions/bash/bitcoin-tx.bash-completion bitcoin-tx
