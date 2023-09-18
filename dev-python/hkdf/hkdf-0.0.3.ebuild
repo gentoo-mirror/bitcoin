@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi
@@ -17,8 +17,8 @@ SRC_URI+="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-
-distutils_enable_tests nose
+IUSE="test"
+RESTRICT="!test? ( test )"
 
 src_unpack() {
 	unpack "${P}.tar.gz"
@@ -26,5 +26,7 @@ src_unpack() {
 }
 
 python_test() {
-	distutils-r1_python_test tests.py
+	set -- "${EPYTHON}" -m tests
+	echo "${@}" >&2
+	"${@}" || die "Tests failed with ${EPYTHON}"
 }
