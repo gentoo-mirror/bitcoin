@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 EGIT_REPO_URI="https://github.com/bitcoin-core/secp256k1.git"
 inherit git-r3 autotools
@@ -9,63 +9,66 @@ inherit git-r3 autotools
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
+SRC_URI="
+	${HOMEPAGE}/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch?full_index=1 -> ${PN}-PR1159-772e74.patch
+"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+asm ecdh +experimental +extrakeys gmp lowmem +schnorr +recovery test test-openssl valgrind"
+IUSE="+asm +ecdh +ellswift experimental +extrakeys lowmem +recovery +schnorr test valgrind"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	extrakeys? ( experimental )
-	schnorr? ( experimental extrakeys )
-	test-openssl? ( test )
+	schnorr? ( extrakeys )
 "
-RDEPEND="
-	gmp? ( dev-libs/gmp:0= )
-"
-DEPEND="${RDEPEND}
+BDEPEND="
+	sys-devel/autoconf-archive
 	virtual/pkgconfig
-	test-openssl? ( dev-libs/openssl:0 )
 	valgrind? ( dev-util/valgrind )
 "
+
+PATCHES=(
+	"${DISTDIR}/${PN}-PR1159-772e74.patch"
+)
 
 src_prepare() {
 	default
 	eautoreconf
+
+	# Generate during build
+	rm -f src/precomputed_ecmult.c src/precomputed_ecmult_gen.c || die
 }
 
 src_configure() {
-	local asm_opt
+	local myeconfargs=(
+		--disable-benchmark
+		$(use_enable experimental)
+		$(use_enable test tests)
+		$(use_enable test exhaustive-tests)
+		$(use_enable {,module-}ecdh)
+		$(use_enable {,module-}ellswift)
+		$(use_enable {,module-}extrakeys)
+		$(use_enable {,module-}recovery)
+		$(use_enable schnorr module-schnorrsig)
+		$(usev lowmem '--with-ecmult-window=4 --with-ecmult-gen-precision=2')
+		$(use_with valgrind)
+	)
 	if use asm; then
 		if use arm; then
-			asm_opt=arm
+			myeconfargs+=( --with-asm=arm32 )
 		else
-			asm_opt=auto
+			myeconfargs+=( --with-asm=auto )
 		fi
 	else
-		asm_opt=no
+		myeconfargs+=( --with-asm=no )
 	fi
-	econf \
-		--disable-benchmark \
-		$(use_enable experimental) \
-		$(use_enable test tests) \
-		$(use_enable test exhaustive-tests) \
-		$(use_enable test-openssl openssl-tests) \
-		$(use_enable ecdh module-ecdh) \
-		$(use_enable extrakeys module-extrakeys) \
-		--with-asm=$asm_opt \
-		--with-bignum=$(usex gmp gmp no) \
-		$(use_enable recovery module-recovery) \
-		$(use_enable schnorr module-schnorrsig) \
-		$(usex lowmem '--with-ecmult-window=2 --with-ecmult-gen-precision=2' '') \
-		$(use_with valgrind) \
-		--disable-static
+
+	econf "${myeconfargs[@]}"
 }
 
 src_install() {
-	dodoc README.md
-	emake DESTDIR="${D}" install
-	find "${D}" -name '*.la' -delete || die
+	default
+	find "${ED}" -name '*.la' -delete || die
 }
