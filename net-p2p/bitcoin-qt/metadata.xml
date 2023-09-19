@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<maintainer type="person">
+		<email>luke-jr+gentoobugs@utopios.org</email>
+		<name>Luke Dashjr</name>
+	</maintainer>
 	<use>
 		<flag name="asm">Enable assembly for optimization</flag>
-		<flag name="bitcoin-core">Transitional flag to pull in net-p2p/bitcoin-core[qt5]</flag>
+		<flag name="bip70">Enable support for the BIP70 payment protocol</flag>
+		<flag name="bitcoin_policy_rbf">Replace By Fee policy: Your node will preferentially mine and relay transactions paying the highest fee, regardless of receive order</flag>
 		<flag name="external-signer">Include support for external wallet signer programs</flag>
+		<flag name="knots">Build enhanced Bitcoin Knots version, rather than Bitcoin Core</flag>
+		<flag name="libevent">Use dev-libs/libevent (needed for JSON-RPC, REST, and Tor auto-configuration</flag>
 		<flag name="nat-pmp">Enable NAT-PMP port forwarding</flag>
 		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
+		<flag name="system-leveldb">Use the system-wide dev-libs/leveldb instead of bundled</flag>
 		<flag name="systemtap">Enable SystemTAP/DTrace tracing</flag>
 		<flag name="upnp">Enable Universal Plug and Play</flag>
 		<flag name="wallet">Enable wallet support</flag>
@@ -14,5 +22,6 @@
 	</use>
 	<upstream>
 		<remote-id type="github">bitcoin/bitcoin</remote-id>
+		<remote-id type="github">bitcoinknots/bitcoin</remote-id>
 	</upstream>
 </pkgmetadata>
