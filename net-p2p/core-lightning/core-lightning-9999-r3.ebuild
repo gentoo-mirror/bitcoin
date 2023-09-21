@@ -209,7 +209,7 @@ LICENSE="MIT BSD-2 CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="developer doc +man postgres python rust sqlite test"
+IUSE="debug doc +man postgres python rust sqlite test"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -416,10 +416,11 @@ src_configure() {
 		CDEBUGFLAGS='-std=gnu11' \
 		COPTFLAGS="${CFLAGS}" \
 		--prefix="${EPREFIX}"/usr \
-		$(use_enable developer) \
+		$(use_enable debug{,build}) \
 		--disable-compat \
 		--disable-valgrind \
 		--disable-static \
+		--disable-coverage \
 		--disable-address-sanitizer \
 		--disable-ub-sanitize \
 		--disable-fuzzing \
