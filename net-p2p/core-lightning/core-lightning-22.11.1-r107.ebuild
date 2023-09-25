@@ -296,7 +296,7 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 PATCHES=(
-	"${FILESDIR}/23.08-move-test-logs-to-TMPDIR.patch"
+	"${FILESDIR}/PR6688-save-our-tmp-dir.patch"
 )
 
 S=${WORKDIR}/${MyPN}-${MyPV}
