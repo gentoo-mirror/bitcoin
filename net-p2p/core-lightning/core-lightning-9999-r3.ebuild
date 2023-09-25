@@ -284,7 +284,6 @@ REQUIRED_USE="
 # FIXME: bundled deps: ccan
 
 PATCHES=(
-	"${FILESDIR}/23.08-move-test-logs-to-TMPDIR.patch"
 )
 
 DOCS=( CHANGELOG.md README.md SECURITY.md )
