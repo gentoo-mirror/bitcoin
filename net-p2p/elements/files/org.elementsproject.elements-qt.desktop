@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=Elements
+Comment=Connect to the Elements P2P Network
+Comment[de]=Verbinde mit dem Elements peer-to-peer Netzwerk
+Comment[fr]=Elements, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Elements, eşten eşe kriptografik sanal para birimi
+Exec=elements-qt %u
+Terminal=false
+Type=Application
+Icon=elements
+MimeType=x-scheme-handler/elements;
+Categories=Office;Finance;P2P;Network;Qt;
+StartupWMClass=Elements-qt

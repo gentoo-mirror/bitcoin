@@ -1,0 +1,320 @@
+From ff49d3b95a79ab73e1125762a78d39bff172da75 Mon Sep 17 00:00:00 2001
+From: Matt Whitlock <matt@whitlock.name>
+Date: Thu, 19 Oct 2023 05:52:25 -0400
+Subject: [PATCH] support linking against system-installed leveldb and
+ libsecp256k1
+
+- Abort if runtime leveldb != compiled-against leveldb.
+
+Originally based on 22.0-fix_build_without_leveldb.patch.
+---
+ configure.ac              | 94 ++++++++++++++++++++++++++++++++++++++-
+ src/Makefile.am           | 16 ++++++-
+ src/Makefile.test.include |  2 +
+ src/dbwrapper.cpp         | 27 ++++++++++-
+ src/dbwrapper.h           |  8 ++++
+ src/init/common.cpp       |  7 +++
+ src/primitives/pak.h      |  2 +-
+ 7 files changed, 150 insertions(+), 6 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 5de5185615..d4e87e8f0a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1311,6 +1311,45 @@ else
+   CPPFLAGS="$CPPFLAGS -DPROVIDE_FUZZ_MAIN_FUNCTION"
+ fi
+ 
++dnl Check for libsecp256k1, only if explicitly requested
++AC_ARG_WITH([system-libsecp256k1],
++  [AS_HELP_STRING([[--with-system-libsecp256k1[=PKG]]],
++    [build using system-installed libsecp256k1 instead of bundled, passing PKG (default: libsecp256k1_zkp) to pkg-config (default is no; DANGEROUS; NOT SUPPORTED)])],
++  [AS_IF([test "x$withval" = xyes], [with_system_libsecp256k1=libsecp256k1_zkp])],
++  [with_system_libsecp256k1=no])
++AM_CONDITIONAL([EMBEDDED_LIBSECP256K1],[test "x$with_system_libsecp256k1" = xno])
++AM_COND_IF([EMBEDDED_LIBSECP256K1], [
++  libsecp256k1_CFLAGS='-I$(srcdir)/secp256k1/include'
++  libsecp256k1_LIBS='secp256k1/libsecp256k1.la'
++], [
++  saved_CPPFLAGS=$CPPFLAGS
++  saved_LIBS=$LIBS
++  PKG_CHECK_MODULES([libsecp256k1], [$with_system_libsecp256k1])
++  CPPFLAGS="$libsecp256k1_CFLAGS $CPPFLAGS"
++  LIBS="$libsecp256k1_LIBS $LIBS"
++  missing_modules=
++  AC_DEFUN([CHECK_MODULE], [
++    AC_CHECK_HEADER([secp256k1_$1.h],
++      [AC_CHECK_FUNCS([$2], [], [missing_modules="${missing_modules} $1"])],
++      [missing_modules="${missing_modules} $1"])
++  ])
++  CHECK_MODULE([ecdh], [secp256k1_ecdh])
++  CHECK_MODULE([extrakeys], [secp256k1_xonly_pubkey_parse])
++  CHECK_MODULE([generator], [secp256k1_generator_parse])
++  CHECK_MODULE([rangeproof], [secp256k1_rangeproof_verify])
++  CHECK_MODULE([recovery], [secp256k1_ecdsa_recover])
++  CHECK_MODULE([schnorrsig], [secp256k1_schnorrsig_verify])
++  CHECK_MODULE([surjectionproof], [secp256k1_surjectionproof_initialize])
++  CHECK_MODULE([whitelist], [secp256k1_whitelist_verify])
++  AS_IF([test -n "${missing_modules}"], [
++    AC_MSG_ERROR([system-installed libsecp256k1 does not support these required modules:${missing_modules}])
++  ])
++  CPPFLAGS=$saved_CPPFLAGS
++  LIBS=$saved_LIBS
++])
++AC_SUBST(libsecp256k1_CFLAGS)
++AC_SUBST(libsecp256k1_LIBS)
++
+ if test x$enable_wallet != xno; then
+     dnl Check for libdb_cxx only if wallet enabled
+     if test "x$use_bdb" != "xno"; then
+@@ -1361,6 +1400,55 @@ if test x$use_ebpf != xno; then
+   )
+ fi
+ 
++dnl Check for leveldb, only if explicitly requested
++AC_ARG_WITH([system-leveldb],
++  [AS_HELP_STRING([--with-system-leveldb],
++    [Build with system LevelDB (default is no; DANGEROUS; NOT SUPPORTED)])],
++  [system_leveldb=$withval],
++  [system_leveldb=no])
++AC_ARG_VAR([leveldb_CFLAGS],[C compiler flags for system-leveldb])
++AC_ARG_VAR([leveldb_LIBS],[linker flags for system-leveldb])
++AS_IF([test x$system_leveldb != xno],[
++  TEMP_CPPFLAGS="$CPPFLAGS"
++  TEMP_LIBS="$LIBS"
++  CPPFLAGS="$leveldb_CFLAGS"
++  LIBS="$leveldb_LIBS"
++  AC_SEARCH_LIBS([leveldb_open],[leveldb],[leveldb_LIBS="$LIBS"],
++    [AC_MSG_ERROR([leveldb library not found; using --with-system-leveldb is not supported anyway])])
++  AC_CHECK_HEADER([leveldb/filter_policy.h],[],
++    [AC_MSG_ERROR([LevelDB headers not found; using --with-system-leveldb is not supported anyway])])
++  AC_CHECK_HEADER([leveldb/helpers/memenv.h],[],
++    [AC_MSG_ERROR([LevelDB headers not found; using --with-system-leveldb is not supported anyway])])
++
++  AC_MSG_CHECKING([for library containing leveldb::NewMemEnv])
++  for searchlib in "" "-lmemenv" ERR; do
++    if test "x$searchlib" = "xERR"; then
++      AC_MSG_RESULT([no])
++      AC_MSG_ERROR([LevelDB's memenv helper not found; using --with-system-leveldb is not supported anyway])
++    fi
++    LIBS="$searchlib $leveldb_LIBS"
++    AC_LINK_IFELSE([AC_LANG_PROGRAM([
++        #include <leveldb/env.h>
++        #include <leveldb/helpers/memenv.h>
++      ],[
++        leveldb::Env *myenv = leveldb::NewMemEnv(leveldb::Env::Default());
++        delete myenv;
++      ])
++    ],[
++      AC_MSG_RESULT([$searchlib])
++      break
++    ])
++  done
++  leveldb_LIBS="$LIBS"
++  LIBS="$TEMP_LIBS"
++  CPPFLAGS="$TEMP_CPPFLAGS"
++],[
++  AC_DEFINE([EMBEDDED_LEVELDB],[1],[Define to use the bundled LevelDB sources])
++])
++AM_CONDITIONAL([EMBEDDED_LEVELDB],[test x$system_leveldb = xno])
++AC_SUBST(leveldb_CFLAGS)
++AC_SUBST(leveldb_LIBS)
++
+ dnl Check for libminiupnpc (optional)
+ if test x$use_upnp != xno; then
+   AC_CHECK_HEADERS(
+@@ -1866,8 +1954,10 @@ PKGCONFIG_LIBDIR_TEMP="$PKG_CONFIG_LIBDIR"
+ unset PKG_CONFIG_LIBDIR
+ PKG_CONFIG_LIBDIR="$PKGCONFIG_LIBDIR_TEMP"
+ 
+-ac_configure_args="${ac_configure_args} --disable-shared --with-pic --enable-benchmark=no --with-bignum=no --enable-module-recovery --enable-module-schnorrsig --enable-experimental --enable-module-whitelist --enable-module-rangeproof --enable-module-generator --enable-module-surjectionproof --enable-module-ecdh"
+-AC_CONFIG_SUBDIRS([src/secp256k1])
++AM_COND_IF([EMBEDDED_LIBSECP256K1],[
++  ac_configure_args="${ac_configure_args} --disable-shared --with-pic --enable-benchmark=no --with-bignum=no --enable-module-recovery --enable-module-schnorrsig --enable-experimental --enable-module-whitelist --enable-module-rangeproof --enable-module-generator --enable-module-surjectionproof --enable-module-ecdh"
++  AC_CONFIG_SUBDIRS([src/secp256k1])
++])
+ 
+ AC_OUTPUT
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index cb3537177f..91df912fa2 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -15,7 +15,7 @@ AM_LIBTOOLFLAGS = --preserve-dup-deps
+ PTHREAD_FLAGS = $(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
+ EXTRA_LIBRARIES =
+ 
+-BITCOIN_INCLUDES=-I$(builddir) -I$(srcdir)/secp256k1/include -I$(srcdir)/$(UNIVALUE_INCLUDE_DIR_INT) $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
++BITCOIN_INCLUDES=-I$(builddir) $(libsecp256k1_CFLAGS) -I$(srcdir)/$(UNIVALUE_INCLUDE_DIR_INT) $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
+ 
+ LIBBITCOIN_SERVER=libbitcoin_server.a
+ LIBBITCOIN_COMMON=libbitcoin_common.a
+@@ -24,7 +24,11 @@ LIBBITCOIN_CLI=libbitcoin_cli.a
+ LIBBITCOIN_UTIL=libbitcoin_util.a
+ LIBBITCOIN_CRYPTO_BASE=crypto/libbitcoin_crypto_base.a
+ LIBBITCOINQT=qt/libbitcoinqt.a
++if EMBEDDED_LIBSECP256K1
+ LIBSECP256K1=secp256k1/libsecp256k1.la
++else
++LIBSECP256K1=$(libsecp256k1_LIBS)
++endif
+ 
+ if ENABLE_ZMQ
+ LIBBITCOIN_ZMQ=libbitcoin_zmq.a
+@@ -51,8 +55,10 @@ LIBBITCOIN_CRYPTO_SHANI = crypto/libbitcoin_crypto_shani.a
+ LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_SHANI)
+ endif
+ 
++if EMBEDDED_LIBSECP256K1
+ $(LIBSECP256K1): $(wildcard secp256k1/src/*.h) $(wildcard secp256k1/src/*.c) $(wildcard secp256k1/include/*)
+ 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
++endif
+ 
+ # Make is not made aware of per-object dependencies to avoid limiting building parallelization
+ # But to build the less dependent modules first, we manually select their order here:
+@@ -787,7 +793,7 @@ endif
+ 
+ libelementsconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
+ libelementsconsensus_la_LIBADD = $(LIBSECP256K1)
+-libelementsconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
++libelementsconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj $(libsecp256k1_CFLAGS) -DBUILD_BITCOIN_INTERNAL
+ libelementsconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+ 
+ endif
+@@ -897,8 +903,14 @@ nodist_libbitcoin_ipc_a_SOURCES = $(libbitcoin_ipc_mpgen_output)
+ CLEANFILES += $(libbitcoin_ipc_mpgen_output)
+ endif
+ 
++if EMBEDDED_LEVELDB
+ include Makefile.crc32c.include
+ include Makefile.leveldb.include
++else
++LEVELDB_CPPFLAGS = $(leveldb_CFLAGS)
++LIBLEVELDB = $(leveldb_LIBS)
++endif
++
+ include Makefile.test_util.include
+ include Makefile.test_fuzz.include
+ 
+diff --git a/src/Makefile.test.include b/src/Makefile.test.include
+index 0296c807dc..4772986e2d 100644
+--- a/src/Makefile.test.include
++++ b/src/Makefile.test.include
+@@ -355,7 +355,9 @@ if ENABLE_BENCH
+ 	$(BENCH_BINARY) > /dev/null
+ endif
+ endif
++if EMBEDDED_LIBSECP256K1
+ 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C secp256k1 check
++endif
+ 
+ if !ENABLE_FUZZ
+ UNIVALUE_TESTS = univalue/test/object univalue/test/unitester univalue/test/no_nul
+diff --git a/src/dbwrapper.cpp b/src/dbwrapper.cpp
+index 3a1086bf4c..113a2f984c 100644
+--- a/src/dbwrapper.cpp
++++ b/src/dbwrapper.cpp
+@@ -10,10 +10,35 @@
+ #include <leveldb/cache.h>
+ #include <leveldb/env.h>
+ #include <leveldb/filter_policy.h>
+-#include <memenv.h>
++#if EMBEDDED_LEVELDB
++# include <memenv.h>
++#else
++# include <leveldb/helpers/memenv.h>
++#endif
+ #include <stdint.h>
+ #include <algorithm>
+ 
++#if !EMBEDDED_LEVELDB
++#include <node/ui_interface.h>
++#include <util/translation.h>
++#include <leveldb/c.h>
++bool dbwrapper_SanityCheck()
++{
++    unsigned long header_version = (leveldb::kMajorVersion << 16) | leveldb::kMinorVersion;
++    unsigned long library_version = (leveldb_major_version() << 16) | leveldb_minor_version();
++
++    if (header_version != library_version) {
++        InitError(Untranslated(strprintf("Compiled with LevelDB %d.%d, but linked with LevelDB %d.%d (incompatible).",
++            leveldb::kMajorVersion, leveldb::kMinorVersion,
++            leveldb_major_version(), leveldb_minor_version()
++        )));
++        return false;
++    }
++
++    return true;
++}
++#endif
++
+ class CBitcoinLevelDBLogger : public leveldb::Logger {
+ public:
+     // This code is adapted from posix_logger.h, which is why it is using vsprintf.
+diff --git a/src/dbwrapper.h b/src/dbwrapper.h
+index c119036db2..73c92c55cf 100644
+--- a/src/dbwrapper.h
++++ b/src/dbwrapper.h
+@@ -5,6 +5,10 @@
+ #ifndef BITCOIN_DBWRAPPER_H
+ #define BITCOIN_DBWRAPPER_H
+ 
++#if defined(HAVE_CONFIG_H)
++#include <config/bitcoin-config.h>
++#endif
++
+ #include <clientversion.h>
+ #include <fs.h>
+ #include <serialize.h>
+@@ -19,6 +23,10 @@
+ static const size_t DBWRAPPER_PREALLOC_KEY_SIZE = 64;
+ static const size_t DBWRAPPER_PREALLOC_VALUE_SIZE = 1024;
+ 
++#if !EMBEDDED_LEVELDB
++bool dbwrapper_SanityCheck();
++#endif
++
+ class dbwrapper_error : public std::runtime_error
+ {
+ public:
+diff --git a/src/init/common.cpp b/src/init/common.cpp
+index 5c1f469081..c7d469f233 100644
+--- a/src/init/common.cpp
++++ b/src/init/common.cpp
+@@ -9,6 +9,7 @@
+ #include <clientversion.h>
+ #include <compat/sanity.h>
+ #include <crypto/sha256.h>
++#include <dbwrapper.h>
+ #include <key.h>
+ #include <logging.h>
+ #include <node/ui_interface.h>
+@@ -40,6 +41,12 @@ void UnsetGlobals()
+ 
+ bool SanityChecks()
+ {
++#if !EMBEDDED_LEVELDB
++    if (!dbwrapper_SanityCheck()) {
++        return InitError(Untranslated("Database sanity check failure. Aborting."));
++    }
++#endif
++
+     if (!ECC_InitSanityCheck()) {
+         return InitError(Untranslated("Elliptic curve cryptography sanity check failure. Aborting."));
+     }
+diff --git a/src/primitives/pak.h b/src/primitives/pak.h
+index ba84075768..f40267df85 100644
+--- a/src/primitives/pak.h
++++ b/src/primitives/pak.h
+@@ -6,7 +6,7 @@
+ #define BITCOIN_PRIMITIVES_PAK_H
+ 
+ #include <script/script.h>
+-#include <secp256k1/include/secp256k1_whitelist.h>
++#include <secp256k1_whitelist.h>
+ #include <chain.h>
+ 
+ class CPAKList
+-- 
+2.42.0
+
