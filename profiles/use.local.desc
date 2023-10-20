@@ -60,5 +60,19 @@ net-p2p/core-lightning:developer - Enable dangerous commands intended for develo
 net-p2p/core-lightning:experimental - Enable dangerous experimental features.
 net-p2p/core-lightning:mkdocs - Use dev-python/mkdocs to build documentation.
 net-p2p/core-lightning:rust - Build Rust components
+net-p2p/elements:asm - Enable assembly for optimization
+net-p2p/elements:berkdb - Support legacy wallets in Berkeley DB format
+net-p2p/elements:cli - Build and install elements-cli command line interface
+net-p2p/elements:daemon - Build and install elementsd daemon
+net-p2p/elements:external-signer - Include support for external wallet signer programs
+net-p2p/elements:gui - Build and install Elements-Qt GUI
+net-p2p/elements:nat-pmp - Enable NAT-PMP port forwarding
+net-p2p/elements:qrcode - Enable generation of QR Codes for receiving payments
+net-p2p/elements:sqlite - Support descriptor wallets in SQLite format
+net-p2p/elements:system-leveldb - Link with virtual/bitcoin-leveldb rather than embedding an internal copy
+net-p2p/elements:system-libsecp256k1 - Link with dev-libs/libsecp256k1-zkp rather than embedding an internal copy
+net-p2p/elements:systemtap - Enable SystemTAP/DTrace tracing
+net-p2p/elements:upnp - Enable Universal Plug and Play
+net-p2p/elements:zeromq - Report blocks and transactions via zeromq
 net-p2p/joinmarket:client - Installs jmclient and jmbitcoin packages
 net-p2p/joinmarket:daemon - Installs jmdaemon package
