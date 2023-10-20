@@ -1,0 +1,89 @@
+#!/sbin/openrc-run
+
+: ${ELEMENTSD_CONFIGFILE:=/etc/elements/elements.conf}
+: ${ELEMENTSD_PIDDIR:=/run/elementsd}
+: ${ELEMENTSD_PIDFILE:=${ELEMENTSD_PIDDIR}/${SVCNAME}.pid}
+: ${ELEMENTSD_DATADIR:=/var/lib/elementsd}
+: ${ELEMENTSD_LOGDIR:=/var/log/elementsd}
+: ${ELEMENTSD_USER:=${BITCOIN_USER:-elements}}
+: ${ELEMENTSD_GROUP:=elements}
+: ${ELEMENTSD_BIN:=/usr/bin/elementsd}
+: ${ELEMENTSD_NICE:=${NICELEVEL:-0}}
+: ${ELEMENTSD_OPTS=${BITCOIN_OPTS}}
+
+name="Elements daemon"
+description="Elements cryptocurrency P2P network daemon"
+
+required_files="${ELEMENTSD_CONFIGFILE}"
+pidfile="${ELEMENTSD_PIDFILE}"
+in_background_fake="start"
+
+depend() {
+	need localmount net
+}
+
+start_pre() {
+	checkpath -f --mode 0660 --owner "${ELEMENTSD_USER}:${ELEMENTSD_GROUP}" "${ELEMENTSD_CONFIGFILE}"
+	checkpath -d --mode 0750 --owner "${ELEMENTSD_USER}:${ELEMENTSD_GROUP}" "${ELEMENTSD_DATADIR}"
+	checkpath -d --mode 0755 --owner "${ELEMENTSD_USER}:${ELEMENTSD_GROUP}" "${ELEMENTSD_LOGDIR}"
+	checkpath -d --mode 0755 --owner "${ELEMENTSD_USER}:${ELEMENTSD_GROUP}" "${ELEMENTSD_PIDDIR}"
+	checkconfig
+}
+
+start() {
+	ebegin "Starting ${name}"
+	mark_service_inactive
+	if start-stop-daemon \
+		--pidfile="${ELEMENTSD_PIDFILE}" \
+		--chdir="${ELEMENTSD_DATADIR}" \
+		--user="${ELEMENTSD_USER}:${ELEMENTSD_GROUP}" \
+		--nice="${ELEMENTSD_NICE}" \
+		--exec="${ELEMENTSD_BIN}" \
+		-- \
+		-daemonwait \
+		-pid="${ELEMENTSD_PIDFILE}" \
+		-conf="${ELEMENTSD_CONFIGFILE}" \
+		-datadir="${ELEMENTSD_DATADIR}" \
+		-debuglogfile="${ELEMENTSD_LOGDIR}/debug.log" \
+		${ELEMENTSD_OPTS}
+	then
+		chmod g+r "${ELEMENTSD_DATADIR}/.cookie"
+		IN_BACKGROUND=yes rc-service "${SVCNAME}" --quiet start
+	else
+		rc-service "${SVCNAME}" --quiet zap
+	fi &
+}
+
+stop() {
+	ebegin "Stopping ${name}"
+	start-stop-daemon --stop \
+		--pidfile="${ELEMENTSD_PIDFILE}" \
+		--retry="${ELEMENTSD_SIGTERM_TIMEOUT}" \
+		--exec="${ELEMENTSD_BIN}"
+	eend $?
+}
+
+checkconfig() {
+	if grep -qs '^rpcuser=' "${ELEMENTSD_CONFIGFILE}" &&
+		! grep -qs '^rpcpassword=' "${ELEMENTSD_CONFIGFILE}"
+	then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run elementsd."
+		eerror "The setting must appear in ${ELEMENTSD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Elements Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

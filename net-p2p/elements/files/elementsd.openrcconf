@@ -1,0 +1,36 @@
+# /etc/conf.d/elementsd: config file for /etc/init.d/elementsd
+
+# Config file location
+#ELEMENTSD_CONFIGFILE="/etc/elements/elements.conf"
+
+# What directory to write pidfile to?  (created and owned by $ELEMENTSD_USER)
+#ELEMENTSD_PIDDIR="/run/elementsd"
+
+# What filename to give the pidfile
+#ELEMENTSD_PIDFILE="${ELEMENTSD_PIDDIR}/${SVCNAME}.pid"
+
+# Where to write elementsd data (be mindful that the blockchain is large)
+#ELEMENTSD_DATADIR="/var/lib/elementsd"
+
+# Where to write the debug.log file
+#ELEMENTSD_LOGDIR="/var/log/elementsd"
+
+# User and group to own elementsd process
+#ELEMENTSD_USER="elements"
+#ELEMENTSD_GROUP="elements"
+
+# Path to elementsd executable
+#ELEMENTSD_BIN="/usr/bin/elementsd"
+
+# Nice value to run elementsd under
+#ELEMENTSD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#ELEMENTSD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for elementsd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+ELEMENTSD_SIGTERM_TIMEOUT=600
