@@ -29,8 +29,9 @@ CRATES="
 	base64-0.13.1
 	base64-0.21.4
 	bech32-0.9.1
-	bitcoin-0.29.2
-	bitcoin_hashes-0.11.0
+	bitcoin-0.30.1
+	bitcoin-private-0.1.0
+	bitcoin_hashes-0.12.0
 	bitflags-1.3.2
 	bitflags-2.4.0
 	bumpalo-3.14.0
@@ -66,6 +67,7 @@ CRATES="
 	heck-0.4.1
 	hermit-abi-0.3.3
 	hex-0.4.3
+	hex_lit-0.1.1
 	home-0.5.5
 	http-0.2.9
 	http-body-0.4.5
@@ -131,8 +133,8 @@ CRATES="
 	rustversion-1.0.14
 	ryu-1.0.15
 	sct-0.7.0
-	secp256k1-0.24.3
-	secp256k1-sys-0.6.1
+	secp256k1-0.27.0
+	secp256k1-sys-0.8.1
 	serde-1.0.188
 	serde_derive-1.0.188
 	serde_json-1.0.107
