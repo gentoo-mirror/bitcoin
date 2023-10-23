@@ -347,6 +347,8 @@ pkg_pretend() {
 		die 'lightningd is running'
 	fi
 
+	use postgres && postgres_check_slot
+
 	if ! use git-src ; then
 		show_backports_warning
 		ewarn '\n'"${EGIT_REPO_URI[0]%.git}/compare/${HEAD_COMMIT}...whitslack:lightning:${EGIT_COMMIT}"
