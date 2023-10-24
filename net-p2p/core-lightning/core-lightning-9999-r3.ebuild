@@ -230,7 +230,7 @@ CDEPEND="
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
-	>=dev-python/bitstring-3[${PYTHON_USEDEP}]
+	>=dev-python/bitstring-4.1[${PYTHON_USEDEP}]
 	>=dev-python/coincurve-18[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1[${PYTHON_USEDEP}]
