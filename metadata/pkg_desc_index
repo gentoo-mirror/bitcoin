@@ -30,4 +30,3 @@ net-p2p/joinmarket 0.9.10: JoinMarket CoinJoin client and daemon
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
 sys-libs/libbacktrace 1.0_p20230329: C library that may be linked into a C/C++ program to produce symbolic backtraces
 virtual/python-serviceproxy 0: Virtual for jsonrpc.proxy.ServiceProxy
-x11-libs/amd-adl-sdk 3.0 4.0: API to access display driver functionality for ATI graphics cards
