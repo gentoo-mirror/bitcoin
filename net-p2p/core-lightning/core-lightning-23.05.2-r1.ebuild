@@ -184,7 +184,7 @@ CRATES="
 	yasna-0.5.1
 "
 
-inherit bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
+inherit bash-completion-r1 cargo distutils-r1 edo postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/_}
@@ -424,7 +424,7 @@ src_configure() {
 	)
 
 	python_need='mako' python_setup
-	set ./configure \
+	edo ./configure \
 		CC="$(tc-getCC)" \
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
 		CWARNFLAGS= \
@@ -440,8 +440,6 @@ src_configure() {
 		--disable-ub-sanitize \
 		--disable-fuzzing \
 		$(use_enable rust)
-	echo "${@}"
-	"${@}" || die 'configure failed'
 
 	use python && distutils-r1_src_configure
 	use rust && cargo_src_configure
