@@ -6,7 +6,7 @@ EAPI=7
 PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1 pypi
+inherit distutils-r1 edo pypi
 
 DESCRIPTION="HMAC-based Extract-and-Expand Key Derivation Function (HKDF) implemented in Python"
 HOMEPAGE="https://github.com/casebeer/python-hkdf https://pypi.org/project/hkdf/"
@@ -26,7 +26,5 @@ src_unpack() {
 }
 
 python_test() {
-	set -- "${EPYTHON}" -m tests
-	echo "${@}" >&2
-	"${@}" || die "Tests failed with ${EPYTHON}"
+	edo "${PYTHON}" -m tests
 }

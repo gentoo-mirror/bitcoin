@@ -5,7 +5,7 @@ EAPI=7
 
 POSTGRES_COMPAT=( {10..15} )
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=poetry
@@ -158,7 +158,7 @@ CRATES="
 	yasna-0.4.0
 "
 
-inherit backports bash-completion-r1 cargo distutils-r1 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo distutils-r1 edo postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/[-_]rc/rc}
@@ -395,7 +395,7 @@ src_configure() {
 	)
 
 	python_need='mako' python_setup
-	set ./configure \
+	edo ./configure \
 		CC="$(tc-getCC)" \
 		CONFIGURATOR_CC="$(tc-getBUILD_CC)" \
 		CWARNFLAGS= \
@@ -411,8 +411,6 @@ src_configure() {
 		--disable-ub-sanitize \
 		--disable-fuzzing \
 		$(use_enable rust)
-	echo "${@}"
-	"${@}" || die 'configure failed'
 
 	use python && distutils-r1_src_configure
 	use rust && cargo_src_configure
