@@ -1,0 +1,16 @@
+BDEPEND=sys-devel/autoconf-archive virtual/pkgconfig doc? ( app-doc/doxygen ) man? ( app-doc/doxygen ) sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.5:1.16 ) >=sys-devel/autoconf-2.71-r5 >=sys-devel/libtool-2.4.7
+DEFINED_PHASES=configure install prepare
+DEPEND=dev-libs/gmp:= dev-libs/openssl:=
+DESCRIPTION=Library for Base58Check encoding and decoding
+EAPI=8
+HOMEPAGE=https://github.com/whitslack/libbase58check
+INHERIT=autotools
+IUSE=doc +man test
+KEYWORDS=~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86
+LICENSE=WTFPL-2
+RDEPEND=dev-libs/gmp:= dev-libs/openssl:=
+RESTRICT=!test? ( test )
+SLOT=0/0
+SRC_URI=https://github.com/whitslack/libbase58check/archive/v1.0.tar.gz -> libbase58check-1.0.tar.gz
+_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	70ec42843fec87d20fd94c67e77cdbff	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	9d3a9a889a6fa62ae794f817c156491b	autotools	6ae9a4347149b19a112caa1182d03bde
+_md5_=b22d1e04827fef89f3243a946b52ca8d
