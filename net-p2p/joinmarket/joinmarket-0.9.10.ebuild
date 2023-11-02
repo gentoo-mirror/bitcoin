@@ -137,8 +137,13 @@ src_prepare() {
 	distutils-r1_src_prepare
 }
 
+python_compile_subdir() {
+	distutils-r1_python_compile
+	rm -rf -- "${BUILD_DIR}/build" || die
+}
+
 python_compile() {
-	python_foreach_subdir distutils-r1_python_compile
+	python_foreach_subdir python_compile_subdir
 }
 
 python_test() {
