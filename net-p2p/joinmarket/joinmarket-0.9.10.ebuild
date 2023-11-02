@@ -139,7 +139,7 @@ src_prepare() {
 
 python_compile_subdir() {
 	distutils-r1_python_compile
-	rm -rf -- "${BUILD_DIR}" || die
+	rm -rf -- "${BUILD_DIR}/build" || die
 }
 
 python_compile() {
