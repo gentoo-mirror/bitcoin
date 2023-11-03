@@ -3,7 +3,7 @@
 
 EAPI=7
 
-POSTGRES_COMPAT=( {10..15} )
+POSTGRES_COMPAT=( {11..16} )
 
 PYTHON_COMPAT=( python3_{10..12} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
@@ -309,10 +309,6 @@ python_foreach_subdir() {
 		"${@}"
 		popd >/dev/null || die
 	done
-}
-
-pkg_pretend() {
-	use postgres && postgres_check_slot
 }
 
 pkg_setup() {
