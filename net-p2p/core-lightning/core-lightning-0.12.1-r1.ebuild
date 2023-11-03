@@ -278,8 +278,6 @@ pkg_pretend() {
 			'\n'"if you are certain you know what you are doing."
 		die 'lightningd is running'
 	fi
-
-	use postgres && postgres_check_slot
 }
 
 pkg_setup() {

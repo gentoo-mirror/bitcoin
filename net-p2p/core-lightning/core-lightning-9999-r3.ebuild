@@ -311,10 +311,6 @@ python_foreach_subdir() {
 	done
 }
 
-pkg_pretend() {
-	use postgres && postgres_check_slot
-}
-
 pkg_setup() {
 	if use postgres ; then
 		postgres_pkg_setup
