@@ -7,6 +7,7 @@
 		<flag name="ecdh">Enable ECDH shared secret computation</flag>
 		<flag name="ecdsa-adaptor">Enable ECDSA adaptor module</flag>
 		<flag name="ecdsa-s2c">Enable ECDSA sign-to-contract module</flag>
+		<flag name="ellswift">Enable ElligatorSwift encoding for public keys</flag>
 		<flag name="experimental">Allow experimental USE flags</flag>
 		<flag name="external-default-callbacks">Enable external default callback functions</flag>
 		<flag name="extrakeys">Enable extrakeys module</flag>
