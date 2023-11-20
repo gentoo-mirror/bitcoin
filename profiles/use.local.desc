@@ -16,6 +16,7 @@ dev-libs/libsecp256k1-zkp:bppp - Enable Bulletproofs++ module
 dev-libs/libsecp256k1-zkp:ecdh - Enable ECDH shared secret computation
 dev-libs/libsecp256k1-zkp:ecdsa-adaptor - Enable ECDSA adaptor module
 dev-libs/libsecp256k1-zkp:ecdsa-s2c - Enable ECDSA sign-to-contract module
+dev-libs/libsecp256k1-zkp:ellswift - Enable ElligatorSwift encoding for public keys
 dev-libs/libsecp256k1-zkp:experimental - Allow experimental USE flags
 dev-libs/libsecp256k1-zkp:external-default-callbacks - Enable external default callback functions
 dev-libs/libsecp256k1-zkp:extrakeys - Enable extrakeys module
