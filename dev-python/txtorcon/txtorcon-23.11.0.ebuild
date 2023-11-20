@@ -10,8 +10,6 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Twisted-based Tor controller client, with state-tracking and config abstractions"
 HOMEPAGE="https://github.com/meejah/txtorcon https://pypi.org/project/txtorcon/ https://txtorcon.readthedocs.org"
-SRC_URI+="
-	https://github.com/meejah/txtorcon/commit/9f098a89c78199af26b17cb2adcf10c9057e62d8.patch?full_index=1 -> ${PN}-fix-tests-python3_12.patch"
 
 LICENSE="MIT"
 SLOT="0"
@@ -22,7 +20,6 @@ RESTRICT="!test? ( test )"
 PYTHON_DEPEND='
 	dev-python/automat[${PYTHON_USEDEP}]
 	dev-python/cryptography[${PYTHON_USEDEP}]
-	dev-python/incremental[${PYTHON_USEDEP}]
 	>=dev-python/twisted-15.5.0[${PYTHON_USEDEP},crypt(+),ssl(+)]
 	>=dev-python/zope-interface-3.6.1[${PYTHON_USEDEP}]
 '
@@ -39,14 +36,12 @@ BDEPEND="
 	doc? ( $(python_gen_any_dep "${DOC_DEPEND}") )
 	test? (
 		${RDEPEND}
-		dev-python/mock[${PYTHON_USEDEP}]
 	)
 "
 
 PATCHES=(
 	"${FILESDIR}/txtorcon-0.19.3-Removeunconditionalexamples.patch"
 	"${FILESDIR}/txtorcon-0.19.3-Removeinstalldocs.patch"
-	"${DISTDIR}/${PN}-fix-tests-python3_12.patch"
 )
 
 python_check_deps() {
