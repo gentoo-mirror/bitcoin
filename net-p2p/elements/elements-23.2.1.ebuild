@@ -5,20 +5,16 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
 
-inherit autotools backports db-use desktop python-any-r1 systemd xdg-utils
+inherit autotools backports check-reqs db-use desktop edo python-any-r1 systemd xdg-utils
 
 BACKPORTS=(
-	0f95247246344510c9a51810c14c633abb382e95:resolve-conflicts	# Integrate univalue into our buildsystem
-	17ae2601c786e6863cee1bd62297d79521219295	# build: remove build stubs for external leveldb
-	cf7292597e18ffca06b0fbf8bcd545aec387e380	# configure.ac: remove Bashism
 )
 
 DESCRIPTION="Implementation of advanced blockchain features extending the Bitcoin protocol"
 HOMEPAGE="https://elementsproject.org/"
 BACKPORTS_BASE_URI="https://github.com/bitcoin/bitcoin/commit/"
 SRC_URI="https://github.com/ElementsProject/elements/releases/download/${P}/${P}.tar.gz
-	$(backports_patch_uris)
-	https://github.com/bitcoin/bitcoin/raw/304319367595b51abfd69f1c4abddeef0acca3a9/src/univalue/sources.mk -> ${P}-univalue-sources.mk"
+	$(backports_patch_uris)"
 
 LICENSE="MIT"
 SLOT="0"
@@ -32,7 +28,7 @@ REQUIRED_USE="
 	system-leveldb? ( || ( daemon gui ) )
 "
 RDEPEND="
-	>=dev-libs/boost-1.71.0:=
+	>=dev-libs/boost-1.77.0:=
 	>=dev-libs/libevent-2.1.12:=
 	berkdb? ( >=sys-libs/db-4.8.30:$(db_ver_to_slot 4.8)=[cxx] )
 	daemon? (
@@ -40,11 +36,11 @@ RDEPEND="
 		acct-user/elements
 	)
 	gui? (
-		>=dev-qt/qtcore-5.12.11:5
-		>=dev-qt/qtgui-5.12.11:5
-		>=dev-qt/qtnetwork-5.12.11:5
-		>=dev-qt/qtwidgets-5.12.11:5
-		dbus? ( >=dev-qt/qtdbus-5.12.11:5 )
+		>=dev-qt/qtcore-5.15.3:5
+		>=dev-qt/qtgui-5.15.3:5
+		>=dev-qt/qtnetwork-5.15.3:5
+		>=dev-qt/qtwidgets-5.15.3:5
+		dbus? ( >=dev-qt/qtdbus-5.15.3:5 )
 	)
 	nat-pmp? ( >=net-libs/libnatpmp-20200924:= )
 	qrcode? ( >=media-gfx/qrencode-3.4.4:= )
@@ -56,7 +52,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	systemtap? ( >=dev-util/systemtap-4.8 )
+	systemtap? ( >=dev-util/systemtap-4.5 )
 "
 BDEPEND="
 	virtual/pkgconfig
@@ -64,7 +60,7 @@ BDEPEND="
 		acct-group/elements
 		acct-user/elements
 	)
-	gui? ( >=dev-qt/linguist-tools-5.12.11:5 )
+	gui? ( >=dev-qt/linguist-tools-5.15.3:5 )
 	test? ( ${PYTHON_DEPS} )
 "
 IDEPEND="
@@ -78,6 +74,8 @@ DOCS=(
 	doc/files.md
 	doc/i2p.md
 	doc/JSON-RPC-interface.md
+	doc/multisig-tutorial.md
+	doc/p2p-bad-ports.md
 	doc/psbt.md
 	doc/reduce-memory.md
 	doc/reduce-traffic.md
@@ -87,7 +85,7 @@ DOCS=(
 )
 
 PATCHES=(
-	"${FILESDIR}/22.1.1-syslibs.patch"
+	"${FILESDIR}/23.2.1-syslibs.patch"
 )
 
 efmt() {
@@ -118,15 +116,20 @@ pkg_pretend() {
 			configuration, but your Elements node will be unable to open any wallets.
 		EOF
 	fi
+
+	# test/functional/feature_pruning.py requires 4 GB disk space
+	use test && CHECKREQS_DISK_BUILD="4G" check-reqs_pkg_pretend
 }
 
 pkg_setup() {
-	use test && python-any-r1_pkg_setup
+	if use test ; then
+		CHECKREQS_DISK_BUILD="4G" check-reqs_pkg_setup
+		python-any-r1_pkg_setup
+	fi
 }
 
 src_unpack() {
 	unpack "${P}.tar.gz"
-	cp "${DISTDIR}/${P}-univalue-sources.mk" "${S}/src/univalue/sources.mk" || die
 }
 
 src_prepare() {
@@ -155,7 +158,7 @@ src_configure() {
 		--${wallet}-wallet
 		$(use_with sqlite)
 		$(use_with berkdb bdb)
-		$(use_enable systemtap ebpf)
+		$(use_enable systemtap usdt)
 		$(use_with upnp miniupnpc)
 		$(use_with nat-pmp natpmp)
 		$(use_enable test tests)
@@ -172,6 +175,9 @@ src_configure() {
 		--enable-util-tx
 		--${wallet}-util-wallet
 		--disable-util-util
+		# syscall sandbox is missing faccessat2 and pselect6, causing test failures;
+		# removed upstream for 26.0 in https://github.com/bitcoin/bitcoin/commit/32e2ffc39374f61bb2435da507f285459985df9e
+		--without-seccomp
 		--without-libs
 		$(use_with daemon)
 		$(use_with gui gui qt5)
@@ -182,14 +188,32 @@ src_configure() {
 	econf "${myeconfargs[@]}"
 }
 
+src_test() {
+	emake check
+
+	# --extended fails
+	# https://github.com/ElementsProject/elements/issues/1296
+	# https://github.com/ElementsProject/elements/issues/1297
+	use daemon && edo "${PYTHON}" test/functional/test_runner.py \
+			--ansi --jobs="$(get_makeopts_jobs)" --timeout-factor="${TIMEOUT_FACTOR:-15}"
+}
+
 src_install() {
 	use external-signer && DOCS+=( doc/external-signer.md )
+	use berkdb || use sqlite && DOCS+=( doc/managing-wallets.md )
+	use systemtap && DOCS+=( doc/tracing.md )
 	use zeromq && DOCS+=( doc/zmq.md )
+
+	if use daemon ; then
+		# https://bugs.gentoo.org/757102
+		DOCS+=( share/rpcauth/rpcauth.py )
+		docompress -x "/usr/share/doc/${PF}/rpcauth.py"
+	fi
 
 	default
 
 	find "${ED}" -type f -name '*.la' -delete || die
-	! use test || rm -f -- "${ED}"/usr/bin/test_elements{,-qt} || die
+	! use test || rm -f -- "${ED}"/usr/bin/test_{bitcoin,elements}{,-qt} || die
 
 	if use daemon ; then
 		insinto /etc/elements
