@@ -203,7 +203,7 @@ src_compile() {
 	default
 
 	if ! tc-is-cross-compiler ; then
-		TOPDIR="${S}" bash contrib/devtools/gen-elements-conf.sh
+		TOPDIR="${S}" bash contrib/devtools/gen-elements-conf.sh || die
 		sed -e 's:^#\?\(mainchainrpccookiefile=\).*$:\1/var/lib/bitcoind/.cookie:;tp' \
 			-e 's:^#\?\(rpccookiefile=\).*$:\1/var/lib/elementsd/.cookie:;tp' \
 			-e 's/ To use, copy this file$//p;Tp;:0;n;/save the file\.$/!b0;d;:p;p' \
