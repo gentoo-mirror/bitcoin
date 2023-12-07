@@ -5,9 +5,10 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
 
-inherit autotools backports check-reqs db-use desktop edo python-any-r1 systemd xdg-utils
+inherit autotools backports check-reqs db-use desktop edo python-any-r1 systemd toolchain-funcs xdg-utils
 
 BACKPORTS=(
+	1c7e820ded0846ef6ab4be9616b0de452336ef64	# script: add script to generate example bitcoin.conf
 )
 
 DESCRIPTION="Implementation of advanced blockchain features extending the Bitcoin protocol"
@@ -146,6 +147,16 @@ src_prepare() {
 	fi
 	eautoreconf
 
+	mv contrib/devtools/gen-{bitcoin,elements}-conf.sh || die
+	sed -e 's/bitcoin/elements/g' \
+		-i contrib/devtools/gen-elements-conf.sh || die
+
+	mv share/examples/{bitcoin,elements}.conf || die
+	sed -e 's/Bitcoin/Elements/g' -e 's/bitcoin\([^s]\)/elements\1/g' \
+		-e '3a mainchainrpccookiefile=/var/lib/bitcoind/.cookie\' \
+		-e 'rpccookiefile=/var/lib/elementsd/.cookie' \
+		-i share/examples/elements.conf || die
+
 	# we say --disable-util-util, so we can't test elements-util
 	sed -ne '/^  {/{h;:0;n;H;/^  }/!b0;g;\|"exec": *"\./elements-util"|d};p' \
 		-i test/util/data/bitcoin-util-test.json || die
@@ -188,6 +199,18 @@ src_configure() {
 	econf "${myeconfargs[@]}"
 }
 
+src_compile() {
+	default
+
+	if ! tc-is-cross-compiler ; then
+		TOPDIR="${S}" bash contrib/devtools/gen-elements-conf.sh || die
+		sed -e 's:^#\?\(mainchainrpccookiefile=\).*$:\1/var/lib/bitcoind/.cookie:;tp' \
+			-e 's:^#\?\(rpccookiefile=\).*$:\1/var/lib/elementsd/.cookie:;tp' \
+			-e 's/ To use, copy this file$//p;Tp;:0;n;/save the file\.$/!b0;d;:p;p' \
+			-ni share/examples/elements.conf || die
+	fi
+}
+
 src_test() {
 	emake check
 
@@ -217,10 +240,7 @@ src_install() {
 
 	if use daemon ; then
 		insinto /etc/elements
-		sed -e 's/Bitcoin/Elements/g' -e 's/bitcoin\([^s]\)/elements\1/g' \
-			-e '3a mainchainrpccookiefile=/var/lib/bitcoind/.cookie\' \
-			-e 'rpccookiefile=/var/lib/elementsd/.cookie' \
-			share/examples/bitcoin.conf >"${ED}/etc/elements/elements.conf" || die
+		doins share/examples/elements.conf
 		fowners elements:elements /etc/elements/elements.conf
 		fperms 0660 /etc/elements/elements.conf
 
