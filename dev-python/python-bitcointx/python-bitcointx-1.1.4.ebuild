@@ -22,10 +22,6 @@ RDEPEND="
 	>=dev-libs/libsecp256k1-0.1_pre20211111
 "
 
-PATCHES=(
-	"${FILESDIR}/1.1.3-drop-openssl-dep.patch"
-)
-
 S="${WORKDIR}/${PN}-${PN}-v${MyPV}"
 
 distutils_enable_tests unittest
