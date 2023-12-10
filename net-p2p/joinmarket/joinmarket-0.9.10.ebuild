@@ -26,6 +26,7 @@ IUSE="+client +daemon qt5"
 REQUIRED_USE="
 	client? ( daemon )
 	qt5? ( client )
+	test? ( client )
 "
 
 RDEPEND="
@@ -139,6 +140,13 @@ src_prepare() {
 			-e 's:^#\?\(os\.system('\''\)pyside2-uic:\1'"${UIC//:/\\:}"' -g python:' \
 			-i jmqtui/setup.py || die
 
+	# https://github.com/JoinMarket-Org/joinmarket-clientserver/commit/c8eef50e9347bb14d0e30ea046b6d59898fbb65e
+	mkdir test/unified || die
+	mv test/*.py test/unified/ || die
+	local each ; for each in */test/ ; do
+		mv --no-clobber --no-target-directory -- "${each%/}" "test/${each%/test/}" || die
+	done
+
 	distutils-r1_src_prepare
 }
 
@@ -151,19 +159,31 @@ python_compile() {
 	python_foreach_subdir python_compile_subdir
 }
 
+src_test() {
+	# avoid package occlusion when running tests
+	rm -rf -- "${PYTHON_SUBDIRS[@]}" || die
+
+	distutils-r1_src_test
+}
+
 python_test() {
 	ln -sfn test/regtest_joinmarket.cfg joinmarket.cfg || die
 
-	jm_test_datadir=${T}/jm_test_home/.bitcoin
+	local jm_test_datadir=${T}/jm_test_home/.bitcoin
 	rm -rf -- "${jm_test_datadir}" || die
 	mkdir -p -- "${jm_test_datadir}" || die
 
-	btcconf=${jm_test_datadir}/bitcoin.conf
+	local btcconf=${jm_test_datadir}/bitcoin.conf
 	cp -f -- test/bitcoin.conf "${btcconf}" || die
 	echo "datadir=${jm_test_datadir}" >>"${btcconf}" || die
 
+	# https://github.com/bitcoin/bitcoin/pull/28597
+	if has_version '>=net-p2p/bitcoin-core-26' ; then
+		echo 'deprecatedrpc=create_bdb' >>"${btcconf}" || die
+	fi
+
 	epytest \
-		"${PYTHON_SUBDIRS[@]}" $(usev client test) \
+		test \
 		--nirc=2 \
 		--btcconf="${btcconf}" \
 		$(sed -n \
