@@ -166,6 +166,8 @@ inherit backports bash-completion-r1 cargo distutils-r1 edo postgres toolchain-f
 
 MyPN=lightning
 MyPV=${PV/_}
+MyPVR=${MyPV}-gentoo-${PR}
+
 BACKPORTS=(
 	ed4815527aba7a3d11bd9f33b441372edd56310e	# gossipd: avoid gossipd crash due to double freeing timer
 	8315c7c906a0d54f2157009665d0b091d746dcbe	# lightningd: don't send channeld message to onchaind.
@@ -338,7 +340,7 @@ src_prepare() {
 		-e 's/^\(release = \).*$/\1"'"${MyPV}-gentoo-${PR}"'"/' \
 		-i doc/conf.py || die
 
-	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
+	# our VERSION="${MyPVR}" confuses is_released_version()
 	[[ ${PV} != *([.[:digit:]]) ]] ||
 		sed -ne '/^static bool is_released_version(void)/{a { return true; }
 			p;:x;n;/^}$/d;bx};p' -i wallet/db.c || die
@@ -357,7 +359,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}-gentoo-${PR}"
+		VERSION="${MyPVR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=

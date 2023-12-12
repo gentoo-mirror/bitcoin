@@ -205,11 +205,13 @@ EGIT_OPT_DEFAULT=1
 inherit bash-completion-r1 cargo distutils-r1 edo git-opt-r3 postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV/_}-gentoo-${PR}
+MyPV=${PV/_}
+MyPVR=${MyPV}-gentoo-${PR}
+DIST_PR=${PR}
 BASE_COMMIT=v${PV/_}
 HEAD_COMMIT=v23.11
 DEADEND_COMMITS=( v23.05.2 ) # reachable from EGIT_COMMIT but not from HEAD_COMMIT
-EGIT_COMMIT=v${MyPV}
+EGIT_COMMIT=v${MyPV}-gentoo-${DIST_PR}
 EGIT_REPO_URI=( https://github.com/{ElementsProject,whitslack}/"${MyPN}".git )
 EGIT_BRANCH="$(ver_cut 1-2)/backports"
 EGIT_SUBMODULES=( '-*' )
@@ -217,7 +219,7 @@ EGIT_SUBMODULES=( '-*' )
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
 SRC_URI="
-	!git-src? ( https://github.com/whitslack/${MyPN}/archive/${EGIT_COMMIT}.tar.gz -> ${PF}.tar.gz )
+	!git-src? ( https://github.com/whitslack/${MyPN}/archive/${EGIT_COMMIT}.tar.gz -> ${PN}-${PV}-${DIST_PR}.tar.gz )
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
@@ -304,7 +306,7 @@ REQUIRED_USE="
 PATCHES=(
 )
 
-S=${WORKDIR}/${MyPN}-${MyPV}
+S=${WORKDIR}/${MyPN}-${MyPV}-gentoo-${DIST_PR}
 EGIT_CHECKOUT_DIR=${S}
 DOCS=( CHANGELOG.md README.md SECURITY.md )
 
@@ -399,7 +401,7 @@ src_unpack() {
 		cd "${S}" || die
 		audit_backports
 	else
-		unpack "${PF}.tar.gz"
+		unpack "${PN}-${PV}-${DIST_PR}.tar.gz"
 	fi
 	cd "${S}/external" || die
 	rm -r */ || die
@@ -458,7 +460,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}"
+		VERSION="${MyPVR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
