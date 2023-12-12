@@ -198,6 +198,7 @@ inherit bash-completion-r1 cargo distutils-r1 edo postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/_}
+MyPVR=${MyPV}-gentoo-${PR}
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
@@ -375,7 +376,7 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
-	# our VERSION="${MyPV}-gentoo-${PR}" confuses is_released_version()
+	# our VERSION="${MyPVR}" confuses is_released_version()
 	[[ ${PV} != *([.[:digit:]]) ]] ||
 		sed -ne '/^bool is_released_version(void)/{a { return true; }
 			p;:x;n;/^}$/d;bx};p' -i common/version.c || die
@@ -388,7 +389,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}-gentoo-${PR}"
+		VERSION="${MyPVR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=

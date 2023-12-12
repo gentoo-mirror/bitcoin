@@ -161,7 +161,9 @@ CRATES="
 inherit backports bash-completion-r1 cargo distutils-r1 edo postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV/[-_]rc/rc}
+MyPV=${PV/_}
+MyPVR=${MyPV}-gentoo-${PR}
+
 BACKPORTS=(
 	2ac775f9f4343338a0782a07d446920582f576b8	# lightningd: fix crash with -O3 -flto.
 	6a48ed9e826efed1ea53b18a8308f97c2d5bbe34	# gossmap: fail to get capacity of locally-added chans (don't crash!).
@@ -354,7 +356,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}-gentoo-${PR}"
+		VERSION="${MyPVR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=

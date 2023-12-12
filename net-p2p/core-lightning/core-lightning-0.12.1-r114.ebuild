@@ -202,25 +202,33 @@ CRATES="
 EGIT_MIN_CLONE_TYPE=single
 EGIT_OPT_DEFAULT=1
 
-inherit bash-completion-r1 cargo distutils-r1 edo git-opt-r3 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo distutils-r1 edo git-opt-r3 postgres toolchain-funcs
 
 MyPN=lightning
-MyPV=${PV/_}-gentoo-${PR}
+MyPV=${PV/_}
+MyPVR=${MyPV}-gentoo-${PR}
+DIST_PR=r113
 BASE_COMMIT=v${PV/_}
 HEAD_COMMIT=v23.11
 DEADEND_COMMITS=( v23.05.2 ) # reachable from EGIT_COMMIT but not from HEAD_COMMIT
-EGIT_COMMIT=v${MyPV}
+EGIT_COMMIT=v${MyPV}-gentoo-${DIST_PR}
 EGIT_REPO_URI=( https://github.com/{ElementsProject,whitslack}/"${MyPN}".git )
 EGIT_BRANCH="${PV}/backports"
 EGIT_SUBMODULES=( '-*' )
 
+BACKPORTS=(
+	cf43294cb2c79f4014e0605310f127751b9a3e71	# subd: Do not send feerate updates to non-channeld subds
+)
+
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
+BACKPORTS_BASE_URI="${EGIT_REPO_URI[0]%.git}/commit/"
 SRC_URI="
-	!git-src? ( https://github.com/whitslack/${MyPN}/archive/${EGIT_COMMIT}.tar.gz -> ${PF}.tar.gz )
+	!git-src? ( https://github.com/whitslack/${MyPN}/archive/${EGIT_COMMIT}.tar.gz -> ${PN}-${PV}-${DIST_PR}.tar.gz )
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
+	$(backports_patch_uris)
 "
 
 LICENSE="MIT BSD-2 CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
@@ -303,7 +311,7 @@ REQUIRED_USE="
 PATCHES=(
 )
 
-S=${WORKDIR}/${MyPN}-${MyPV}
+S=${WORKDIR}/${MyPN}-${MyPV}-gentoo-${DIST_PR}
 EGIT_CHECKOUT_DIR=${S}
 DOCS=( CHANGELOG.md README.md SECURITY.md )
 
@@ -371,7 +379,7 @@ audit_backports() {
 	set -o pipefail
 
 	ebegin 'Verifying that all revert commits are tree-same as their grandparents'
-	git rev-list --no-merges "${HEAD_COMMIT}..${EGIT_COMMIT}" "${DEADEND_COMMITS[@]/#/^}" |
+	git rev-list --no-merges --grep='^Revert "' "${HEAD_COMMIT}..${EGIT_COMMIT}" "${DEADEND_COMMITS[@]/#/^}" |
 		while read -r rev ; do git diff --exit-code "${rev}"{^^,} || exit ; done >/dev/null
 	eend "${?}" || die 'revert commit audit failed'
 
@@ -398,7 +406,7 @@ src_unpack() {
 		cd "${S}" || die
 		audit_backports
 	else
-		unpack "${PF}.tar.gz"
+		unpack "${PN}-${PV}-${DIST_PR}.tar.gz"
 	fi
 	cd "${S}/external" || die
 	rm -r */ || die
@@ -414,6 +422,7 @@ src_unpack() {
 }
 
 src_prepare() {
+	backports_apply_patches
 	default
 
 	# hack to suppress tools/refresh-submodules.sh
@@ -457,7 +466,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
-		VERSION="${MyPV}"
+		VERSION="${MyPVR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
@@ -581,7 +590,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-23.02.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
