@@ -1,7 +1,7 @@
 # Copyright 2010-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 POSTGRES_COMPAT=( {11..16} )
 
@@ -199,36 +199,29 @@ CRATES="
 	yasna-0.5.2
 "
 
-EGIT_MIN_CLONE_TYPE=single
-EGIT_OPT_DEFAULT=1
-
-inherit bash-completion-r1 cargo distutils-r1 edo git-opt-r3 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo distutils-r1 edo postgres toolchain-funcs
 
 MyPN=lightning
 MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
-DIST_PR=${PR}
-BASE_COMMIT=v${PV/_}
-HEAD_COMMIT=v23.11
-DEADEND_COMMITS=( v23.05.2 ) # reachable from EGIT_COMMIT but not from HEAD_COMMIT
-EGIT_COMMIT=v${MyPV}-gentoo-${DIST_PR}
-EGIT_REPO_URI=( https://github.com/{ElementsProject,whitslack}/"${MyPN}".git )
-EGIT_BRANCH="${PV}/backports"
-EGIT_SUBMODULES=( '-*' )
+
+BACKPORTS=(
+	cf43294cb2c79f4014e0605310f127751b9a3e71	# subd: Do not send feerate updates to non-channeld subds
+)
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
-HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
-SRC_URI="
-	!git-src? ( https://github.com/whitslack/${MyPN}/archive/${EGIT_COMMIT}.tar.gz -> ${PN}-${PV}-${DIST_PR}.tar.gz )
+HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
+BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
+SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
+	$(backports_patch_uris)
 "
 
 LICENSE="MIT BSD-2 CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE="debug doc +man postgres python rust sqlite test"
 RESTRICT="mirror !test? ( test )"
 
@@ -278,7 +271,6 @@ BDEPEND="
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
 		')
 	)
-	git-src? ( net-misc/curl[ssl] )
 	python? (
 		${DISTUTILS_DEPS}
 		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
@@ -306,8 +298,7 @@ REQUIRED_USE="
 PATCHES=(
 )
 
-S=${WORKDIR}/${MyPN}-${MyPV}-gentoo-${DIST_PR}
-EGIT_CHECKOUT_DIR=${S}
+S=${WORKDIR}/${MyPN}-${MyPV}
 DOCS=( CHANGELOG.md README.md SECURITY.md )
 
 python_check_deps() {
@@ -328,16 +319,6 @@ python_foreach_subdir() {
 	done
 }
 
-show_backports_warning() {
-	ewarn "You are installing an" \
-		    "${PORTAGE_COLOR_WARN-${WARN}}UNOFFICIAL${PORTAGE_COLOR_NORMAL-${NORMAL}}" \
-		    "branch of Core Lightning that is kept as" \
-		'\n'"closely in sync with the latest official release as possible without" \
-		'\n'"introducing any database schema migrations relative to ${BASE_COMMIT}." \
-		'\n'"You should proceed only if you trust the branch maintainer or have" \
-		'\n'"carefully audited the differences versus the upstream release:"
-}
-
 pkg_pretend() {
 	if [[ ! "${REPLACE_RUNNING_CLIGHTNING}" ]] &&
 		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
@@ -353,11 +334,6 @@ pkg_pretend() {
 			'\n'"if you are certain you know what you are doing."
 		die 'lightningd is running'
 	fi
-
-	if ! use git-src ; then
-		show_backports_warning
-		ewarn '\n'"${EGIT_REPO_URI[0]%.git}/compare/${HEAD_COMMIT}...whitslack:lightning:${EGIT_COMMIT}"
-	fi
 }
 
 pkg_setup() {
@@ -369,40 +345,8 @@ pkg_setup() {
 	use test && tc-ld-disable-gold	# mock magic doesn't support gold
 }
 
-audit_backports() {
-	local - any
-	set -o pipefail
-
-	ebegin 'Verifying that all revert commits are tree-same as their grandparents'
-	git rev-list --no-merges "${HEAD_COMMIT}..${EGIT_COMMIT}" "${DEADEND_COMMITS[@]/#/^}" |
-		while read -r rev ; do git diff --exit-code "${rev}"{^^,} || exit ; done >/dev/null
-	eend "${?}" || die 'revert commit audit failed'
-
-	ebegin "Verifying that no database migrations are introduced since ${BASE_COMMIT}"
-	count_migrations() {
-		git show "${1}:wallet/db.c" | sed -ne '/dbmigrations\[\] = {$/,/^};/{/},/p}' | wc -l
-	}
-	(( "$(count_migrations "${EGIT_COMMIT}")" == "$(count_migrations "${BASE_COMMIT}")" ))
-	eend "${?}" || die 'database migrations audit failed'
-	unset count_migrations
-
-	show_backports_warning
-	ewarn '\n'"\$ export GIT_DIR=${EGIT_DIR@Q}" \
-		'\n'"\$ HEAD=\$(git ls-remote --tags ${EGIT_REPO_URI[0]} ${HEAD_COMMIT} | cut -f1)" \
-		'\n'"\$ git diff \"\${HEAD}..${EGIT_COMMIT}\"" \
-		'\n'"\$ git log --reverse --merges --cc \"\${HEAD}..${EGIT_COMMIT}\""
-}
-
 src_unpack() {
-	if use git-src ; then
-		git-r3_fetch "${EGIT_REPO_URI[0]}" "refs/tags/${HEAD_COMMIT}"
-		git-r3_fetch "${EGIT_REPO_URI[0]}" "refs/tags/${BASE_COMMIT}"
-		git-r3_src_unpack
-		cd "${S}" || die
-		audit_backports
-	else
-		unpack "${PN}-${PV}-${DIST_PR}.tar.gz"
-	fi
+	unpack "${P}.tar.gz"
 	cd "${S}/external" || die
 	rm -r */ || die
 	unpack jsmn-1.0.0.tar.gz gheap-67fc83b.tar.gz
@@ -417,6 +361,7 @@ src_unpack() {
 }
 
 src_prepare() {
+	backports_apply_patches
 	default
 
 	# hack to suppress tools/refresh-submodules.sh
@@ -428,12 +373,6 @@ src_prepare() {
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
-
-	# delete all pre-generated files; they're often stale anyway
-	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
-		cln-rpc/src/model.rs \
-		contrib/pyln-grpc-proto/pyln/grpc/{node_pb2{,_grpc},primitives_pb2}.py \
-		doc/*.[0-9] || die
 
 	# only run 'install' command if there are actually files to install
 	# and don't unconditionally regenerate Python sources
@@ -448,6 +387,11 @@ src_prepare() {
 
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
+
+	# our VERSION="${MyPVR}" confuses is_released_version()
+	[[ ${PV} != *([.[:digit:]]) ]] ||
+		sed -ne '/^bool is_released_version(void)/{a { return true; }
+			p;:x;n;/^}$/d;bx};p' -i common/version.c || die
 
 	# don't require running in a Git worktree
 	rm conftest.py || die
