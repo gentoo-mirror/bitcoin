@@ -206,13 +206,12 @@ MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
-	cf43294cb2c79f4014e0605310f127751b9a3e71	# subd: Do not send feerate updates to non-channeld subds
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
 BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
-SRC_URI="${HOMEPAGE}/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+SRC_URI="${HOMEPAGE}/archive/refs/tags/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
