@@ -207,9 +207,9 @@ inherit backports bash-completion-r1 cargo distutils-r1 edo git-opt-r3 postgres 
 MyPN=lightning
 MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
-DIST_PR=r113
+DIST_PR=${PR}
 BASE_COMMIT=v${PV/_}
-HEAD_COMMIT=v23.11
+HEAD_COMMIT=v23.11.2
 DEADEND_COMMITS=( v23.05.2 ) # reachable from EGIT_COMMIT but not from HEAD_COMMIT
 EGIT_COMMIT=v${MyPV}-gentoo-${DIST_PR}
 EGIT_REPO_URI=( https://github.com/{ElementsProject,whitslack}/"${MyPN}".git )
@@ -379,7 +379,7 @@ audit_backports() {
 	set -o pipefail
 
 	ebegin 'Verifying that all revert commits are tree-same as their grandparents'
-	git rev-list --no-merges --grep='^Revert "' "${HEAD_COMMIT}..${EGIT_COMMIT}" "${DEADEND_COMMITS[@]/#/^}" |
+	git rev-list --no-merges "${HEAD_COMMIT}..${EGIT_COMMIT}" "${DEADEND_COMMITS[@]/#/^}" |
 		while read -r rev ; do git diff --exit-code "${rev}"{^^,} || exit ; done >/dev/null
 	eend "${?}" || die 'revert commit audit failed'
 
@@ -590,7 +590,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-0.12.0.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-23.02.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
