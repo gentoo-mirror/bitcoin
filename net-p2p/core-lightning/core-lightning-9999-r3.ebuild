@@ -1,4 +1,4 @@
-# Copyright 2010-2023 Gentoo Authors
+# Copyright 2010-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -158,6 +158,7 @@ CRATES="
 	tokio-macros-2.1.0
 	tokio-rustls-0.23.4
 	tokio-stream-0.1.14
+	tokio-test-0.4.3
 	tokio-util-0.7.9
 	tonic-0.8.3
 	tonic-build-0.8.4
