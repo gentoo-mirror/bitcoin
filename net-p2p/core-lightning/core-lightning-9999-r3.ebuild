@@ -86,6 +86,7 @@ CRATES="
 	libc-0.2.148
 	linux-raw-sys-0.4.7
 	log-0.4.20
+	matchers-0.1.0
 	matchit-0.7.3
 	memchr-2.6.3
 	mime-0.3.17
@@ -94,6 +95,7 @@ CRATES="
 	mio-0.8.8
 	multimap-0.8.3
 	nom-7.1.3
+	nu-ansi-term-0.46.0
 	num-bigint-0.4.4
 	num-integer-0.1.45
 	num-traits-0.2.16
@@ -101,6 +103,7 @@ CRATES="
 	object-0.32.1
 	oid-registry-0.6.1
 	once_cell-1.18.0
+	overload-0.1.1
 	pem-1.1.1
 	percent-encoding-2.3.0
 	petgraph-0.6.4
@@ -122,7 +125,9 @@ CRATES="
 	rcgen-0.10.0
 	redox_syscall-0.3.5
 	regex-1.9.5
+	regex-automata-0.1.10
 	regex-automata-0.3.8
+	regex-syntax-0.6.29
 	regex-syntax-0.7.5
 	ring-0.16.20
 	rustc-demangle-0.1.23
@@ -138,7 +143,9 @@ CRATES="
 	serde-1.0.188
 	serde_derive-1.0.188
 	serde_json-1.0.107
+	sharded-slab-0.1.7
 	slab-0.4.9
+	smallvec-1.11.2
 	socket2-0.4.9
 	socket2-0.5.4
 	spin-0.5.2
@@ -150,6 +157,7 @@ CRATES="
 	termcolor-1.3.0
 	thiserror-1.0.49
 	thiserror-impl-1.0.49
+	thread_local-1.1.7
 	time-0.3.29
 	time-core-0.1.2
 	time-macros-0.2.15
@@ -165,14 +173,17 @@ CRATES="
 	tower-0.4.13
 	tower-layer-0.3.2
 	tower-service-0.3.2
-	tracing-0.1.37
-	tracing-attributes-0.1.26
-	tracing-core-0.1.31
+	tracing-0.1.40
+	tracing-attributes-0.1.27
+	tracing-core-0.1.32
 	tracing-futures-0.2.5
+	tracing-log-0.2.0
+	tracing-subscriber-0.3.18
 	try-lock-0.2.4
 	unicode-ident-1.0.12
 	unicode-xid-0.2.4
 	untrusted-0.7.1
+	valuable-0.1.0
 	want-0.3.1
 	wasi-0.11.0+wasi-snapshot-preview1
 	wasm-bindgen-0.2.87
