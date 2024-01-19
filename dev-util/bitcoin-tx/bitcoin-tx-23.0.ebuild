@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -30,7 +30,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	>=sys-devel/automake-1.13
+	>=dev-build/automake-1.13
 	|| ( >=sys-devel/gcc-8.1[cxx] >=sys-devel/clang-7 )
 "
 
