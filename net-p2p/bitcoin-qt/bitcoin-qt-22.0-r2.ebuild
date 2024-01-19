@@ -53,7 +53,7 @@ DEPEND="${RDEPEND}
 	systemtap? ( dev-debug/systemtap )
 "
 BDEPEND="
-	>=sys-devel/automake-1.13
+	>=dev-build/automake-1.13
 	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
 	dev-qt/linguist-tools:5
 	knots? (

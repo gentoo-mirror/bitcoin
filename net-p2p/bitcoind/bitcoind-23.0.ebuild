@@ -48,7 +48,7 @@ DEPEND="${RDEPEND}
 	systemtap? ( >=dev-debug/systemtap-4.5 )
 "
 BDEPEND="
-	>=sys-devel/automake-1.13
+	>=dev-build/automake-1.13
 	|| ( >=sys-devel/gcc-8.1[cxx] >=sys-devel/clang-7 )
 "
 
