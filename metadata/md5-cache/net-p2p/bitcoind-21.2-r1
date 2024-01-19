@@ -1,4 +1,4 @@
-BDEPEND=>=sys-devel/automake-1.13 sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=dev-build/automake-1.16.5:1.16 ) || ( >=dev-build/autoconf-2.72-r1:2.72 >=dev-build/autoconf-2.71-r6:2.71 ) >=dev-build/libtool-2.4.7 virtual/pkgconfig
+BDEPEND=>=dev-build/automake-1.13 sys-devel/gnuconfig >=app-portage/elt-patches-20170815 || ( >=dev-build/automake-1.16.5:1.16 ) || ( >=dev-build/autoconf-2.72-r1:2.72 >=dev-build/autoconf-2.71-r6:2.71 ) >=dev-build/libtool-2.4.7 virtual/pkgconfig
 DEFINED_PHASES=configure install postinst prepare pretend
 DEPEND=acct-group/bitcoin acct-user/bitcoin >=dev-libs/boost-1.68.0:=[threads(+)] dev-libs/libevent:= >dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr] >=dev-libs/univalue-1.0.4:= virtual/bitcoin-leveldb sqlite? ( >=dev-db/sqlite-3.7.17:= ) upnp? ( >=net-libs/miniupnpc-1.9.20150916:= ) berkdb? ( sys-libs/db:4.8=[cxx] ) zeromq? ( net-libs/zeromq:= )
 DESCRIPTION=Original Bitcoin crypto-currency wallet for automated services
@@ -14,4 +14,4 @@ RESTRICT=!test? ( test )
 SLOT=0
 SRC_URI=https://github.com/bitcoin/bitcoin/archive/af591f2068d0363c92d9756ca39c43db85e5804c.tar.gz -> bitcoin-v0.21.2.tar.gz https://bitcoinknots.org/files/21.x/21.2.knots20210629/bitcoin-21.2.knots20210629.patches.txz -> bitcoin-21.2.knots20210629.patches.tar.xz
 _eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	e56c7649b804f051623c8bc1a1c44084	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	9d3a9a889a6fa62ae794f817c156491b	autotools	e4cf390b19033d5ca443765bc8537b81	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff	db-use	3807d3e43e20aaa6e4decedd2bb2db4c	systemd	c8b03e8df84486aa991d4396686e8942
-_md5_=160110da65576d4443611fb6bca4af5b
+_md5_=f49b1aee0bcdcb5b12eadbbf66cfbb0f
