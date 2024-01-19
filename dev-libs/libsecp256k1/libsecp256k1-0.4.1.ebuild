@@ -23,7 +23,7 @@ REQUIRED_USE="
 BDEPEND="
 	dev-build/autoconf-archive
 	virtual/pkgconfig
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 "
 
 PATCHES=(
