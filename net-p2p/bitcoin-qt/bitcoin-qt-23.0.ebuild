@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -52,7 +52,7 @@ RDEPEND="
 	zeromq? ( net-libs/zeromq:= )
 "
 DEPEND="${RDEPEND}
-	systemtap? ( >=dev-util/systemtap-4.5 )
+	systemtap? ( >=dev-debug/systemtap-4.5 )
 "
 BDEPEND="
 	>=sys-devel/automake-1.13
