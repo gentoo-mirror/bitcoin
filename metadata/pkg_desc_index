@@ -4,7 +4,7 @@ acct-user/elements 0: System-wide Elements services user
 acct-user/lightning 0: System-wide Lightning services user
 dev-db/pg_base58check 1.0_p1: Base58Check functions and base type for PostgreSQL
 dev-libs/libbase58check 1.0: Library for Base58Check encoding and decoding
-dev-libs/libsecp256k1 0.4.1 9999: Optimized C library for EC operations on curve secp256k1
+dev-libs/libsecp256k1 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/libsecp256k1-zkp 0.1.0_pre20231101: A fork of libsecp256k1 with support for advanced and experimental features such as Confidential Assets and MuSig2
 dev-python/base58 2.1.1: Base58 and Base58Check implementation compatible with what is used by the bitcoin network
 dev-python/bencoder-pyx 3.0.1: A fast bencode implementation in Cython
