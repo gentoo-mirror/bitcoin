@@ -13,5 +13,5 @@ REQUIRED_USE=sqlite? ( wallet ) berkdb? ( wallet ) wallet? ( || ( berkdb sqlite 
 RESTRICT=!test? ( test )
 SLOT=0
 SRC_URI=https://github.com/bitcoin/bitcoin/archive/a0988140b71485ad12c3c3a4a9573f7c21b1eff8.tar.gz -> bitcoin-v22.0.tar.gz https://bitcoinknots.org/files/22.x/22.0.knots20211108/bitcoin-22.0.knots20211108.patches.txz -> bitcoin-22.0.knots20211108.patches.tar.xz
-_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	e56c7649b804f051623c8bc1a1c44084	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	9d3a9a889a6fa62ae794f817c156491b	autotools	e4cf390b19033d5ca443765bc8537b81	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff	db-use	3807d3e43e20aaa6e4decedd2bb2db4c	systemd	c8b03e8df84486aa991d4396686e8942	flag-o-matic	78cf3cc2d5572fddf5e5e10c70f7c81a
+_eclasses_=gnuconfig	b6b3e92f8b8c996400074b5f61a59256	toolchain-funcs	e56c7649b804f051623c8bc1a1c44084	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	9d3a9a889a6fa62ae794f817c156491b	autotools	e4cf390b19033d5ca443765bc8537b81	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff	db-use	3807d3e43e20aaa6e4decedd2bb2db4c	systemd	c8b03e8df84486aa991d4396686e8942	flag-o-matic	b2b07efa51009704f88173b2c7feab47
 _md5_=a7953eeef3ef02816ace4e52e6b780d4
