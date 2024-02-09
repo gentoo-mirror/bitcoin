@@ -8,7 +8,7 @@ inherit autotools multilib-minimal
 MyPN=secp256k1-zkp
 DESCRIPTION="A fork of libsecp256k1 with support for advanced and experimental features such as Confidential Assets and MuSig2"
 HOMEPAGE="https://github.com/BlockstreamResearch/secp256k1-zkp"
-COMMITHASH="2192e9d051186754100fd270955fa6e7df26d457"
+COMMITHASH="1e04d324476f991de0b503343d8de73c505f7276"
 SRC_URI="
 	${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tar.gz
 	https://github.com/bitcoin-core/secp256k1/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch?full_index=1 -> libsecp256k1-PR1159-772e74.patch
@@ -22,7 +22,7 @@ RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	asm? ( || ( amd64 arm ) arm? ( experimental ) )
-	bppp? ( experimental )
+	bppp? ( experimental generator )
 	ecdsa-adaptor? ( experimental )
 	ecdsa-s2c? ( experimental )
 	generator? ( experimental )
@@ -86,19 +86,10 @@ multilib_src_configure() {
 		$(use_enable {,module-}schnorrsig) \
 		$(use_enable {,module-}surjectionproof)
 		$(use_enable {,module-}whitelist)
+		$(use_with asm asm "$(usex arm arm32 auto)")
 		$(usev lowmem '--with-ecmult-window=4 --with-ecmult-gen-precision=2')
 		$(use_with valgrind)
 	)
-	if use asm; then
-		if use arm; then
-			myeconfargs+=( --with-asm=arm32 )
-		else
-			myeconfargs+=( --with-asm=auto )
-		fi
-	else
-		myeconfargs+=( --with-asm=no )
-	fi
-
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
