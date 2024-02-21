@@ -240,7 +240,7 @@ RESTRICT="mirror !test? ( test )"
 CDEPEND="
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
 	>=dev-libs/libsodium-1.0.16:=
-	>=net-libs/libwally-core-1.0.0:0/1[elements]
+	>=net-libs/libwally-core-1.2.0_p20240220:0/1[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.13:=
 	postgres? ( ${POSTGRES_DEP} )
@@ -539,7 +539,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-23.08.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-24.02.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
