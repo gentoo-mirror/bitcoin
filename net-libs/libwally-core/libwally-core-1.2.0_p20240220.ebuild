@@ -11,12 +11,14 @@ DISTUTILS_EXT=1
 inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
 BACKPORTS=(
+	abb22e19d114855de995c86ad749f31561739353	# tx: check absolute tx limits only when constructing from scratch
 )
 
+MyPV="$(ver_cut 1-3)"
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
 BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
-SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
+SRC_URI="${HOMEPAGE}/archive/release_${MyPV}.tar.gz -> ${PN}-${MyPV}.tar.gz
 	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0"
@@ -61,7 +63,7 @@ REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} elements )
 "
 
-S="${WORKDIR}/${PN}-release_${PV}"
+S="${WORKDIR}/${PN}-release_${MyPV}"
 
 # https://github.com/ElementsProject/libwally-core/pull/409#issuecomment-1713069590
 RDEPEND="${RDEPEND//'dev-lang/python:3.12'/'>=dev-lang/python-3.12.0_rc2:3.12'}"
@@ -96,7 +98,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	unpack "${P}.tar.gz"
+	unpack "${PN}-${MyPV}.tar.gz"
 }
 
 src_prepare() {
