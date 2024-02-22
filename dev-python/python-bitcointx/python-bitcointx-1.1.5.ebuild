@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
-	>=dev-libs/libsecp256k1-0.1_pre20211111
+	>=dev-libs/libsecp256k1-0.4.0
 "
 
 S="${WORKDIR}/${PN}-${PN}-v${MyPV}"
