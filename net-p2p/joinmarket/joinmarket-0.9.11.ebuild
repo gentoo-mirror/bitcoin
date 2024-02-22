@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -17,55 +17,55 @@ HOMEPAGE="https://github.com/JoinMarket-Org/joinmarket-clientserver"
 SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	test? (
 		https://github.com/JoinMarket-Org/miniircd/archive/20a391f490a58ba9ef295b0d813a95a7e9337382.tar.gz -> ${PN}-miniircd.tar.gz
-	)"
+	)
+"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-IUSE="+client +daemon qt5"
+IUSE="+client +daemon gui"
 REQUIRED_USE="
 	client? ( daemon )
-	qt5? ( client )
+	gui? ( client )
 	test? ( client )
 "
 
 RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/chromalog-1.0.5[${PYTHON_USEDEP}]
-		>=dev-python/pyaes-1.6.1[${PYTHON_USEDEP}]
+		>=dev-python/cryptography-3.3.2[${PYTHON_USEDEP}]
+		amd64? ( >=dev-python/cryptography-41.0.6[${PYTHON_USEDEP}] )
+		arm64? ( >=dev-python/cryptography-41.0.6[${PYTHON_USEDEP}] )
 		>=dev-python/service-identity-21.1.0[${PYTHON_USEDEP}]
-		>=dev-python/twisted-22.4.0[${PYTHON_USEDEP}]
-		>=dev-python/txtorcon-22.0.0[${PYTHON_USEDEP}]
+		>=dev-python/twisted-23.10.0[${PYTHON_USEDEP}]
+		>=dev-python/txtorcon-23.11.0[${PYTHON_USEDEP}]
 
 		client? (
-			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
 			>=dev-python/argon2-cffi-21.3.0[${PYTHON_USEDEP}]
+			>=dev-python/autobahn-20.12.3[${PYTHON_USEDEP}]
 			>=dev-python/bencoder-pyx-3.0.1[${PYTHON_USEDEP}]
 			>=dev-python/klein-20.6.0[${PYTHON_USEDEP}]
 			>=dev-python/mnemonic-0.20[${PYTHON_USEDEP}]
 			>=dev-python/pyjwt-2.4.0[${PYTHON_USEDEP}]
-			>=dev-python/python-bitcointx-1.1.3[${PYTHON_USEDEP}]
+			>=dev-python/python-bitcointx-1.1.5[${PYTHON_USEDEP}]
 			>=dev-python/werkzeug-2.2.3[${PYTHON_USEDEP}]
 		)
 
 		daemon? (
-			>=dev-python/cryptography-3.3.2[${PYTHON_USEDEP}]
-			amd64? ( >=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}] )
-			arm64? ( >=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}] )
 			>=dev-python/libnacl-1.8.0[${PYTHON_USEDEP}]
 			>=dev-python/pyopenssl-23.2.0[${PYTHON_USEDEP}]
 		)
 
-		qt5? (
+		gui? (
 			dev-python/pillow[${PYTHON_USEDEP}]
 			>=dev-python/pyside2-5.14.2[gui,widgets,${PYTHON_USEDEP}]
 			>=dev-python/qrcode-7.3.1[${PYTHON_USEDEP}]
-			>=dev-python/qt5reactor-0.6_pre20181201[${PYTHON_USEDEP}]
+			>=dev-python/qt5reactor-0.6.3[${PYTHON_USEDEP}]
 		)
 	')
 
 	client? (
-		>=dev-libs/libsecp256k1-0.1_pre20211204[ecdh,recovery]
+		>=dev-libs/libsecp256k1-0.4.1[ecdh,recovery]
 	)
 "
 DEPEND=""
@@ -80,7 +80,7 @@ BDEPEND="
 		)
 	')
 
-	qt5? (
+	gui? (
 		dev-qt/qtwidgets
 	)
 
@@ -99,26 +99,11 @@ S="${WORKDIR}/${MyPN}-${PV}"
 
 distutils_enable_tests pytest
 
-python_foreach_subdir() {
-	local subdir
-	for subdir in "${PYTHON_SUBDIRS[@]}" ; do
-		pushd "${subdir}" >/dev/null || die
-		"${@}"
-		popd >/dev/null || die
-	done
-}
-
-pkg_setup() {
-	PYTHON_SUBDIRS=( jmbase )
-	use client && PYTHON_SUBDIRS+=( jmbitcoin jmclient )
-	use daemon && PYTHON_SUBDIRS+=( jmdaemon )
-	use qt5 && PYTHON_SUBDIRS+=( jmqtui )
-
-	python-single-r1_pkg_setup
-}
-
 src_unpack() {
 	default
+	use client || rm -r "${S}"/{src,test}/{jmbitcoin,jmclient} || die
+	use daemon || rm -r "${S}"/{src,test}/jmdaemon || die
+	use gui || rm -r "${S}/src/jmqtui" || die
 	use !test || mv miniircd-* "${S}/miniircd" || die
 }
 
@@ -129,41 +114,18 @@ src_prepare() {
 
 	# Gentoo is not affected by https://bugreports.qt.io/browse/QTBUG-88688
 	sed -e 's/\(PySide2\|PyQt5\)!=5\.15\.0,!=5\.15\.1,!=5\.15\.2,!=6\.0/\1/' \
-			-e '/QTBUG-88688$/d' \
-			-i requirements/gui.txt \
-			-i jmqtui/setup.py || die
+			-e 's/\s*#.*QTBUG-88688$//' \
+			-i pyproject.toml || die
 
 	# PySide2 no longer ships pyside2-uic in favor of 'uic -g python'
 	# https://bugreports.qt.io/browse/PYSIDE-1098
-	local UIC="$(qt5_get_bindir)/uic"
-	sed -e 's/^#\(import os\)$/\1/' \
-			-e 's:^#\?\(os\.system('\''\)pyside2-uic:\1'"${UIC//:/\\:}"' -g python:' \
-			-i jmqtui/setup.py || die
-
-	# https://github.com/JoinMarket-Org/joinmarket-clientserver/commit/c8eef50e9347bb14d0e30ea046b6d59898fbb65e
-	mkdir test/unified || die
-	mv test/*.py test/unified/ || die
-	local each ; for each in */test/ ; do
-		mv --no-clobber --no-target-directory -- "${each%/}" "test/${each%/test/}" || die
-	done
+	if use gui ; then
+		local UIC="$(qt5_get_bindir)/uic"
+		sed -e 's:\(os\.system('\''\)pyside2-uic:\1'"${UIC//:/\\:}"' -g python:' \
+				-i src/jmqtui/_compile.py || die
+	fi
 
 	distutils-r1_src_prepare
-}
-
-python_compile_subdir() {
-	distutils-r1_python_compile
-	rm -rf -- "${BUILD_DIR}/build" || die
-}
-
-python_compile() {
-	python_foreach_subdir python_compile_subdir
-}
-
-src_test() {
-	# avoid package occlusion when running tests
-	rm -rf -- "${PYTHON_SUBDIRS[@]}" || die
-
-	distutils-r1_src_test
 }
 
 python_test() {
@@ -201,7 +163,7 @@ src_install() {
 			find scripts/*.py "${@}" -perm /0111
 			use client || grep -l '\bjmclient\b' scripts/*.py
 			use daemon || grep -l '\bjmdaemon\b' scripts/*.py
-			use qt5 || grep -l '\bPySide2\b' scripts/*.py
+			use gui || grep -l '\bPySide2\b' scripts/*.py
 		} | sort | uniq -u
 	}
 
@@ -213,7 +175,7 @@ src_install() {
 	dodoc -r README.md docs/{*.md,images,release-notes}
 	newdoc scripts{/,-}README.md
 
-	if use qt5 ; then
+	if use gui ; then
 		doicon docs/images/joinmarket_logo.png
 		domenu joinmarket-qt.desktop
 	fi
