@@ -23,8 +23,8 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-build/autoconf-archive
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen )
-	man? ( app-doc/doxygen )
+	doc? ( app-text/doxygen )
+	man? ( app-text/doxygen )
 "
 
 src_prepare() {
