@@ -8,16 +8,22 @@ PYTHON_REQ_USE="sqlite,ssl"
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit desktop distutils-r1 qmake-utils
+inherit backports desktop distutils-r1 qmake-utils
 
 MyPN=${PN}-clientserver
 
+BACKPORTS=(
+	3317b0b519512c11b858403b86d5d46e0cc440b3	# Fix jm_single().bc_interface.get_deser_from_gettransaction call
+)
+
 DESCRIPTION="JoinMarket CoinJoin client and daemon"
 HOMEPAGE="https://github.com/JoinMarket-Org/joinmarket-clientserver"
+BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
 SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	test? (
 		https://github.com/JoinMarket-Org/miniircd/archive/20a391f490a58ba9ef295b0d813a95a7e9337382.tar.gz -> ${PN}-miniircd.tar.gz
 	)
+	$(backports_patch_uris)
 "
 
 LICENSE="GPL-3"
@@ -108,6 +114,8 @@ src_unpack() {
 }
 
 src_prepare() {
+	backports_apply_patches
+
 	sed -e 's|^\(Exec=\).*$|\1joinmarket-qt.py|' \
 			-e '/^Name=/a Categories=Network;P2P;Qt;' \
 			-i joinmarket-qt.desktop || die
