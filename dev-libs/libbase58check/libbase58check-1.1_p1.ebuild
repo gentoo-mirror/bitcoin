@@ -7,7 +7,7 @@ inherit autotools
 
 DESCRIPTION="Library for Base58Check encoding and decoding"
 HOMEPAGE="https://github.com/whitslack/libbase58check"
-SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="${HOMEPAGE}/archive/v${PV/_}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="WTFPL-2"
 SLOT="0/0"  # subslot is from soname
@@ -26,6 +26,8 @@ BDEPEND="
 	doc? ( app-text/doxygen )
 	man? ( app-text/doxygen )
 "
+
+S="${WORKDIR}/${PN}-${PV/_}"
 
 src_prepare() {
 	default
