@@ -6,6 +6,6 @@
 		<name>Matt Whitlock</name>
 	</maintainer>
 	<upstream>
-		<remote-id type="github">whitslack/pg_base58check</remote-id>
+		<remote-id type="github">whitslack/pg_bitcoin_address</remote-id>
 	</upstream>
 </pkgmetadata>

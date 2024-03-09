@@ -1,0 +1,1 @@
+move dev-db/pg_base58check dev-db/pg_bitcoin_address
