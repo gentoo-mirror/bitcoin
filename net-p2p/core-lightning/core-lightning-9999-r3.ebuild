@@ -509,7 +509,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-23.08.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-24.02.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
