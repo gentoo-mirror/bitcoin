@@ -1,6 +1,6 @@
 BDEPEND=postgres_targets_postgres16? ( dev-db/postgresql:16= ) postgres_targets_postgres15? ( dev-db/postgresql:15= ) postgres_targets_postgres14? ( dev-db/postgresql:14= ) postgres_targets_postgres13? ( dev-db/postgresql:13= ) postgres_targets_postgres12? ( dev-db/postgresql:12= ) virtual/pkgconfig
 DEFINED_PHASES=compile install postinst preinst prepare setup test
-DEPEND=postgres_targets_postgres16? ( dev-db/postgresql:16= ) postgres_targets_postgres15? ( dev-db/postgresql:15= ) postgres_targets_postgres14? ( dev-db/postgresql:14= ) postgres_targets_postgres13? ( dev-db/postgresql:13= ) postgres_targets_postgres12? ( dev-db/postgresql:12= ) dev-libs/libbase58check:= dev-libs/libbech32:=
+DEPEND=postgres_targets_postgres16? ( dev-db/postgresql:16= ) postgres_targets_postgres15? ( dev-db/postgresql:15= ) postgres_targets_postgres14? ( dev-db/postgresql:14= ) postgres_targets_postgres13? ( dev-db/postgresql:13= ) postgres_targets_postgres12? ( dev-db/postgresql:12= ) dev-libs/libbase58check:= dev-libs/libbech32:=[blech32(-)]
 DESCRIPTION=PostgreSQL extension supporting Bitcoin addresses
 EAPI=7
 HOMEPAGE=https://github.com/whitslack/pg_bitcoin_address
@@ -8,9 +8,9 @@ INHERIT=postgres-multi
 IUSE=postgres_targets_postgres16 postgres_targets_postgres15 postgres_targets_postgres14 postgres_targets_postgres13 postgres_targets_postgres12
 KEYWORDS=~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86
 LICENSE=WTFPL-2
-RDEPEND=postgres_targets_postgres16? ( dev-db/postgresql:16= ) postgres_targets_postgres15? ( dev-db/postgresql:15= ) postgres_targets_postgres14? ( dev-db/postgresql:14= ) postgres_targets_postgres13? ( dev-db/postgresql:13= ) postgres_targets_postgres12? ( dev-db/postgresql:12= ) dev-libs/libbase58check:= dev-libs/libbech32:=
+RDEPEND=postgres_targets_postgres16? ( dev-db/postgresql:16= ) postgres_targets_postgres15? ( dev-db/postgresql:15= ) postgres_targets_postgres14? ( dev-db/postgresql:14= ) postgres_targets_postgres13? ( dev-db/postgresql:13= ) postgres_targets_postgres12? ( dev-db/postgresql:12= ) dev-libs/libbase58check:= dev-libs/libbech32:=[blech32(-)]
 REQUIRED_USE=|| ( postgres_targets_postgres16 postgres_targets_postgres15 postgres_targets_postgres14 postgres_targets_postgres13 postgres_targets_postgres12 )
 SLOT=0
-SRC_URI=https://github.com/whitslack/pg_bitcoin_address/archive/v2.0.tar.gz -> pg_bitcoin_address-2.0.tar.gz
+SRC_URI=https://github.com/whitslack/pg_bitcoin_address/archive/v2.1.tar.gz -> pg_bitcoin_address-2.1.tar.gz
 _eclasses_=out-of-source-utils	1a9007554652a6e627edbccb3c25a439	multibuild	d67e78a235f541871c7dfe4cf7931489	postgres	3f864368af6c0e46196e03821025f1f5	postgres-multi	eb5db133692fe18bccaa7c2c5f45306d
-_md5_=8a98ebcf4e0d0f0e0891574b2ac6834b
+_md5_=1a477ec3f75475873a169c6954c64f00

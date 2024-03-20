@@ -2,9 +2,9 @@ acct-group/elements 0: A group for users of system-wide Elements services
 acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/elements 0: System-wide Elements services user
 acct-user/lightning 0: System-wide Lightning services user
-dev-db/pg_bitcoin_address 2.0: PostgreSQL extension supporting Bitcoin addresses
+dev-db/pg_bitcoin_address 2.1: PostgreSQL extension supporting Bitcoin addresses
 dev-libs/libbase58check 1.1_p1: Library for Base58Check encoding and decoding
-dev-libs/libbech32 1.0: Library for Bech32/Bech32m encoding and decoding
+dev-libs/libbech32 1.1: Library for Bech32/Bech32m/Blech32/Blech32m encoding/decoding
 dev-libs/libsecp256k1 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/libsecp256k1-zkp 0.1.0_pre20240203: A fork of libsecp256k1 with support for advanced and experimental features such as Confidential Assets and MuSig2
 dev-python/base58 2.1.1: Base58 and Base58Check implementation compatible with what is used by the bitcoin network
