@@ -21,7 +21,7 @@ REQUIRED_USE="${POSTGRES_REQ_USE}"
 RDEPEND="
 	${POSTGRES_DEP}
 	dev-libs/libbase58check:=
-	dev-libs/libbech32:=
+	dev-libs/libbech32:=[blech32(-)]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -43,7 +43,13 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	elog "To instantiate ${PN} in your database, execute:"
+	elog "To instantiate ${PN} in your database:"
 	elog
 	elog "=> CREATE EXTENSION ${PN};"
+	if [[ -n "${REPLACING_VERSIONS}" ]] ; then
+		elog
+		elog "To upgrade an existing ${PN} instance:"
+		elog
+		elog "=> ALTER EXTENSION ${PN} UPDATE;"
+	fi
 }
