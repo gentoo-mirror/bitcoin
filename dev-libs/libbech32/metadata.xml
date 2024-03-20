@@ -5,6 +5,9 @@
 		<email>gentoo@mattwhitlock.name</email>
 		<name>Matt Whitlock</name>
 	</maintainer>
+	<use>
+		<flag name="blech32">Enable support for Blech32/Blech32m encodings.</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">whitslack/libbech32</remote-id>
 	</upstream>
