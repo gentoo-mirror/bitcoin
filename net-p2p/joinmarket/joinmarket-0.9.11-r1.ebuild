@@ -92,6 +92,7 @@ BDEPEND="
 
 	test? (
 		|| (
+			>=net-p2p/bitcoin-core-0.20[berkdb(-),cli(-),daemon(-)]
 			>=net-p2p/bitcoin-core-0.20[berkdb(-),bitcoin-cli(-),daemon(-)]
 			(
 				>=net-p2p/bitcoin-cli-0.20
