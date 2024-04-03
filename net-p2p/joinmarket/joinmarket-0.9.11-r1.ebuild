@@ -134,6 +134,9 @@ src_prepare() {
 				-i src/jmqtui/_compile.py || die
 	fi
 
+	# fix "ValueError: 'int' is not callable" with >=dev-python/pytest-8
+	sed -e 's/type="int"/type=int/' -i conftest.py || die
+
 	distutils-r1_src_prepare
 }
 
