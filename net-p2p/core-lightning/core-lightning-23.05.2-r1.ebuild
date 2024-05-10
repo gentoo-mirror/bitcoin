@@ -217,7 +217,10 @@ CDEPEND="
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
-	<dev-python/bitstring-4.2[${PYTHON_USEDEP}]
+	|| (
+		>=dev-python/bitstring-4.2.2[${PYTHON_USEDEP}]
+		<dev-python/bitstring-4.2[${PYTHON_USEDEP}]
+	)
 	!<dev-python/bitstring-3.1.9
 	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
