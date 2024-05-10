@@ -1,4 +1,4 @@
-# Copyright 2010-2023 Gentoo Authors
+# Copyright 2010-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -217,7 +217,8 @@ CDEPEND="
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
-	>=dev-python/bitstring-3.1.9[${PYTHON_USEDEP}]
+	<dev-python/bitstring-4.2[${PYTHON_USEDEP}]
+	!<dev-python/bitstring-3.1.9
 	>=dev-python/coincurve-17.0.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-36.0.0[${PYTHON_USEDEP}]
 	>=dev-python/PySocks-1.7.1[${PYTHON_USEDEP}]
