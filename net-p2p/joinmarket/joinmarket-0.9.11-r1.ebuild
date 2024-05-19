@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 PYTHON_REQ_USE="sqlite,ssl"
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
@@ -14,6 +14,7 @@ MyPN=${PN}-clientserver
 
 BACKPORTS=(
 	3317b0b519512c11b858403b86d5d46e0cc440b3	# Fix jm_single().bc_interface.get_deser_from_gettransaction call
+	12d6b5aa06777dd4055b632fefc75aa9dc31c61e:strip=\.github/	# Bump compatible Python version to 3.12
 )
 
 DESCRIPTION="JoinMarket CoinJoin client and daemon"
@@ -32,7 +33,7 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="+client +daemon gui"
 REQUIRED_USE="
 	client? ( daemon )
-	gui? ( client )
+	gui? ( client !python_single_target_python3_12 )
 	test? ( client )
 "
 
@@ -107,7 +108,7 @@ S="${WORKDIR}/${MyPN}-${PV}"
 distutils_enable_tests pytest
 
 src_unpack() {
-	default
+	unpack "${P}.tar.gz" $(usev test "${PN}-miniircd.tar.gz")
 	use client || rm -r "${S}"/{src,test}/{jmbitcoin,jmclient} || die
 	use daemon || rm -r "${S}"/{src,test}/jmdaemon || die
 	use gui || rm -r "${S}/src/jmqtui" || die
