@@ -1,14 +1,14 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="HMAC-based Extract-and-Expand Key Derivation Function (HKDF) implemented in Python"
+DESCRIPTION="Python FFI bindings for libsecp256k1"
 COMMIT_HASH="0ce2ec5e423b9e1b5d135eba9061cbb81140751c"
 HOMEPAGE="https://github.com/rustyrussell/secp256k1-py https://pypi.org/project/secp256k1/"
 SRC_URI+="
