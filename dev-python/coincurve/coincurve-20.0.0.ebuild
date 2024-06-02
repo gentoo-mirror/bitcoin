@@ -1,10 +1,10 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=hatchling
 DISTUTILS_EXT=1
 
 inherit distutils-r1
@@ -16,25 +16,27 @@ SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 DEPEND="
 	>=dev-libs/libsecp256k1-0.4.1:=[ecdh,extrakeys,recovery,schnorr]
-	>=dev-python/cffi-1.3.0[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}
 	dev-python/asn1crypto[${PYTHON_USEDEP}]
+	>=dev-python/cffi-1.3.0[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	>=dev-build/cmake-3.26
+	dev-python/cffi[${PYTHON_USEDEP}]
+	>=dev-python/hatchling-1.24.2[${PYTHON_USEDEP}]
+	dev-python/pypkgconf[${PYTHON_USEDEP}]
+	>=dev-python/scikit-build-core-0.9.0[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest
 
-src_prepare() {
-	default
-
-	# upstream logic is broken when pkg-config returns no flags/dirs
-	sed -e 's/^\(_has_system_lib\s*=\s*\).*$/\1True/' -i setup_support.py || die
-	sed -e '/^\s*extension\.extra_\w\+_args\s*=\s*\[$/{s/$/a for a in [/;:0;n;/^\s*\]$/!b0;s/$/ if a]/}' \
-		-i setup.py || die
+src_compile() {
+	local -x COINCURVE_IGNORE_SYSTEM_LIB=0
+	distutils-r1_src_compile
 }
 
 python_test() {
