@@ -11,5 +11,5 @@ LICENSE=MIT
 RDEPEND=>=dev-libs/boost-1.64.0:=[threads(+)] dev-libs/libevent:= >=dev-libs/univalue-1.0.4:=
 SLOT=0
 SRC_URI=https://github.com/bitcoin/bitcoin/archive/a0988140b71485ad12c3c3a4a9573f7c21b1eff8.tar.gz -> bitcoin-v22.0.tar.gz https://bitcoinknots.org/files/22.x/22.0.knots20211108/bitcoin-22.0.knots20211108.patches.txz -> bitcoin-22.0.knots20211108.patches.tar.xz
-_eclasses_=gnuconfig	a397adda6984a4c423e28ac274c1ba98	toolchain-funcs	e56c7649b804f051623c8bc1a1c44084	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	5f49a16f67f81bdf873e3d1f10b10001	autotools	dc70c1dc473b68317fc4a86f5fbfc57d	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff	flag-o-matic	d309b9713dfc18e754cba88d3ba69653
+_eclasses_=gnuconfig	a397adda6984a4c423e28ac274c1ba98	toolchain-funcs	e56c7649b804f051623c8bc1a1c44084	multilib	c19072c3cd7ac5cb21de013f7e9832e0	libtool	5f49a16f67f81bdf873e3d1f10b10001	autotools	dc70c1dc473b68317fc4a86f5fbfc57d	bash-completion-r1	f5e7a020fd9c741740756aac61bf75ff	flag-o-matic	e503ea5acc20410237ba33ec3f7c857d
 _md5_=45007686142c453ce41470cfccec57ae
