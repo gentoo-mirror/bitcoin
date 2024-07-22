@@ -1,9 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
@@ -20,7 +20,7 @@ SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
 	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0"
-SLOT="0/1"  # sublot comes from soname
+SLOT="0/1"  # subslot comes from soname
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 IUSE+=" +asm +elements minimal python test"
 RESTRICT="!test? ( test )"
