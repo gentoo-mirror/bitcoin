@@ -13,16 +13,17 @@ inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-mini
 BACKPORTS=(
 )
 
+MyPV="$(ver_cut 1-3)"
 DESCRIPTION="Collection of useful primitives for cryptocurrency wallets"
 HOMEPAGE="https://github.com/ElementsProject/libwally-core"
 BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
-SRC_URI="${HOMEPAGE}/archive/release_${PV}.tar.gz -> ${P}.tar.gz
+SRC_URI="${HOMEPAGE}/archive/release_${MyPV}.tar.gz -> ${PN}-${MyPV}.tar.gz
 	$(backports_patch_uris)"
 
 LICENSE="MIT CC0-1.0"
-SLOT="0/${PV}"
+SLOT="0/1"  # subslot comes from soname
 KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-IUSE+=" +asm elements minimal python test"
+IUSE+=" +asm +elements minimal python test"
 RESTRICT="!test? ( test )"
 
 # TODO: js
@@ -30,11 +31,9 @@ RESTRICT="!test? ( test )"
 JAVA_PKG_NV_DEPEND=">=virtual/jdk-1.7"
 DEPEND+="
 	!elements? ( >=dev-libs/libsecp256k1-0.3.1[${MULTILIB_USEDEP},ecdh,extrakeys,recovery,schnorr] )
-	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20230412[${MULTILIB_USEDEP},ecdh,ecdsa-s2c,extrakeys,generator,rangeproof,recovery,schnorrsig,surjectionproof,whitelist] )
+	elements? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20240203[${MULTILIB_USEDEP},ecdh,ecdsa-s2c,extrakeys,generator,rangeproof,recovery,schnorrsig,surjectionproof,whitelist] )
 "
 RDEPEND="${DEPEND}
-	!<net-p2p/core-lightning-0.9.3-r2
-	!=net-p2p/core-lightning-9999
 	java? ( >=virtual/jre-1.7 )
 	python? ( ${PYTHON_DEPS} )
 "
@@ -63,12 +62,7 @@ REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} elements )
 "
 
-S="${WORKDIR}/${PN}-release_${PV}"
-
-PATCHES=(
-	"${FILESDIR}/0.8.9-sys_libsecp256k1_zkp.patch"
-	"${FILESDIR}/0.8.8-python-module-dynamic-link.patch"
-)
+S="${WORKDIR}/${PN}-release_${MyPV}"
 
 # https://github.com/ElementsProject/libwally-core/pull/409#issuecomment-1713069590
 RDEPEND="${RDEPEND//'dev-lang/python:3.12'/'>=dev-lang/python-3.12.0_rc2:3.12'}"
@@ -88,20 +82,6 @@ python_check_deps() {
 }
 
 pkg_pretend() {
-	if has_version "<${CATEGORY}/${PN}-0.8.2" &&
-		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
-		{ has_version '<net-p2p/core-lightning-0.9.3-r2' || has_version '=net-p2p/core-lightning-9999' ; } &&
-		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ||
-			-x "${EROOT%/}/run/openrc/started/lightningd" ]]
-	then
-		eerror "${CATEGORY}/${PN}-0.8.2 introduced a binary-incompatible change.
-Installing version ${PV} while running an instance of Core Lightning that
-was compiled against a pre-0.8.2 version of ${PN} will cause
-assertion failures in newly spawned Core Lightning subdaemons. Please stop
-the running lightningd daemon and then reattempt this installation."
-		die 'lightningd is running'
-	fi
-
 	if use minimal ; then
 		ewarn "You have enabled the ${PORTAGE_COLOR_HILITE-${HILITE}}minimal${PORTAGE_COLOR_NORMAL-${NORMAL}} USE flag, which is intended for embedded
 environments and may adversely affect performance on standard systems."
@@ -117,23 +97,21 @@ pkg_setup() {
 }
 
 src_unpack() {
-	unpack "${P}.tar.gz"
+	unpack "${PN}-${MyPV}.tar.gz"
 }
 
 src_prepare() {
 	backports_apply_patches
-	sed -e 's|\(#[[:space:]]*include[[:space:]]\+\)"\(src/\)\?secp256k1/include/\(.*\)"|\1<\3>|' \
-		-i src/*.{c,h} || die
-	rm -r src/secp256k1
 	default
-	sed -e 's/==/=/g' -i configure.ac || die
-	sed -e '/^if not is_windows/,/make -j/d' -i setup.py || die
+	! use java || has_version '<virtual/jdk-20' ||
+		sed -e 's/^\(JAVAC_TARGET\)=.*$/\1=8/' -i configure.ac || die
 	eautoreconf
 	use java && java-pkg-opt-2_src_prepare
 }
 
 multilib_src_configure() {
 	multilib_is_native_abi && cd "${S}" # distutils needs in-tree native build
+	use python && python_setup
 	ECONF_SOURCE="${S}" econf \
 		--includedir="${EPREFIX}/usr/include/libwally" \
 		--enable-export-all \
@@ -143,12 +121,15 @@ multilib_src_configure() {
 		$(use_enable minimal) \
 		$(use_enable asm) \
 		$(multilib_native_use_enable {,swig-}java) \
-		$(multilib_native_use_enable {,swig-}python)
+		$(multilib_native_use_enable {,swig-}python) \
+		--with-system-secp256k1
 }
 
 src_compile() {
 	multilib-minimal_src_compile
 	if use python ; then
+		WALLY_ABI_PY_WHEEL_USE_LIB=shared \
+		WALLY_ABI_PY_WHEEL_USE_PKG_SECP256K1=libsecp256k1_zkp \
 		distutils-r1_src_compile
 	elif use doc ; then
 		python_setup
