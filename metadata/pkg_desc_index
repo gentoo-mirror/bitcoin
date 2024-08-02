@@ -27,7 +27,7 @@ net-p2p/bitcoin-cli 0.15.0-r1 0.15.1 0.16.0 0.16.1 0.16.2 0.16.3 0.17.1 0.18.0 0
 net-p2p/bitcoin-qt 21.2-r1 22.0-r2 23.0: An end-user Qt GUI for the Bitcoin crypto-currency
 net-p2p/bitcoind 21.2-r1 22.0-r2 23.0: Original Bitcoin crypto-currency wallet for automated services
 net-p2p/core-lightning 23.05.2-r1 23.05.2-r104 23.08.1 23.08.1-r102 23.11.2 24.02.2 24.05 9999-r3: An implementation of Bitcoin's Lightning Network in C
-net-p2p/elements 23.2.1-r1: Implementation of advanced blockchain features extending the Bitcoin protocol
+net-p2p/elements 23.2.2: Implementation of advanced blockchain features extending the Bitcoin protocol
 net-p2p/joinmarket 0.9.11-r1: JoinMarket CoinJoin client and daemon
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
 sys-libs/libbacktrace 1.0_p20230329: C library that may be linked into a C/C++ program to produce symbolic backtraces
