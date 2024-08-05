@@ -23,7 +23,7 @@ SLOT="0"
 if [[ "${PV}" != *_rc* ]] ; then
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 fi
-IUSE="+asm +berkdb +cli +daemon dbus examples +external-signer gui kde libs +man nat-pmp +qrcode +sqlite system-leveldb +system-libsecp256k1 systemtap test upnp zeromq"
+IUSE="+asm +berkdb +cli +daemon dbus examples +external-signer gui kde libs +man nat-pmp +qrcode +sqlite system-leveldb +system-libsecp256k1 systemtap test tor-subprocess upnp zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -61,6 +61,7 @@ RDEPEND="
 	sqlite? ( >=dev-db/sqlite-3.38.5:= )
 	system-leveldb? ( virtual/bitcoin-leveldb )
 	system-libsecp256k1? ( >=dev-libs/libsecp256k1-0.4.0:=[ellswift,extrakeys,recovery,schnorr] )
+	tor-subprocess? ( net-vpn/tor )
 	upnp? ( >=net-libs/miniupnpc-2.2.2:= )
 	zeromq? ( >=net-libs/zeromq-4.3.4:= )
 "
@@ -199,6 +200,15 @@ src_configure() {
 		$(use_with system-leveldb)
 		$(use_with system-libsecp256k1)
 	)
+	if use tor-subprocess || use external-signer; then
+		myeconfargs+=( --with-boost-process )
+		if ! use tor-subprocess; then
+			# Disable torexecute feature by default
+			sed 's/\(DEFAULT_TOR_EXECUTE = "\)tor"/\1"/' -i src/torcontrol.cpp || die 'sed failed'
+		fi
+	else
+		myeconfargs+=( --without-boost-process )
+	fi
 	econf "${myeconfargs[@]}"
 }
 
