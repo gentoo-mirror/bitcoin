@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 
 inherit autotools backports check-reqs db-use desktop edo python-any-r1 systemd toolchain-funcs xdg-utils
 
@@ -15,6 +15,7 @@ DESCRIPTION="Implementation of advanced blockchain features extending the Bitcoi
 HOMEPAGE="https://elementsproject.org/"
 BACKPORTS_BASE_URI="https://github.com/bitcoin/bitcoin/commit/"
 SRC_URI="https://github.com/ElementsProject/elements/releases/download/${P}/${P}.tar.gz
+	https://github.com/bitcoin/bitcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1 -> bitcoin-core-miniupnpc-2.2.8-compat.patch
 	$(backports_patch_uris)"
 
 LICENSE="MIT"
@@ -86,6 +87,8 @@ DOCS=(
 )
 
 PATCHES=(
+	"${DISTDIR}/bitcoin-core-miniupnpc-2.2.8-compat.patch"
+	"${FILESDIR}/23.2.3-gcc15.patch"
 	"${FILESDIR}/23.2.1-syslibs.patch"
 )
 
@@ -202,7 +205,7 @@ src_configure() {
 src_compile() {
 	default
 
-	if ! tc-is-cross-compiler ; then
+	if use daemon && ! tc-is-cross-compiler ; then
 		TOPDIR="${S}" bash contrib/devtools/gen-elements-conf.sh || die
 		sed -e 's:^#\?\(mainchainrpccookiefile=\).*$:\1/var/lib/bitcoind/.cookie:;tp' \
 			-e 's:^#\?\(rpccookiefile=\).*$:\1/var/lib/elementsd/.cookie:;tp' \
