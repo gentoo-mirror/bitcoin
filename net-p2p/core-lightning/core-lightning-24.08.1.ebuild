@@ -221,6 +221,7 @@ MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
+	990b3b8016beed5cbeb12b69accf36018e467b11	# tools/headerversions.c: fix build without SQLite
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
