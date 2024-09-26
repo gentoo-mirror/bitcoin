@@ -468,7 +468,6 @@ src_compile() {
 		fi
 	fi
 
-	use rust || cargo_env() { "${@}" ; }  # work around https://bugs.gentoo.org/938764
 	use python && distutils-r1_src_compile
 }
 
