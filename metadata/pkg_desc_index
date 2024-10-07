@@ -14,7 +14,7 @@ dev-python/chromalog 1.0.5: Enhance Python with colored logging
 dev-python/coincurve 20.0.0: Cross-platform Python CFFI bindings for libsecp256k1
 dev-python/hkdf 0.0.3-r1: HMAC-based Extract-and-Expand Key Derivation Function (HKDF) implemented in Python
 dev-python/mkdocs-exclude 1.0.2-r1: A mkdocs plugin that lets you exclude files or trees from your output.
-dev-python/mnemonic 0.20-r1: Mnemonic code for generating deterministic keys, BIP39
+dev-python/mnemonic 0.21: Mnemonic code for generating deterministic keys, BIP39
 dev-python/pycoin 0.91.20210515-r1: Utilities for Bitcoin addresses and transaction manipulation
 dev-python/pypkgconf 2.1.1.1: Python bindings to libpkgconf
 dev-python/python-bitcointx 1.1.5-r1: A python3 library providing an easy interface to the Bitcoin data structures
