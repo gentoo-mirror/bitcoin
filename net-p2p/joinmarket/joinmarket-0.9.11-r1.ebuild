@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 PYTHON_REQ_USE="sqlite,ssl"
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_USE_PEP517=setuptools
@@ -33,7 +33,7 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="+client +daemon gui"
 REQUIRED_USE="
 	client? ( daemon )
-	gui? ( client !python_single_target_python3_12 )
+	gui? ( client !python_single_target_python3_12 !python_single_target_python3_13 )
 	test? ( client )
 "
 
