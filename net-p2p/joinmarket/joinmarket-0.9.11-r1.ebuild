@@ -157,6 +157,12 @@ python_test() {
 		echo 'deprecatedrpc=create_bdb' >>"${btcconf}" || die
 	fi
 
+	# https://github.com/bitcoin/bitcoin/pull/30493
+	# https://github.com/JoinMarket-Org/joinmarket-clientserver/issues/1734
+	if has_version '>=net-p2p/bitcoin-core-28' ; then
+		echo 'mempoolfullrbf=0' >>"${btcconf}" || die
+	fi
+
 	epytest \
 		test \
 		--nirc=2 \
