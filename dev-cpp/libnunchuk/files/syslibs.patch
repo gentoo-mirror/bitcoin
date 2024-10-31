@@ -1,0 +1,414 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2156db7..776782a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,10 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.23)
+ project(nunchuk VERSION 0.1.0)
+ 
++include(GNUInstallDirs)
++
++find_package(PkgConfig)
++
+ configure_file(src/config.h.in nunchuk-config.h)
+ 
+ set(CMAKE_CXX_STANDARD 17)
+@@ -8,13 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_CXX_EXTENSIONS OFF)
+ set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+-set(Boost_USE_STATIC_LIBS ON)
+-set(OPENSSL_USE_STATIC_LIBS ON)
+-set(UR__DISABLE_TESTS ON)
+ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+ 
+ set(BITCOIN_FOLDER "contrib/bitcoin")
+-set(OPENSSL_FOLDER "contrib/openssl")
+ if(ANDROID)
+     if(${ANDROID_ABI} STREQUAL "arm64-v8a")
+         set(ANDROID_TARGET "aarch64-linux-android")
+@@ -49,18 +49,13 @@ if(WIN32)
+ elseif(ANDROID)
+     add_subdirectory(contrib/sqlite)
+ else()
+-    find_library(sqlcipher_lib NAMES libsqlcipher.a PATHS "${PROJECT_SOURCE_DIR}/contrib/sqlcipher/.libs" NO_DEFAULT_PATH)
+-    if (NOT sqlcipher_lib)
+-        message(FATAL_ERROR "sqlcipher not found")
+-    endif()
+-    add_library(sqlcipher STATIC IMPORTED)
+-    set_target_properties(sqlcipher PROPERTIES IMPORTED_LOCATION ${sqlcipher_lib})
++	pkg_check_modules(SQLCIPHER REQUIRED IMPORTED_TARGET sqlcipher)
++	add_library(sqlcipher ALIAS PkgConfig::SQLCIPHER)
+ endif()
+ 
+ add_subdirectory(embedded)
+ 
+-set(UR__DISABLE_TESTS ON)
+-add_subdirectory(contrib/bc-ur-cpp)
++include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/ur/ur.cmake)
+ 
+ add_library(trezor-crypto STATIC
+     "contrib/trezor-firmware/crypto/bip39.c"
+@@ -73,7 +68,7 @@ add_library(trezor-crypto STATIC
+     "contrib/trezor-firmware/crypto/aes/aeskey.c"
+     "contrib/trezor-firmware/crypto/aes/aestab.c"
+ )
+-
++target_compile_options(trezor-crypto PRIVATE -fPIC)
+ target_include_directories(trezor-crypto PUBLIC
+     "${PROJECT_SOURCE_DIR}/contrib/trezor-firmware/crypto"
+ )
+@@ -94,29 +89,10 @@ if(WIN32)
+     endif()
+ endif()
+ 
+-add_library(ur-2 STATIC
+-    "contrib/bc-ur-2/src/crc32.c"
+-    "contrib/bc-ur-2/src/memzero.c"
+-    "contrib/bc-ur-2/src/sha2.c"
+-    "contrib/bc-ur-2/src/bytewords.cpp"
+-    "contrib/bc-ur-2/src/fountain-decoder.cpp"
+-    "contrib/bc-ur-2/src/fountain-encoder.cpp"
+-    "contrib/bc-ur-2/src/fountain-utils.cpp"
+-    "contrib/bc-ur-2/src/random-sampler.cpp"
+-    "contrib/bc-ur-2/src/ur-decoder.cpp"
+-    "contrib/bc-ur-2/src/ur-encoder.cpp"
+-    "contrib/bc-ur-2/src/ur.cpp"
+-    "contrib/bc-ur-2/src/utils.cpp"
+-    "contrib/bc-ur-2/src/xoshiro256.cpp"
+-)
++pkg_check_modules(BC_UR REQUIRED IMPORTED_TARGET libbc-ur)
++add_library(ur-2 ALIAS PkgConfig::BC_UR)
+ 
+-target_include_directories(ur-2 PUBLIC
+-    "${PROJECT_SOURCE_DIR}/contrib/bc-ur-2/src"
+-    ${Boost_INCLUDE_DIRS}
+-    "${PROJECT_SOURCE_DIR}/contrib/bitcoin/depends/${ANDROID_TARGET}/include"
+-)
+-
+-add_library("${PROJECT_NAME}" STATIC 
++add_library("${PROJECT_NAME}"
+     src/hwiservice.cpp 
+     src/coreutils.cpp
+     src/descriptor.cpp
+@@ -158,6 +134,22 @@ add_library("${PROJECT_NAME}" STATIC
+     src/utils/loguru.cpp
+ )
+ 
++target_sources(${PROJECT_NAME} PUBLIC FILE_SET HEADERS
++	BASE_DIRS
++		contrib/bitcoin/src
++		include
++		src
++	FILES
++		contrib/bitcoin/src/tinyformat.h
++		include/nunchuk.h
++		include/nunchukmatrix.h
++		src/utils/bip32.hpp
++		src/utils/enumconverter.hpp
++		src/utils/errorutils.hpp
++		src/utils/loguru.hpp
++		src/utils/rfc2440.hpp
++)
++
+ set(PROJECT_LIBRARIES
+     ur
+     ur-2
+@@ -173,37 +165,40 @@ if(WIN32)
+ elseif(APPLE)
+     set(PROJECT_LIBRARIES sqlcipher ${PROJECT_LIBRARIES})
+ elseif(UNIX)
++	target_link_options(${PROJECT_NAME} PRIVATE LINKER:-z,defs)
+     set(PROJECT_LIBRARIES sqlcipher ${PROJECT_LIBRARIES} dl)
+ endif()
+ 
+-set(BUILD_SHARED_LIB_TAPPROTOCOL OFF)
+-add_subdirectory(contrib/tap-protocol)
+-# Pass Bitcoin random to tap-protocol
+-target_compile_definitions(tap-protocol PUBLIC LIB_TAPPROTOCOL_USE_BITCOIN_RANDOM=1)
+-# Allow testnet Tapsigner
+-target_compile_definitions(tap-protocol PUBLIC SKIP_BASE58_PREFIX_CHECK=1)
++include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/tap-protocol/tap-protocol.cmake)
+ 
+-set(BBQR_BUILD_EXAMPLES OFF)
+-add_subdirectory(contrib/bbqr-cpp)
++include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/bbqr-cpp/bbqr-cpp.cmake)
+ 
+ if(ANDROID)
+     target_link_libraries("${PROJECT_NAME}" PUBLIC -Wl,--start-group embedded ${PROJECT_LIBRARIES} trezor-crypto -Wl,--end-group tap-protocol bbqr-cpp)
+ else()
+-    target_link_libraries("${PROJECT_NAME}" PUBLIC embedded ${PROJECT_LIBRARIES} trezor-crypto tap-protocol bbqr-cpp)
++    target_link_libraries("${PROJECT_NAME}" PRIVATE embedded ${PROJECT_LIBRARIES} trezor-crypto tap-protocol bbqr-cpp)
+ endif()
+ 
+-target_include_directories("${PROJECT_NAME}" PUBLIC 
+-    "${PROJECT_SOURCE_DIR}/src"
+-    "${PROJECT_SOURCE_DIR}/include"
+-    ${Boost_INCLUDE_DIRS}
+-    ${OPENSSL_INCLUDE_DIR}
+-    "${PROJECT_SOURCE_DIR}/contrib"
+-    "${PROJECT_SOURCE_DIR}/contrib/sqlite"
+-    "${PROJECT_BINARY_DIR}"
+-    "${PROJECT_SOURCE_DIR}/contrib/tap-protocol/include"
+-    "${PROJECT_SOURCE_DIR}/contrib/bbqr-cpp/include"
++target_include_directories(${PROJECT_NAME}
++	PUBLIC
++		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++	PRIVATE
++		$<BUILD_INTERFACE:
++			${CMAKE_CURRENT_SOURCE_DIR}/src
++			${Boost_INCLUDE_DIRS}
++			${OPENSSL_INCLUDE_DIR}
++		>
+ )
+ 
+ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+ include(CPack)
++
++install(
++	TARGETS ${PROJECT_NAME}
++	EXPORT ${PROJECT_NAME}
++	FILE_SET HEADERS
++		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
++)
++install(EXPORT ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+diff --git a/embedded/CMakeLists.txt b/embedded/CMakeLists.txt
+index fe3db33..593b11a 100644
+--- a/embedded/CMakeLists.txt
++++ b/embedded/CMakeLists.txt
+@@ -15,8 +15,6 @@ elseif(NOT ANDROID)
+     find_package(Boost 1.47.0 REQUIRED COMPONENTS filesystem)
+ endif()
+ 
+-set(UR__DISABLE_TESTS ON)
+-
+ if(WIN32)
+     find_package(Libevent CONFIG REQUIRED)
+ 
+@@ -124,56 +122,144 @@ elseif(ANDROID)
+     endif()
+ 
+ else()
+-    find_library(event_lib NAMES libevent.a event)
+-    if (NOT event_lib)
+-        message(FATAL_ERROR "libevent not found")
+-    endif()
+-    add_library(event STATIC IMPORTED)
+-    set_target_properties(event PROPERTIES IMPORTED_LOCATION ${event_lib})
+-
+-    find_library(event_pthreads_lib NAMES libevent_pthreads.a event_pthreads)
+-    if (NOT event_pthreads_lib)
+-        message(FATAL_ERROR "libevent_pthreads not found")
+-    endif()
+-    add_library(event_pthreads STATIC IMPORTED)
+-    set_target_properties(event_pthreads PROPERTIES IMPORTED_LOCATION ${event_pthreads_lib})
++	pkg_check_modules(LIBEVENT REQUIRED IMPORTED_TARGET libevent)
++	add_library(event ALIAS PkgConfig::LIBEVENT)
++	pkg_check_modules(LIBEVENT_PTHREADS REQUIRED IMPORTED_TARGET libevent_pthreads)
++	add_library(event_pthreads ALIAS PkgConfig::LIBEVENT_PTHREADS)
++	pkg_check_modules(LIBSECP256K1 REQUIRED IMPORTED_TARGET libsecp256k1>=0.2.0)
++	add_library(secp256k1 ALIAS PkgConfig::LIBSECP256K1)
+ 
+     set(Bitcoin_LIBRARIES 
+-        bitcoin_common
+-        bitcoin_util
+-        bitcoin_server
+-        bitcoin_wallet
+-        bitcoin_consensus
+-        bitcoin_crypto_base
+-        bitcoin_crypto_shani
+-        bitcoin_crypto_sse41
+-        bitcoin_crypto_avx2
+         secp256k1
+         leveldb
+-        univalue
+-        memenv
+-        crc32c
+-        crc32c_sse42
+     )
+-    set(Bitcoin_PATHS "${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src")
+-    set(Bitcoin_PATH_SUFFIXES "univalue/.libs" "leveldb" "crc32c" "crypto" "secp256k1/.libs")
+-    foreach(btclib ${Bitcoin_LIBRARIES})
+-        find_library(${btclib}_location ${btclib} PATHS ${Bitcoin_PATHS} PATH_SUFFIXES ${Bitcoin_PATH_SUFFIXES} NO_DEFAULT_PATH)
+-        if (NOT ${btclib}_location)
+-            message(FATAL_ERROR "${btclib} not found")
+-        endif()
+-        add_library(${btclib} STATIC IMPORTED)
+-        set_target_properties(${btclib} PROPERTIES IMPORTED_LOCATION ${${btclib}_location})
+-    endforeach()
+ endif()
+ 
+ set(Bitcoin_INCLUDE_DIRS
+     ${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src
+     ${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src/univalue/include
++    ${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src/leveldb
++    ${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src/leveldb/helpers/memenv
+     ${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src/leveldb/include
+ )
+ 
+-add_library("${PROJECT_NAME}" embeddedrpc.cpp)
++set(Bitcoin_SOURCES
++	arith_uint256.cpp
++	blockfilter.cpp
++	bloom.cpp
++	chain.cpp
++	chainparams.cpp
++	chainparamsbase.cpp
++	coins.cpp
++	compressor.cpp
++	core_read.cpp
++	core_write.cpp
++	dbwrapper.cpp
++	deploymentinfo.cpp
++	deploymentstatus.cpp
++	flatfile.cpp
++	fs.cpp
++	httpserver.cpp
++	key.cpp
++	key_io.cpp
++	logging.cpp
++	merkleblock.cpp
++	netaddress.cpp
++	netbase.cpp
++	outputtype.cpp
++	pow.cpp
++	protocol.cpp
++	psbt.cpp
++	random.cpp
++	randomenv.cpp
++	scheduler.cpp
++	shutdown.cpp
++	signet.cpp
++	threadinterrupt.cpp
++	timedata.cpp
++	txdb.cpp
++	txmempool.cpp
++	validation.cpp
++	validationinterface.cpp
++	versionbits.cpp
++	warnings.cpp
++	consensus/merkle.cpp
++	consensus/tx_check.cpp
++	consensus/tx_verify.cpp
++	crypto/chacha20.cpp
++	crypto/muhash.cpp
++	crypto/sha1.cpp
++	crypto/sha3.cpp
++	crypto/siphash.cpp
++	index/base.cpp
++	index/blockfilterindex.cpp
++	index/coinstatsindex.cpp
++	index/txindex.cpp
++	interfaces/echo.cpp
++	node/blockstorage.cpp
++	node/coin.cpp
++	node/coinstats.cpp
++	node/psbt.cpp
++	node/transaction.cpp
++	node/ui_interface.cpp
++	policy/feerate.cpp
++	policy/fees.cpp
++	policy/packages.cpp
++	policy/policy.cpp
++	policy/rbf.cpp
++	policy/settings.cpp
++	primitives/block.cpp
++	rpc/blockchain.cpp
++	rpc/misc.cpp
++	rpc/rawtransaction.cpp
++	rpc/rawtransaction_util.cpp
++	rpc/request.cpp
++	rpc/server.cpp
++	rpc/util.cpp
++	script/descriptor.cpp
++	script/interpreter.cpp
++	script/script_error.cpp
++	script/sigcache.cpp
++	script/sign.cpp
++	script/signingprovider.cpp
++	script/standard.cpp
++	support/lockedpool.cpp
++	univalue/lib/univalue.cpp
++	univalue/lib/univalue_get.cpp
++	univalue/lib/univalue_read.cpp
++	univalue/lib/univalue_write.cpp
++	util/asmap.cpp
++	util/bip32.cpp
++	util/bytevectorhash.cpp
++	util/error.cpp
++	util/getuniquepath.cpp
++	util/hasher.cpp
++	util/message.cpp
++	util/moneystr.cpp
++	util/rbf.cpp
++	util/serfloat.cpp
++	util/settings.cpp
++	util/sock.cpp
++	util/spanparsing.cpp
++	util/system.cpp
++	util/thread.cpp
++	util/threadnames.cpp
++	util/time.cpp
++	util/tokenpipe.cpp
++	wallet/coinselection.cpp
++	wallet/wallet.cpp
++)
++list(TRANSFORM Bitcoin_SOURCES PREPEND ${CMAKE_SOURCE_DIR}/${BITCOIN_FOLDER}/src/)
++add_library(${PROJECT_NAME} STATIC embeddedrpc.cpp ${Bitcoin_SOURCES})
++target_compile_definitions(${PROJECT_NAME} PRIVATE HAVE_CONFIG_H)
++set_property(SOURCE ${CMAKE_SOURCE_DIR}/${BITCOIN_FOLDER}/src/dbwrapper.cpp APPEND PROPERTY COMPILE_FLAGS -fno-rtti)
++
++set(LEVELDB_BUILD_TESTS OFF)
++set(LEVELDB_BUILD_BENCHMARKS OFF)
++set(LEVELDB_INSTALL OFF)
++set(BUILD_SHARED_LIBS OFF)
++add_subdirectory(${CMAKE_SOURCE_DIR}/${BITCOIN_FOLDER}/src/leveldb ${CMAKE_BINARY_DIR}/${BITCOIN_FOLDER}/src/leveldb)
++target_compile_options(leveldb PRIVATE -fPIC)
+ 
+ set(PROJECT_LIBRARIES
+     ${Bitcoin_LIBRARIES}
+@@ -185,20 +271,17 @@ if(WIN32)
+     target_link_options("${PROJECT_NAME}" PUBLIC /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
+     set(PROJECT_LIBRARIES ${PROJECT_LIBRARIES} libevent::core libevent::extra)
+ else()
++	target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
+     set(PROJECT_LIBRARIES ${PROJECT_LIBRARIES} event event_pthreads)
+ endif()
+ 
+ target_link_libraries("${PROJECT_NAME}" PUBLIC ${PROJECT_LIBRARIES})
+ 
+-target_include_directories("${PROJECT_NAME}" PUBLIC 
+-    "${PROJECT_SOURCE_DIR}"
+-    ${Bitcoin_INCLUDE_DIRS}
+-    ${Boost_INCLUDE_DIRS}
+-    "${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/depends/${ANDROID_TARGET}/include"
++target_include_directories(${PROJECT_NAME}
++	PUBLIC
++		${CMAKE_CURRENT_SOURCE_DIR}
++		${Bitcoin_INCLUDE_DIRS}
++	PRIVATE
++		${Boost_INCLUDE_DIRS}
++		${CMAKE_SOURCE_DIR}/${BITCOIN_FOLDER}/depends/${ANDROID_TARGET}/include
+ )
+-
+-# Pass secp256k1 for tap-protocol
+-get_target_property(SECP256K1_LIBRARY secp256k1 IMPORTED_LOCATION)
+-set(EXTERNAL_SECP256K1_LIBRARY "${SECP256K1_LIBRARY}" PARENT_SCOPE)
+-set(EXTERNAL_SECP256K1_INCLUDE "${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src/secp256k1/include" PARENT_SCOPE)
+-set(USE_EXTERNAL_SECP256K1 ON PARENT_SCOPE)
+diff --git a/src/storage/storage.cpp b/src/storage/storage.cpp
+index 9a0c834..65fbcc0 100644
+--- a/src/storage/storage.cpp
++++ b/src/storage/storage.cpp
+@@ -256,7 +256,7 @@ void NunchukStorage::SetPassphrase(Chain chain, const std::string& value) {
+     } else {
+       return db.ReKey(value);
+     }
+-    fs::copy_file(new_file, old_file, fs::copy_option::overwrite_if_exists);
++    fs::copy_file(new_file, old_file, fs::copy_options::overwrite_existing);
+     fs::remove(new_file);
+   };
+ 
