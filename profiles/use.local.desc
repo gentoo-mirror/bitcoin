@@ -108,3 +108,4 @@ net-p2p/elements:upnp - Enable Universal Plug and Play
 net-p2p/elements:zeromq - Report blocks and transactions via zeromq
 net-p2p/joinmarket:client - Installs jmclient and jmbitcoin packages
 net-p2p/joinmarket:daemon - Installs jmdaemon package
+net-p2p/nunchuk-desktop:qrcode - Enable generation of QR Codes for receiving payments

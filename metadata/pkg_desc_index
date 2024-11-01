@@ -3,7 +3,12 @@ acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/elements 0: System-wide Elements services user
 acct-user/lightning 0: System-wide Lightning services user
 cln-plugins/sling 2.1.1: A Core Lightning plugin to automatically rebalance multiple channels
+dev-cpp/bbqr-cpp 0_pre20240319: Encodes larger files into a series of QR codes so they can cross air gaps
+dev-cpp/bc-ur-cpp 0.1.0_pre20210208: A C++ implementation of BCR-0004 and BCR-0005
+dev-cpp/libnunchuk 0.1.0_pre20241012: C++ multisig library powered by Bitcoin Core
+dev-cpp/tap-protocol 1.0.0_p20240120: Coinkite Tap Protocol
 dev-db/pg_bitcoin_address 2.1: PostgreSQL extension supporting Bitcoin addresses
+dev-libs/bc-ur 0.3.0: Uniform Resources reference library in C++
 dev-libs/libbase58check 1.1_p1: Library for Base58Check encoding and decoding
 dev-libs/libbech32 1.1_p1: Library for Bech32/Bech32m/Blech32/Blech32m encoding/decoding
 dev-libs/libsecp256k1 9999: Optimized C library for EC operations on curve secp256k1
@@ -27,6 +32,7 @@ net-p2p/bitcoin-knots 27.1.0.20240801: Enhanced implementation of the Bitcoin cr
 net-p2p/core-lightning 23.05.2-r1 23.05.2-r104 23.08.1 23.08.1-r102 23.11.2 24.02.2 24.05 24.08.2 9999-r3: An implementation of Bitcoin's Lightning Network in C
 net-p2p/elements 23.2.4: Implementation of advanced blockchain features extending the Bitcoin protocol
 net-p2p/joinmarket 0.9.11-r1: JoinMarket CoinJoin client and daemon
+net-p2p/nunchuk-desktop 1.9.39: Graphical multisig wallet powered by Bitcoin Core
 net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
 sys-libs/libbacktrace 1.0_p20230329: C library that may be linked into a C/C++ program to produce symbolic backtraces
 virtual/bitcoin-leveldb 0-r2: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
