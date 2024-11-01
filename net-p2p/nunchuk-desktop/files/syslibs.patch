@@ -1,0 +1,178 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4d5fc33..8a15ae0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,6 +6,8 @@ else()
+     project(nunchuk-qt VERSION 1.9.39)
+ endif()
+ 
++include(GNUInstallDirs)
++
+ set( CMAKE_CXX_STANDARD 20 )
+ set( CMAKE_CXX_STANDARD_REQUIRED ON)
+ set( CMAKE_INCLUDE_CURRENT_DIR ON )
+@@ -15,8 +17,6 @@ set( CMAKE_AUTOUIC ON )
+ set( CXX_STANDARD "-std=c++20")
+ if (WIN32)
+     set(CXX_STANDARD "/std:c++20")
+-elseif (NOT APPLE)
+-    set( CMAKE_CXX_FLAGS "-march=native -O3")
+ endif()
+ 
+ if (CMAKE_BUILD_TYPE STREQUAL "Release")
+@@ -32,11 +32,6 @@ if(WIN32)
+     set(VCPKG_BUILD_TYPE Release)
+ endif()
+ 
+-# NO PIE memory
+-if(UNIX AND NOT APPLE)
+-    set ( CMAKE_CXX_FLAGS "-no-pie -s" )
+-endif()
+-
+ if( NOT CMAKE_BUILD_TYPE )
+     set( CMAKE_BUILD_TYPE Debug )
+ 
+@@ -292,22 +287,18 @@ QT5_WRAP_CPP(MOCS ${${PROJECT_NAME}_MOCS})
+ 
+ set( QRCODE_SCANNER ON )
+ if(QRCODE_SCANNER)
+-    set(ZXING_UNIT_TESTS OFF)
+-    set(ZXING_BLACKBOX_TESTS OFF)
+-    set(ZXING_EXAMPLES OFF)
+-    set(BUILD_SHARED_LIBS OFF)
+-    # add_definitions ( -DQR_DFS_IMPROVE )
+-    # add_definitions ( -DQR_DFS_IMPROVE_TEST )
+-    add_subdirectory(contrib/zxing ZXing)
++	find_package(ZXing REQUIRED CONFIG)
+ endif(QRCODE_SCANNER)
+ 
+-add_subdirectory(contrib/libnunchuk nunchuk EXCLUDE_FROM_ALL)
++include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/nunchuk/nunchuk.cmake)
+ 
+ macro(SET_OPTION option value)
+   set(${option} ${value} CACHE INTERNAL "" FORCE)
+ endmacro()
+ 
+ SET_OPTION(Quotient_ENABLE_E2EE  ON)
++set(BUILD_SHARED_LIBS OFF)
++set(BUILD_TESTING OFF)
+ add_subdirectory(contrib/quotient quotient EXCLUDE_FROM_ALL)
+ 
+ if(APPLE)
+@@ -358,3 +349,5 @@ if(USE_KEYCHAIN)
+     target_link_libraries(${PROJECT_NAME} PUBLIC ${QTKEYCHAIN_LIBRARIES})
+     include_directories(${QTKEYCHAIN_INCLUDE_DIR})
+ endif()
++
++install(TARGETS ${PROJECT_NAME})
+diff --git a/QRScanner/QBarcodeDecoder.cpp b/QRScanner/QBarcodeDecoder.cpp
+index 822cfce..ad56c77 100644
+--- a/QRScanner/QBarcodeDecoder.cpp
++++ b/QRScanner/QBarcodeDecoder.cpp
+@@ -19,7 +19,6 @@
+  **************************************************************************/
+ #include "QBarcodeDecoder.h"
+ #include "QOutlog.h"
+-#include "ResultPoint.h"
+ #include <QDebug>
+ #include <QImage>
+ #include <QtMultimedia/qvideoframe.h>
+@@ -27,7 +26,7 @@
+ #include <QOpenGLFunctions>
+ #include <QOffscreenSurface>
+ #include <iostream>
+-#include <ReadBarcode.h>
++#include <ZXing/ReadBarcode.h>
+ #include <exception>
+ #include <QScopeGuard>
+ #include <QDateTime>
+@@ -64,7 +63,7 @@ Result ReadBarcode(const QImage& img, const ReaderOptions& options = { })
+         case QImage::Format_ARGB32:
+         case QImage::Format_RGB32:
+ #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
+-            return ImageFormat::RGBA;
++            return ImageFormat::RGBX;
+ #else
+             return ImageFormat::XRGB;
+ #endif
+@@ -72,7 +71,7 @@ Result ReadBarcode(const QImage& img, const ReaderOptions& options = { })
+             return ImageFormat::RGB;
+         case QImage::Format_RGBX8888:
+         case QImage::Format_RGBA8888:
+-            return ImageFormat::RGBA;
++            return ImageFormat::RGBX;
+         case QImage::Format_Grayscale8:
+             return ImageFormat::Lum;
+         default: return ImageFormat::None;
+@@ -90,15 +89,6 @@ Result ReadBarcode(const QImage& img, const ReaderOptions& options = { })
+ 
+ using namespace ZXing::Qt;
+ 
+-std::ostream& operator << (std::ostream& os, const std::vector<ZXing::ResultPoint>& points)
+-{
+-    for (const auto& p : points) {
+-        os << int(p.x() + .5f) << "x" << int(p.y() + .5f) << " ";
+-    }
+-
+-    return os;
+-}
+-
+ QBarcodeDecoder::QBarcodeDecoder(QObject *parent) : QObject(parent)
+ {
+ 
+diff --git a/QRScanner/QBarcodeDecoder.h b/QRScanner/QBarcodeDecoder.h
+index df69f07..45781ad 100644
+--- a/QRScanner/QBarcodeDecoder.h
++++ b/QRScanner/QBarcodeDecoder.h
+@@ -25,7 +25,7 @@
+ 
+ #include <QOpenGLContext>
+ #include <QOpenGLFunctions>
+-#include "BarcodeFormat.h"
++#include <ZXing/BarcodeFormat.h>
+ 
+ // Default camera resolution width/height
+ #define DEFAULT_RES_W 1080
+diff --git a/QRScanner/QBarcodeFilter.h b/QRScanner/QBarcodeFilter.h
+index e5377d2..b4a6102 100644
+--- a/QRScanner/QBarcodeFilter.h
++++ b/QRScanner/QBarcodeFilter.h
+@@ -25,7 +25,7 @@
+ #include <qqml.h>
+ 
+ #include "QBarcodeDecoder.h"
+-#include "BarcodeFormat.h"
++#include <ZXing/BarcodeFormat.h>
+ 
+ void processImage(QBarcodeDecoder *decoder, const QImage &image, ZXing::BarcodeFormats formats);
+ 
+diff --git a/QRScanner/QBarcodeGenerator.cpp b/QRScanner/QBarcodeGenerator.cpp
+index 456213c..1e91332 100644
+--- a/QRScanner/QBarcodeGenerator.cpp
++++ b/QRScanner/QBarcodeGenerator.cpp
+@@ -19,10 +19,10 @@
+  **************************************************************************/
+ #include "QBarcodeGenerator.h"
+ #include <QStandardPaths>
+-#include "MultiFormatWriter.h"
++#include <ZXing/MultiFormatWriter.h>
+ #include <QDateTime>
+ #include "QOutlog.h"
+-#include "BitMatrix.h"
++#include <ZXing/BitMatrix.h>
+ 
+ QBarcodeGenerator::QBarcodeGenerator() : m_borderWitdh(0)
+ {
+diff --git a/main.cpp b/main.cpp
+index c245045..2fd4b55 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -35,7 +35,7 @@
+ #include "Chats/ClientController.h"
+ #include "Premiums/QUserWallets.h"
+ #include "Premiums/QGroupWallets.h"
+-#include "contrib/libnunchuk/src/utils/loguru.hpp"
++#include <nunchuk/utils/loguru.hpp>
+ #include "RegisterTypes/DashRectangle.h"
+ #include "QPingThread.h"
+ #include "QRScanner/QBarcodeFilter.h"

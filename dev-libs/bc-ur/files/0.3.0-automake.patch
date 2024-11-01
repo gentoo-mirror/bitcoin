@@ -1,0 +1,151 @@
+diff --git a/Makefile.am b/Makefile.am
+new file mode 100644
+index 0000000..8902b64
+--- /dev/null
++++ b/Makefile.am
+@@ -0,0 +1,22 @@
++#
++#  Makefile.am
++#
++#  Copyright © 2020-2024 by Blockchain Commons, LLC
++#  Licensed under the "BSD-2-Clause Plus Patent License"
++#
++
++dist_doc_DATA = \
++	LICENSE \
++	README.md
++
++dist_noinst_SCRIPTS = \
++	bootstrap.sh
++
++EXTRA_DIST = \
++	CLA.md $(wildcard CLA-signed/*) \
++	CODEOWNERS \
++	CONTRIBUTING.md
++
++pkgconfig_DATA = libbc-ur.pc
++
++SUBDIRS = src test
+diff --git a/configure.ac b/configure.ac
+index c653a71..7a6d532 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,14 +2,17 @@
+ # Process this file with autoconf to produce a configure script.
+ 
+ AC_PREREQ([2.69])
+-AC_INIT([bc-ur], [0.2.0])
++AC_INIT([bc-ur], [0.3.0], [], [bc-ur], [https://github.com/BlockchainCommons/bc-ur])
+ AC_CONFIG_SRCDIR([src/ur.cpp])
+ AC_CONFIG_HEADERS([config.h])
++AM_INIT_AUTOMAKE([foreign subdir-objects])
++LT_INIT
+ 
+ # Checks for programs.
+ AC_PROG_CXX
+ AC_PROG_CC
+ AC_PROG_INSTALL
++PKG_INSTALLDIR
+ 
+ # Checks for libraries.
+ 
+@@ -29,7 +32,15 @@ AC_TYPE_UINT8_T
+ AC_FUNC_MALLOC
+ AC_CHECK_FUNCS([bzero])
+ 
++case "$(uname)" in
++	*MINGW64*)
++		WS2_32_LIB=-lws2_32
++		;;
++esac
++AC_SUBST([WS2_32_LIB])
++
+ AC_CONFIG_FILES([Makefile
++                 libbc-ur.pc
+                  src/Makefile
+                  test/Makefile])
+ AC_OUTPUT
+diff --git a/libbc-ur.pc.in b/libbc-ur.pc.in
+new file mode 100644
+index 0000000..1eee96c
+--- /dev/null
++++ b/libbc-ur.pc.in
+@@ -0,0 +1,11 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++includedir=@includedir@/@PACKAGE_NAME@
++libdir=@libdir@
++
++Name: lib@PACKAGE_NAME@
++Description: Uniform Resources reference library in C++
++URL: @PACKAGE_URL@
++Version: @PACKAGE_VERSION@
++Cflags: -I${includedir}
++Libs: -L${libdir} -l@PACKAGE_NAME@
+diff --git a/src/Makefile.am b/src/Makefile.am
+new file mode 100644
+index 0000000..6869f0c
+--- /dev/null
++++ b/src/Makefile.am
+@@ -0,0 +1,41 @@
++#
++#  Makefile.am
++#
++#  Copyright © 2020-2024 by Blockchain Commons, LLC
++#  Licensed under the "BSD-2-Clause Plus Patent License"
++#
++
++lib_LTLIBRARIES = libbc-ur.la
++
++libbc_ur_la_SOURCES = \
++	bytewords.cpp \
++	crc32.c \
++	fountain-decoder.cpp \
++	fountain-encoder.cpp \
++	fountain-utils.cpp \
++	memzero.c \
++	random-sampler.cpp \
++	sha2.c \
++	ur.cpp \
++	ur-decoder.cpp \
++	ur-encoder.cpp \
++	utils.cpp \
++	xoshiro256.cpp
++
++pkginclude_HEADERS = \
++	bc-ur.hpp \
++	bytewords.hpp \
++	cbor-lite.hpp \
++	fountain-decoder.hpp \
++	fountain-encoder.hpp \
++	fountain-utils.hpp \
++	random-sampler.hpp \
++	ur.hpp \
++	ur-encoder.hpp \
++	ur-decoder.hpp \
++	utils.hpp \
++	xoshiro256.hpp
++
++.PHONY: lint
++lint:
++	cppcheck --enable=all --inline-suppr --suppress=unusedFunction --suppress=missingInclude .
+diff --git a/test/Makefile.am b/test/Makefile.am
+new file mode 100644
+index 0000000..e73c784
+--- /dev/null
++++ b/test/Makefile.am
+@@ -0,0 +1,14 @@
++#
++#  Makefile.am
++#
++#  Copyright © 2020-2024 by Blockchain Commons, LLC
++#  Licensed under the "BSD-2-Clause Plus Patent License"
++#
++
++check_PROGRAMS = test
++
++test_SOURCES = test.cpp test-utils.cpp test-utils.hpp
++test_LDADD = ../src/libbc-ur.la @WS2_32_LIB@
++
++TESTS = $(check_PROGRAMS)
++noinst_PROGRAMS = $(check_PROGRAMS)
