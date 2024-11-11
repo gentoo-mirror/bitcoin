@@ -270,7 +270,7 @@ BDEPEND="
 	)
 	rust? (
 		${RUST_DEPEND}
-		>=dev-libs/protobuf-3.20.3
+		>=dev-libs/protobuf-3.20.3[protoc(+)]
 	)
 	sys-devel/gettext
 	virtual/pkgconfig
