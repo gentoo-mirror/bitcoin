@@ -35,6 +35,8 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/2.1.1.1-use-system-libpkgconf.patch"
+	"${FILESDIR}/2.1.1.1-fix-test_provides.patch"
+	"${FILESDIR}/2.1.1.1-skip-broken-test-on-Python-3.12.patch"
 )
 
 distutils_enable_tests pytest
@@ -49,7 +51,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	sed -e 's/\r$//' -i meson.build || die  # DOS line endings?!
+	sed -e 's/\r$//' -i meson.build tests/test_{parser,provides}.py || die  # DOS line endings?!
 	default
 }
 

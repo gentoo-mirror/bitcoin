@@ -1,0 +1,36 @@
+From c82a4ba10d77c6fb025192f74253cd2b461a56ee Mon Sep 17 00:00:00 2001
+From: Matt Whitlock <pypkgconf@mattwhitlock.name>
+Date: Mon, 11 Nov 2024 01:45:38 -0500
+Subject: [PATCH] tests/test_provides.py: fix typos
+
+There were two definitions of test_bar. The latter was meant to be test_baz.
+Further, it contained a typo in one of its pkg-config queries.
+---
+ tests/test_provides.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_provides.py b/tests/test_provides.py
+index 409ed37..80c2473 100644
+--- a/tests/test_provides.py
++++ b/tests/test_provides.py
+@@ -69,7 +69,7 @@ def test_bar(lib1_env):
+     ) == ["-lfoo"]
+ 
+ 
+-def test_bar(lib1_env):
++def test_baz(lib1_env):
+     assert pypkgconf.query_args("--libs provides-test-baz", env=lib1_env) == ["-lfoo"]
+     assert pypkgconf.query_args('--libs "provides-test-baz = 1.1.0"', env=lib1_env) == [
+         "-lfoo"
+@@ -83,7 +83,7 @@ def test_bar(lib1_env):
+     with pytest.raises(pypkgconf.PkgConfError):
+         pypkgconf.query_args('--libs "provides-test-baz != 1.1.0"', env=lib1_env)
+     assert pypkgconf.query_args(
+-        '--libs "provides-test-baz !- 1.0.0"', env=lib1_env
++        '--libs "provides-test-baz != 1.0.0"', env=lib1_env
+     ) == ["-lfoo"]
+     assert pypkgconf.query_args('--libs "provides-test-baz > 1.1.1"', env=lib1_env) == [
+         "-lfoo"
+-- 
+2.47.0
+
