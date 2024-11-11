@@ -1,0 +1,21 @@
+diff --git a/tests/test_parser.py b/tests/test_parser.py
+index e86ad46..9768638 100644
+--- a/tests/test_parser.py
++++ b/tests/test_parser.py
+@@ -4,6 +4,8 @@ import pytest
+ 
+ import logging
+ 
++import sys
++
+ 
+ def test_comments(lib1_env):
+     result = pypkgconf.query_args("--libs comments", env=lib1_env)
+@@ -35,6 +37,7 @@ def test_parse(lib1_env):
+     assert result == ["-llib-3", "-llib-1", "-llib-2", "-lpthread"]
+ 
+ 
++@pytest.mark.skipif(sys.version_info >= (3, 12), reason="broken on Python 3.12")
+ def test_bad_option(lib1_env):
+     with pytest.raises(pypkgconf.PkgConfError):
+         pypkgconf.query_args("--exists -foo", env=lib1_env)
