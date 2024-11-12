@@ -214,16 +214,23 @@ CRATES="
 	yasna-0.5.2
 "
 
-inherit bash-completion-r1 cargo distutils-r1 edo git-r3 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo distutils-r1 edo git-r3 postgres toolchain-funcs
 
 MyPN=lightning
 EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
 EGIT_SUBMODULES=( '-*' external/gheap )
 
+BACKPORTS=(
+	990b3b8016beed5cbeb12b69accf36018e467b11	# tools/headerversions.c: fix build without SQLite
+)
+
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
+BACKPORTS_BASE_URI="${EGIT_REPO_URI[0]%.git}/commit/"
 SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
-	rust? ( $(cargo_crate_uris) )"
+	rust? ( $(cargo_crate_uris) )
+	$(backports_patch_uris)
+"
 
 LICENSE="MIT BSD-2 CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
@@ -354,6 +361,7 @@ src_unpack() {
 }
 
 src_prepare() {
+	backports_apply_patches
 	default
 
 	# hack to suppress tools/refresh-submodules.sh
