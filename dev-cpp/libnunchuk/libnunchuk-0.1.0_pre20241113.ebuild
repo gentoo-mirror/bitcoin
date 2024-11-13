@@ -5,7 +5,7 @@ EAPI=8
 
 inherit autotools cmake
 
-COMMIT_HASH="4c8e43cab5a5c0ff66c3b12e02d8b68bb4a59c4b"
+COMMIT_HASH="ca2b370b97a3f2e3825351009d2b4f9d9de730ec"
 BITCOIN_CORE_PV="22.0"
 TREZOR_FIRMWARE_COMMIT_HASH="b957dfbddb4222c5f9e573f3d4dc21fcbc6ff3a9"
 DESCRIPTION="C++ multisig library powered by Bitcoin Core"
@@ -26,7 +26,7 @@ RDEPEND="
 	>=dev-cpp/bbqr-cpp-0_pre20240319:=
 	>=dev-cpp/bc-ur-cpp-0.1.0_pre20210208:=
 	>=dev-cpp/tap-protocol-1.0.0_p20231114:=
-	>=dev-libs/bc-ur-0.3.0:=
+	>=dev-libs/bc-ur-0.3.0-r1:=
 	>=dev-libs/boost-1.47.0:=
 	dev-libs/libevent:=
 	>=dev-libs/libsecp256k1-0.2.0:=[ecdh,recovery,schnorr]
