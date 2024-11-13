@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="
-	>=dev-cpp/libnunchuk-0.1.0_pre20241001:=
+	>=dev-cpp/libnunchuk-0.1.0_pre20241113:=
 	>=dev-libs/olm-3.1.3:=
 	>=dev-libs/openssl-1.1.0:=
 	dev-libs/qtkeychain:=[qt5]
