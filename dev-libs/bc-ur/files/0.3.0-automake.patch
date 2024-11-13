@@ -84,10 +84,10 @@ index 0000000..1eee96c
 +Libs: -L${libdir} -l@PACKAGE_NAME@
 diff --git a/src/Makefile.am b/src/Makefile.am
 new file mode 100644
-index 0000000..6869f0c
+index 0000000..fd86c41
 --- /dev/null
 +++ b/src/Makefile.am
-@@ -0,0 +1,41 @@
+@@ -0,0 +1,42 @@
 +#
 +#  Makefile.am
 +#
@@ -116,6 +116,7 @@ index 0000000..6869f0c
 +	bc-ur.hpp \
 +	bytewords.hpp \
 +	cbor-lite.hpp \
++	crc32.h \
 +	fountain-decoder.hpp \
 +	fountain-encoder.hpp \
 +	fountain-utils.hpp \
