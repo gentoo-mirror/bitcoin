@@ -221,7 +221,6 @@ EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
 EGIT_SUBMODULES=( '-*' external/gheap )
 
 BACKPORTS=(
-	990b3b8016beed5cbeb12b69accf36018e467b11	# tools/headerversions.c: fix build without SQLite
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
