@@ -1,0 +1,13 @@
+See: https://github.com/autoconf-archive/autoconf-archive/pull/300#issuecomment-2416443298
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -31,7 +31,7 @@ AC_ARG_ENABLE([c++],
+ 	[enable_cxx=yes])
+ AM_CONDITIONAL([BUILD_CXX], [test x"$enable_cxx" = xyes])
+ AM_COND_IF([BUILD_CXX], [
+-	AX_CXX_COMPILE_STDCXX([20])
++	AX_CXX_COMPILE_STDCXX([20], [noext])
+ ])
+ 
+ AC_ARG_ENABLE([tests],
