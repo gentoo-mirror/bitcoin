@@ -8,6 +8,7 @@ inherit autotools
 DESCRIPTION="Library for Bech32/Bech32m/Blech32/Blech32m encoding/decoding"
 HOMEPAGE="https://github.com/whitslack/libbech32"
 SRC_URI="${HOMEPAGE}/archive/v${PV/_}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${PV/_}"
 
 LICENSE="WTFPL-2"
 SLOT="0/0"  # subslot is from soname
@@ -23,10 +24,9 @@ BDEPEND="
 	man? ( app-text/doxygen )
 "
 
-S="${WORKDIR}/${PN}-${PV/_}"
-
 src_prepare() {
 	default
+	has_version -b '=dev-build/autoconf-archive-2024.10.16*' && eapply "${FILESDIR}/avoid-ax_cxx_compile_stdcxx-bug.patch"
 	eautoreconf
 }
 
