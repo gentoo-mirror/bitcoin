@@ -26,7 +26,7 @@ BDEPEND="
 
 src_prepare() {
 	default
-	has_version -b '=dev-build/autoconf-archive-2024.10.16*' && eapply "${FILESDIR}/avoid-ax_cxx_compile_stdcxx-bug.patch"
+	has_version -b '=dev-build/autoconf-archive-2024.10.16' && eapply "${FILESDIR}/avoid-ax_cxx_compile_stdcxx-bug.patch"
 	eautoreconf
 }
 
