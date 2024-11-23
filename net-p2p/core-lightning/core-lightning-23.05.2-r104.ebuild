@@ -377,6 +377,7 @@ pkg_setup() {
 		export PG_CONFIG=
 	fi
 	use test && tc-ld-disable-gold	# mock magic doesn't support gold
+	use rust && rust_pkg_setup
 }
 
 audit_backports() {
