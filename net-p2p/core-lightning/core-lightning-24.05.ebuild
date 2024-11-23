@@ -218,6 +218,7 @@ MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
+	8165f99731a0058abd72c2c7914ba318cea79281	# lightningd/test/Makefile: add missing dependency on header_versions_gen.h
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -358,6 +359,7 @@ pkg_setup() {
 		export PG_CONFIG=
 	fi
 	use test && tc-ld-disable-gold	# mock magic doesn't support gold
+	use rust && rust_pkg_setup
 }
 
 src_unpack() {
