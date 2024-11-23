@@ -218,6 +218,7 @@ MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
+	8165f99731a0058abd72c2c7914ba318cea79281	# lightningd/test/Makefile: add missing dependency on header_versions_gen.h
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
