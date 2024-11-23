@@ -1,0 +1,5 @@
+# net-p2p/joinmarket[gui] still depends on PySide2
+# https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=862181cf33a86bd6f11a4ea7c34cee76f9807732
+dev-python/pyside2
+dev-python/pyside2-tools
+dev-python/shiboken2
