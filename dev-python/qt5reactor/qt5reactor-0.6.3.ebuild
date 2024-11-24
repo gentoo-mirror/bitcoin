@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -20,7 +20,7 @@ IUSE=""
 RDEPEND="
 	dev-python/twisted[${PYTHON_USEDEP}]
 	|| (
-		dev-python/PyQt5[${PYTHON_USEDEP}]
+		dev-python/pyqt5[${PYTHON_USEDEP}]
 		dev-python/pyside2[${PYTHON_USEDEP}]
 	)
 "

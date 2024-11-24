@@ -256,7 +256,7 @@ PYTHON_DEPEND="
 	!<dev-python/bitstring-4.1
 	>=dev-python/coincurve-18[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}]
-	>=dev-python/PySocks-1[${PYTHON_USEDEP}]
+	>=dev-python/pysocks-1[${PYTHON_USEDEP}]
 	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
