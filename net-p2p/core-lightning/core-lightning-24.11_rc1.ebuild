@@ -206,29 +206,33 @@ CRATES="
 	zeroize-1.8.1
 "
 
-inherit backports bash-completion-r1 cargo distutils-r1 edo git-r3 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo distutils-r1 edo postgres toolchain-funcs
 
 MyPN=lightning
-EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
-EGIT_SUBMODULES=( '-*' external/gheap )
+MyPV=${PV/_}
+MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
-HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
-BACKPORTS_BASE_URI="${EGIT_REPO_URI[0]%.git}/commit/"
-SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+HOMEPAGE="https://github.com/ElementsProject/${MyPN}"
+BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
+SRC_URI="${HOMEPAGE}/archive/refs/tags/v${MyPV}.tar.gz -> ${P}.tar.gz
+	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
+	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
 	rust? ( $(cargo_crate_uris) )
 	$(backports_patch_uris)
 "
+S="${WORKDIR}/${MyPN}-${MyPV}"
 
 LICENSE="MIT BSD-2 CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
-#KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
-KEYWORDS=""
+if [[ "${PV}" != *_rc* ]] ; then
+	KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
+fi
 IUSE="debug doc +man postgres python rust sqlite test"
-RESTRICT="!test? ( test )"
+RESTRICT="mirror !test? ( test )"
 
 CDEPEND="
 	>=dev-libs/libsecp256k1-zkp-0.1.0_pre20220318:=[ecdh,extrakeys(-),recovery,schnorrsig(-)]
@@ -279,7 +283,6 @@ BDEPEND="
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
 		')
 	)
-	net-misc/curl[ssl]
 	python? (
 		${DISTUTILS_DEPS}
 		test? (
@@ -324,6 +327,23 @@ python_foreach_subdir() {
 	done
 }
 
+pkg_pretend() {
+	if [[ ! "${REPLACE_RUNNING_CLIGHTNING}" ]] &&
+		[[ -x "${EROOT%/}/usr/bin/lightningd" ]] &&
+		{ has_version "<${CATEGORY}/${PN}-$(ver_cut 1-3)" ||
+			has_version ">=${CATEGORY}/${PN}-$(ver_cut 1-2).$(($(ver_cut 3)+1))" ; } &&
+		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ||
+			-x "${EROOT%/}/run/openrc/started/lightningd" ]]
+	then
+		eerror "A potentially incompatible version of the lightningd daemon is currently" \
+			'\n'"running. Installing version ${PV} would likely cause the running daemon" \
+			'\n'"to fail when it next spawns a subdaemon process. Please stop the running" \
+			'\n'"daemon and reattempt this installation, or set REPLACE_RUNNING_CLIGHTNING=1" \
+			'\n'"if you are certain you know what you are doing."
+		die 'lightningd is running'
+	fi
+}
+
 pkg_setup() {
 	if use postgres ; then
 		postgres_pkg_setup
@@ -335,11 +355,12 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_src_unpack
-	find "${S}/external" -depth -mindepth 1 -maxdepth 1 -type d ! -name 'gheap' -delete || die
+	unpack "${P}.tar.gz"
 	cd "${S}/external" || die
-	unpack jsmn-1.0.0.tar.gz
+	rm -r */ || die
+	unpack jsmn-1.0.0.tar.gz gheap-67fc83b.tar.gz
 	mv jsmn{-1.0.0,} || die
+	mv gheap{-*,} || die
 
 	if use rust ; then
 		set ${CRATES}
@@ -362,12 +383,6 @@ src_prepare() {
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
 	fi
 
-	# delete all pre-generated files; they're often stale anyway
-	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
-		cln-rpc/src/model.rs \
-		contrib/pyln-grpc-proto/pyln/grpc/{node_pb2{,_grpc},primitives_pb2}.py \
-		doc/*.[0-9] || die
-
 	# only run 'install' command if there are actually files to install
 	# and don't unconditionally regenerate Python sources
 	sed -e 's/^\t\$(INSTALL_DATA) \(\$([^)]\+)\).*$/ifneq (\1,)\n\0\nendif/' \
@@ -382,6 +397,14 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
+	# our VERSION="${MyPVR}" confuses is_released_version()
+	[[ ${PV} != *([.[:digit:]]) ]] ||
+		sed -ne '/^bool is_released_version(void)/{a { return true; }
+			p;:x;n;/^}$/d;bx};p' -i common/version.c || die
+
+	# don't require running in a Git worktree
+	rm conftest.py || die
+
 	use python && distutils-r1_src_prepare
 }
 
@@ -390,6 +413,7 @@ src_configure() {
 	. "${FILESDIR}/compat_vars.bash"
 	CLIGHTNING_MAKEOPTS=(
 		V=1
+		VERSION="${MyPVR}"
 		DISTRO=Gentoo
 		COVERAGE=
 		DEVTOOLS=
