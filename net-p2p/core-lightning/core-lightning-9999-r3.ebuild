@@ -248,9 +248,8 @@ PYTHON_DEPEND="
 	)
 	!<dev-python/bitstring-4.1
 	>=dev-python/coincurve-20[${PYTHON_USEDEP}]
-	>=dev-python/cryptography-41.0.2[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-42[${PYTHON_USEDEP}]
 	>=dev-python/pysocks-1[${PYTHON_USEDEP}]
-	>=dev-python/pycparser-2.21[${PYTHON_USEDEP}]
 "
 RDEPEND="${CDEPEND}
 	acct-group/lightning
@@ -274,7 +273,7 @@ BDEPEND="
 			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
 		') )
 		$(python_gen_any_dep '
-			>=dev-python/jinja-3.1.2[${PYTHON_USEDEP}]
+			>=dev-python/jinja2-3.1.2[${PYTHON_USEDEP}]
 			dev-python/mkdocs[${PYTHON_USEDEP}]
 			dev-python/mkdocs-exclude[${PYTHON_USEDEP}]
 			dev-python/mkdocs-material[${PYTHON_USEDEP}]
@@ -283,9 +282,6 @@ BDEPEND="
 	net-misc/curl[ssl]
 	python? (
 		${DISTUTILS_DEPS}
-		>=dev-python/installer-0.4.0_p20220124[${PYTHON_USEDEP}]
-		>=dev-python/poetry-core-1.0.0[${PYTHON_USEDEP}]
-		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 		test? (
 			>=dev-python/pytest-7[${PYTHON_USEDEP}]
 			${PYTHON_DEPEND}
@@ -314,7 +310,7 @@ python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
 		dev-python/mako"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' mkdocs '* ]] || python_has_version \
-		dev-python/{jinja,mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
+		dev-python/{jinja2,mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
 	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
 		dev-python/{recommonmark,sphinx{,-rtd-theme}}"[${PYTHON_USEDEP}]" ; }
 }
@@ -517,7 +513,7 @@ src_install() {
 	einstalldocs
 
 	insinto /etc/lightning
-	newins "${FILESDIR}/lightningd-24.05.conf" lightningd.conf
+	newins "${FILESDIR}/lightningd-24.11.conf" lightningd.conf
 	fowners :lightning /etc/lightning/lightningd.conf
 	fperms 0640 /etc/lightning/lightningd.conf
 
