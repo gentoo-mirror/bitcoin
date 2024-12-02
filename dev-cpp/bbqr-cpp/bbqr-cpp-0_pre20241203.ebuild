@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake
 
-COMMIT_HASH="56b59c19ad1ab419cf8b2beac07a3d9c8c667db2"
+COMMIT_HASH="e1b68da3699c971fd8850e433dcc394bd5ded060"
 DESCRIPTION="Encodes larger files into a series of QR codes so they can cross air gaps"
 HOMEPAGE="https://github.com/nunchuk-io/bbqr-cpp"
 SRC_URI="${HOMEPAGE}/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz"
