@@ -23,7 +23,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="
 	>=dev-db/sqlcipher-4.4.1:=
-	>=dev-cpp/bbqr-cpp-0_pre20240319:=
+	>=dev-cpp/bbqr-cpp-0_pre20241203:=
 	>=dev-cpp/bc-ur-cpp-0.1.0_pre20210208:=
 	>=dev-cpp/tap-protocol-1.0.0_p20231114:=
 	>=dev-libs/bc-ur-0.3.0-r1:=
