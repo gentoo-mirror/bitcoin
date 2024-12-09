@@ -321,7 +321,7 @@ python_check_deps() {
 python_foreach_subdir() {
 	local subdir
 	for subdir in "${PYTHON_SUBDIRS[@]}" ; do
-		pushd "${subdir}" >/dev/null || die
+		pushd -- "${subdir}" >/dev/null || die
 		"${@}"
 		popd >/dev/null || die
 	done
