@@ -1,0 +1,81 @@
+diff --git a/src/backend/electrum/client.cpp b/src/backend/electrum/client.cpp
+index bd9d4dc..0c4ea26 100644
+--- a/src/backend/electrum/client.cpp
++++ b/src/backend/electrum/client.cpp
+@@ -404,10 +404,9 @@ void ElectrumClient::enqueue_message(const std::string& jsonrpc_request) {
+ void ElectrumClient::socket_connect() {
+   std::string h = use_proxy_ ? proxy_host_ : host_;
+   int p = use_proxy_ ? proxy_port_ : port_;
+-  ip::tcp::resolver::query resolver_query(h, std::to_string(p));
+   ip::tcp::resolver resolver(io_service_);
+   boost::system::error_code error;
+-  auto resolve_rs = resolver.resolve(resolver_query, error);
++  auto resolve_rs = resolver.resolve(h, std::to_string(p), error);
+   if (error.value() != 0) {
+     return handle_error("socket_connect", "can not resolve host");
+   }
+@@ -499,7 +498,7 @@ void ElectrumClient::handle_read(const boost::system::error_code& error) {
+     return handle_error("handle_read", error.message());
+   }
+   std::stringstream ss;
+-  ss << buffer_cast<const char*>(receive_buffer_.data());
++  ss << receive_buffer_.data().data();
+   std::string message;
+   std::getline(ss, message);
+   if (!message.empty()) {
+@@ -517,7 +516,7 @@ void ElectrumClient::handle_read(const boost::system::error_code& error) {
+         cb->second.set_value(response);
+       }
+     } else if (response["method"] != nullptr) {
+-      signal_service_.post([this, response]() {
++      post(signal_service_.get_executor(), [this, response]() {
+         sigmap_.at(response["method"])(response["params"]);
+       });
+     } else {
+diff --git a/src/backend/electrum/client.h b/src/backend/electrum/client.h
+index 7982a8f..0d9ad59 100644
+--- a/src/backend/electrum/client.h
++++ b/src/backend/electrum/client.h
+@@ -95,9 +95,9 @@ class ElectrumClient {
+   std::string proxy_username_ = "";
+   std::string proxy_password_ = "";
+   std::thread io_thread_;
+-  boost::asio::io_service io_service_;
++  boost::asio::io_context io_service_;
+   std::thread signal_thread_;
+-  boost::asio::io_service signal_service_;
++  boost::asio::io_context signal_service_;
+   boost::asio::executor_work_guard<boost::asio::io_context::executor_type>
+       signal_worker_;
+   std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
+diff --git a/src/backend/electrum/synchronizer.cpp b/src/backend/electrum/synchronizer.cpp
+index ce2beb2..1ca6be2 100644
+--- a/src/backend/electrum/synchronizer.cpp
++++ b/src/backend/electrum/synchronizer.cpp
+@@ -62,11 +62,11 @@ void ElectrumSynchronizer::Run() {
+   chain_tip_ = 0;
+   scripthash_to_wallet_address_.clear();
+ 
+-  io_service_.post([&]() {
++  post(io_service_.get_executor(), [&]() {
+     try {
+       client_ = std::unique_ptr<ElectrumClient>(
+           new ElectrumClient(app_settings_, [&]() {
+-            io_service_.post([&]() {
++            post(io_service_.get_executor(), [&]() {
+               std::this_thread::sleep_for(
+                   std::chrono::seconds(RECONNECT_DELAY_SECOND));
+               Run();
+diff --git a/src/backend/synchronizer.h b/src/backend/synchronizer.h
+index e5e897a..dc4a65e 100644
+--- a/src/backend/synchronizer.h
++++ b/src/backend/synchronizer.h
+@@ -75,7 +75,7 @@ class Synchronizer {
+   std::shared_ptr<NunchukStorage> storage_;
+ 
+   std::thread sync_thread_;
+-  boost::asio::io_service io_service_;
++  boost::asio::io_context io_service_;
+   boost::asio::executor_work_guard<boost::asio::io_context::executor_type>
+       sync_worker_;
+ 

@@ -36,6 +36,7 @@ BDEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/syslibs.patch"
+	"${FILESDIR}/compat-boost-1.87.patch"
 )
 
 src_unpack() {
