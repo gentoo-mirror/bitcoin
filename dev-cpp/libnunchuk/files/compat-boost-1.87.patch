@@ -79,3 +79,22 @@ index e5e897a..dc4a65e 100644
    boost::asio::executor_work_guard<boost::asio::io_context::executor_type>
        sync_worker_;
  
+diff --git a/src/nunchukutils.cpp b/src/nunchukutils.cpp
+index cbb194f..4f00e35 100644
+--- a/src/nunchukutils.cpp
++++ b/src/nunchukutils.cpp
+@@ -1105,12 +1105,12 @@ bool Utils::CheckElectrumServer(const std::string& server, int timeout) {
+ 
+   bool result = false;
+   try {
+-    io_service svc;
++    io_context svc;
+     tcp::socket s(svc);
+     deadline_timer tim(svc, boost::posix_time::seconds(timeout));
+ 
+     tim.async_wait([&](ec) { s.cancel(); });
+-    s.async_connect({ip::address::from_string(host), port},
++    s.async_connect({ip::make_address(host), port},
+                     [&](ec ec) { result = !ec; });
+ 
+     svc.run();
