@@ -36,7 +36,5 @@ net-p2p/core-lightning 24.02.2 24.05 24.08.2 24.11.1 9999-r3: An implementation 
 net-p2p/elements 23.2.4: Implementation of advanced blockchain features extending the Bitcoin protocol
 net-p2p/joinmarket 0.9.11-r1: JoinMarket CoinJoin client and daemon
 net-p2p/nunchuk-desktop 1.9.42: Graphical multisig wallet powered by Bitcoin Core
-net-p2p/pushpool 0.3 0.4 0.4.1 0.5 0.5.1: Bitcoin crypto-currency pooled mining proxy
 sys-libs/libbacktrace 1.0_p20230329: C library that may be linked into a C/C++ program to produce symbolic backtraces
 virtual/bitcoin-leveldb 0-r2: Virtual for LevelDB versions known to be compatible with Bitcoin Core 0.9+
-virtual/python-serviceproxy 0: Virtual for jsonrpc.proxy.ServiceProxy
