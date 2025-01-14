@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -21,13 +21,12 @@ SRC_URI="https://github.com/ElementsProject/elements/releases/download/${P}/${P}
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+asm +berkdb +cli +daemon dbus examples +external-signer gui +man nat-pmp +qrcode +sqlite system-leveldb +system-libsecp256k1 systemtap test upnp zeromq"
+IUSE="+asm +berkdb +cli +daemon dbus examples +external-signer gui +man nat-pmp +qrcode +sqlite +system-libsecp256k1 systemtap test upnp zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	dbus? ( gui )
 	qrcode? ( gui )
-	system-leveldb? ( || ( daemon gui ) )
 "
 RDEPEND="
 	>=dev-libs/boost-1.77.0:=
@@ -47,7 +46,6 @@ RDEPEND="
 	nat-pmp? ( >=net-libs/libnatpmp-20200924:= )
 	qrcode? ( >=media-gfx/qrencode-3.4.4:= )
 	sqlite? ( >=dev-db/sqlite-3.32.1:= )
-	system-leveldb? ( virtual/bitcoin-leveldb )
 	system-libsecp256k1? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20220406:=[ecdh,extrakeys,rangeproof,recovery,schnorrsig,surjectionproof] )
 	upnp? ( >=net-libs/miniupnpc-2.2.2:= )
 	zeromq? ( >=net-libs/zeromq-4.3.1:= )
@@ -139,7 +137,6 @@ src_unpack() {
 src_prepare() {
 	backports_apply_patches
 	default
-	! use system-leveldb || rm -r src/leveldb || die
 	if use system-libsecp256k1 ; then
 		rm -r src/secp256k1 || die
 		sed -e '/^DIST_SUBDIRS *=/s/\bsecp256k1\b//' -i src/Makefile.am || die
@@ -196,7 +193,6 @@ src_configure() {
 		$(use_with daemon)
 		$(use_with gui gui qt5)
 		$(use_with dbus qtdbus)
-		$(use_with system-leveldb)
 		$(use_with system-libsecp256k1)
 	)
 	econf "${myeconfargs[@]}"
