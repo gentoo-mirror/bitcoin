@@ -132,7 +132,6 @@ net-p2p/elements:gui - Build and install Elements-Qt GUI
 net-p2p/elements:nat-pmp - Enable NAT-PMP port forwarding
 net-p2p/elements:qrcode - Enable generation of QR Codes for receiving payments
 net-p2p/elements:sqlite - Support descriptor wallets in SQLite format
-net-p2p/elements:system-leveldb - Link with virtual/bitcoin-leveldb rather than embedding an internal copy
 net-p2p/elements:system-libsecp256k1 - Link with dev-libs/libsecp256k1-zkp rather than embedding an internal copy
 net-p2p/elements:systemtap - Enable SystemTAP/DTrace tracing
 net-p2p/elements:upnp - Enable Universal Plug and Play
