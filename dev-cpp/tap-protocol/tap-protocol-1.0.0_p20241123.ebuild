@@ -1,11 +1,11 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 inherit cmake
 
-COMMIT_HASH="d7bf3ae88f08fd2c6575a2107bef6899550da314"
+COMMIT_HASH="90e1d6b9bdb2b86097ddd09213bac1f3e3efbf94"
 DESCRIPTION="Coinkite Tap Protocol"
 HOMEPAGE="https://github.com/nunchuk-io/tap-protocol"
 SRC_URI="${HOMEPAGE}/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz"
@@ -20,7 +20,7 @@ RESTRICT="test"
 
 RDEPEND="
 	dev-cpp/nlohmann_json:=
-	>=dev-libs/libsecp256k1-0.2.0:=
+	>=dev-libs/libsecp256k1-0.4.0:=
 "
 DEPEND="${RDEPEND}
 	test? ( >=dev-libs/boost-1.47.0 )
@@ -39,7 +39,6 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIB_TAPPROTOCOL:BOOL=ON
 		-DBUILD_TESTING:BOOL=$(usex test)
-		-DUSE_EXTERNAL_SECP256K1:BOOL=ON
 	)
 	cmake_src_configure
 }

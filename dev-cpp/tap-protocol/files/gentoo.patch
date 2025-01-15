@@ -33,25 +33,29 @@ index 64d7995..20eab33 100644
 +install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME} PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tap_protocol)
 +install(EXPORT ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 diff --git a/contrib/bitcoin-core/CMakeLists.txt b/contrib/bitcoin-core/CMakeLists.txt
-index 5fbf489..7dead8a 100644
+index 81b54bf..237f609 100644
 --- a/contrib/bitcoin-core/CMakeLists.txt
 +++ b/contrib/bitcoin-core/CMakeLists.txt
-@@ -97,10 +97,9 @@ if (NOT ${USE_EXTERNAL_SECP256K1})
-   add_subdirectory(src/secp256k1)
-   target_link_libraries(${PROJECT_NAME} PUBLIC secp256k1)
+@@ -84,14 +84,9 @@ add_library(${PROJECT_NAME} STATIC
+ if (TARGET secp256k1)
+     target_link_libraries(${PROJECT_NAME} PUBLIC secp256k1)
  else()
--    target_compile_definitions(${PROJECT_NAME} PUBLIC SECP256K1_V020)
--    add_library(libsecp256k1 STATIC IMPORTED)
--    set_target_properties(libsecp256k1 PROPERTIES IMPORTED_LOCATION ${EXTERNAL_SECP256K1_LIBRARY})
--    set_target_properties(libsecp256k1 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${EXTERNAL_SECP256K1_INCLUDE})
+-    set(SECP256K1_DISABLE_SHARED ON)
+-    set(SECP256K1_ENABLE_MODULE_RECOVERY ON)
+-    set(SECP256K1_BUILD_BENCHMARK OFF)
+-    set(SECP256K1_BUILD_TESTS OFF)
+-    set(SECP256K1_BUILD_EXHAUSTIVE_TESTS OFF)
+-    set(SECP256K1_BUILD_CTIME_TESTS OFF)
+-    set(SECP256K1_BUILD_EXAMPLES OFF)
+-    add_subdirectory(src/secp256k1)
 +    find_package(PkgConfig)
 +    pkg_check_modules(LIBSECP256K1 REQUIRED IMPORTED_TARGET libsecp256k1)
-+    add_library(libsecp256k1 ALIAS PkgConfig::LIBSECP256K1)
-     target_link_libraries(${PROJECT_NAME} PUBLIC libsecp256k1)
++    add_library(secp256k1 ALIAS PkgConfig::LIBSECP256K1)
+     target_link_libraries(${PROJECT_NAME} PUBLIC secp256k1)
  endif()
  
 diff --git a/include/tap_protocol/cktapcard.h b/include/tap_protocol/cktapcard.h
-index 7fde637..ffc7644 100644
+index 89a7370..62efe05 100644
 --- a/include/tap_protocol/cktapcard.h
 +++ b/include/tap_protocol/cktapcard.h
 @@ -4,7 +4,7 @@
@@ -77,7 +81,7 @@ index a3d4351..e534d67 100644
  namespace tap_protocol {
  
 diff --git a/include/tap_protocol/hwi_tapsigner.h b/include/tap_protocol/hwi_tapsigner.h
-index 0d519d5..004c3fb 100644
+index 3377006..c55047c 100644
 --- a/include/tap_protocol/hwi_tapsigner.h
 +++ b/include/tap_protocol/hwi_tapsigner.h
 @@ -4,8 +4,8 @@
@@ -89,8 +93,8 @@ index 0d519d5..004c3fb 100644
 +#include "cktapcard.h"
 +#include "tap_protocol.h"
  
- struct CExtPubKey;
- 
+ namespace bc_core {
+   struct CExtPubKey;
 diff --git a/include/tap_protocol/secp256k1_utils.h b/include/tap_protocol/secp256k1_utils.h
 index 609f7a2..2e1de36 100644
 --- a/include/tap_protocol/secp256k1_utils.h
@@ -118,7 +122,7 @@ index a9744eb..54b75fa 100644
  using json = nlohmann::json;
  
 diff --git a/include/tap_protocol/utils.h b/include/tap_protocol/utils.h
-index 97244c0..4706344 100644
+index 320f247..9152748 100644
 --- a/include/tap_protocol/utils.h
 +++ b/include/tap_protocol/utils.h
 @@ -1,9 +1,9 @@
@@ -132,5 +136,5 @@ index 97244c0..4706344 100644
 +#include "secp256k1_utils.h"
 +#include <nlohmann/json.hpp>
  
- #ifdef LIB_TAPPROTOCOL_USE_BITCOIN_RANDOM
- void GetStrongRandBytes(unsigned char *buf, int num) noexcept;
+ namespace tap_protocol {
+ 
