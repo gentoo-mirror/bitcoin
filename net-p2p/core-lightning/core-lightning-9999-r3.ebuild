@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Gentoo Authors
+# Copyright 2010-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -15,16 +15,22 @@ CRATES="
 	addr2line-0.24.2
 	adler2-2.0.0
 	aho-corasick-1.1.3
-	anyhow-1.0.93
+	anyhow-1.0.95
+	arbitrary-1.4.1
+	arc-swap-1.7.1
 	asn1-rs-0.6.2
 	asn1-rs-derive-0.5.1
 	asn1-rs-impl-0.2.0
 	async-stream-0.3.6
 	async-stream-impl-0.3.6
-	async-trait-0.1.83
+	async-trait-0.1.85
+	atomic-waker-1.1.2
 	autocfg-1.4.0
 	axum-0.6.20
+	axum-0.8.1
 	axum-core-0.3.4
+	axum-core-0.5.0
+	axum-server-0.6.0
 	backtrace-0.3.74
 	base64-0.21.7
 	base64-0.22.1
@@ -33,22 +39,33 @@ CRATES="
 	bitcoin-internals-0.2.0
 	bitcoin_hashes-0.13.0
 	bitflags-1.3.2
-	bitflags-2.6.0
+	bitflags-2.8.0
+	block-buffer-0.10.4
+	bumpalo-3.17.0
 	byteorder-1.5.0
-	bytes-1.8.0
-	cc-1.1.37
+	bytes-1.9.0
+	cc-1.2.9
 	cfg-if-1.0.0
-	data-encoding-2.6.0
+	cpufeatures-0.2.16
+	crc32fast-1.4.2
+	crossbeam-utils-0.8.21
+	crypto-common-0.1.6
+	data-encoding-2.7.0
 	der-parser-9.0.0
 	deranged-0.3.11
+	derive_arbitrary-1.4.1
+	digest-0.10.7
 	displaydoc-0.2.5
 	either-1.13.0
+	engineioxide-0.15.1
 	env_logger-0.10.2
 	equivalent-1.0.1
-	errno-0.3.9
-	fastrand-2.2.0
+	errno-0.3.10
+	fastrand-2.3.0
 	fixedbitset-0.4.2
+	flate2-1.0.35
 	fnv-1.0.7
+	form_urlencoded-1.2.1
 	futures-0.3.31
 	futures-channel-0.3.31
 	futures-core-0.3.31
@@ -58,40 +75,63 @@ CRATES="
 	futures-sink-0.3.31
 	futures-task-0.3.31
 	futures-util-0.3.31
+	generic-array-0.14.7
 	getrandom-0.2.15
 	gimli-0.31.1
 	h2-0.3.26
+	h2-0.4.7
 	hashbrown-0.12.3
-	hashbrown-0.15.1
+	hashbrown-0.15.2
 	heck-0.5.0
-	hermit-abi-0.3.9
 	hermit-abi-0.4.0
 	hex-0.4.3
 	hex-conservative-0.1.2
 	hex_lit-0.1.1
 	http-0.2.12
+	http-1.2.0
 	http-body-0.4.6
+	http-body-1.0.1
+	http-body-util-0.1.2
 	httparse-1.9.5
 	httpdate-1.0.3
 	humantime-2.1.0
-	hyper-0.14.31
+	hyper-0.14.32
+	hyper-1.5.2
 	hyper-timeout-0.4.1
+	hyper-util-0.1.10
+	icu_collections-1.5.0
+	icu_locid-1.5.0
+	icu_locid_transform-1.5.0
+	icu_locid_transform_data-1.5.0
+	icu_normalizer-1.5.0
+	icu_normalizer_data-1.5.0
+	icu_properties-1.5.1
+	icu_properties_data-1.5.0
+	icu_provider-1.5.0
+	icu_provider_macros-1.5.0
+	idna-1.0.3
+	idna_adapter-1.2.0
 	indexmap-1.9.3
-	indexmap-2.6.0
+	indexmap-2.7.0
 	is-terminal-0.4.13
 	itertools-0.12.1
-	itoa-1.0.11
+	itoa-1.0.14
 	lazy_static-1.5.0
-	libc-0.2.162
-	linux-raw-sys-0.4.14
-	log-0.4.22
+	libc-0.2.169
+	linux-raw-sys-0.4.15
+	litemap-0.7.4
+	lockfree-object-pool-0.1.6
+	log-0.4.25
+	log-panics-2.1.0
 	matchers-0.1.0
 	matchit-0.7.3
+	matchit-0.8.4
 	memchr-2.7.4
 	mime-0.3.17
+	mime_guess-2.0.5
 	minimal-lexical-0.2.1
-	miniz_oxide-0.8.0
-	mio-1.0.2
+	miniz_oxide-0.8.3
+	mio-1.0.3
 	multimap-0.10.0
 	nom-7.1.3
 	nu-ansi-term-0.46.0
@@ -99,89 +139,126 @@ CRATES="
 	num-conv-0.1.0
 	num-integer-0.1.46
 	num-traits-0.2.19
-	object-0.36.5
+	object-0.36.7
 	oid-registry-0.7.1
 	once_cell-1.20.2
 	overload-0.1.1
 	pem-3.0.4
 	percent-encoding-2.3.1
 	petgraph-0.6.5
-	pin-project-1.1.7
-	pin-project-internal-1.1.7
-	pin-project-lite-0.2.15
+	pin-project-1.1.8
+	pin-project-internal-1.1.8
+	pin-project-lite-0.2.16
 	pin-utils-0.1.0
 	powerfmt-0.2.0
 	ppv-lite86-0.2.20
-	prettyplease-0.2.25
-	proc-macro2-1.0.89
+	prettyplease-0.2.29
+	proc-macro2-1.0.93
 	prost-0.12.6
 	prost-build-0.12.6
 	prost-derive-0.12.6
 	prost-types-0.12.6
-	quote-1.0.37
+	quote-1.0.38
 	rand-0.8.5
 	rand_chacha-0.3.1
 	rand_core-0.6.4
-	rcgen-0.13.1
+	rcgen-0.13.2
 	regex-1.11.1
 	regex-automata-0.1.10
-	regex-automata-0.4.8
+	regex-automata-0.4.9
 	regex-syntax-0.6.29
 	regex-syntax-0.8.5
 	ring-0.17.8
+	rust-embed-8.5.0
+	rust-embed-impl-8.5.0
+	rust-embed-utils-8.5.0
 	rustc-demangle-0.1.24
 	rusticata-macros-4.1.0
-	rustix-0.38.39
+	rustix-0.38.43
+	rustls-0.21.12
 	rustls-0.22.4
 	rustls-pemfile-2.2.0
-	rustls-pki-types-1.10.0
+	rustls-pki-types-1.10.1
+	rustls-webpki-0.101.7
 	rustls-webpki-0.102.8
-	rustversion-1.0.18
+	rustversion-1.0.19
 	ryu-1.0.18
+	same-file-1.0.6
+	sct-0.7.1
 	secp256k1-0.28.2
 	secp256k1-sys-0.9.2
-	serde-1.0.214
-	serde_derive-1.0.214
-	serde_json-1.0.132
+	serde-1.0.217
+	serde_derive-1.0.217
+	serde_json-1.0.135
+	serde_path_to_error-0.1.16
+	serde_urlencoded-0.7.1
+	sha1-0.10.6
+	sha2-0.10.8
 	sharded-slab-0.1.7
 	shlex-1.3.0
+	simd-adler32-0.3.7
 	slab-0.4.9
 	smallvec-1.13.2
-	socket2-0.5.7
+	socket2-0.5.8
+	socketioxide-0.15.1
+	socketioxide-core-0.15.1
+	socketioxide-parser-common-0.15.1
 	spin-0.9.8
+	stable_deref_trait-1.2.0
 	subtle-2.6.1
-	syn-2.0.87
+	syn-2.0.96
 	sync_wrapper-0.1.2
+	sync_wrapper-1.0.2
 	synstructure-0.13.1
-	tempfile-3.14.0
+	tempfile-3.15.0
 	termcolor-1.4.1
-	thiserror-1.0.68
-	thiserror-impl-1.0.68
+	thiserror-1.0.69
+	thiserror-2.0.11
+	thiserror-impl-1.0.69
+	thiserror-impl-2.0.11
 	thread_local-1.1.8
-	time-0.3.36
+	time-0.3.37
 	time-core-0.1.2
-	time-macros-0.2.18
-	tokio-1.41.1
+	time-macros-0.2.19
+	tinystr-0.7.6
+	tokio-1.43.0
 	tokio-io-timeout-1.2.0
-	tokio-macros-2.4.0
+	tokio-macros-2.5.0
+	tokio-rustls-0.24.1
 	tokio-rustls-0.25.0
-	tokio-stream-0.1.16
+	tokio-stream-0.1.17
 	tokio-test-0.4.4
-	tokio-util-0.7.12
+	tokio-tungstenite-0.24.0
+	tokio-util-0.7.13
 	tonic-0.11.0
 	tonic-build-0.11.0
 	tower-0.4.13
+	tower-0.5.2
+	tower-http-0.6.2
 	tower-layer-0.3.3
 	tower-service-0.3.3
-	tracing-0.1.40
-	tracing-attributes-0.1.27
-	tracing-core-0.1.32
+	tracing-0.1.41
+	tracing-attributes-0.1.28
+	tracing-core-0.1.33
 	tracing-log-0.2.0
-	tracing-subscriber-0.3.18
+	tracing-subscriber-0.3.19
 	try-lock-0.2.5
-	unicode-ident-1.0.13
+	tungstenite-0.24.0
+	typenum-1.17.0
+	unicase-2.8.1
+	unicode-ident-1.0.14
 	untrusted-0.9.0
+	url-2.5.4
+	utf-8-0.7.6
+	utf16_iter-1.0.5
+	utf8_iter-1.0.4
+	utoipa-5.3.1
+	utoipa-gen-5.3.1
+	utoipa-swagger-ui-9.0.0
+	utoipa-swagger-ui-vendored-0.1.2
 	valuable-0.1.0
+	version_check-0.9.5
+	walkdir-2.5.0
 	want-0.3.1
 	wasi-0.11.0+wasi-snapshot-preview1
 	winapi-0.3.9
@@ -199,11 +276,21 @@ CRATES="
 	windows_x86_64_gnu-0.52.6
 	windows_x86_64_gnullvm-0.52.6
 	windows_x86_64_msvc-0.52.6
+	write16-1.0.0
+	writeable-0.5.5
 	x509-parser-0.16.0
 	yasna-0.5.2
+	yoke-0.7.5
+	yoke-derive-0.7.5
 	zerocopy-0.7.35
 	zerocopy-derive-0.7.35
+	zerofrom-0.1.5
+	zerofrom-derive-0.1.5
 	zeroize-1.8.1
+	zerovec-0.10.4
+	zerovec-derive-0.10.3
+	zip-2.2.2
+	zopfli-0.8.1
 "
 
 inherit backports bash-completion-r1 cargo distutils-r1 edo git-r3 postgres toolchain-funcs
