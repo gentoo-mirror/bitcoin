@@ -8,5 +8,5 @@ KEYWORDS=~amd64 ~arm ~arm64 ~x86
 LICENSE=BSD-2-with-patent
 SLOT=0/0.3.0
 SRC_URI=https://github.com/BlockchainCommons/bc-ur/archive/refs/tags/0.3.0.tar.gz -> bc-ur-0.3.0.tar.gz https://github.com/bakaoh/bc-ur/commit/9a21a885b2b49d56eb2b0b2f81551daab2838ef8.patch?full_index=1 -> 9a21a885b2b49d56eb2b0b2f81551daab2838ef8.patch
-_eclasses_=gnuconfig	ddeb9f8caff1b5f71a09c75b7534df79	toolchain-funcs	14648d8795f7779e11e1bc7cf08b7536	multilib	b2a329026f2e404e9e371097dda47f96	libtool	6b28392a775f807c8be5fc7ec9a605b9	autotools	7d91cc798a8afd8f4e0c6e9587296ebe	backports	3d56c5d2e8bfc539003e6f066431e183
+_eclasses_=gnuconfig	ddeb9f8caff1b5f71a09c75b7534df79	toolchain-funcs	6afdb6107430c1832ca7e16aacbf8fa1	multilib	b2a329026f2e404e9e371097dda47f96	libtool	6b28392a775f807c8be5fc7ec9a605b9	autotools	7d91cc798a8afd8f4e0c6e9587296ebe	backports	3d56c5d2e8bfc539003e6f066431e183
 _md5_=613c7cb19fbbf6879a5a27287f22de92
