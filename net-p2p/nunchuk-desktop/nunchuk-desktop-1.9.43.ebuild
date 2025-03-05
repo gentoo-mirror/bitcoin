@@ -1,25 +1,27 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 inherit cmake desktop
 
+MyPV="$(ver_cut 1-3)"
 # TODO: disembed net-libs/libquotient after Nunchuk switches to Qt6
 QUOTIENT_COMMIT_HASH="77b190d822c1e980b98b84999f0cfb609ed05a49"
 DESCRIPTION="Graphical multisig wallet powered by Bitcoin Core"
 HOMEPAGE="https://github.com/nunchuk-io/nunchuk-desktop"
 SRC_URI="
-	${HOMEPAGE}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
+	${HOMEPAGE}/archive/refs/tags/${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/tongvanlinh/libQuotient/archive/${QUOTIENT_COMMIT_HASH}.tar.gz -> ${PN}-quotient-${QUOTIENT_COMMIT_HASH}.tar.gz
 "
+S="${WORKDIR}/${PN}-${MyPV}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="
-	>=dev-cpp/libnunchuk-0.1.0_pre20241213:=
+	>=dev-cpp/libnunchuk-0.1.0_pre20250227:=
 	>=dev-libs/olm-3.1.3:=
 	>=dev-libs/openssl-1.1.0:=
 	dev-libs/qtkeychain:=[qt5]
@@ -33,13 +35,16 @@ RDEPEND="
 	>=dev-qt/qtquickcontrols-5.12:5=
 	>=dev-qt/qtsql-5.12:5=
 	>=dev-qt/qtsvg-5.12:5=
-	>=dev-qt/qttest-5.12:5=
+	>=dev-qt/qtwidgets-5.12:5=
 	media-libs/zxing-cpp:=
 "
 BDEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/syslibs.patch"
+)
+
+DOCS=(
 )
 
 extract_icns() { {

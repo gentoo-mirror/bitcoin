@@ -1,68 +1,85 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4d5fc33..8a15ae0 100644
+index 9bf41ae..0b7d927 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -6,6 +6,8 @@ else()
-     project(nunchuk-qt VERSION 1.9.39)
+@@ -5,6 +5,7 @@ else()
+     project(nunchuk-qt VERSION 1.9.43)
  endif()
  
 +include(GNUInstallDirs)
-+
- set( CMAKE_CXX_STANDARD 20 )
- set( CMAKE_CXX_STANDARD_REQUIRED ON)
- set( CMAKE_INCLUDE_CURRENT_DIR ON )
-@@ -15,8 +17,6 @@ set( CMAKE_AUTOUIC ON )
- set( CXX_STANDARD "-std=c++20")
- if (WIN32)
-     set(CXX_STANDARD "/std:c++20")
--elseif (NOT APPLE)
--    set( CMAKE_CXX_FLAGS "-march=native -O3")
+ 
+ # nunchuk
+ if(WIN32)
+@@ -20,7 +21,7 @@ if(WIN32)
+     set(HAVE_EVHTTP_CONNECTION_GET_PEER_CONST_CHAR ON)
  endif()
  
- if (CMAKE_BUILD_TYPE STREQUAL "Release")
-@@ -32,11 +32,6 @@ if(WIN32)
-     set(VCPKG_BUILD_TYPE Release)
- endif()
+-add_subdirectory(contrib/libnunchuk)
++include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/nunchuk/nunchuk.cmake)
+ 
+ if(APPLE)
+     find_package(OpenSSL REQUIRED)
+@@ -36,22 +37,15 @@ set(CMAKE_AUTORCC ON )
+ set(CMAKE_AUTOUIC ON )
+ 
+ # ZXing Opt
+-set(ZXING_UNIT_TESTS OFF)
+-set(ZXING_BLACKBOX_TESTS OFF)
+-set(ZXING_EXAMPLES OFF)
+ set(BUILD_SHARED_LIBS OFF)
+ find_package(Qt5 COMPONENTS Widgets REQUIRED)
+-add_subdirectory(contrib/zxing)
++find_package(ZXing REQUIRED CONFIG)
+ 
+ # Quotient
+ set(Quotient_ENABLE_E2EE ON CACHE INTERNAL "" FORCE)
+ set(BUILD_TESTING OFF)
+-add_subdirectory(contrib/quotient)
++add_subdirectory(contrib/quotient EXCLUDE_FROM_ALL)
  
 -# NO PIE memory
 -if(UNIX AND NOT APPLE)
 -    set ( CMAKE_CXX_FLAGS "-no-pie -s" )
 -endif()
--
  if( NOT CMAKE_BUILD_TYPE )
      set( CMAKE_BUILD_TYPE Debug )
- 
-@@ -292,22 +287,18 @@ QT5_WRAP_CPP(MOCS ${${PROJECT_NAME}_MOCS})
- 
- set( QRCODE_SCANNER ON )
- if(QRCODE_SCANNER)
--    set(ZXING_UNIT_TESTS OFF)
--    set(ZXING_BLACKBOX_TESTS OFF)
--    set(ZXING_EXAMPLES OFF)
--    set(BUILD_SHARED_LIBS OFF)
--    # add_definitions ( -DQR_DFS_IMPROVE )
--    # add_definitions ( -DQR_DFS_IMPROVE_TEST )
--    add_subdirectory(contrib/zxing ZXing)
-+	find_package(ZXing REQUIRED CONFIG)
- endif(QRCODE_SCANNER)
- 
--add_subdirectory(contrib/libnunchuk nunchuk EXCLUDE_FROM_ALL)
-+include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/nunchuk/nunchuk.cmake)
- 
- macro(SET_OPTION option value)
-   set(${option} ${value} CACHE INTERNAL "" FORCE)
- endmacro()
- 
- SET_OPTION(Quotient_ENABLE_E2EE  ON)
-+set(BUILD_SHARED_LIBS OFF)
-+set(BUILD_TESTING OFF)
- add_subdirectory(contrib/quotient quotient EXCLUDE_FROM_ALL)
- 
- if(APPLE)
-@@ -358,3 +349,5 @@ if(USE_KEYCHAIN)
-     target_link_libraries(${PROJECT_NAME} PUBLIC ${QTKEYCHAIN_LIBRARIES})
-     include_directories(${QTKEYCHAIN_INCLUDE_DIR})
  endif()
+@@ -72,14 +66,6 @@ if (Qt5Keychain_FOUND)
+ endif()
+ find_package(Boost REQUIRED COMPONENTS filesystem)
+ 
+-FIND_PACKAGE(OpenGL REQUIRED)
+-if(OPENGL_FOUND) # never true, but printed as true
+-    message(STATUS "---------------------------------> OPENGL: " ${OPENGL_LIBRARIES})
+-    message(STATUS "---------------------------------> OPENGL: " ${OPENGL_INCLUDE_DIR})
+-    link_directories(${OPENGL_LIBRARIES})
+-    include_directories(${OPENGL_INCLUDE_DIR})
+-endif()
+-
+ # Include path
+ set(Nunchuk_INC_PATH
+     ${PROJECT_SOURCE_DIR}
+@@ -115,7 +101,6 @@ QT5_ADD_RESOURCES(SOURCE_RSCS
+ # Add include path
+ include_directories(${Nunchuk_INC_PATH})
+ include_directories("${PROJECT_SOURCE_DIR}/contrib/quotient/lib")
+-include_directories("${PROJECT_SOURCE_DIR}/contrib/libnunchuk/src")
+ include_directories(${QTKEYCHAIN_INCLUDE_DIRS})
+ 
+ # Executable
+@@ -173,8 +158,6 @@ endif()
+ # Target link options
+ if(WIN32)
+     target_link_options(${PROJECT_NAME} PUBLIC /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
+-else()
+-    target_link_options(${PROJECT_NAME} PUBLIC -static-libgcc -static-libstdc++)
+ endif()
+ 
+ # Target link libraries
+@@ -197,3 +180,5 @@ target_link_libraries (${PROJECT_NAME} PUBLIC Quotient)
+ target_include_directories("${PROJECT_NAME}" PUBLIC "${PROJECT_SOURCE_DIR}/contrib/quotient/lib" )
+ 
+ target_link_libraries (${PROJECT_NAME} PUBLIC ZXing)
 +
 +install(TARGETS ${PROJECT_NAME})
 diff --git a/QRScanner/QBarcodeDecoder.cpp b/QRScanner/QBarcodeDecoder.cpp
@@ -164,15 +181,15 @@ index 456213c..1e91332 100644
  QBarcodeGenerator::QBarcodeGenerator() : m_borderWitdh(0)
  {
 diff --git a/main.cpp b/main.cpp
-index c245045..2fd4b55 100644
+index 3c27748..0ef8937 100644
 --- a/main.cpp
 +++ b/main.cpp
-@@ -35,7 +35,7 @@
- #include "Chats/ClientController.h"
+@@ -36,7 +36,7 @@
  #include "Premiums/QUserWallets.h"
  #include "Premiums/QGroupWallets.h"
+ #include "Premiums/QSharedWallets.h"
 -#include "contrib/libnunchuk/src/utils/loguru.hpp"
 +#include <nunchuk/utils/loguru.hpp>
  #include "RegisterTypes/DashRectangle.h"
- #include "QPingThread.h"
  #include "QRScanner/QBarcodeFilter.h"
+ #include "QPDFPrinter.h"
