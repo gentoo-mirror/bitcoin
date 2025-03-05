@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake
 
-COMMIT_HASH="90e1d6b9bdb2b86097ddd09213bac1f3e3efbf94"
+COMMIT_HASH="08f96660c7305308b22c0cc690603976743772da"
 DESCRIPTION="Coinkite Tap Protocol"
 HOMEPAGE="https://github.com/nunchuk-io/tap-protocol"
 SRC_URI="${HOMEPAGE}/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz"
