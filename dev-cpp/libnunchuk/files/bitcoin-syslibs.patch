@@ -1,167 +1,81 @@
-diff '--color=auto' -Naur a/configure.ac b/configure.ac
---- a/configure.ac	2021-09-08 18:16:07.000000000 +0000
-+++ b/configure.ac	2024-10-30 10:15:37.768891487 +0000
-@@ -1309,6 +1309,8 @@
-   CPPFLAGS="$CPPFLAGS -DPROVIDE_FUZZ_MAIN_FUNCTION"
- fi
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e68af79b51..d5def3f32c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,7 +7,7 @@
+ #
+ # Centos Stream 9, https://www.centos.org/cl-vs-cs/#end-of-life, EOL in May 2027:
+ #  - CMake 3.26.5, https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os/Packages/
+-cmake_minimum_required(VERSION 3.22)
++cmake_minimum_required(VERSION 3.25)
  
-+PKG_CHECK_MODULES([libsecp256k1], [libsecp256k1])
+ if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+   message(FATAL_ERROR "In-source builds are not allowed.")
+@@ -164,6 +164,9 @@ if(WITH_MULTIPROCESS)
+   )
+ endif()
+ 
++option(WITH_SYSTEM_LIBSECP256K1 "Link with system-installed libsecp256k1." OFF)
++mark_as_advanced(WITH_SYSTEM_LIBSECP256K1)
 +
- if test x$enable_wallet != xno; then
-     dnl Check for libdb_cxx only if wallet enabled
-     if test "x$use_bdb" != "xno"; then
-@@ -1894,9 +1896,6 @@
-   AC_CONFIG_SUBDIRS([src/univalue])
- fi
+ cmake_dependent_option(BUILD_GUI_TESTS "Build test_bitcoin-qt executable." ON "BUILD_GUI;BUILD_TESTS" OFF)
+ if(BUILD_GUI)
+   set(qt_components Core Gui Widgets LinguistTools)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d62d38f9e4..41ea148621 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -30,6 +30,44 @@ if(WITH_MULTIPROCESS)
+   add_subdirectory(ipc)
+ endif()
  
--ac_configure_args="${ac_configure_args} --disable-shared --with-pic --enable-benchmark=no --enable-module-recovery --enable-module-schnorrsig --enable-experimental"
--AC_CONFIG_SUBDIRS([src/secp256k1])
--
- AC_OUTPUT
++if(WITH_SYSTEM_LIBSECP256K1)
++
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(libsecp256k1 REQUIRED IMPORTED_TARGET libsecp256k1)
++add_library(secp256k1 ALIAS PkgConfig::libsecp256k1)
++block()
++  string(APPEND CMAKE_REQUIRED_FLAGS " ${libsecp256k1_CFLAGS_OTHER}")
++  list(APPEND CMAKE_REQUIRED_INCLUDES ${libsecp256k1_INCLUDE_DIRS})
++  list(APPEND CMAKE_REQUIRED_LINK_OPTIONS ${libsecp256k1_LDFLAGS})
++  list(APPEND CMAKE_REQUIRED_LIBRARIES ${libsecp256k1_LIBRARIES})
++  unset(missing_modules)
++  include(CheckSymbolExists)
++  macro(check_secp256k1_module module symbol)
++    string(TOUPPER "${symbol}" VAR)
++    set(VAR "libsecp256k1_HAS_${VAR}")
++    unset(${VAR})
++    check_symbol_exists("${symbol}" "secp256k1_${module}.h" ${VAR})
++    if(NOT ${VAR})
++      list(APPEND missing_modules "${module}")
++    endif()
++  endmacro()
++  message(CHECK_START "Checking for required libsecp256k1 modules")
++  list(APPEND CMAKE_MESSAGE_INDENT "  ")
++  check_secp256k1_module(ellswift secp256k1_ellswift_encode)
++  check_secp256k1_module(extrakeys secp256k1_xonly_pubkey_parse)
++  check_secp256k1_module(musig secp256k1_musig_pubnonce_parse)
++  check_secp256k1_module(recovery secp256k1_ecdsa_recover)
++  check_secp256k1_module(schnorrsig secp256k1_schnorrsig_verify)
++  list(POP_BACK CMAKE_MESSAGE_INDENT)
++  if(missing_modules)
++    list(JOIN missing_modules ", " missing_modules)
++    message(FATAL_ERROR "System-installed libsecp256k1 lacks these required modules: ${missing_modules}.")
++  endif()
++  message(CHECK_PASS "all were found")
++endblock()
++
++else() # !WITH_SYSTEM_LIBSECP256K1
++
+ #=============================
+ # secp256k1 subtree
+ #=============================
+@@ -75,6 +113,8 @@ add_subdirectory(secp256k1)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ string(APPEND CMAKE_C_COMPILE_OBJECT " ${APPEND_CPPFLAGS} ${APPEND_CFLAGS}")
  
- dnl Replace the BUILDDIR path with the correct Windows path if compiling on Native Windows
-@@ -1922,7 +1921,7 @@
-     echo "    with qr       = $use_qr"
- fi
- echo "  with zmq        = $use_zmq"
--if test x$enable_fuzz == xno; then
-+if test x$enable_fuzz = xno; then
-     echo "  with test       = $use_tests"
- else
-     echo "  with test       = not building test_bitcoin because fuzzing is enabled"
-diff '--color=auto' -Naur a/src/Makefile.am b/src/Makefile.am
---- a/src/Makefile.am	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/Makefile.am	2024-10-30 09:20:31.370268160 +0000
-@@ -6,7 +6,7 @@
- print-%: FORCE
- 	@echo '$*'='$($*)'
- 
--DIST_SUBDIRS = secp256k1 univalue
-+DIST_SUBDIRS = univalue
- 
- AM_LDFLAGS = $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS) $(GPROF_LDFLAGS) $(SANITIZER_LDFLAGS)
- AM_CXXFLAGS = $(DEBUG_CXXFLAGS) $(HARDENED_CXXFLAGS) $(WARN_CXXFLAGS) $(NOWARN_CXXFLAGS) $(ERROR_CXXFLAGS) $(GPROF_CXXFLAGS) $(SANITIZER_CXXFLAGS)
-@@ -24,7 +24,7 @@
- LIBUNIVALUE = $(UNIVALUE_LIBS)
- endif
- 
--BITCOIN_INCLUDES=-I$(builddir) -I$(srcdir)/secp256k1/include $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
-+BITCOIN_INCLUDES=-I$(builddir) $(libsecp256k1_CFLAGS) $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
- 
- BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
- 
-@@ -35,7 +35,7 @@
- LIBBITCOIN_UTIL=libbitcoin_util.a
- LIBBITCOIN_CRYPTO_BASE=crypto/libbitcoin_crypto_base.a
- LIBBITCOINQT=qt/libbitcoinqt.a
--LIBSECP256K1=secp256k1/libsecp256k1.la
-+LIBSECP256K1=$(libsecp256k1_LIBS)
- 
- if ENABLE_ZMQ
- LIBBITCOIN_ZMQ=libbitcoin_zmq.a
-@@ -62,9 +62,6 @@
- LIBBITCOIN_CRYPTO += $(LIBBITCOIN_CRYPTO_SHANI)
- endif
- 
--$(LIBSECP256K1): $(wildcard secp256k1/src/*.h) $(wildcard secp256k1/src/*.c) $(wildcard secp256k1/include/*)
--	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
--
- # Make is not made aware of per-object dependencies to avoid limiting building parallelization
- # But to build the less dependent modules first, we manually select their order here:
- EXTRA_LIBRARIES += \
-@@ -755,7 +752,7 @@
- 
- libbitcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
- libbitcoinconsensus_la_LIBADD = $(LIBSECP256K1)
--libbitcoinconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
-+libbitcoinconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj $(libsecp256k1_CFLAGS) -DBUILD_BITCOIN_INTERNAL
- libbitcoinconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
- 
- endif
-@@ -800,7 +797,6 @@
- 	$(AM_V_at)$(MAKE) -C $(top_srcdir) $(subdir)/config/bitcoin-config.h.in
- 
- clean-local:
--	-$(MAKE) -C secp256k1 clean
- 	-$(MAKE) -C univalue clean
- 	-rm -f leveldb/*/*.gcda leveldb/*/*.gcno leveldb/helpers/memenv/*.gcda leveldb/helpers/memenv/*.gcno
- 	-rm -f config.h
-diff '--color=auto' -Naur a/src/Makefile.test.include b/src/Makefile.test.include
---- a/src/Makefile.test.include	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/Makefile.test.include	2024-10-30 09:13:07.375420193 +0000
-@@ -347,7 +347,6 @@
- 	$(BENCH_BINARY) > /dev/null
- endif
- endif
--	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C secp256k1 check
- if EMBEDDED_UNIVALUE
- 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C univalue check
- endif
-diff '--color=auto' -Naur a/src/chainparamsbase.h b/src/chainparamsbase.h
---- a/src/chainparamsbase.h	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/chainparamsbase.h	2024-10-31 05:11:13.448362168 +0000
-@@ -5,6 +5,7 @@
- #ifndef BITCOIN_CHAINPARAMSBASE_H
- #define BITCOIN_CHAINPARAMSBASE_H
- 
-+#include <cstdint>
- #include <memory>
- #include <string>
- 
-diff '--color=auto' -Naur a/src/key.cpp b/src/key.cpp
---- a/src/key.cpp	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/key.cpp	2024-10-30 12:39:05.741181116 +0000
-@@ -274,7 +274,7 @@
-         uint256 tweak = XOnlyPubKey(pubkey_bytes).ComputeTapTweakHash(merkle_root->IsNull() ? nullptr : merkle_root);
-         if (!secp256k1_keypair_xonly_tweak_add(GetVerifyContext(), &keypair, tweak.data())) return false;
-     }
--    bool ret = secp256k1_schnorrsig_sign(secp256k1_context_sign, sig.data(), hash.data(), &keypair, secp256k1_nonce_function_bip340, aux ? (void*)aux->data() : nullptr);
-+    bool ret = secp256k1_schnorrsig_sign(secp256k1_context_sign, sig.data(), hash.data(), &keypair, aux ? aux->data() : nullptr);
-     memory_cleanse(&keypair, sizeof(keypair));
-     return ret;
- }
-diff '--color=auto' -Naur a/src/leveldb/benchmarks/db_bench_sqlite3.cc b/src/leveldb/benchmarks/db_bench_sqlite3.cc
---- a/src/leveldb/benchmarks/db_bench_sqlite3.cc	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/leveldb/benchmarks/db_bench_sqlite3.cc	2024-10-30 13:59:19.867007115 +0000
-@@ -2,6 +2,7 @@
- // Use of this source code is governed by a BSD-style license that can be
- // found in the LICENSE file. See the AUTHORS file for names of contributors.
- 
-+#include <time.h>
- #include <sqlite3.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff '--color=auto' -Naur a/src/pubkey.cpp b/src/pubkey.cpp
---- a/src/pubkey.cpp	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/pubkey.cpp	2024-10-30 12:39:04.954174355 +0000
-@@ -191,7 +191,7 @@
-     assert(sigbytes.size() == 64);
-     secp256k1_xonly_pubkey pubkey;
-     if (!secp256k1_xonly_pubkey_parse(secp256k1_context_verify, &pubkey, m_keydata.data())) return false;
--    return secp256k1_schnorrsig_verify(secp256k1_context_verify, sigbytes.data(), msg.begin(), &pubkey);
-+    return secp256k1_schnorrsig_verify(secp256k1_context_verify, sigbytes.data(), msg.begin(), msg.size(), &pubkey);
- }
- 
- static const CHashWriter HASHER_TAPTWEAK = TaggedHash("TapTweak");
-diff '--color=auto' -Naur a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
---- a/src/support/lockedpool.cpp	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/support/lockedpool.cpp	2024-10-30 12:28:54.922951742 +0000
-@@ -22,6 +22,7 @@
- #endif
- 
- #include <algorithm>
-+#include <stdexcept>
- #ifdef ARENA_DEBUG
- #include <iomanip>
- #include <iostream>
-diff '--color=auto' -Naur a/src/util/bip32.h b/src/util/bip32.h
---- a/src/util/bip32.h	2021-09-08 18:16:07.000000000 +0000
-+++ b/src/util/bip32.h	2024-10-30 12:41:36.498482194 +0000
-@@ -6,6 +6,7 @@
- #define BITCOIN_UTIL_BIP32_H
- 
- #include <attributes.h>
-+#include <cstdint>
- #include <string>
- #include <vector>
- 
++endif() # !WITH_SYSTEM_LIBSECP256K1
++
+ add_library(bitcoin_consensus STATIC EXCLUDE_FROM_ALL
+   arith_uint256.cpp
+   consensus/merkle.cpp
