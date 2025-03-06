@@ -86,7 +86,6 @@ DOCS=(
 )
 
 PATCHES=(
-	"${FILESDIR}/23.2.3-gcc15.patch"
 	"${FILESDIR}/23.2.1-syslibs.patch"
 )
 
