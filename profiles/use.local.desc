@@ -115,7 +115,8 @@ net-p2p/bitcoin-knots:qrcode - Enable generation of QR Codes for receiving payme
 net-p2p/bitcoin-knots:sqlite - Support descriptor wallets in SQLite format
 net-p2p/bitcoin-knots:system-leveldb - Link with virtual/bitcoin-leveldb rather than embedding an internal copy
 net-p2p/bitcoin-knots:system-libsecp256k1 - Link with dev-libs/libsecp256k1 rather than embedding an internal copy
-net-p2p/bitcoin-knots:systemtap - Enable SystemTAP/DTrace tracing
+net-p2p/bitcoin-knots:systemtap - Enable SystemTap/DTrace tracing
+net-p2p/bitcoin-knots:test-full - Run tests that take a long time
 net-p2p/bitcoin-knots:tor-subprocess - Run dedicated Tor subprocess
 net-p2p/bitcoin-knots:upnp - Enable Universal Plug and Play
 net-p2p/bitcoin-knots:zeromq - Report blocks and transactions via zeromq
