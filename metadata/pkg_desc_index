@@ -16,7 +16,7 @@ dev-libs/libsecp256k1-zkp 0.1.0_pre20240203: A fork of libsecp256k1 with support
 dev-python/base58 2.1.1-r1: Base58 and Base58Check implementation compatible with what is used by the bitcoin network
 dev-python/bencoder-pyx 3.0.1-r1: A fast bencode implementation in Cython
 dev-python/chromalog 1.0.5: Enhance Python with colored logging
-dev-python/coincurve 20.0.0: Cross-platform Python CFFI bindings for libsecp256k1
+dev-python/coincurve 21.0.0: Cross-platform Python CFFI bindings for libsecp256k1
 dev-python/hkdf 0.0.3-r1: HMAC-based Extract-and-Expand Key Derivation Function (HKDF) implemented in Python
 dev-python/mkdocs-exclude 1.0.2-r1: A mkdocs plugin that lets you exclude files or trees from your output.
 dev-python/mnemonic 0.21: Mnemonic code for generating deterministic keys, BIP39
