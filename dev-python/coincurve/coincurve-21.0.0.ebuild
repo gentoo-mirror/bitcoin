@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -18,10 +18,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 DEPEND="
-	>=dev-libs/libsecp256k1-0.4.1:=[ecdh,extrakeys,recovery,schnorr]
+	>=dev-libs/libsecp256k1-0.6.0:=[ecdh,extrakeys,recovery,schnorr]
 "
 RDEPEND="${DEPEND}
-	dev-python/asn1crypto[${PYTHON_USEDEP}]
 	>=dev-python/cffi-1.3.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
@@ -34,8 +33,13 @@ BDEPEND="
 
 distutils_enable_tests pytest
 
+src_prepare() {
+	default
+	sed -e '/^\[tool\.hatch\.build\.targets\.wheel\.hooks\.custom\]$/d' -i pyproject.toml || die
+}
+
 src_compile() {
-	local -x COINCURVE_IGNORE_SYSTEM_LIB=0
+	local -x COINCURVE_IGNORE_SYSTEM_LIB=0 COINCURVE_VENDOR_CFFI=0
 	distutils-r1_src_compile
 }
 
