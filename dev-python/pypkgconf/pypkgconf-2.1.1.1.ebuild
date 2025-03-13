@@ -20,8 +20,9 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86"
 
+# dev-util/pkgconf:0/6 introduces API changes that break pypkgconf
 DEPEND="
-	>=dev-util/pkgconf-2.1.1:=
+	>=dev-util/pkgconf-2.1.1:0/5
 "
 RDEPEND="${DEPEND}
 	dev-python/cffi[${PYTHON_USEDEP}]
