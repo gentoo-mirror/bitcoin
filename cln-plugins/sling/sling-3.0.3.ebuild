@@ -155,6 +155,10 @@ RDEPEND="
 	>=net-p2p/core-lightning-23.11
 "
 
+PATCHES=(
+	"${FILESDIR}/support-version-without-v.patch"
+)
+
 src_install() {
 	cargo_src_install
 	insinto /usr/libexec/c-lightning/plugins
