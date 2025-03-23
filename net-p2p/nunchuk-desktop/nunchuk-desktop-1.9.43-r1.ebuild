@@ -11,7 +11,7 @@ QUOTIENT_COMMIT_HASH="77b190d822c1e980b98b84999f0cfb609ed05a49"
 DESCRIPTION="Graphical multisig wallet powered by Bitcoin Core"
 HOMEPAGE="https://github.com/nunchuk-io/nunchuk-desktop"
 SRC_URI="
-	${HOMEPAGE}/archive/refs/tags/${MyPV}.tar.gz -> ${P}.tar.gz
+	${HOMEPAGE}/archive/refs/tags/${MyPV}.tar.gz -> ${PF}.tar.gz
 	https://github.com/tongvanlinh/libQuotient/archive/${QUOTIENT_COMMIT_HASH}.tar.gz -> ${PN}-quotient-${QUOTIENT_COMMIT_HASH}.tar.gz
 "
 S="${WORKDIR}/${PN}-${MyPV}"
@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="
-	>=dev-cpp/libnunchuk-0.1.0_pre20250227:=
+	>=dev-cpp/libnunchuk-0.1.0_pre20250321:=
 	>=dev-libs/olm-3.1.3:=
 	>=dev-libs/openssl-1.1.0:=
 	dev-libs/qtkeychain:=[qt5]
@@ -59,7 +59,7 @@ extract_icns() { {
 } <"${1:?Must specify icns file.}" ; }
 
 src_unpack() {
-	unpack "${P}.tar.gz"
+	unpack "${PF}.tar.gz"
 	cd "${S}/contrib" || die
 	rmdir quotient || die
 	unpack "${PN}-quotient-${QUOTIENT_COMMIT_HASH}.tar.gz"

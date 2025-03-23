@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9bf41ae..0b7d927 100644
+index b54a23c..795a57d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -5,6 +5,7 @@ else()
@@ -19,7 +19,7 @@ index 9bf41ae..0b7d927 100644
  
  if(APPLE)
      find_package(OpenSSL REQUIRED)
-@@ -36,22 +37,15 @@ set(CMAKE_AUTORCC ON )
+@@ -36,23 +37,15 @@ set(CMAKE_AUTORCC ON )
  set(CMAKE_AUTOUIC ON )
  
  # ZXing Opt
@@ -39,12 +39,13 @@ index 9bf41ae..0b7d927 100644
  
 -# NO PIE memory
 -if(UNIX AND NOT APPLE)
--    set ( CMAKE_CXX_FLAGS "-no-pie -s" )
+-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -no-pie")
+-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -no-pie")
 -endif()
  if( NOT CMAKE_BUILD_TYPE )
      set( CMAKE_BUILD_TYPE Debug )
  endif()
-@@ -72,14 +66,6 @@ if (Qt5Keychain_FOUND)
+@@ -73,14 +66,6 @@ if (Qt5Keychain_FOUND)
  endif()
  find_package(Boost REQUIRED COMPONENTS filesystem)
  
@@ -59,7 +60,7 @@ index 9bf41ae..0b7d927 100644
  # Include path
  set(Nunchuk_INC_PATH
      ${PROJECT_SOURCE_DIR}
-@@ -115,7 +101,6 @@ QT5_ADD_RESOURCES(SOURCE_RSCS
+@@ -116,7 +101,6 @@ QT5_ADD_RESOURCES(SOURCE_RSCS
  # Add include path
  include_directories(${Nunchuk_INC_PATH})
  include_directories("${PROJECT_SOURCE_DIR}/contrib/quotient/lib")
@@ -67,7 +68,7 @@ index 9bf41ae..0b7d927 100644
  include_directories(${QTKEYCHAIN_INCLUDE_DIRS})
  
  # Executable
-@@ -173,8 +158,6 @@ endif()
+@@ -177,8 +161,6 @@ endif()
  # Target link options
  if(WIN32)
      target_link_options(${PROJECT_NAME} PUBLIC /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
@@ -76,7 +77,7 @@ index 9bf41ae..0b7d927 100644
  endif()
  
  # Target link libraries
-@@ -197,3 +180,5 @@ target_link_libraries (${PROJECT_NAME} PUBLIC Quotient)
+@@ -201,3 +183,5 @@ target_link_libraries (${PROJECT_NAME} PUBLIC Quotient)
  target_include_directories("${PROJECT_NAME}" PUBLIC "${PROJECT_SOURCE_DIR}/contrib/quotient/lib" )
  
  target_link_libraries (${PROJECT_NAME} PUBLIC ZXing)
