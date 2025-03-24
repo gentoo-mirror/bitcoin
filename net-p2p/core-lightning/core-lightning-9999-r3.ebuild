@@ -3,9 +3,9 @@
 
 EAPI=8
 
-POSTGRES_COMPAT=( {11..16} )
+POSTGRES_COMPAT=( {11..17} )
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=poetry
