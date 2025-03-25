@@ -1,0 +1,190 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 20ef740..efa8b51 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,7 @@ else()
+     project(nunchuk-qt VERSION 1.9.44)
+ endif()
+ 
++include(GNUInstallDirs)
+ 
+ # nunchuk
+ if(WIN32)
+@@ -20,7 +21,7 @@ if(WIN32)
+     set(HAVE_EVHTTP_CONNECTION_GET_PEER_CONST_CHAR ON)
+ endif()
+ 
+-add_subdirectory(contrib/libnunchuk)
++include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/nunchuk/nunchuk.cmake)
+ 
+ if(APPLE)
+     find_package(OpenSSL REQUIRED)
+@@ -36,17 +37,14 @@ set(CMAKE_AUTORCC ON )
+ set(CMAKE_AUTOUIC ON )
+ 
+ # ZXing Opt
+-set(ZXING_UNIT_TESTS OFF)
+-set(ZXING_BLACKBOX_TESTS OFF)
+-set(ZXING_EXAMPLES OFF)
+ set(BUILD_SHARED_LIBS OFF)
+ find_package(Qt5 COMPONENTS Widgets REQUIRED)
+-add_subdirectory(contrib/zxing)
++find_package(ZXing REQUIRED CONFIG)
+ 
+ # Quotient
+ set(Quotient_ENABLE_E2EE ON CACHE INTERNAL "" FORCE)
+ set(BUILD_TESTING OFF)
+-add_subdirectory(contrib/quotient)
++add_subdirectory(contrib/quotient EXCLUDE_FROM_ALL)
+ 
+ if ((UNIX AND NOT APPLE) OR WIN32)
+     message("---------------------------------> Backward compatibility BOOST_ASIO_NO_DEPRECATED=0")
+@@ -73,14 +71,6 @@ if (Qt5Keychain_FOUND)
+ endif()
+ find_package(Boost REQUIRED COMPONENTS filesystem)
+ 
+-FIND_PACKAGE(OpenGL REQUIRED)
+-if(OPENGL_FOUND) # never true, but printed as true
+-    message(STATUS "---------------------------------> OPENGL: " ${OPENGL_LIBRARIES})
+-    message(STATUS "---------------------------------> OPENGL: " ${OPENGL_INCLUDE_DIR})
+-    link_directories(${OPENGL_LIBRARIES})
+-    include_directories(${OPENGL_INCLUDE_DIR})
+-endif()
+-
+ # Include path
+ set(Nunchuk_INC_PATH
+     ${PROJECT_SOURCE_DIR}
+@@ -116,7 +106,6 @@ QT5_ADD_RESOURCES(SOURCE_RSCS
+ # Add include path
+ include_directories(${Nunchuk_INC_PATH})
+ include_directories("${PROJECT_SOURCE_DIR}/contrib/quotient/lib")
+-include_directories("${PROJECT_SOURCE_DIR}/contrib/libnunchuk/src")
+ include_directories(${QTKEYCHAIN_INCLUDE_DIRS})
+ 
+ # Executable
+@@ -177,8 +166,6 @@ endif()
+ # Target link options
+ if(WIN32)
+     target_link_options(${PROJECT_NAME} PUBLIC /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
+-else()
+-    target_link_options(${PROJECT_NAME} PUBLIC -static-libgcc -static-libstdc++)
+ endif()
+ 
+ # Target link libraries
+@@ -201,3 +188,5 @@ target_link_libraries (${PROJECT_NAME} PUBLIC Quotient)
+ target_include_directories("${PROJECT_NAME}" PUBLIC "${PROJECT_SOURCE_DIR}/contrib/quotient/lib" )
+ 
+ target_link_libraries (${PROJECT_NAME} PUBLIC ZXing)
++
++install(TARGETS ${PROJECT_NAME})
+diff --git a/QRScanner/QBarcodeDecoder.cpp b/QRScanner/QBarcodeDecoder.cpp
+index 822cfce..ad56c77 100644
+--- a/QRScanner/QBarcodeDecoder.cpp
++++ b/QRScanner/QBarcodeDecoder.cpp
+@@ -19,7 +19,6 @@
+  **************************************************************************/
+ #include "QBarcodeDecoder.h"
+ #include "QOutlog.h"
+-#include "ResultPoint.h"
+ #include <QDebug>
+ #include <QImage>
+ #include <QtMultimedia/qvideoframe.h>
+@@ -27,7 +26,7 @@
+ #include <QOpenGLFunctions>
+ #include <QOffscreenSurface>
+ #include <iostream>
+-#include <ReadBarcode.h>
++#include <ZXing/ReadBarcode.h>
+ #include <exception>
+ #include <QScopeGuard>
+ #include <QDateTime>
+@@ -64,7 +63,7 @@ Result ReadBarcode(const QImage& img, const ReaderOptions& options = { })
+         case QImage::Format_ARGB32:
+         case QImage::Format_RGB32:
+ #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
+-            return ImageFormat::RGBA;
++            return ImageFormat::RGBX;
+ #else
+             return ImageFormat::XRGB;
+ #endif
+@@ -72,7 +71,7 @@ Result ReadBarcode(const QImage& img, const ReaderOptions& options = { })
+             return ImageFormat::RGB;
+         case QImage::Format_RGBX8888:
+         case QImage::Format_RGBA8888:
+-            return ImageFormat::RGBA;
++            return ImageFormat::RGBX;
+         case QImage::Format_Grayscale8:
+             return ImageFormat::Lum;
+         default: return ImageFormat::None;
+@@ -90,15 +89,6 @@ Result ReadBarcode(const QImage& img, const ReaderOptions& options = { })
+ 
+ using namespace ZXing::Qt;
+ 
+-std::ostream& operator << (std::ostream& os, const std::vector<ZXing::ResultPoint>& points)
+-{
+-    for (const auto& p : points) {
+-        os << int(p.x() + .5f) << "x" << int(p.y() + .5f) << " ";
+-    }
+-
+-    return os;
+-}
+-
+ QBarcodeDecoder::QBarcodeDecoder(QObject *parent) : QObject(parent)
+ {
+ 
+diff --git a/QRScanner/QBarcodeDecoder.h b/QRScanner/QBarcodeDecoder.h
+index df69f07..45781ad 100644
+--- a/QRScanner/QBarcodeDecoder.h
++++ b/QRScanner/QBarcodeDecoder.h
+@@ -25,7 +25,7 @@
+ 
+ #include <QOpenGLContext>
+ #include <QOpenGLFunctions>
+-#include "BarcodeFormat.h"
++#include <ZXing/BarcodeFormat.h>
+ 
+ // Default camera resolution width/height
+ #define DEFAULT_RES_W 1080
+diff --git a/QRScanner/QBarcodeFilter.h b/QRScanner/QBarcodeFilter.h
+index e5377d2..b4a6102 100644
+--- a/QRScanner/QBarcodeFilter.h
++++ b/QRScanner/QBarcodeFilter.h
+@@ -25,7 +25,7 @@
+ #include <qqml.h>
+ 
+ #include "QBarcodeDecoder.h"
+-#include "BarcodeFormat.h"
++#include <ZXing/BarcodeFormat.h>
+ 
+ void processImage(QBarcodeDecoder *decoder, const QImage &image, ZXing::BarcodeFormats formats);
+ 
+diff --git a/QRScanner/QBarcodeGenerator.cpp b/QRScanner/QBarcodeGenerator.cpp
+index 456213c..1e91332 100644
+--- a/QRScanner/QBarcodeGenerator.cpp
++++ b/QRScanner/QBarcodeGenerator.cpp
+@@ -19,10 +19,10 @@
+  **************************************************************************/
+ #include "QBarcodeGenerator.h"
+ #include <QStandardPaths>
+-#include "MultiFormatWriter.h"
++#include <ZXing/MultiFormatWriter.h>
+ #include <QDateTime>
+ #include "QOutlog.h"
+-#include "BitMatrix.h"
++#include <ZXing/BitMatrix.h>
+ 
+ QBarcodeGenerator::QBarcodeGenerator() : m_borderWitdh(0)
+ {
+diff --git a/main.cpp b/main.cpp
+index 91053bf..63615d5 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -36,7 +36,7 @@
+ #include "Premiums/QUserWallets.h"
+ #include "Premiums/QGroupWallets.h"
+ #include "Premiums/QSharedWallets.h"
+-#include "contrib/libnunchuk/src/utils/loguru.hpp"
++#include <nunchuk/utils/loguru.hpp>
+ #include "RegisterTypes/DashRectangle.h"
+ #include "QRScanner/QBarcodeFilter.h"
+ #include "QPDFPrinter.h"
