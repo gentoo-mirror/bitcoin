@@ -47,7 +47,7 @@ RDEPEND="
 	nat-pmp? ( >=net-libs/libnatpmp-20200924:= )
 	qrcode? ( >=media-gfx/qrencode-3.4.4:= )
 	sqlite? ( >=dev-db/sqlite-3.32.1:= )
-	system-libsecp256k1? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20220406:=[ecdh,extrakeys,rangeproof,recovery,schnorrsig,surjectionproof] )
+	system-libsecp256k1? ( >=dev-libs/libsecp256k1-zkp-0.1.0_pre20220406:=[ecdh,extrakeys,generator,rangeproof,recovery,schnorrsig,surjectionproof,whitelist] )
 	upnp? ( >=net-libs/miniupnpc-2.2.2:= )
 	zeromq? ( >=net-libs/zeromq-4.3.1:= )
 "
