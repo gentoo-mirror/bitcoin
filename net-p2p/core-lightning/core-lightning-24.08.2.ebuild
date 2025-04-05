@@ -223,6 +223,8 @@ MyPVR=${MyPV}-gentoo-${PR}
 BACKPORTS=(
 	990b3b8016beed5cbeb12b69accf36018e467b11	# tools/headerversions.c: fix build without SQLite
 	8165f99731a0058abd72c2c7914ba318cea79281	# lightningd/test/Makefile: add missing dependency on header_versions_gen.h
+	a98ff02c199fdb4f42a5ca82c8415951eb001c25	# cln-rpc/Makefile: fix typo CLN_RPC_GEN_ALL=>CLN_RPC_GENALL￼
+	d3d034be3cdccf6567432195f121b5d5512f48b7	# Makefile: also include cln-grpc/Makefile
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -487,7 +489,7 @@ src_configure() {
 
 src_compile() {
 	python_need='mako' python_setup
-	emake "${CLIGHTNING_MAKEOPTS[@]}"
+	emake "${CLIGHTNING_MAKEOPTS[@]}" RUST=0
 
 	if use doc ; then
 		local python_need='mkdocs'
@@ -502,6 +504,13 @@ src_compile() {
 	fi
 
 	use python && distutils-r1_src_compile
+
+	if use rust ; then
+		# these sources weren't generated above because we set RUST=0
+		emake "${CLIGHTNING_MAKEOPTS[@]}" cln-{,g}rpc-all
+		cargo_src_compile
+		use test && cargo_src_test --no-run
+	fi
 }
 
 python_compile() {
