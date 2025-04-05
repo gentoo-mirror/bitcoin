@@ -214,7 +214,6 @@ MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
 	a98ff02c199fdb4f42a5ca82c8415951eb001c25	# cln-rpc/Makefile: fix typo CLN_RPC_GEN_ALL=>CLN_RPC_GENALL￼
-	d3d034be3cdccf6567432195f121b5d5512f48b7	# Makefile: also include cln-grpc/Makefile
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
