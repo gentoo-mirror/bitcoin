@@ -104,6 +104,17 @@ net-misc/bfgminer:udev-broad-rules - Enable broader udev rules that may match no
 net-misc/bfgminer:x6500 - Enable support for mining with X6500 FPGAs
 net-misc/bfgminer:zeusminer - Enable support for mining with ZeusMiner units
 net-misc/bfgminer:ztex - Enable support for mining with Ztex FPGAs
+net-p2p/bitcoin-core:berkdb - Support legacy wallets in Berkeley DB format
+net-p2p/bitcoin-core:cli - Build and install bitcoin-cli command line interface
+net-p2p/bitcoin-core:daemon - Build and install bitcoind daemon
+net-p2p/bitcoin-core:external-signer - Include support for external wallet signer programs
+net-p2p/bitcoin-core:gui - Build and install Bitcoin-Qt GUI
+net-p2p/bitcoin-core:qrcode - Enable generation of QR Codes for receiving payments
+net-p2p/bitcoin-core:sqlite - Support descriptor wallets in SQLite format
+net-p2p/bitcoin-core:system-libsecp256k1 - Link with dev-libs/libsecp256k1 rather than embedding an internal copy
+net-p2p/bitcoin-core:systemtap - Enable SystemTap/DTrace tracing
+net-p2p/bitcoin-core:test-full - Run tests that take a long time
+net-p2p/bitcoin-core:zeromq - Report blocks and transactions via zeromq
 net-p2p/bitcoin-knots:berkdb - Support legacy wallets in Berkeley DB format
 net-p2p/bitcoin-knots:cli - Build and install bitcoin-cli command line interface
 net-p2p/bitcoin-knots:daemon - Build and install bitcoind daemon
