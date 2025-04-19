@@ -1,0 +1,8 @@
+# Copyright 1999-2025 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# Matt Whitlock <gentoo@mattwhitlock.name> (2025-04-19)
+# Unfortunately there is no way for an overlay profile to enable this flag by
+# default only on arches that support it, but we assume that overlay users will
+# know how to turn it off if their arch does not.
+net-p2p/bitcoin-core asm
