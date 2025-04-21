@@ -5,7 +5,7 @@ EAPI=8
 
 inherit autotools cmake
 
-COMMIT_HASH="7d05d9fa71fc9035314da16dd53312e9c48065c3"
+COMMIT_HASH="fc52ca08a248701f7c462d07810f58a1d44de3ec"
 BITCOIN_CORE_COMMIT_HASH="57b47c47ef0bd36e1c32d709c62998c51dc76f34"  # https://github.com/bitcoin/bitcoin/pull/29675
 TREZOR_FIRMWARE_COMMIT_HASH="b957dfbddb4222c5f9e573f3d4dc21fcbc6ff3a9"
 DESCRIPTION="C++ multisig library powered by Bitcoin Core"
