@@ -1,9 +1,9 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 20ef740..efa8b51 100644
+index a9aaa1d..db41b32 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -5,6 +5,7 @@ else()
-     project(nunchuk-qt VERSION 1.9.44)
+     project(nunchuk-qt VERSION 1.9.45)
  endif()
  
 +include(GNUInstallDirs)
@@ -176,13 +176,13 @@ index 456213c..1e91332 100644
  QBarcodeGenerator::QBarcodeGenerator() : m_borderWitdh(0)
  {
 diff --git a/main.cpp b/main.cpp
-index 91053bf..63615d5 100644
+index c01a1a4..4f348fe 100644
 --- a/main.cpp
 +++ b/main.cpp
-@@ -36,7 +36,7 @@
- #include "Premiums/QUserWallets.h"
+@@ -37,7 +37,7 @@
  #include "Premiums/QGroupWallets.h"
  #include "Premiums/QSharedWallets.h"
+ #include "Premiums/QSignerManagement.h"
 -#include "contrib/libnunchuk/src/utils/loguru.hpp"
 +#include <nunchuk/utils/loguru.hpp>
  #include "RegisterTypes/DashRectangle.h"
