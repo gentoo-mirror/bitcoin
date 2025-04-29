@@ -9,7 +9,7 @@ CRATES="
 	aho-corasick-1.1.3
 	android-tzdata-0.1.1
 	android_system_properties-0.1.5
-	anyhow-1.0.97
+	anyhow-1.0.98
 	arrayvec-0.7.6
 	autocfg-1.4.0
 	backtrace-0.3.74
@@ -21,9 +21,9 @@ CRATES="
 	bumpalo-3.17.0
 	bytecount-0.6.8
 	bytes-1.10.1
-	cc-1.2.16
+	cc-1.2.20
 	cfg-if-1.0.0
-	chrono-0.4.40
+	chrono-0.4.41
 	cln-plugin-0.4.0
 	cln-rpc-0.4.0
 	core-foundation-sys-0.8.7
@@ -37,30 +37,30 @@ CRATES="
 	futures-sink-0.3.31
 	futures-task-0.3.31
 	futures-util-0.3.31
-	getrandom-0.3.1
+	getrandom-0.3.2
 	gimli-0.31.1
 	heck-0.5.0
 	hex-0.4.3
 	hex-conservative-0.1.2
 	hex_lit-0.1.1
-	iana-time-zone-0.1.61
+	iana-time-zone-0.1.63
 	iana-time-zone-haiku-0.1.2
 	itoa-1.0.15
 	js-sys-0.3.77
 	lazy_static-1.5.0
-	libc-0.2.171
+	libc-0.2.172
 	lock_api-0.4.12
-	log-0.4.26
+	log-0.4.27
 	log-panics-2.1.0
 	matchers-0.1.0
 	memchr-2.7.4
-	miniz_oxide-0.8.5
+	miniz_oxide-0.8.8
 	mio-1.0.3
 	nu-ansi-term-0.46.0
 	num-format-0.4.4
 	num-traits-0.2.19
 	object-0.36.7
-	once_cell-1.21.0
+	once_cell-1.21.3
 	overload-0.1.1
 	papergrid-0.14.0
 	parking_lot-0.12.3
@@ -70,12 +70,13 @@ CRATES="
 	ppv-lite86-0.2.21
 	proc-macro-error-attr2-2.0.0
 	proc-macro-error2-2.0.1
-	proc-macro2-1.0.94
-	quote-1.0.39
-	rand-0.9.0
+	proc-macro2-1.0.95
+	quote-1.0.40
+	r-efi-5.2.0
+	rand-0.9.1
 	rand_chacha-0.9.0
 	rand_core-0.9.3
-	redox_syscall-0.5.10
+	redox_syscall-0.5.11
 	regex-1.11.1
 	regex-automata-0.1.10
 	regex-automata-0.4.9
@@ -93,18 +94,18 @@ CRATES="
 	sharded-slab-0.1.7
 	shlex-1.3.0
 	slab-0.4.9
-	smallvec-1.14.0
-	socket2-0.5.8
-	syn-2.0.100
+	smallvec-1.15.0
+	socket2-0.5.9
+	syn-2.0.101
 	tabled-0.18.0
 	tabled_derive-0.10.0
 	thread_local-1.1.8
 	tikv-jemalloc-sys-0.6.0+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
 	tikv-jemallocator-0.6.0
-	tokio-1.44.0
+	tokio-1.44.2
 	tokio-macros-2.5.0
 	tokio-stream-0.1.17
-	tokio-util-0.7.13
+	tokio-util-0.7.15
 	tracing-0.1.41
 	tracing-attributes-0.1.28
 	tracing-core-0.1.33
@@ -114,7 +115,7 @@ CRATES="
 	unicode-width-0.2.0
 	valuable-0.1.1
 	wasi-0.11.0+wasi-snapshot-preview1
-	wasi-0.13.3+wasi-0.2.2
+	wasi-0.14.2+wasi-0.2.4
 	wasm-bindgen-0.2.100
 	wasm-bindgen-backend-0.2.100
 	wasm-bindgen-macro-0.2.100
@@ -123,8 +124,12 @@ CRATES="
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-x86_64-pc-windows-gnu-0.4.0
-	windows-core-0.52.0
-	windows-link-0.1.0
+	windows-core-0.61.0
+	windows-implement-0.60.0
+	windows-interface-0.59.1
+	windows-link-0.1.1
+	windows-result-0.3.2
+	windows-strings-0.4.0
 	windows-sys-0.52.0
 	windows-targets-0.52.6
 	windows_aarch64_gnullvm-0.52.6
@@ -135,9 +140,9 @@ CRATES="
 	windows_x86_64_gnu-0.52.6
 	windows_x86_64_gnullvm-0.52.6
 	windows_x86_64_msvc-0.52.6
-	wit-bindgen-rt-0.33.0
-	zerocopy-0.8.23
-	zerocopy-derive-0.8.23
+	wit-bindgen-rt-0.39.0
+	zerocopy-0.8.25
+	zerocopy-derive-0.8.25
 "
 
 inherit cargo
