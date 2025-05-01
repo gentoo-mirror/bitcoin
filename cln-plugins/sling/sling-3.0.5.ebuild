@@ -6,6 +6,7 @@ EAPI=8
 CRATES="
 	addr2line-0.24.2
 	adler2-2.0.0
+	ahash-0.8.11
 	aho-corasick-1.1.3
 	android-tzdata-0.1.1
 	android_system_properties-0.1.5
@@ -27,7 +28,6 @@ CRATES="
 	cln-plugin-0.4.0
 	cln-rpc-0.4.0
 	core-foundation-sys-0.8.7
-	fnv-1.0.7
 	futures-0.3.31
 	futures-channel-0.3.31
 	futures-core-0.3.31
@@ -37,6 +37,7 @@ CRATES="
 	futures-sink-0.3.31
 	futures-task-0.3.31
 	futures-util-0.3.31
+	getrandom-0.2.16
 	getrandom-0.3.2
 	gimli-0.31.1
 	heck-0.5.0
@@ -62,7 +63,7 @@ CRATES="
 	object-0.36.7
 	once_cell-1.21.3
 	overload-0.1.1
-	papergrid-0.14.0
+	papergrid-0.15.0
 	parking_lot-0.12.3
 	parking_lot_core-0.9.10
 	pin-project-lite-0.2.16
@@ -97,8 +98,9 @@ CRATES="
 	smallvec-1.15.0
 	socket2-0.5.9
 	syn-2.0.101
-	tabled-0.18.0
-	tabled_derive-0.10.0
+	tabled-0.19.0
+	tabled_derive-0.11.0
+	testing_table-0.3.0
 	thread_local-1.1.8
 	tikv-jemalloc-sys-0.6.0+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
 	tikv-jemallocator-0.6.0
@@ -114,6 +116,7 @@ CRATES="
 	unicode-ident-1.0.18
 	unicode-width-0.2.0
 	valuable-0.1.1
+	version_check-0.9.5
 	wasi-0.11.0+wasi-snapshot-preview1
 	wasi-0.14.2+wasi-0.2.4
 	wasm-bindgen-0.2.100
@@ -141,7 +144,9 @@ CRATES="
 	windows_x86_64_gnullvm-0.52.6
 	windows_x86_64_msvc-0.52.6
 	wit-bindgen-rt-0.39.0
+	zerocopy-0.7.35
 	zerocopy-0.8.25
+	zerocopy-derive-0.7.35
 	zerocopy-derive-0.8.25
 "
 
