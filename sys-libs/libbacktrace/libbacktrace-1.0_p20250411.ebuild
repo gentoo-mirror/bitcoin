@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,9 +7,8 @@ inherit autotools
 
 DESCRIPTION="C library that may be linked into a C/C++ program to produce symbolic backtraces"
 HOMEPAGE="https://github.com/ianlancetaylor/libbacktrace"
-COMMITHASH="cdb64b688dda93bbbacbc2b1ccf50ce9329d4748"
-SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tar.gz
-	${HOMEPAGE}/commit/6674aadb6f2be925e89b253f1b380ecdbc69777b.patch?full_index=1 -> ${PN}-libtool-no-wrap-tests.patch"
+COMMITHASH="793921876c981ce49759114d7bb89bb89b2d3a2d"
+SRC_URI="${HOMEPAGE}/archive/${COMMITHASH}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${COMMITHASH}"
 
 LICENSE="BSD"
@@ -17,10 +16,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc64 ~riscv ~x86"
 IUSE="static-libs test"
 RESTRICT="!test? ( test )"
-
-PATCHES=(
-	"${DISTDIR}/${PN}-libtool-no-wrap-tests.patch"
-)
 
 BDEPEND="
 	test? (
