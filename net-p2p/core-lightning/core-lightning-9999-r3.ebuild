@@ -77,6 +77,7 @@ CRATES="
 	futures-util-0.3.31
 	generic-array-0.14.7
 	getrandom-0.2.15
+	getrandom-0.3.2
 	gimli-0.31.1
 	h2-0.3.26
 	h2-0.4.7
@@ -120,6 +121,7 @@ CRATES="
 	libc-0.2.169
 	linux-raw-sys-0.4.15
 	litemap-0.7.4
+	lock_api-0.4.12
 	lockfree-object-pool-0.1.6
 	log-0.4.25
 	log-panics-2.1.0
@@ -143,6 +145,8 @@ CRATES="
 	oid-registry-0.7.1
 	once_cell-1.20.2
 	overload-0.1.1
+	parking_lot-0.12.3
+	parking_lot_core-0.9.10
 	pem-3.0.4
 	percent-encoding-2.3.1
 	petgraph-0.6.5
@@ -159,10 +163,15 @@ CRATES="
 	prost-derive-0.12.6
 	prost-types-0.12.6
 	quote-1.0.38
+	r-efi-5.2.0
 	rand-0.8.5
+	rand-0.9.1
 	rand_chacha-0.3.1
+	rand_chacha-0.9.0
 	rand_core-0.6.4
+	rand_core-0.9.3
 	rcgen-0.13.2
+	redox_syscall-0.5.11
 	regex-1.11.1
 	regex-automata-0.1.10
 	regex-automata-0.4.9
@@ -184,6 +193,7 @@ CRATES="
 	rustversion-1.0.19
 	ryu-1.0.18
 	same-file-1.0.6
+	scopeguard-1.2.0
 	sct-0.7.1
 	secp256k1-0.28.2
 	secp256k1-sys-0.9.2
@@ -196,6 +206,7 @@ CRATES="
 	sha2-0.10.8
 	sharded-slab-0.1.7
 	shlex-1.3.0
+	signal-hook-registry-1.4.5
 	simd-adler32-0.3.7
 	slab-0.4.9
 	smallvec-1.13.2
@@ -221,7 +232,7 @@ CRATES="
 	time-core-0.1.2
 	time-macros-0.2.19
 	tinystr-0.7.6
-	tokio-1.43.0
+	tokio-1.44.2
 	tokio-io-timeout-1.2.0
 	tokio-macros-2.5.0
 	tokio-rustls-0.24.1
@@ -261,6 +272,7 @@ CRATES="
 	walkdir-2.5.0
 	want-0.3.1
 	wasi-0.11.0+wasi-snapshot-preview1
+	wasi-0.14.2+wasi-0.2.4
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.9
@@ -276,6 +288,7 @@ CRATES="
 	windows_x86_64_gnu-0.52.6
 	windows_x86_64_gnullvm-0.52.6
 	windows_x86_64_msvc-0.52.6
+	wit-bindgen-rt-0.39.0
 	write16-1.0.0
 	writeable-0.5.5
 	x509-parser-0.16.0
