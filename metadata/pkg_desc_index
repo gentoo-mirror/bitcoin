@@ -2,7 +2,7 @@ acct-group/elements 0: A group for users of system-wide Elements services
 acct-group/lightning 0: A group for users of system-wide Lightning services
 acct-user/elements 0: System-wide Elements services user
 acct-user/lightning 0: System-wide Lightning services user
-cln-plugins/sling 2.1.1 3.0.5: A Core Lightning plugin to automatically rebalance multiple channels
+cln-plugins/sling 2.1.1 3.0.6: A Core Lightning plugin to automatically rebalance multiple channels
 dev-cpp/bbqr-cpp 0_pre20241203: Encodes larger files into a series of QR codes so they can cross air gaps
 dev-cpp/bc-ur-cpp 0.1.0_pre20210208: A C++ implementation of BCR-0004 and BCR-0005
 dev-cpp/libnunchuk 0.1.0_pre20250416: C++ multisig library powered by Bitcoin Core
