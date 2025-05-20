@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..13} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 
@@ -26,5 +26,7 @@ BDEPEND="
 		>=dev-python/pytest-7.2.0[${PYTHON_USEDEP}]
 	)
 "
+# https://github.com/whtsky/bencoder.pyx/issues/143
+BDEPEND+=" <dev-python/cython-3.1_alpha"
 
 distutils_enable_tests pytest
