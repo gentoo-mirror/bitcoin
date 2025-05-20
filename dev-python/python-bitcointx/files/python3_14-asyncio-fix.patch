@@ -1,0 +1,12 @@
+diff -Naur a/bitcointx/tests/test_async_and_threading.py b/bitcointx/tests/test_async_and_threading.py
+--- a/bitcointx/tests/test_async_and_threading.py	2024-01-21 12:17:24.000000000 +0000
++++ b/bitcointx/tests/test_async_and_threading.py	2025-05-20 18:28:36.860455340 +0000
+@@ -200,7 +200,7 @@
+             f3 = asyncio.ensure_future(async_regtest())
+             await asyncio.gather(f1, f2, f3)
+ 
+-        asyncio.get_event_loop().run_until_complete(go())
++        asyncio.run(go())
+ 
+         self.assertEqual(set(finished_successfully),
+                          set(['mainnet', 'testnet', 'regtest']))
