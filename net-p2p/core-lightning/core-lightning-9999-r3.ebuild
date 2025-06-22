@@ -336,9 +336,9 @@ CDEPEND="
 	>=net-libs/libwally-core-1.4.0:0/6[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.13:=
-	postgres? ( || ( ${POSTGRES_DEP} ) )
+	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
-	sqlite? ( >=dev-db/sqlite-3.33.0:= )
+	sqlite? ( >=dev-db/sqlite-3.29.0:= )
 "
 PYTHON_DEPEND="
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
@@ -396,7 +396,7 @@ BDEPEND="
 "
 REQUIRED_USE="
 	|| ( postgres sqlite )
-	postgres? ( ${POSTGRES_REQ_USE} )
+	postgres? ( ${POSTGRES_REQ_USE/||/^^} )
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 # FIXME: bundled deps: ccan

@@ -300,7 +300,7 @@ BDEPEND="
 "
 REQUIRED_USE="
 	|| ( postgres sqlite )
-	postgres? ( ${POSTGRES_REQ_USE} )
+	postgres? ( ${POSTGRES_REQ_USE/||/^^} )
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 # FIXME: bundled deps: ccan
