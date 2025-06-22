@@ -406,6 +406,10 @@ PATCHES=(
 
 DOCS=( CHANGELOG.md README.md SECURITY.md )
 
+efmt() {
+	: ${1:?} ; local l ; while read -r l ; do "${!#}" "${l}" ; done < <(fmt "${@:1:$#-1}")
+}
+
 python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
 		dev-python/mako"[${PYTHON_USEDEP}]" ; } &&
@@ -644,7 +648,9 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
-	elog " - Add your user(s) to the 'lightning' group."
-	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
+	efmt -su elog <<-EOF
+		To use lightning-cli with the /etc/init.d/lightningd service:
+		 - Add your user(s) to the 'lightning' group.
+		 - Symlink ~/.lightning to /var/lib/lightning.
+	EOF
 }
