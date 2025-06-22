@@ -340,7 +340,7 @@ CDEPEND="
 	>=net-libs/libwally-core-1.4.0:0/6[elements]
 	|| ( >=sys-libs/libbacktrace-1.0_p20220218:= =sys-libs/libbacktrace-0.0.0_pre20220218:= )
 	>=sys-libs/zlib-1.2.13:=
-	postgres? ( || ( ${POSTGRES_DEP} ) )
+	postgres? ( ${POSTGRES_DEP} )
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( >=dev-db/sqlite-3.29.0:= )
 "
@@ -399,7 +399,7 @@ BDEPEND="
 "
 REQUIRED_USE="
 	|| ( postgres sqlite )
-	postgres? ( ${POSTGRES_REQ_USE} )
+	postgres? ( ${POSTGRES_REQ_USE/||/^^} )
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 # FIXME: bundled deps: ccan
@@ -408,6 +408,10 @@ PATCHES=(
 )
 
 DOCS=( CHANGELOG.md README.md SECURITY.md )
+
+efmt() {
+	: ${1:?} ; local l ; while read -r l ; do "${!#}" "${l}" ; done < <(fmt "${@:1:$#-1}")
+}
 
 python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
@@ -435,11 +439,13 @@ pkg_pretend() {
 		[[ "$(find /proc/[0-9]*/exe -xtype f -lname "${EROOT%/}/usr/bin/lightningd*" -print -quit 2>/dev/null)" ||
 			-x "${EROOT%/}/run/openrc/started/lightningd" ]]
 	then
-		eerror "A potentially incompatible version of the lightningd daemon is currently" \
-			'\n'"running. Installing version ${PV} would likely cause the running daemon" \
-			'\n'"to fail when it next spawns a subdaemon process. Please stop the running" \
-			'\n'"daemon and reattempt this installation, or set REPLACE_RUNNING_CLIGHTNING=1" \
-			'\n'"if you are certain you know what you are doing."
+		efmt eerror <<-EOF
+			A potentially incompatible version of the lightningd daemon is currently
+			running. Installing version ${PV} would likely cause the running daemon
+			to fail when it next spawns a subdaemon process. Please stop the running
+			daemon and reattempt this installation, or set REPLACE_RUNNING_CLIGHTNING=1
+			if you are certain you know what you are doing.
+		EOF
 		die 'lightningd is running'
 	fi
 }
@@ -668,7 +674,22 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	elog 'To use lightning-cli with the /etc/init.d/lightningd service:'
-	elog " - Add your user(s) to the 'lightning' group."
-	elog ' - Symlink ~/.lightning to /var/lib/lightning.'
+	efmt -su elog <<-EOF
+		To use lightning-cli with the /etc/init.d/lightningd service:
+		 - Add your user(s) to the 'lightning' group.
+		 - Symlink ~/.lightning to /var/lib/lightning.
+	EOF
+
+	local v ; for v in ${REPLACING_VERSIONS} ; do
+		if ver_test "${v}" -lt 25.05 ; then
+			efmt ewarn <<-EOF
+				Due to experimental protocol upgrades, --experimental-splicing is
+				incompatible with previous CLN versions. You will not be able to
+				reestablish channels with older nodes at all if this is enabled! If you
+				have CLN peers with the experimental splicing feature, consider disabling
+				this option until they upgrade to support the latest draft spec.
+			EOF
+			break
+		fi
+	done
 }
