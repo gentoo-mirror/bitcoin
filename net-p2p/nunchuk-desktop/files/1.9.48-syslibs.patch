@@ -1,26 +1,32 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b54a23c..795a57d 100644
+index b11a096..5fa2000 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -5,6 +5,7 @@ else()
-     project(nunchuk-qt VERSION 1.9.43)
+@@ -1,10 +1,12 @@
+-cmake_minimum_required( VERSION 3.1 )
++cmake_minimum_required( VERSION 3.5 )
+ if(UNIX AND APPLE)
+     project(Nunchuk VERSION 1.9.48)
+ else()
+     project(nunchuk-qt VERSION 1.9.48)
  endif()
  
 +include(GNUInstallDirs)
- 
++
  # nunchuk
- if(WIN32)
-@@ -20,7 +21,7 @@ if(WIN32)
-     set(HAVE_EVHTTP_CONNECTION_GET_PEER_CONST_CHAR ON)
+ if(MSVC AND WIN32)
+     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+@@ -23,7 +25,7 @@ if (WIN32)
+     add_definitions("-DWIN32")
+     add_definitions("-DBOOST_PROCESS_USE_STD_FS")
  endif()
- 
 -add_subdirectory(contrib/libnunchuk)
 +include(${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/nunchuk/nunchuk.cmake)
  
- if(APPLE)
-     find_package(OpenSSL REQUIRED)
-@@ -36,23 +37,15 @@ set(CMAKE_AUTORCC ON )
- set(CMAKE_AUTOUIC ON )
+ # Compiler Opt
+ set(CMAKE_CXX_STANDARD 20)
+@@ -56,17 +58,14 @@ add_definitions(-DOAUTH_CLIENT_SECRET="${OAUTH_CLIENT_SECRET}")
+ add_definitions(-DOAUTH_REDIRECT_URI="${OAUTH_REDIRECT_URI}")
  
  # ZXing Opt
 -set(ZXING_UNIT_TESTS OFF)
@@ -37,17 +43,11 @@ index b54a23c..795a57d 100644
 -add_subdirectory(contrib/quotient)
 +add_subdirectory(contrib/quotient EXCLUDE_FROM_ALL)
  
--# NO PIE memory
--if(UNIX AND NOT APPLE)
--    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -no-pie")
--    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -no-pie")
--endif()
- if( NOT CMAKE_BUILD_TYPE )
-     set( CMAKE_BUILD_TYPE Debug )
+ if ((UNIX AND NOT APPLE) OR WIN32)
+     message("---------------------------------> Backward compatibility BOOST_ASIO_NO_DEPRECATED=0")
+@@ -123,14 +122,6 @@ else()
+     find_package(Boost REQUIRED )
  endif()
-@@ -73,14 +66,6 @@ if (Qt5Keychain_FOUND)
- endif()
- find_package(Boost REQUIRED COMPONENTS filesystem)
  
 -FIND_PACKAGE(OpenGL REQUIRED)
 -if(OPENGL_FOUND) # never true, but printed as true
@@ -60,27 +60,10 @@ index b54a23c..795a57d 100644
  # Include path
  set(Nunchuk_INC_PATH
      ${PROJECT_SOURCE_DIR}
-@@ -116,7 +101,6 @@ QT5_ADD_RESOURCES(SOURCE_RSCS
- # Add include path
- include_directories(${Nunchuk_INC_PATH})
- include_directories("${PROJECT_SOURCE_DIR}/contrib/quotient/lib")
--include_directories("${PROJECT_SOURCE_DIR}/contrib/libnunchuk/src")
- include_directories(${QTKEYCHAIN_INCLUDE_DIRS})
- 
- # Executable
-@@ -177,8 +161,6 @@ endif()
- # Target link options
- if(WIN32)
-     target_link_options(${PROJECT_NAME} PUBLIC /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
--else()
--    target_link_options(${PROJECT_NAME} PUBLIC -static-libgcc -static-libstdc++)
+@@ -264,3 +255,5 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+     message(STATUS "---------------------------------> MSVC -> link SQLite::SQLite3")
+ 	target_link_libraries (${PROJECT_NAME} PRIVATE SQLite::SQLite3)
  endif()
- 
- # Target link libraries
-@@ -201,3 +183,5 @@ target_link_libraries (${PROJECT_NAME} PUBLIC Quotient)
- target_include_directories("${PROJECT_NAME}" PUBLIC "${PROJECT_SOURCE_DIR}/contrib/quotient/lib" )
- 
- target_link_libraries (${PROJECT_NAME} PUBLIC ZXing)
 +
 +install(TARGETS ${PROJECT_NAME})
 diff --git a/QRScanner/QBarcodeDecoder.cpp b/QRScanner/QBarcodeDecoder.cpp
@@ -182,13 +165,13 @@ index 456213c..1e91332 100644
  QBarcodeGenerator::QBarcodeGenerator() : m_borderWitdh(0)
  {
 diff --git a/main.cpp b/main.cpp
-index 3c27748..0ef8937 100644
+index 400c934..9de6af3 100644
 --- a/main.cpp
 +++ b/main.cpp
-@@ -36,7 +36,7 @@
- #include "Premiums/QUserWallets.h"
+@@ -37,7 +37,7 @@
  #include "Premiums/QGroupWallets.h"
  #include "Premiums/QSharedWallets.h"
+ #include "Signers/QSignerManagement.h"
 -#include "contrib/libnunchuk/src/utils/loguru.hpp"
 +#include <nunchuk/utils/loguru.hpp>
  #include "RegisterTypes/DashRectangle.h"

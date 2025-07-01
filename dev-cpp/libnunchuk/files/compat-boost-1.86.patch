@@ -49,7 +49,7 @@ index 7982a8f..0d9ad59 100644
        signal_worker_;
    std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
 diff --git a/src/backend/electrum/synchronizer.cpp b/src/backend/electrum/synchronizer.cpp
-index ce2beb2..1ca6be2 100644
+index 3dce99a..47962cc 100644
 --- a/src/backend/electrum/synchronizer.cpp
 +++ b/src/backend/electrum/synchronizer.cpp
 @@ -62,11 +62,11 @@ void ElectrumSynchronizer::Run() {
@@ -67,10 +67,10 @@ index ce2beb2..1ca6be2 100644
                    std::chrono::seconds(RECONNECT_DELAY_SECOND));
                Run();
 diff --git a/src/backend/synchronizer.h b/src/backend/synchronizer.h
-index e5e897a..dc4a65e 100644
+index b6521c9..909ae5f 100644
 --- a/src/backend/synchronizer.h
 +++ b/src/backend/synchronizer.h
-@@ -75,7 +75,7 @@ class Synchronizer {
+@@ -78,7 +78,7 @@ class Synchronizer {
    std::shared_ptr<NunchukStorage> storage_;
  
    std::thread sync_thread_;
@@ -79,11 +79,28 @@ index e5e897a..dc4a65e 100644
    boost::asio::executor_work_guard<boost::asio::io_context::executor_type>
        sync_worker_;
  
+diff --git a/src/hwiservice.cpp b/src/hwiservice.cpp
+index 17f616d..1c36e77 100644
+--- a/src/hwiservice.cpp
++++ b/src/hwiservice.cpp
+@@ -20,6 +20,12 @@
+ #include <base58.h>
+ 
+ #include <array>
++#include <boost/version.hpp>
++#if BOOST_VERSION >= 108600
++# define BOOST_PROCESS_VERSION 1
++# include <boost/process/v1/child.hpp>
++# include <boost/process/v1/io.hpp>
++#endif
+ #include <boost/process.hpp>
+ #include <charconv>
+ #ifdef _WIN32
 diff --git a/src/nunchukutils.cpp b/src/nunchukutils.cpp
-index cbb194f..4f00e35 100644
+index fe08c3c..41fd309 100644
 --- a/src/nunchukutils.cpp
 +++ b/src/nunchukutils.cpp
-@@ -1105,12 +1105,12 @@ bool Utils::CheckElectrumServer(const std::string& server, int timeout) {
+@@ -1115,12 +1115,12 @@ bool Utils::CheckElectrumServer(const std::string& server, int timeout) {
  
    bool result = false;
    try {

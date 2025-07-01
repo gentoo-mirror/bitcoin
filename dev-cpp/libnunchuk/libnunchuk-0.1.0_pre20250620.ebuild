@@ -5,7 +5,7 @@ EAPI=8
 
 inherit autotools cmake
 
-COMMIT_HASH="fc52ca08a248701f7c462d07810f58a1d44de3ec"
+COMMIT_HASH="1ad39d471288f13587e8dd1eaa93ced11ca69be9"
 BITCOIN_CORE_COMMIT_HASH="57b47c47ef0bd36e1c32d709c62998c51dc76f34"  # https://github.com/bitcoin/bitcoin/pull/29675
 TREZOR_FIRMWARE_COMMIT_HASH="b957dfbddb4222c5f9e573f3d4dc21fcbc6ff3a9"
 DESCRIPTION="C++ multisig library powered by Bitcoin Core"
@@ -21,22 +21,23 @@ LICENSE="MIT"
 SLOT="0/${PV}"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
+# Bitcoin Core has stricter Boost dependency than libnunchuk
 RDEPEND="
 	>=dev-db/sqlcipher-4.4.1:=
 	>=dev-cpp/bbqr-cpp-0_pre20241203:=
 	>=dev-cpp/bc-ur-cpp-0.1.0_pre20210208:=
 	>=dev-cpp/tap-protocol-1.0.0_p20250218:=
 	>=dev-libs/bc-ur-0.3.0-r1:=
-	>=dev-libs/boost-1.47.0:=
+	>=dev-libs/boost-1.73.0:=
 	dev-libs/libevent:=
 	>=dev-libs/libsecp256k1-0.2.0:=[ecdh,ellswift,musig,recovery,schnorr]
-	>=dev-libs/openssl-1.1.1j:=
+	>=dev-libs/openssl-3.0.13:=
 "
 BDEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/syslibs.patch"
-	"${FILESDIR}/compat-boost-1.87.patch"
+	"${FILESDIR}/compat-boost-1.86.patch"
 )
 
 src_unpack() {
@@ -51,6 +52,10 @@ src_unpack() {
 }
 
 src_prepare() {
+	# https://bugs.gentoo.org/958361
+	# https://github.com/google/crc32c/commit/2bbb3be42e20a0e6c0f7b39dc07dc863d9ffbc07
+	sed -e '/^cmake_minimum_required(VERSION 3\.1)$/s/)$/6)/' -i contrib/bitcoin/src/crc32c/CMakeLists.txt || die
+
 	cmake_src_prepare
 
 	cd "${S}/contrib/bitcoin" || die
