@@ -6,7 +6,7 @@ EAPI=8
 inherit cmake desktop
 
 MyPV="$(ver_cut 1-3)"
-COMMIT_HASH="48b236e53786419270011883680adf40ff259864"
+COMMIT_HASH="387321b8ea0c9325dfc1def6c0f972fccd6c3631"
 # TODO: disembed net-libs/libquotient after Nunchuk switches to Qt6
 QUOTIENT_COMMIT_HASH="77b190d822c1e980b98b84999f0cfb609ed05a49"
 DESCRIPTION="Graphical multisig wallet powered by Bitcoin Core"
@@ -24,7 +24,8 @@ if [[ "${PV}" != *_pre* && "${PV}" != *_rc* ]] ; then
 fi
 
 RDEPEND="
-	>=dev-cpp/libnunchuk-0.1.0_pre20250416:=
+	>=dev-cpp/libnunchuk-0.1.0_pre20250620:=
+	dev-libs/boost:=
 	>=dev-libs/olm-3.1.3:=
 	>=dev-libs/openssl-1.1.0:=
 	dev-libs/qtkeychain:=[qt5]
@@ -44,7 +45,7 @@ RDEPEND="
 BDEPEND="${RDEPEND}"
 
 PATCHES=(
-	"${FILESDIR}/1.9.45-syslibs.patch"
+	"${FILESDIR}/1.9.48-syslibs.patch"
 )
 
 DOCS=(
@@ -72,6 +73,13 @@ src_unpack() {
 src_prepare() {
 	cmake_src_prepare
 	extract_icns Icon.icns ic{11,12,07,08,09}
+}
+
+src_configure() {
+	local mycmakeargs=(
+		-DUSING_WEBENGINE=OFF
+	)
+	cmake_src_configure
 }
 
 src_install() {

@@ -1,9 +1,9 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9c3d75b..d948949 100644
+index 73709b8..d183600 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -1,6 +1,10 @@
--cmake_minimum_required(VERSION 3.1)
+-cmake_minimum_required(VERSION 3.18)
 +cmake_minimum_required(VERSION 3.23)
  project(nunchuk VERSION 0.1.0)
  
@@ -14,8 +14,8 @@ index 9c3d75b..d948949 100644
  configure_file(src/config.h.in nunchuk-config.h)
  
  set(CMAKE_CXX_STANDARD 20)
-@@ -9,9 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
- set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+@@ -8,9 +12,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_CXX_EXTENSIONS OFF)
  set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 -set(Boost_USE_STATIC_LIBS ON)
@@ -24,25 +24,46 @@ index 9c3d75b..d948949 100644
  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
  
  if(ANDROID)
-@@ -63,23 +64,22 @@ if(WIN32)
-     string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus")
-     find_package(sqlcipher CONFIG REQUIRED)
+@@ -50,37 +51,37 @@ elseif(IOS)
+     add_library(libevent::libevent ALIAS event_extra_static)
+     add_library(libevent::pthreads ALIAS event_pthreads_static)
  else()
--    add_subdirectory(contrib/sqlite)
--    add_library(SQLite::SQLite3 ALIAS sqlcipher)
--    set(SQLite3_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/contrib/sqlite/sqlcipher)
--    set(SQLite3_LIBRARY sqlcipher)
-+	pkg_check_modules(SQLCIPHER REQUIRED IMPORTED_TARGET sqlcipher)
-+	add_library(sqlcipher ALIAS PkgConfig::SQLCIPHER)
+-    find_library(event_lib NAMES libevent.a event REQUIRED)
+-    add_library(libevent::libevent STATIC IMPORTED)
+-    set_target_properties(libevent::libevent PROPERTIES IMPORTED_LOCATION ${event_lib})
++	pkg_check_modules(LIBEVENT REQUIRED IMPORTED_TARGET libevent)
++	add_library(libevent::libevent ALIAS PkgConfig::LIBEVENT)
+ 
+   if (NOT WIN32)
+-    find_library(event_pthreads_lib NAMES libevent_pthreads.a event_pthreads REQUIRED)
+-    add_library(libevent::pthreads STATIC IMPORTED)
+-    set_target_properties(libevent::pthreads PROPERTIES IMPORTED_LOCATION ${event_pthreads_lib})
++	pkg_check_modules(LIBEVENT_PTHREADS REQUIRED IMPORTED_TARGET libevent_pthreads)
++	add_library(libevent::pthreads ALIAS PkgConfig::LIBEVENT_PTHREADS)
+   endif()
  endif()
  
-+set(BUILD_CLI OFF)
+ find_package(OpenSSL REQUIRED)
+ find_package(Threads REQUIRED)
+ 
+-add_subdirectory(contrib/sqlite)
+-add_library(SQLite::SQLite3 ALIAS sqlcipher)
+-set(SQLite3_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/contrib/sqlite/sqlcipher)
+-set(SQLite3_LIBRARY sqlcipher)
++pkg_check_modules(SQLCIPHER REQUIRED IMPORTED_TARGET sqlcipher)
++add_library(sqlcipher ALIAS PkgConfig::SQLCIPHER)
++add_library(SQLite::SQLite3 ALIAS PkgConfig::SQLCIPHER)
++set(SQLite3_INCLUDE_DIR ${SQLCIPHER_INCLUDE_DIRS})
++set(SQLite3_LIBRARY ${SQLCIPHER_LIBRARIES})
+ 
  set(BUILD_DAEMON OFF)
  set(BUILD_TESTS OFF)
 +set(INSTALL_MAN OFF)
  set(HAVE_IFADDRS_H FALSE)
  cmake_policy(SET CMP0077 NEW)
 -set(SECP256K1_ENABLE_MODULE_ECDH ON)
+ set(BUILD_CLI OFF)
++set(WITH_BDB OFF)
 +set(WITH_SYSTEM_LIBSECP256K1 ON)
  add_subdirectory(contrib/bitcoin)
  
@@ -54,7 +75,7 @@ index 9c3d75b..d948949 100644
  
  add_library(trezor-crypto STATIC
      "contrib/trezor-firmware/crypto/bip39.c"
-@@ -92,7 +92,7 @@ add_library(trezor-crypto STATIC
+@@ -93,7 +94,7 @@ add_library(trezor-crypto STATIC
      "contrib/trezor-firmware/crypto/aes/aeskey.c"
      "contrib/trezor-firmware/crypto/aes/aestab.c"
  )
@@ -63,7 +84,7 @@ index 9c3d75b..d948949 100644
  target_include_directories(trezor-crypto PUBLIC
      "${PROJECT_SOURCE_DIR}/contrib/trezor-firmware/crypto"
  )
-@@ -113,31 +113,12 @@ if(WIN32)
+@@ -114,30 +115,12 @@ if(WIN32)
      endif()
  endif()
  
@@ -85,21 +106,21 @@ index 9c3d75b..d948949 100644
 +pkg_check_modules(BC_UR REQUIRED IMPORTED_TARGET libbc-ur)
 +add_library(ur-2 ALIAS PkgConfig::BC_UR)
  
- find_package(Boost 1.47.0 REQUIRED)
+-find_package(Boost 1.47.0 REQUIRED)
++find_package(Boost 1.47.0 REQUIRED COMPONENTS process)
  
 -target_include_directories(ur-2 PUBLIC
 -    "${PROJECT_SOURCE_DIR}/contrib/bc-ur-2/src"
--    ${Boost_INCLUDE_DIRS}
 -    "${PROJECT_SOURCE_DIR}/contrib/bitcoin/depends/${ANDROID_TARGET}/include"
 -)
 -
 -add_library("${PROJECT_NAME}" STATIC 
 +add_library("${PROJECT_NAME}"
      src/hwiservice.cpp 
+     src/groupservice.cpp
      src/selector.cpp 
-     src/spender.cpp
-@@ -185,6 +166,22 @@ add_library("${PROJECT_NAME}" STATIC
-     src/utils/coldcard.cpp
+@@ -195,6 +178,22 @@ add_library("${PROJECT_NAME}" STATIC
+     src/utils/tweetnacl.c
  )
  
 +target_sources(${PROJECT_NAME} PUBLIC FILE_SET HEADERS
@@ -121,7 +142,7 @@ index 9c3d75b..d948949 100644
  set(PROJECT_LIBRARIES
      ur
      ur-2
-@@ -199,40 +196,41 @@ if(WIN32)
+@@ -211,40 +210,45 @@ if(WIN32)
  elseif(APPLE)
      set(PROJECT_LIBRARIES sqlcipher ${PROJECT_LIBRARIES})
  elseif(UNIX)
@@ -172,6 +193,10 @@ index 9c3d75b..d948949 100644
 +			${OPENSSL_INCLUDE_DIR}
 +			${CMAKE_CURRENT_BINARY_DIR}/contrib/bitcoin/src
 +		>
++)
++target_link_libraries(${PROJECT_NAME}
++	PRIVATE
++		Boost::process
  )
  
  set(CPACK_PROJECT_NAME ${PROJECT_NAME})
@@ -186,58 +211,65 @@ index 9c3d75b..d948949 100644
 +)
 +install(EXPORT ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 diff --git a/embedded/CMakeLists.txt b/embedded/CMakeLists.txt
-index b29734e..07245b3 100644
+index c936192..ba6de07 100644
 --- a/embedded/CMakeLists.txt
 +++ b/embedded/CMakeLists.txt
-@@ -36,19 +36,12 @@ elseif(ANDROID OR IOS)
-             univalue
-     )
- else()
--    find_library(event_lib NAMES libevent.a event)
--    if (NOT event_lib)
--        message(FATAL_ERROR "libevent not found")
--    endif()
--    add_library(event STATIC IMPORTED)
--    set_target_properties(event PROPERTIES IMPORTED_LOCATION ${event_lib})
--
--    find_library(event_pthreads_lib NAMES libevent_pthreads.a event_pthreads)
--    if (NOT event_pthreads_lib)
--        message(FATAL_ERROR "libevent_pthreads not found")
--    endif()
--    add_library(event_pthreads STATIC IMPORTED)
--    set_target_properties(event_pthreads PROPERTIES IMPORTED_LOCATION ${event_pthreads_lib})
-+	pkg_check_modules(LIBEVENT REQUIRED IMPORTED_TARGET libevent)
-+	add_library(event ALIAS PkgConfig::LIBEVENT)
-+	pkg_check_modules(LIBEVENT_PTHREADS REQUIRED IMPORTED_TARGET libevent_pthreads)
-+	add_library(event_pthreads ALIAS PkgConfig::LIBEVENT_PTHREADS)
-+	pkg_check_modules(LIBSECP256K1 REQUIRED IMPORTED_TARGET libsecp256k1>=0.2.0)
-+	add_library(secp256k1 ALIAS PkgConfig::LIBSECP256K1)
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ project(embedded VERSION 0.1.0)
  
-     set(Bitcoin_LIBRARIES 
-         bitcoin_common
-@@ -87,16 +80,18 @@ if(WIN32)
- elseif(ANDROID OR IOS)
-     #set(PROJECT_LIBRARIES ${PROJECT_LIBRARIES} libevent::core libevent::extra)
- else()
-+	target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
-     set(PROJECT_LIBRARIES ${PROJECT_LIBRARIES} event event_pthreads)
- endif()
+ set(CMAKE_CXX_STANDARD 20)
+@@ -20,6 +20,9 @@ set(Bitcoin_LIBRARIES
+ 	univalue
+ )
  
++pkg_check_modules(LIBSECP256K1 REQUIRED IMPORTED_TARGET libsecp256k1>=0.2.0)
++add_library(secp256k1 ALIAS PkgConfig::LIBSECP256K1)
++
+ set(Bitcoin_INCLUDE_DIRS
+     ${PROJECT_SOURCE_DIR}/../contrib/bitcoin/build/src
+     ${PROJECT_SOURCE_DIR}/../contrib/bitcoin/src
+@@ -34,13 +37,15 @@ set(PROJECT_LIBRARIES
+     ${Boost_LIBRARIES}
+ )
+ 
++target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
  target_link_libraries("${PROJECT_NAME}" PRIVATE ${PROJECT_LIBRARIES})
  
 -target_include_directories("${PROJECT_NAME}" PUBLIC 
 -    "${PROJECT_SOURCE_DIR}"
 -    ${Bitcoin_INCLUDE_DIRS}
 -    ${Boost_INCLUDE_DIRS}
--    "${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/src/secp256k1/include"
--    "${PROJECT_BINARY_DIR}/../${BITCOIN_FOLDER}/src"
--    "${PROJECT_SOURCE_DIR}/../${BITCOIN_FOLDER}/depends/${ANDROID_TARGET}/include"
+-    "${PROJECT_SOURCE_DIR}/../contrib/bitcoin/src/secp256k1/include"
+-    "${PROJECT_BINARY_DIR}/../contrib/bitcoin/src"
+-    "${PROJECT_SOURCE_DIR}/../contrib/bitcoin/depends/${ANDROID_TARGET}/include"
 +target_include_directories(${PROJECT_NAME}
 +	PUBLIC
 +		${CMAKE_CURRENT_SOURCE_DIR}
 +		${Bitcoin_INCLUDE_DIRS}
 +	PRIVATE
 +		${Boost_INCLUDE_DIRS}
-+		${CMAKE_SOURCE_DIR}/${BITCOIN_FOLDER}/depends/${ANDROID_TARGET}/include
-+		${CMAKE_BINARY_DIR}/${BITCOIN_FOLDER}/src
++		${CMAKE_SOURCE_DIR}/contrib/bitcoin/depends/${ANDROID_TARGET}/include
++		${CMAKE_BINARY_DIR}/contrib/bitcoin/src
  )
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index e96a161..c4c673c 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ project(nunchuk-examples VERSION 0.1.0)
+ 
+ set(CMAKE_CXX_STANDARD 20)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 51b5789..2c22720 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ project(test-nunchuk)
+ 
+ enable_testing()
