@@ -11,5 +11,5 @@ REQUIRED_USE=test? ( cxx )
 RESTRICT=!test? ( test )
 SLOT=0/0
 SRC_URI=https://github.com/whitslack/libbech32/archive/v1.1p1.tar.gz -> libbech32-1.1_p1.tar.gz
-_eclasses_=gnuconfig	ddeb9f8caff1b5f71a09c75b7534df79	toolchain-funcs	a6df79c1e9bc84369dbf3d44206ac772	libtool	c81bd096be5f4c82f4e8f156ef112402	autotools	955b29ccd82c1df4755e5f37748d2fa6
+_eclasses_=gnuconfig	ddeb9f8caff1b5f71a09c75b7534df79	toolchain-funcs	a0b29008c671a362b505f96fa80ce9c0	libtool	c81bd096be5f4c82f4e8f156ef112402	autotools	955b29ccd82c1df4755e5f37748d2fa6
 _md5_=1ed2941c16df8f4bf8f168f210bf2f25
