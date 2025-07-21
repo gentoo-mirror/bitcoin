@@ -12,7 +12,7 @@ dev-libs/bc-ur 0.3.0-r1: Uniform Resources reference library in C++
 dev-libs/leveldb 1.20: a fast key-value storage library written at Google
 dev-libs/libbase58check 1.1_p1: Library for Base58Check encoding and decoding
 dev-libs/libbech32 1.1_p1: Library for Bech32/Bech32m/Blech32/Blech32m encoding/decoding
-dev-libs/libsecp256k1 9999: Optimized C library for EC operations on curve secp256k1
+dev-libs/libsecp256k1 0.7.0 9999: Optimized C library for EC operations on curve secp256k1
 dev-libs/libsecp256k1-zkp 0.1.0_pre20240203: A fork of libsecp256k1 with support for advanced and experimental features such as Confidential Assets and MuSig2
 dev-python/base58 2.1.1-r1: Base58 and Base58Check implementation compatible with what is used by the bitcoin network
 dev-python/bencoder-pyx 3.0.1-r1: A fast bencode implementation in Cython
