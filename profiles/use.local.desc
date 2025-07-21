@@ -8,10 +8,10 @@ dev-libs/libsecp256k1:ellswift - Enable ElligatorSwift encoding for public keys
 dev-libs/libsecp256k1:experimental - Allow experimental USE flags
 dev-libs/libsecp256k1:extrakeys - Enable extrakeys module
 dev-libs/libsecp256k1:lowmem - Reduce runtime memory usage at the expense of performance (ecmult window size 4, gen precision 2)
+dev-libs/libsecp256k1:musig - Enable MuSig2 module
 dev-libs/libsecp256k1:recovery - Enable ECDSA pubkey recovery module
 dev-libs/libsecp256k1:schnorr - Enable Schnorr signature module
 dev-libs/libsecp256k1:test-full - Enable exhaustive tests
-dev-libs/libsecp256k1:valgrind - Compile in valgrind memory hints
 dev-libs/libsecp256k1-zkp:asm - Enable x86_64 assembly optimisation
 dev-libs/libsecp256k1-zkp:bppp - Enable Bulletproofs++ module
 dev-libs/libsecp256k1-zkp:ecdh - Enable ECDH shared secret computation
