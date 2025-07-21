@@ -13,7 +13,7 @@
     <flag name="lowmem">Reduce runtime memory usage at the expense of performance (ecmult window size 4, gen precision 2)</flag>
     <flag name="recovery">Enable ECDSA pubkey recovery module</flag>
     <flag name="schnorr">Enable Schnorr signature module</flag>
-    <flag name="test-openssl">Enable OpenSSL comparison tests</flag>
+    <flag name="test-full">Enable exhaustive tests</flag>
     <flag name="valgrind">Compile in valgrind memory hints</flag>
   </use>
   <upstream>

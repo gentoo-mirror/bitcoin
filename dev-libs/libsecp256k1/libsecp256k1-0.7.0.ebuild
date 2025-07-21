@@ -3,19 +3,17 @@
 
 EAPI=8
 
-EGIT_REPO_URI="https://github.com/bitcoin-core/secp256k1.git"
-inherit git-r3 cmake toolchain-funcs
+inherit cmake edo toolchain-funcs
 
 MyPN=secp256k1
 DESCRIPTION="Optimized C library for EC operations on curve secp256k1"
 HOMEPAGE="https://github.com/bitcoin-core/secp256k1"
-SRC_URI="
-	${HOMEPAGE}/commit/772e747bd9104d80fe531bed61f23f75342d7d63.patch?full_index=1 -> ${PN}-PR1159-772e74.patch
-"
+SRC_URI="https://github.com/bitcoin-core/secp256k1/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${MyPN}-${PV}"
 
 LICENSE="MIT"
-SLOT="0"
-KEYWORDS=""
+SLOT="0/6"  # subslot is "$((_LIB_VERSION_CURRENT-_LIB_VERSION_AGE))" from configure.ac
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="asm +ecdh +ellswift experimental +extrakeys lowmem musig +recovery +schnorr test test-full valgrind"
 RESTRICT="!test? ( test )"
 
@@ -31,7 +29,6 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${DISTDIR}/${PN}-PR1159-772e74.patch"
 )
 
 DOCS=(
