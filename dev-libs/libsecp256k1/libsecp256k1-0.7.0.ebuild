@@ -22,10 +22,12 @@ REQUIRED_USE="
 	musig? ( schnorr )
 	schnorr? ( extrakeys )
 "
+DEPEND="
+	valgrind? ( dev-debug/valgrind )
+"
 BDEPEND="
 	>=dev-build/cmake-3.22
 	virtual/pkgconfig
-	valgrind? ( dev-debug/valgrind )
 "
 
 PATCHES=(
