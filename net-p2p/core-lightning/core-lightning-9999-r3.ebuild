@@ -119,6 +119,7 @@ CRATES="
 	itoa-1.0.15
 	lazy_static-1.5.0
 	libc-0.2.172
+	libyml-0.0.5
 	linux-raw-sys-0.9.4
 	litemap-0.7.4
 	lock_api-0.4.12
@@ -161,6 +162,7 @@ CRATES="
 	prost-build-0.12.6
 	prost-derive-0.12.6
 	prost-types-0.12.6
+	quick-xml-0.37.5
 	quote-1.0.40
 	r-efi-5.2.0
 	rand-0.8.5
@@ -177,6 +179,8 @@ CRATES="
 	regex-syntax-0.6.29
 	regex-syntax-0.8.5
 	ring-0.17.14
+	roxmltree-0.20.0
+	roxmltree_to_serde-0.6.2
 	rust-embed-8.7.1
 	rust-embed-impl-8.7.0
 	rust-embed-utils-8.7.0
@@ -202,7 +206,9 @@ CRATES="
 	serde_derive-1.0.219
 	serde_json-1.0.140
 	serde_path_to_error-0.1.17
+	serde_qs-0.15.0
 	serde_urlencoded-0.7.1
+	serde_yml-0.0.12
 	sha1-0.10.6
 	sha2-0.10.9
 	sharded-slab-0.1.7
