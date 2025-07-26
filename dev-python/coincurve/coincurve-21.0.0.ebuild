@@ -27,7 +27,6 @@ BDEPEND="
 	>=dev-build/cmake-3.26
 	dev-python/cffi[${PYTHON_USEDEP}]
 	>=dev-python/hatchling-1.24.2[${PYTHON_USEDEP}]
-	dev-python/pypkgconf[${PYTHON_USEDEP}]
 	>=dev-python/scikit-build-core-0.9.0[${PYTHON_USEDEP}]
 "
 
