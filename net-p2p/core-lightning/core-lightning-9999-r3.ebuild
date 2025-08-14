@@ -13,11 +13,12 @@ DISTUTILS_USE_PEP517=poetry
 CARGO_OPTIONAL=1
 CRATES="
 	addr2line-0.24.2
-	adler2-2.0.0
+	adler2-2.0.1
 	aho-corasick-1.1.3
 	anyhow-1.0.98
 	arbitrary-1.4.1
 	arc-swap-1.7.1
+	arrayvec-0.7.6
 	asn1-rs-0.6.2
 	asn1-rs-derive-0.5.1
 	asn1-rs-impl-0.2.0
@@ -25,30 +26,38 @@ CRATES="
 	async-stream-impl-0.3.6
 	async-trait-0.1.88
 	atomic-waker-1.1.2
-	autocfg-1.4.0
+	autocfg-1.5.0
 	axum-0.6.20
 	axum-0.8.4
 	axum-core-0.3.4
 	axum-core-0.5.2
 	axum-server-0.6.0
 	backtrace-0.3.74
+	base58ck-0.1.0
 	base64-0.21.7
 	base64-0.22.1
 	bech32-0.10.0-beta
+	bech32-0.11.0
 	bitcoin-0.31.2
+	bitcoin-0.32.6
 	bitcoin-internals-0.2.0
+	bitcoin-internals-0.3.0
+	bitcoin-io-0.1.3
+	bitcoin-units-0.1.2
 	bitcoin_hashes-0.13.0
+	bitcoin_hashes-0.14.0
 	bitflags-1.3.2
-	bitflags-2.9.0
+	bitflags-2.9.1
 	block-buffer-0.10.4
-	bumpalo-3.17.0
+	bumpalo-3.19.0
 	byteorder-1.5.0
 	bytes-1.10.1
-	cc-1.2.21
-	cfg-if-1.0.0
+	cc-1.2.30
+	cfg-if-1.0.1
+	core-foundation-0.9.4
+	core-foundation-sys-0.8.7
 	cpufeatures-0.2.17
-	crc32fast-1.4.2
-	crossbeam-utils-0.8.21
+	crc32fast-1.5.0
 	crypto-common-0.1.6
 	data-encoding-2.9.0
 	der-parser-9.0.0
@@ -56,14 +65,16 @@ CRATES="
 	derive_arbitrary-1.4.1
 	digest-0.10.7
 	displaydoc-0.2.5
+	dnssec-prover-0.6.7
 	either-1.15.0
-	engineioxide-0.15.1
+	encoding_rs-0.8.35
+	engineioxide-0.15.2
 	env_logger-0.10.2
 	equivalent-1.0.2
-	errno-0.3.11
+	errno-0.3.13
 	fastrand-2.3.0
 	fixedbitset-0.4.2
-	flate2-1.1.1
+	flate2-1.1.2
 	fnv-1.0.7
 	form_urlencoded-1.2.1
 	futures-0.3.31
@@ -77,16 +88,18 @@ CRATES="
 	futures-util-0.3.31
 	generic-array-0.14.7
 	getrandom-0.2.16
-	getrandom-0.3.2
+	getrandom-0.3.3
 	gimli-0.31.1
-	h2-0.3.26
-	h2-0.4.10
+	h2-0.3.27
+	h2-0.4.11
 	hashbrown-0.12.3
-	hashbrown-0.15.3
+	hashbrown-0.13.2
+	hashbrown-0.15.4
 	heck-0.5.0
-	hermit-abi-0.5.1
+	hermit-abi-0.5.2
 	hex-0.4.3
 	hex-conservative-0.1.2
+	hex-conservative-0.2.1
 	hex_lit-0.1.1
 	http-0.2.12
 	http-1.3.1
@@ -98,8 +111,9 @@ CRATES="
 	humantime-2.2.0
 	hyper-0.14.32
 	hyper-1.6.0
+	hyper-rustls-0.24.2
 	hyper-timeout-0.4.1
-	hyper-util-0.1.11
+	hyper-util-0.1.16
 	icu_collections-1.5.0
 	icu_locid-1.5.0
 	icu_locid_transform-1.5.0
@@ -113,28 +127,36 @@ CRATES="
 	idna-1.0.3
 	idna_adapter-1.2.0
 	indexmap-1.9.3
-	indexmap-2.9.0
+	indexmap-2.10.0
+	io-uring-0.7.9
+	ipnet-2.11.0
 	is-terminal-0.4.16
 	itertools-0.12.1
 	itoa-1.0.15
+	js-sys-0.3.77
 	lazy_static-1.5.0
-	libc-0.2.172
+	libc-0.2.174
+	libm-0.2.15
 	libyml-0.0.5
+	libz-rs-sys-0.5.1
+	lightning-0.1.5
+	lightning-invoice-0.33.2
+	lightning-types-0.2.0
 	linux-raw-sys-0.9.4
 	litemap-0.7.4
-	lock_api-0.4.12
+	lock_api-0.4.13
 	log-0.4.27
 	log-panics-2.1.0
 	matchers-0.1.0
 	matchit-0.7.3
 	matchit-0.8.4
-	memchr-2.7.4
+	memchr-2.7.5
 	mime-0.3.17
 	mime_guess-2.0.5
 	minimal-lexical-0.2.1
-	miniz_oxide-0.8.8
-	mio-1.0.3
-	multimap-0.10.0
+	miniz_oxide-0.8.9
+	mio-1.0.4
+	multimap-0.10.1
 	nom-7.1.3
 	nu-ansi-term-0.46.0
 	num-bigint-0.4.6
@@ -145,8 +167,8 @@ CRATES="
 	oid-registry-0.7.1
 	once_cell-1.21.3
 	overload-0.1.1
-	parking_lot-0.12.3
-	parking_lot_core-0.9.10
+	parking_lot-0.12.4
+	parking_lot_core-0.9.11
 	pem-3.0.5
 	percent-encoding-2.3.1
 	petgraph-0.6.5
@@ -154,9 +176,10 @@ CRATES="
 	pin-project-internal-1.1.10
 	pin-project-lite-0.2.16
 	pin-utils-0.1.0
+	possiblyrandom-0.2.0
 	powerfmt-0.2.0
 	ppv-lite86-0.2.21
-	prettyplease-0.2.32
+	prettyplease-0.2.36
 	proc-macro2-1.0.95
 	prost-0.12.6
 	prost-build-0.12.6
@@ -164,47 +187,51 @@ CRATES="
 	prost-types-0.12.6
 	quick-xml-0.37.5
 	quote-1.0.40
-	r-efi-5.2.0
+	r-efi-5.3.0
 	rand-0.8.5
-	rand-0.9.1
+	rand-0.9.2
 	rand_chacha-0.3.1
 	rand_chacha-0.9.0
 	rand_core-0.6.4
 	rand_core-0.9.3
 	rcgen-0.13.2
-	redox_syscall-0.5.12
+	redox_syscall-0.5.15
 	regex-1.11.1
 	regex-automata-0.1.10
 	regex-automata-0.4.9
 	regex-syntax-0.6.29
 	regex-syntax-0.8.5
+	reqwest-0.11.27
 	ring-0.17.14
 	roxmltree-0.20.0
 	roxmltree_to_serde-0.6.2
-	rust-embed-8.7.1
-	rust-embed-impl-8.7.0
-	rust-embed-utils-8.7.0
-	rustc-demangle-0.1.24
+	rust-embed-8.7.2
+	rust-embed-impl-8.7.2
+	rust-embed-utils-8.7.2
+	rustc-demangle-0.1.25
 	rusticata-macros-4.1.0
-	rustix-1.0.7
+	rustix-1.0.8
 	rustls-0.21.12
 	rustls-0.22.4
-	rustls-0.23.27
+	rustls-0.23.29
+	rustls-pemfile-1.0.4
 	rustls-pemfile-2.2.0
-	rustls-pki-types-1.11.0
+	rustls-pki-types-1.12.0
 	rustls-webpki-0.101.7
 	rustls-webpki-0.102.8
-	rustls-webpki-0.103.2
-	rustversion-1.0.20
+	rustls-webpki-0.103.4
+	rustversion-1.0.21
 	ryu-1.0.20
 	same-file-1.0.6
 	scopeguard-1.2.0
 	sct-0.7.1
 	secp256k1-0.28.2
+	secp256k1-0.29.1
 	secp256k1-sys-0.9.2
+	secp256k1-sys-0.10.1
 	serde-1.0.219
 	serde_derive-1.0.219
-	serde_json-1.0.140
+	serde_json-1.0.141
 	serde_path_to_error-0.1.17
 	serde_qs-0.15.0
 	serde_urlencoded-0.7.1
@@ -215,35 +242,38 @@ CRATES="
 	shlex-1.3.0
 	signal-hook-registry-1.4.5
 	simd-adler32-0.3.7
-	slab-0.4.9
-	smallvec-1.15.0
-	socket2-0.5.9
-	socketioxide-0.15.1
-	socketioxide-core-0.15.1
-	socketioxide-parser-common-0.15.1
+	slab-0.4.10
+	smallvec-1.15.1
+	socket2-0.5.10
+	socketioxide-0.15.2
+	socketioxide-core-0.15.2
+	socketioxide-parser-common-0.15.2
 	stable_deref_trait-1.2.0
 	subtle-2.6.1
-	syn-2.0.101
+	syn-2.0.104
 	sync_wrapper-0.1.2
 	sync_wrapper-1.0.2
 	synstructure-0.13.2
-	tempfile-3.19.1
+	system-configuration-0.5.1
+	system-configuration-sys-0.5.0
+	tempfile-3.20.0
 	termcolor-1.4.1
 	thiserror-1.0.69
 	thiserror-2.0.12
 	thiserror-impl-1.0.69
 	thiserror-impl-2.0.12
-	thread_local-1.1.8
+	thread_local-1.1.9
 	time-0.3.41
 	time-core-0.1.4
 	time-macros-0.2.22
 	tinystr-0.7.6
-	tokio-1.45.0
-	tokio-io-timeout-1.2.0
+	tokio-1.46.1
+	tokio-io-timeout-1.2.1
 	tokio-macros-2.5.0
 	tokio-rustls-0.24.1
 	tokio-rustls-0.25.0
 	tokio-rustls-0.26.2
+	tokio-socks-0.5.2
 	tokio-stream-0.1.17
 	tokio-test-0.4.4
 	tokio-tungstenite-0.24.0
@@ -253,12 +283,12 @@ CRATES="
 	tonic-build-0.11.0
 	tower-0.4.13
 	tower-0.5.2
-	tower-http-0.6.2
+	tower-http-0.6.6
 	tower-layer-0.3.3
 	tower-service-0.3.3
 	tracing-0.1.41
-	tracing-attributes-0.1.28
-	tracing-core-0.1.33
+	tracing-attributes-0.1.30
+	tracing-core-0.1.34
 	tracing-log-0.2.0
 	tracing-subscriber-0.3.19
 	try-lock-0.2.5
@@ -272,31 +302,59 @@ CRATES="
 	utf-8-0.7.6
 	utf16_iter-1.0.5
 	utf8_iter-1.0.4
-	utoipa-5.3.1
-	utoipa-gen-5.3.1
-	utoipa-swagger-ui-9.0.1
+	utoipa-5.4.0
+	utoipa-gen-5.4.0
+	utoipa-swagger-ui-9.0.2
 	utoipa-swagger-ui-vendored-0.1.2
 	valuable-0.1.1
 	version_check-0.9.5
 	walkdir-2.5.0
 	want-0.3.1
-	wasi-0.11.0+wasi-snapshot-preview1
+	wasi-0.11.1+wasi-snapshot-preview1
 	wasi-0.14.2+wasi-0.2.4
+	wasm-bindgen-0.2.100
+	wasm-bindgen-backend-0.2.100
+	wasm-bindgen-futures-0.4.50
+	wasm-bindgen-macro-0.2.100
+	wasm-bindgen-macro-support-0.2.100
+	wasm-bindgen-shared-0.2.100
+	web-sys-0.3.77
+	webpki-roots-0.25.4
 	winapi-0.3.9
 	winapi-i686-pc-windows-gnu-0.4.0
 	winapi-util-0.1.9
 	winapi-x86_64-pc-windows-gnu-0.4.0
+	windows-sys-0.48.0
 	windows-sys-0.52.0
 	windows-sys-0.59.0
+	windows-sys-0.60.2
+	windows-targets-0.48.5
 	windows-targets-0.52.6
+	windows-targets-0.53.2
+	windows_aarch64_gnullvm-0.48.5
 	windows_aarch64_gnullvm-0.52.6
+	windows_aarch64_gnullvm-0.53.0
+	windows_aarch64_msvc-0.48.5
 	windows_aarch64_msvc-0.52.6
+	windows_aarch64_msvc-0.53.0
+	windows_i686_gnu-0.48.5
 	windows_i686_gnu-0.52.6
+	windows_i686_gnu-0.53.0
 	windows_i686_gnullvm-0.52.6
+	windows_i686_gnullvm-0.53.0
+	windows_i686_msvc-0.48.5
 	windows_i686_msvc-0.52.6
+	windows_i686_msvc-0.53.0
+	windows_x86_64_gnu-0.48.5
 	windows_x86_64_gnu-0.52.6
+	windows_x86_64_gnu-0.53.0
+	windows_x86_64_gnullvm-0.48.5
 	windows_x86_64_gnullvm-0.52.6
+	windows_x86_64_gnullvm-0.53.0
+	windows_x86_64_msvc-0.48.5
 	windows_x86_64_msvc-0.52.6
+	windows_x86_64_msvc-0.53.0
+	winreg-0.50.0
 	wit-bindgen-rt-0.39.0
 	write16-1.0.0
 	writeable-0.5.5
@@ -304,14 +362,15 @@ CRATES="
 	yasna-0.5.2
 	yoke-0.7.5
 	yoke-derive-0.7.5
-	zerocopy-0.8.25
-	zerocopy-derive-0.8.25
+	zerocopy-0.8.26
+	zerocopy-derive-0.8.26
 	zerofrom-0.1.5
 	zerofrom-derive-0.1.6
 	zeroize-1.8.1
 	zerovec-0.10.4
 	zerovec-derive-0.10.3
-	zip-2.6.1
+	zip-3.0.0
+	zlib-rs-0.5.1
 	zopfli-0.8.2
 "
 
