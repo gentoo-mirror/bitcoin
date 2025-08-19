@@ -8,7 +8,7 @@ POSTGRES_COMPAT=( {11..17} )
 PYTHON_COMPAT=( python3_{11..13} )
 PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
-DISTUTILS_USE_PEP517=poetry
+DISTUTILS_USE_PEP517=hatchling
 
 CARGO_OPTIONAL=1
 CRATES="
@@ -677,7 +677,12 @@ src_compile() {
 }
 
 python_compile() {
-	python_foreach_subdir distutils-r1_python_compile
+	python_foreach_subdir python_compile_subdir
+}
+
+python_compile_subdir() {
+	distutils-r1_python_compile
+	rm -f -- "${BUILD_DIR}/install$(python_get_sitedir)/pyln"{,/spec}/{__init__.py,__pycache__/__init__.*.pyc} || die
 }
 
 python_compile_all() {
