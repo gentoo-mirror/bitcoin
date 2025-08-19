@@ -10,6 +10,7 @@ PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=hatchling
 
+RUST_MIN_VER="1.75.0"
 CARGO_OPTIONAL=1
 CRATES="
 	addr2line-0.24.2
@@ -377,6 +378,7 @@ CRATES="
 inherit backports bash-completion-r1 cargo distutils-r1 edo git-r3 postgres toolchain-funcs
 
 MyPN=lightning
+BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH="d071ce27734ca13be2471f81abf8699d902c3a10"
 EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
 EGIT_SUBMODULES=( '-*' external/gheap )
 
@@ -387,7 +389,10 @@ DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
 BACKPORTS_BASE_URI="${EGIT_REPO_URI[0]%.git}/commit/"
 SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
-	rust? ( $(cargo_crate_uris) )
+	rust? (
+		$(cargo_crate_uris)
+		https://github.com/rust-bitcoin/bitcoin-payment-instructions/archive/${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}.tar.gz -> bitcoin-payment-instructions-${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}.crate
+	)
 	$(backports_patch_uris)
 "
 
@@ -514,9 +519,10 @@ src_unpack() {
 	mv jsmn{-1.0.0,} || die
 
 	if use rust ; then
-		set ${CRATES}
+		set ${CRATES} "bitcoin-payment-instructions-${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}"
 		local A="${*/%/.crate}"
 		cargo_src_unpack
+		mv -- "${ECARGO_VENDOR}/bitcoin-payment-instructions-"{"${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}",0.4.0} || die
 	fi
 }
 
@@ -532,6 +538,8 @@ src_prepare() {
 
 	if ! use sqlite ; then
 		sed -e $'/^var=HAVE_SQLITE3/,/\\bEND\\b/{/^code=/a#error\n}' -i configure || die
+		# https://github.com/ElementsProject/lightning/issues/8473
+		rm plugins/bkpr/test/run-recorder.c || die
 	fi
 
 	# delete all pre-generated files; they're often stale anyway
@@ -555,6 +563,12 @@ src_prepare() {
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
 	use python && distutils-r1_src_prepare
+
+	if use rust ; then
+		sed -Ee '/^\s*bitcoin-payment-instructions\s*=/s/\bgit\s*=\s*"[^"]*", rev\s*=\s*"[^"]*"/version = "0.4.0"/' \
+			-i plugins/bip353-plugin/Cargo.toml || die
+		cargo_update_crates
+	fi
 }
 
 src_configure() {

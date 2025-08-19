@@ -10,6 +10,7 @@ PYTHON_SUBDIRS=( contrib/{pyln-proto,pyln-spec/bolt{1,2,4,7},pyln-client} )
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=hatchling
 
+RUST_MIN_VER="1.75.0"
 CARGO_OPTIONAL=1
 CRATES="
 	addr2line-0.24.2
@@ -379,6 +380,7 @@ inherit backports bash-completion-r1 cargo distutils-r1 edo postgres toolchain-f
 MyPN=lightning
 MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
+BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH="d071ce27734ca13be2471f81abf8699d902c3a10"
 
 BACKPORTS=(
 )
@@ -389,7 +391,10 @@ BACKPORTS_BASE_URI="${HOMEPAGE}/commit/"
 SRC_URI="${HOMEPAGE}/archive/refs/tags/v${MyPV}.tar.gz -> ${P}.tar.gz
 	https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
 	https://github.com/valyala/gheap/archive/67fc83bc953324f4759e52951921d730d7e65099.tar.gz -> gheap-67fc83b.tar.gz
-	rust? ( $(cargo_crate_uris) )
+	rust? (
+		$(cargo_crate_uris)
+		https://github.com/rust-bitcoin/bitcoin-payment-instructions/archive/${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}.tar.gz -> bitcoin-payment-instructions-${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}.crate
+	)
 	$(backports_patch_uris)
 "
 S="${WORKDIR}/${MyPN}-${MyPV}"
@@ -537,9 +542,10 @@ src_unpack() {
 	mv gheap{-*,} || die
 
 	if use rust ; then
-		set ${CRATES}
+		set ${CRATES} "bitcoin-payment-instructions-${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}"
 		local A="${*/%/.crate}"
 		cargo_src_unpack
+		mv -- "${ECARGO_VENDOR}/bitcoin-payment-instructions-"{"${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}",0.4.0} || die
 	fi
 }
 
@@ -582,6 +588,12 @@ src_prepare() {
 	rm conftest.py || die
 
 	use python && distutils-r1_src_prepare
+
+	if use rust ; then
+		sed -Ee '/^\s*bitcoin-payment-instructions\s*=/s/\bgit\s*=\s*"[^"]*", rev\s*=\s*"[^"]*"/version = "0.4.0"/' \
+			-i plugins/bip353-plugin/Cargo.toml || die
+		cargo_update_crates
+	fi
 }
 
 src_configure() {
