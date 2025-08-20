@@ -374,11 +374,13 @@ CRATES="
 	zlib-rs-0.5.1
 	zopfli-0.8.2
 "
+declare -A GIT_CRATES=(
+	[bitcoin-payment-instructions]="https://github.com/rust-bitcoin/bitcoin-payment-instructions;d071ce27734ca13be2471f81abf8699d902c3a10"
+)
 
 inherit backports bash-completion-r1 cargo distutils-r1 edo git-r3 postgres toolchain-funcs
 
 MyPN=lightning
-BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH="d071ce27734ca13be2471f81abf8699d902c3a10"
 EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
 EGIT_SUBMODULES=( '-*' external/gheap )
 
@@ -389,10 +391,7 @@ DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
 HOMEPAGE="${EGIT_REPO_URI[*]%.git}"
 BACKPORTS_BASE_URI="${EGIT_REPO_URI[0]%.git}/commit/"
 SRC_URI="https://github.com/zserge/jsmn/archive/v1.0.0.tar.gz -> jsmn-1.0.0.tar.gz
-	rust? (
-		$(cargo_crate_uris)
-		https://github.com/rust-bitcoin/bitcoin-payment-instructions/archive/${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}.tar.gz -> bitcoin-payment-instructions-${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}.crate
-	)
+	rust? ( ${CARGO_CRATE_URIS} )
 	$(backports_patch_uris)
 "
 
@@ -483,6 +482,15 @@ efmt() {
 	: ${1:?} ; local l ; while read -r l ; do "${!#}" "${l}" ; done < <(fmt "${@:1:$#-1}")
 }
 
+re_match() {
+	local -n var="${1:?}" ; local regex="${2:?}" ; shift 2
+	var=( )
+	local each ; for each ; do
+		[[ "${each}" =~ ${regex} ]] && var+=( "${each}" )
+	done
+	(( "${#var[@]}" ))
+}
+
 python_check_deps() {
 	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
 		dev-python/mako"[${PYTHON_USEDEP}]" ; } &&
@@ -512,6 +520,8 @@ pkg_setup() {
 }
 
 src_unpack() {
+	local -a git_crates
+	re_match git_crates '\.gh\.tar\.gz$' ${A} && unpack "${git_crates[@]}"
 	git-r3_src_unpack
 	find "${S}/external" -depth -mindepth 1 -maxdepth 1 -type d ! -name 'gheap' -delete || die
 	cd "${S}/external" || die
@@ -519,10 +529,9 @@ src_unpack() {
 	mv jsmn{-1.0.0,} || die
 
 	if use rust ; then
-		set ${CRATES} "bitcoin-payment-instructions-${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}"
+		set ${CRATES}
 		local A="${*/%/.crate}"
 		cargo_src_unpack
-		mv -- "${ECARGO_VENDOR}/bitcoin-payment-instructions-"{"${BITCOIN_PAYMENT_INSTRUCTIONS_COMMITHASH}",0.4.0} || die
 	fi
 }
 
@@ -563,12 +572,6 @@ src_prepare() {
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
 	use python && distutils-r1_src_prepare
-
-	if use rust ; then
-		sed -Ee '/^\s*bitcoin-payment-instructions\s*=/s/\bgit\s*=\s*"[^"]*", rev\s*=\s*"[^"]*"/version = "0.4.0"/' \
-			-i plugins/bip353-plugin/Cargo.toml || die
-		cargo_update_crates
-	fi
 }
 
 src_configure() {
