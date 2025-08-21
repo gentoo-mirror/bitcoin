@@ -11,7 +11,7 @@ DISTUTILS_EXT=1
 inherit autotools backports check-reqs distutils-r1 java-pkg-opt-2 multilib-minimal
 
 BACKPORTS=(
-	393449b535c7766aa9e851b06c203ae8f6594a9b	# don't embed Python code into libwallycore.so
+	5e137d0359e43de717c313bb6ebaebdb99993c11	# don't embed Python code into libwallycore.so
 )
 
 MyPV="$(ver_cut 1-3)"
@@ -106,6 +106,8 @@ src_prepare() {
 	default
 	! use java || has_version '<virtual/jdk-20' ||
 		sed -e 's/^\(JAVAC_TARGET\)=.*$/\1=8/' -i configure.ac || die
+	! use python || sed -e 's:\$(top_builddir)/venv/bin/python \([^-]\):$(PYTHON_TEST) \1:' \
+		-e '/\$(top_builddir)\/venv/d' -i src/Makefile.am || die
 	eautoreconf
 	use java && java-pkg-opt-2_src_prepare
 }
@@ -144,6 +146,7 @@ multilib_src_compile() {
 }
 
 python_test() {
+	local -x LD_LIBRARY_PATH=".libs"
 	emake -C src check-swig-python PYTHON="${EPYTHON}"
 }
 
