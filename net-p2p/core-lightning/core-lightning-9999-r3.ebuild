@@ -378,13 +378,24 @@ declare -A GIT_CRATES=(
 	[bitcoin-payment-instructions]="https://github.com/rust-bitcoin/bitcoin-payment-instructions;d071ce27734ca13be2471f81abf8699d902c3a10"
 )
 
-inherit backports bash-completion-r1 cargo distutils-r1 edo git-r3 postgres toolchain-funcs
+inherit backports bash-completion-r1 cargo depends distutils-r1 edo git-r3 postgres toolchain-funcs
 
 MyPN=lightning
 EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
 EGIT_SUBMODULES=( '-*' external/gheap )
 
 BACKPORTS=(
+	51b6be302976e7302a8760b64d4beb716d87a0ad	# pyln-client: don't leak dirfd after connecting Unix socket
+	af5caec88bb3549ec6ecfb9edf1b632cd81aa301	# pyln-testing: close 'config.vars' after reading
+	d045e4acf0ee4f725c73c206a0fa17f1f4419b95	# pyln-testing: close log files when tearing down node_factory
+	b29efab74a96c969a39af03d6b60827578546cde	# pyln-testing: don't leak file descriptor in GossipStore
+	24c9abb92c019d6178fa73edf8affd564ed8e52e	# tests: do not leak file descriptors
+	93ac98db224a05825d8d848390f919ecb7dbf70d	# tests: skip certain tests if RUST is not enabled
+	324302d27b2d818c65c89267104b8719bdf6b489	# tests: work around socket path name too long on Linux
+	eed6aa8059b56cf3d0cece7641f82fdeae8e24da	# pyln-testing: pass timeout to BitcoinProxy
+	e62a2714be5ae2a51488a4489d709add9dac7ab7	# plugins: generate certificates with required extensions
+	c27dd25d2e181ff166b1fd61461a6c908a636930	# test_coinmoves.py: use pytest.approx for change amount
+	cdd75f5742b1784761f019941a8c0e6eb08a55de	# test_renepay.py: use test-specific temp dir, not /tmp
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
@@ -399,7 +410,7 @@ LICENSE="MIT BSD-2 CC0-1.0 GPL-2 LGPL-2.1 LGPL-3"
 SLOT="0"
 #KEYWORDS="~amd64 ~amd64-linux ~arm ~arm64 ~mips ~ppc ~x86 ~x86-linux"
 KEYWORDS=""
-IUSE="debug doc +man postgres python rust sqlite test"
+IUSE="debug doc +man postgres python rust sqlite test test-full"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -412,7 +423,7 @@ CDEPEND="
 	python? ( ${PYTHON_DEPS} )
 	sqlite? ( >=dev-db/sqlite-3.29.0:= )
 "
-PYTHON_DEPEND="
+PYTHON_DEPEND='
 	>=dev-python/base58-2.1.1[${PYTHON_USEDEP}]
 	|| (
 		>=dev-python/bitstring-4.2.2[${PYTHON_USEDEP}]
@@ -422,11 +433,38 @@ PYTHON_DEPEND="
 	>=dev-python/coincurve-20[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-42[${PYTHON_USEDEP}]
 	>=dev-python/pysocks-1[${PYTHON_USEDEP}]
-"
+'
+MAKO_DEPEND='
+	>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
+'
+MKDOCS_DEPEND='
+	>=dev-python/jinja2-3.1.2[${PYTHON_USEDEP}]
+	dev-python/mkdocs[${PYTHON_USEDEP}]
+	dev-python/mkdocs-exclude[${PYTHON_USEDEP}]
+	dev-python/mkdocs-material[${PYTHON_USEDEP}]
+'
+SPHINX_DEPEND='
+	dev-python/recommonmark[${PYTHON_USEDEP}]
+	dev-python/sphinx[${PYTHON_USEDEP}]
+	dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
+'
+TEST_FULL_DEPEND="${PYTHON_DEPEND}"'
+	>=dev-python/cheroot-8[${PYTHON_USEDEP}]
+	>=dev-python/ephemeral-port-reserve-1.1.4[${PYTHON_USEDEP}]
+	>=dev-python/flask-2[${PYTHON_USEDEP}]
+	>=dev-python/grpcio-1[${PYTHON_USEDEP}]
+	>=dev-python/jsonschema-4.4.0[${PYTHON_USEDEP}]
+	>=dev-python/protobuf-5.29.4[${PYTHON_USEDEP}]
+	>=dev-python/psycopg-2.9:2[${PYTHON_USEDEP}]
+	>=dev-python/pytest-7[${PYTHON_USEDEP}]
+	dev-python/pytest-xdist[${PYTHON_USEDEP}]
+	>=dev-python/requests-2.31.0[${PYTHON_USEDEP}]
+	>=dev-python/websocket-client-1.2.3[${PYTHON_USEDEP}]
+'
 RDEPEND="${CDEPEND}
 	acct-group/lightning
 	acct-user/lightning
-	python? ( ${PYTHON_DEPEND} )
+	python? ( ${PYTHON_DEPEND//'${PYTHON_USEDEP}'/${PYTHON_USEDEP}} )
 "
 DEPEND="${CDEPEND}
 "
@@ -435,28 +473,17 @@ BDEPEND="
 	acct-user/lightning
 	>=app-misc/jq-1.6
 	man? ( app-text/lowdown )
-	$(python_gen_any_dep '
-		>=dev-python/mako-1.1.6[${PYTHON_USEDEP}]
-	')
+	$(python_gen_any_dep "${MAKO_DEPEND}")
 	doc? (
-		python? ( $(python_gen_any_dep '
-			dev-python/recommonmark[${PYTHON_USEDEP}]
-			dev-python/sphinx[${PYTHON_USEDEP}]
-			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
-		') )
-		$(python_gen_any_dep '
-			>=dev-python/jinja2-3.1.2[${PYTHON_USEDEP}]
-			dev-python/mkdocs[${PYTHON_USEDEP}]
-			dev-python/mkdocs-exclude[${PYTHON_USEDEP}]
-			dev-python/mkdocs-material[${PYTHON_USEDEP}]
-		')
+		$(python_gen_any_dep "${MKDOCS_DEPEND}")
+		python? ( $(python_gen_any_dep "${SPHINX_DEPEND}") )
 	)
 	net-misc/curl[ssl]
 	python? (
 		${DISTUTILS_DEPS}
 		test? (
 			>=dev-python/pytest-7[${PYTHON_USEDEP}]
-			${PYTHON_DEPEND}
+			${PYTHON_DEPEND//'${PYTHON_USEDEP}'/${PYTHON_USEDEP}}
 		)
 	)
 	rust? (
@@ -465,18 +492,38 @@ BDEPEND="
 	)
 	sys-devel/gettext
 	virtual/pkgconfig
+	test-full? (
+		net-p2p/bitcoin-core[cli,daemon,sqlite(+),wallet(+)]
+		$(PYTHON_REQ_USE='sqlite' python_gen_any_dep "${TEST_FULL_DEPEND}")
+	)
 "
 REQUIRED_USE="
 	|| ( postgres sqlite )
 	postgres? ( ${POSTGRES_REQ_USE/||/^^} )
 	python? ( ${PYTHON_REQUIRED_USE} )
+	test-full? ( test )
 "
 # FIXME: bundled deps: ccan
 
 PATCHES=(
+	"${FILESDIR}/python-bitcointx.patch"
 )
 
 DOCS=( CHANGELOG.md README.md SECURITY.md )
+
+EPYTEST_PLUGINS=( )
+EPYTEST_DESELECT=(
+	# test depends on machine being "reasonably fast," which we can't guarantee
+	test_connection.py::test_no_delay
+
+	# these tests require Internet access, which we don't provide
+	test_cln_rs.py::test_bip353
+	test_gossip.py::test_announce_{dns_suppressed,and_connect_via_dns}
+)
+EPYTEST_IGNORE=(
+	# we don't depend on any of the installers that Reckless wants
+	tests/test_reckless.py
+)
 
 efmt() {
 	: ${1:?} ; local l ; while read -r l ; do "${!#}" "${l}" ; done < <(fmt "${@:1:$#-1}")
@@ -492,12 +539,14 @@ re_match() {
 }
 
 python_check_deps() {
-	{ [[ " ${python_need} " != *' mako '* ]] || python_has_version \
-		dev-python/mako"[${PYTHON_USEDEP}]" ; } &&
-	{ [[ " ${python_need} " != *' mkdocs '* ]] || python_has_version \
-		dev-python/{jinja2,mkdocs{,-exclude,-material}}"[${PYTHON_USEDEP}]" ; } &&
-	{ [[ " ${python_need} " != *' sphinx '* ]] || python_has_version \
-		dev-python/{recommonmark,sphinx{,-rtd-theme}}"[${PYTHON_USEDEP}]" ; }
+	{ [[ " ${python_need} " != *' mako '* ]] || has_depends -p \
+		${MAKO_DEPEND//'${PYTHON_USEDEP}'/"${PYTHON_USEDEP}"} ; } &&
+	{ [[ " ${python_need} " != *' mkdocs '* ]] || has_depends -p \
+		${MKDOCS_DEPEND//'${PYTHON_USEDEP}'/"${PYTHON_USEDEP}"} ; } &&
+	{ [[ " ${python_need} " != *' sphinx '* ]] || has_depends -p \
+		${SPHINX_DEPEND//'${PYTHON_USEDEP}'/"${PYTHON_USEDEP}"} ; } &&
+	{ [[ " ${python_need} " != *' test-full '* ]] || has_depends -p \
+		${TEST_FULL_DEPEND//'${PYTHON_USEDEP}'/"${PYTHON_USEDEP}"} ; }
 }
 
 python_foreach_subdir() {
@@ -552,10 +601,11 @@ src_prepare() {
 	fi
 
 	# delete all pre-generated files; they're often stale anyway
-	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
-		cln-rpc/src/model.rs \
-		contrib/pyln-grpc-proto/pyln/grpc/{node_pb2{,_grpc},primitives_pb2}.py \
-		doc/*.[0-9] || die
+# 	rm -f cln-grpc/{src/{convert,server}.rs,proto/node.proto} \
+# 		cln-rpc/src/model.rs \
+# 		doc/*.[0-9] || die
+	# we can't delete contrib/pyln-grpc-proto/pyln/grpc/{node_pb2{,_grpc},primitives_pb2}.py
+	# because regenerating them requires dev-python/grpcio-tools, which is a huge PITA
 
 	# only run 'install' command if there are actually files to install
 	# and don't unconditionally regenerate Python sources
@@ -571,6 +621,12 @@ src_prepare() {
 	# we'll strip the binaries ourselves
 	sed -e '/^[[:space:]]*strip[[:space:]]*=/d' -i Cargo.toml || die
 
+	# save our SSDs! ("cp" -> "cp -l")
+	local shopt_pop=$(shopt -p globstar)
+	shopt -s globstar
+	sed -e 's/\bcp\b/cp -l/g' -i -- **/Makefile || die
+	${shopt_pop}
+
 	use python && distutils-r1_src_prepare
 }
 
@@ -580,8 +636,8 @@ src_configure() {
 	CLIGHTNING_MAKEOPTS=(
 		V=1
 		DISTRO=Gentoo
+		DEFAULT_TARGETS=
 		COVERAGE=
-		DEVTOOLS=
 		DOC_DATA=
 		BOLTDIR="${WORKDIR}/does_not_exist"
 		COMPAT_CFLAGS="${COMPAT_CFLAGS[*]}"
@@ -601,6 +657,9 @@ src_configure() {
 
 	use test || CLIGHTNING_MAKEOPTS+=(
 		ALL_TEST_PROGRAMS=
+	)
+	use test-full || CLIGHTNING_MAKEOPTS+=(
+		DEVTOOLS=
 	)
 
 	use sqlite || CLIGHTNING_MAKEOPTS+=(
@@ -641,7 +700,7 @@ src_configure() {
 
 src_compile() {
 	python_need='mako' python_setup
-	emake "${CLIGHTNING_MAKEOPTS[@]}" RUST=0
+	emake "${CLIGHTNING_MAKEOPTS[@]}"
 
 	if use doc ; then
 		local python_need='mkdocs'
@@ -658,10 +717,12 @@ src_compile() {
 	use python && distutils-r1_src_compile
 
 	if use rust ; then
-		# these sources weren't generated above because we set RUST=0
+		# these sources weren't generated above because we set DEFAULT_TARGETS=
 		emake "${CLIGHTNING_MAKEOPTS[@]}" cln-{,g}rpc-all
 		cargo_src_compile
 		use test && cargo_src_test --no-run
+		# link all the Cargo-built plugins into the plugins directory
+		emake "${CLIGHTNING_MAKEOPTS[@]}" $(sed -ne 's/^PLUGINS += \(.*\)$/\1/p' plugins/Makefile)
 	fi
 }
 
@@ -685,11 +746,23 @@ python_compile_subdir_docs() {
 
 src_test() {
 	# disable flaky bitcoin/test/run-secret_eq_consttime
-	SLOW_MACHINE=1 \
+	local -x SLOW_MACHINE=1
 	emake "${CLIGHTNING_MAKEOPTS[@]}" check-units
 
 	use python && distutils-r1_src_test
 	use rust && cargo_src_test
+
+	if use test-full ; then
+		python_need='test-full'
+		python_setup
+		local EPYTEST_XDIST=1
+		# double up, as these tests are surprisingly ineffective at saturating the CPU
+		[[ -v EPYTEST_JOBS ]] || local -i EPYTEST_JOBS="$(makeopts_jobs)*2"
+		local -a pythonpath
+		mapfile -t pythonpath <<<"$(readlink -e -- "${PYTHON_SUBDIRS[@]}" contrib/pyln-{grpc-proto,testing})"
+		local -x PYTHONPATH="$(IFS=: ; printf '%s' "${pythonpath[*]}")" RUST_PROFILE=release
+		TEST_DIR="${T}" epytest tests
+	fi
 }
 
 python_test() {
