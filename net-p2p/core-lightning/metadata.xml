@@ -10,6 +10,7 @@
 		<flag name="experimental">Enable dangerous experimental features.</flag>
 		<flag name="mkdocs">Use dev-python/mkdocs to build documentation.</flag>
 		<flag name="rust">Build Rust components</flag>
+		<flag name="test-full">Run integration tests</flag>
 	</use>
 	<upstream>
 		<remote-id type="github">ElementsProject/lightning</remote-id>

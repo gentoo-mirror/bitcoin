@@ -1,0 +1,98 @@
+--- a/contrib/pyln-testing/pyln/testing/btcproxy.py
++++ b/contrib/pyln-testing/pyln/testing/btcproxy.py
+@@ -1,8 +1,8 @@
+ """ A bitcoind proxy that allows instrumentation and canned responses
+ """
+ from flask import Flask, request  # type: ignore
+-from bitcoin.rpc import JSONRPCError  # type: ignore
+-from bitcoin.rpc import RawProxy as BitcoinProxy  # type: ignore
++from bitcointx.rpc import JSONRPCError  # type: ignore
++from bitcointx.rpc import RPCCaller as BitcoinProxy  # type: ignore
+ from cheroot.wsgi import Server  # type: ignore
+ from cheroot.wsgi import PathInfoDispatcher  # type: ignore
+ 
+@@ -33,7 +33,7 @@
+         self.request_count = 0
+ 
+     def _handle_request(self, r):
+-        brpc = BitcoinProxy(btc_conf_file=self.bitcoind.conf_file)
++        brpc = BitcoinProxy(conf_file=self.bitcoind.conf_file)
+         method = r['method']
+ 
+         # If we have set a mock for this method reply with that instead of
+--- a/contrib/pyln-testing/pyln/testing/utils.py
++++ b/contrib/pyln-testing/pyln/testing/utils.py
+@@ -1,6 +1,6 @@
+-from bitcoin.core import COIN  # type: ignore
+-from bitcoin.rpc import RawProxy as BitcoinProxy  # type: ignore
+-from bitcoin.rpc import JSONRPCError
++from bitcointx.core import CoreCoinParams  # type: ignore
++from bitcointx.rpc import RPCCaller as BitcoinProxy  # type: ignore
++from bitcointx.rpc import JSONRPCError
+ from contextlib import contextmanager
+ from pathlib import Path
+ from pyln.client import RpcError
+@@ -30,6 +30,8 @@
+ import time
+ import warnings
+ 
++COIN = CoreCoinParams.COIN
++
+ BITCOIND_CONFIG = {
+     "regtest": 1,
+     "rpcuser": "rpcuser",
+@@ -373,7 +375,7 @@
+             raise AttributeError
+
+         # Create a callable to do the actual call
+-        proxy = BitcoinProxy(btc_conf_file=self.__btc_conf_file__,
++        proxy = BitcoinProxy(conf_file=self.__btc_conf_file__,
+                              timeout=self.__timeout__)
+ 
+         def f(*args):
+--- a/tests/test_closing.py
++++ b/tests/test_closing.py
+@@ -13,7 +13,7 @@ from utils import (
+ 
+ from typing import List, Optional
+ 
+-import bitcoin
++import bitcointx as bitcoin
+ import os
+ import queue
+ import pytest
+--- a/tests/test_misc.py
++++ b/tests/test_misc.py
+@@ -1,5 +1,5 @@
+ import base64
+-from bitcoin.rpc import RawProxy
++from bitcointx.rpc import RPCCaller
+ from decimal import Decimal
+ from fixtures import *  # noqa: F401,F403
+ from fixtures import LightningNode, TEST_NETWORK
+@@ -153,7 +153,7 @@
+         if fetched_peerblock:
+             fetched_peerblock = False
+             conf_file = os.path.join(bitcoind.bitcoin_dir, "bitcoin.conf")
+-            brpc = RawProxy(btc_conf_file=conf_file)
++            brpc = RPCCaller(conf_file=conf_file)
+             return {
+                 "result": brpc._call(r["method"], *r["params"]),
+                 "error": None,
+@@ -249,7 +249,7 @@
+     # This is slow enough that we're going to notice.
+     def mock_getblock(r):
+         conf_file = os.path.join(bitcoind.bitcoin_dir, 'bitcoin.conf')
+-        brpc = RawProxy(btc_conf_file=conf_file)
++        brpc = RPCCaller(conf_file=conf_file)
+         if r['params'][0] == slow_blockid:
+             mock_release.wait(TIMEOUT)
+         return {
+--- a/tests/test_wallet.py
++++ b/tests/test_wallet.py
+@@ -1,4 +1,4 @@
+-from bitcoin.rpc import JSONRPCError
++from bitcointx.rpc import JSONRPCError
+ from decimal import Decimal
+ from fixtures import *  # noqa: F401,F403
+ from fixtures import TEST_NETWORK
