@@ -462,6 +462,7 @@ TEST_FULL_DEPEND="${PYTHON_DEPEND}"'
 	>=dev-python/psycopg-2.9:2[${PYTHON_USEDEP}]
 	>=dev-python/pytest-7[${PYTHON_USEDEP}]
 	dev-python/pytest-xdist[${PYTHON_USEDEP}]
+	dev-python/python-bitcointx[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.31.0[${PYTHON_USEDEP}]
 	>=dev-python/websocket-client-1.2.3[${PYTHON_USEDEP}]
 '
