@@ -9,20 +9,20 @@ CRATES="
 	aho-corasick-1.1.3
 	android-tzdata-0.1.1
 	android_system_properties-0.1.5
-	anyhow-1.0.98
+	anyhow-1.0.99
 	arrayvec-0.7.6
 	autocfg-1.5.0
-	backtrace-0.3.74
+	backtrace-0.3.75
 	bech32-0.10.0-beta
 	bitcoin-0.31.2
 	bitcoin-internals-0.2.0
 	bitcoin_hashes-0.13.0
-	bitflags-2.9.1
+	bitflags-2.9.3
 	bumpalo-3.19.0
 	bytecount-0.6.9
 	bytes-1.10.1
-	cc-1.2.29
-	cfg-if-1.0.1
+	cc-1.2.34
+	cfg-if-1.0.3
 	chrono-0.4.41
 	core-foundation-sys-0.8.7
 	fnv-1.0.7
@@ -43,18 +43,18 @@ CRATES="
 	hex_lit-0.1.1
 	iana-time-zone-0.1.63
 	iana-time-zone-haiku-0.1.2
-	io-uring-0.7.8
+	io-uring-0.7.10
 	itoa-1.0.15
 	js-sys-0.3.77
 	lazy_static-1.5.0
-	libc-0.2.174
-	libmimalloc-sys-0.1.43
+	libc-0.2.175
+	libmimalloc-sys-0.1.44
 	lock_api-0.4.13
 	log-0.4.27
 	log-panics-2.1.0
 	matchers-0.1.0
 	memchr-2.7.5
-	mimalloc-0.1.47
+	mimalloc-0.1.48
 	miniz_oxide-0.8.9
 	mio-1.0.4
 	nu-ansi-term-0.46.0
@@ -71,41 +71,41 @@ CRATES="
 	ppv-lite86-0.2.21
 	proc-macro-error-attr2-2.0.0
 	proc-macro-error2-2.0.1
-	proc-macro2-1.0.95
+	proc-macro2-1.0.101
 	quote-1.0.40
 	r-efi-5.3.0
-	rand-0.9.1
+	rand-0.9.2
 	rand_chacha-0.9.0
 	rand_core-0.9.3
-	redox_syscall-0.5.13
-	regex-1.11.1
+	redox_syscall-0.5.17
+	regex-1.11.2
 	regex-automata-0.1.10
-	regex-automata-0.4.9
+	regex-automata-0.4.10
 	regex-syntax-0.6.29
-	regex-syntax-0.8.5
-	rustc-demangle-0.1.25
-	rustversion-1.0.21
+	regex-syntax-0.8.6
+	rustc-demangle-0.1.26
+	rustversion-1.0.22
 	ryu-1.0.20
 	scopeguard-1.2.0
 	secp256k1-0.28.2
 	secp256k1-sys-0.9.2
 	serde-1.0.219
 	serde_derive-1.0.219
-	serde_json-1.0.140
+	serde_json-1.0.143
 	sharded-slab-0.1.7
 	shlex-1.3.0
-	slab-0.4.10
+	slab-0.4.11
 	smallvec-1.15.1
-	socket2-0.5.10
-	syn-2.0.104
+	socket2-0.6.0
+	syn-2.0.106
 	tabled-0.20.0
 	tabled_derive-0.11.0
 	testing_table-0.3.0
 	thread_local-1.1.9
-	tokio-1.46.1
+	tokio-1.47.1
 	tokio-macros-2.5.0
 	tokio-stream-0.1.17
-	tokio-util-0.7.15
+	tokio-util-0.7.16
 	tracing-0.1.41
 	tracing-attributes-0.1.30
 	tracing-core-0.1.34
@@ -130,7 +130,6 @@ CRATES="
 	windows-link-0.1.3
 	windows-result-0.3.4
 	windows-strings-0.4.2
-	windows-sys-0.52.0
 	windows-sys-0.59.0
 	windows-targets-0.52.6
 	windows_aarch64_gnullvm-0.52.6
