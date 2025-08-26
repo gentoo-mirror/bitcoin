@@ -385,6 +385,7 @@ MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
+	d635f19dbfe15fe0e5d9c8aa8b8b7a8a2f08405d	# plugins: generate certificates with required extensions
 	51b6be302976e7302a8760b64d4beb716d87a0ad	# pyln-client: don't leak dirfd after connecting Unix socket
 	af5caec88bb3549ec6ecfb9edf1b632cd81aa301	# pyln-testing: close 'config.vars' after reading
 	d045e4acf0ee4f725c73c206a0fa17f1f4419b95	# pyln-testing: close log files when tearing down node_factory
@@ -393,7 +394,6 @@ BACKPORTS=(
 	93ac98db224a05825d8d848390f919ecb7dbf70d	# tests: skip certain tests if RUST is not enabled
 	324302d27b2d818c65c89267104b8719bdf6b489	# tests: work around socket path name too long on Linux
 	eed6aa8059b56cf3d0cece7641f82fdeae8e24da	# pyln-testing: pass timeout to BitcoinProxy
-	e62a2714be5ae2a51488a4489d709add9dac7ab7	# plugins: generate certificates with required extensions
 	c27dd25d2e181ff166b1fd61461a6c908a636930	# test_coinmoves.py: use pytest.approx for change amount
 	cdd75f5742b1784761f019941a8c0e6eb08a55de	# test_renepay.py: use test-specific temp dir, not /tmp
 )
