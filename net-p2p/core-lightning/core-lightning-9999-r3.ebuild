@@ -753,7 +753,7 @@ src_test() {
 	use rust && cargo_src_test
 
 	if use test-full ; then
-		python_need='test-full'
+		local python_need='test-full'
 		python_setup
 		local EPYTEST_XDIST=1
 		# double up, as these tests are surprisingly ineffective at saturating the CPU
