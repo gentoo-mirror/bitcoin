@@ -385,7 +385,6 @@ MyPV=${PV/_}
 MyPVR=${MyPV}-gentoo-${PR}
 
 BACKPORTS=(
-	d635f19dbfe15fe0e5d9c8aa8b8b7a8a2f08405d	# plugins: generate certificates with required extensions
 	51b6be302976e7302a8760b64d4beb716d87a0ad	# pyln-client: don't leak dirfd after connecting Unix socket
 	af5caec88bb3549ec6ecfb9edf1b632cd81aa301	# pyln-testing: close 'config.vars' after reading
 	d045e4acf0ee4f725c73c206a0fa17f1f4419b95	# pyln-testing: close log files when tearing down node_factory
@@ -779,7 +778,7 @@ src_test() {
 	use rust && cargo_src_test
 
 	if use test-full ; then
-		python_need='test-full'
+		local python_need='test-full'
 		python_setup
 		local EPYTEST_XDIST=1
 		# double up, as these tests are surprisingly ineffective at saturating the CPU
