@@ -13,7 +13,7 @@ MyPV="$(ver_cut 1-2).knots$(ver_cut 4)"
 DESCRIPTION="Enhanced implementation of the Bitcoin cryptocurrency"
 HOMEPAGE="https://bitcoinknots.org/"
 SRC_URI="
-	https://github.com/bitcoinknots/bitcoin/archive/v${MyPV}.tar.gz -> ${P}.tar.gz
+	https://github.com/bitcoinknots/bitcoin/releases/download/v29.1.knots20250903/bitcoin-29.1.knots20250903.tar.gz
 	https://raw.githubusercontent.com/bitcoin/bitcoin/v27.1/src/qt/res/src/bitcoin.svg -> bitcoin128.svg
 "
 S="${WORKDIR}/${PN/-knots}-${MyPV}"
