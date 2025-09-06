@@ -24,7 +24,6 @@
 		<flag name="zeromq">Report blocks and transactions via zeromq</flag>
 	</use>
 	<upstream>
-		<remote-id type="github">bitcoin/bitcoin</remote-id>
-		<remote-id type="cpe">cpe:/a:bitcoin:bitcoin_core</remote-id>
+		<remote-id type="github">bitcoinknots/bitcoin</remote-id>
 	</upstream>
 </pkgmetadata>
