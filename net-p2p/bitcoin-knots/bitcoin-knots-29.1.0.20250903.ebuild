@@ -23,13 +23,14 @@ SLOT="0"
 if [[ "${PV}" != *_rc* ]] ; then
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 fi
-IUSE="+asm +berkdb +cli +daemon dbus examples +external-signer gui kde libs +man +qrcode +sqlite system-leveldb +system-libsecp256k1 systemtap test test-full tor-subprocess upnp zeromq"
+IUSE="+asm +berkdb +cli +daemon dbus examples +external-signer gui kde libs +man +qrcode qt6 +sqlite system-leveldb +system-libsecp256k1 systemtap test test-full tor-subprocess upnp zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
 	dbus? ( gui )
 	kde? ( gui )
 	qrcode? ( gui )
+	qt6? ( gui )
 	test-full? ( test )
 	system-leveldb? ( || ( daemon gui ) )
 "
@@ -50,11 +51,16 @@ RDEPEND="
 	)
 	gui? (
 		!net-p2p/bitcoin-qt
-		>=dev-qt/qtcore-5.15.11:5
-		>=dev-qt/qtgui-5.15.11:5
-		>=dev-qt/qtnetwork-5.15.11:5
-		>=dev-qt/qtwidgets-5.15.11:5
-		dbus? ( >=dev-qt/qtdbus-5.15.11:5 )
+		qt6? (
+			>=dev-qt/qtbase-6.2:6[dbus?,gui,network,widgets]
+		)
+		!qt6? (
+			>=dev-qt/qtcore-5.15.11:5
+			>=dev-qt/qtgui-5.15.11:5
+			>=dev-qt/qtnetwork-5.15.11:5
+			>=dev-qt/qtwidgets-5.15.11:5
+			dbus? ( >=dev-qt/qtdbus-5.15.11:5 )
+		)
 	)
 	libs? ( !net-libs/libbitcoinconsensus )
 	qrcode? ( >=media-gfx/qrencode-4.1.1:= )
@@ -80,7 +86,12 @@ BDEPEND="
 		dev-libs/libxslt
 		gnome-base/librsvg
 		media-gfx/imagemagick[png]
-		>=dev-qt/linguist-tools-5.15.11:5
+		qt6? (
+			>=dev-qt/qttools-6.2:6[linguist]
+		)
+		!qt6? (
+			>=dev-qt/linguist-tools-5.15.11:5
+		)
 	)
 	test? ( ${PYTHON_DEPS} )
 "
@@ -185,6 +196,7 @@ src_configure() {
 		-DBUILD_UTIL=OFF
 		-DBUILD_DAEMON=$(usex daemon)
 		-DBUILD_GUI=$(usex gui)
+		-DWITH_QT_VERSION=$(usex qt6 6 5)
 		-DWITH_DBUS=$(usex dbus)
 		-DWITH_SYSTEM_LIBSECP256K1=$(usex system-libsecp256k1 ON \
 			"OFF -DSECP256K1_ASM=$(usex asm AUTO OFF)")
