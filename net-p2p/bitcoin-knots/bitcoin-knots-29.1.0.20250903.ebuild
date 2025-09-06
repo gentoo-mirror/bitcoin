@@ -183,7 +183,7 @@ src_configure() {
 		-DWITH_BDB=$(usex berkdb)
 		-DWITH_USDT=$(usex systemtap)
 		-DBUILD_TESTS=$(usex test)
-		-DBUILD_BENCH=OFF
+		-DBUILD_BENCH=$(usex test)
 		-DBUILD_{FOR_FUZZING,FUZZ_BINARY}=OFF
 		-DWITH_QRENCODE=$(usex qrcode)
 		-DWITH_CCACHE=OFF
@@ -250,7 +250,7 @@ src_install() {
 	cmake_src_install
 
 	find "${ED}" -type f -name '*.la' -delete || die
-	! use test || rm -f -- "${ED}"/usr/bin/test_bitcoin{,-qt} || die
+	! use test || rm -f -- "${ED}"/usr/bin/{bench,test}_bitcoin{,-qt} || die
 
 	newbashcomp contrib/completions/bash/bitcoin-tx.bash bitcoin-tx
 	use cli && newbashcomp contrib/completions/bash/bitcoin-cli.bash bitcoin-cli
