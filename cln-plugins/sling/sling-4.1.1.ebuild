@@ -3,6 +3,7 @@
 
 EAPI=8
 
+RUST_MIN_VER="1.85"
 CRATES="
 	addr2line-0.24.2
 	adler2-2.0.1
@@ -17,14 +18,15 @@ CRATES="
 	bitcoin-0.31.2
 	bitcoin-internals-0.2.0
 	bitcoin_hashes-0.13.0
-	bitflags-2.9.3
+	bitflags-2.9.4
 	bumpalo-3.19.0
 	bytecount-0.6.9
 	bytes-1.10.1
-	cc-1.2.34
+	cc-1.2.35
 	cfg-if-1.0.3
 	chrono-0.4.41
 	core-foundation-sys-0.8.7
+	find-msvc-tools-0.1.0
 	fnv-1.0.7
 	futures-0.3.31
 	futures-channel-0.3.31
@@ -50,19 +52,18 @@ CRATES="
 	libc-0.2.175
 	libmimalloc-sys-0.1.44
 	lock_api-0.4.13
-	log-0.4.27
+	log-0.4.28
 	log-panics-2.1.0
-	matchers-0.1.0
+	matchers-0.2.0
 	memchr-2.7.5
 	mimalloc-0.1.48
 	miniz_oxide-0.8.9
 	mio-1.0.4
-	nu-ansi-term-0.46.0
+	nu-ansi-term-0.50.1
 	num-format-0.4.4
 	num-traits-0.2.19
 	object-0.36.7
 	once_cell-1.21.3
-	overload-0.1.1
 	papergrid-0.17.0
 	parking_lot-0.12.4
 	parking_lot_core-0.9.11
@@ -78,10 +79,7 @@ CRATES="
 	rand_chacha-0.9.0
 	rand_core-0.9.3
 	redox_syscall-0.5.17
-	regex-1.11.2
-	regex-automata-0.1.10
 	regex-automata-0.4.10
-	regex-syntax-0.6.29
 	regex-syntax-0.8.6
 	rustc-demangle-0.1.26
 	rustversion-1.0.22
@@ -110,26 +108,24 @@ CRATES="
 	tracing-attributes-0.1.30
 	tracing-core-0.1.34
 	tracing-log-0.2.0
-	tracing-subscriber-0.3.19
+	tracing-subscriber-0.3.20
 	unicode-ident-1.0.18
 	unicode-width-0.2.1
 	valuable-0.1.1
 	wasi-0.11.1+wasi-snapshot-preview1
-	wasi-0.14.2+wasi-0.2.4
+	wasi-0.14.3+wasi-0.2.4
 	wasm-bindgen-0.2.100
 	wasm-bindgen-backend-0.2.100
 	wasm-bindgen-macro-0.2.100
 	wasm-bindgen-macro-support-0.2.100
 	wasm-bindgen-shared-0.2.100
-	winapi-0.3.9
-	winapi-i686-pc-windows-gnu-0.4.0
-	winapi-x86_64-pc-windows-gnu-0.4.0
 	windows-core-0.61.2
 	windows-implement-0.60.0
 	windows-interface-0.59.1
 	windows-link-0.1.3
 	windows-result-0.3.4
 	windows-strings-0.4.2
+	windows-sys-0.52.0
 	windows-sys-0.59.0
 	windows-targets-0.52.6
 	windows_aarch64_gnullvm-0.52.6
@@ -140,7 +136,7 @@ CRATES="
 	windows_x86_64_gnu-0.52.6
 	windows_x86_64_gnullvm-0.52.6
 	windows_x86_64_msvc-0.52.6
-	wit-bindgen-rt-0.39.0
+	wit-bindgen-0.45.0
 	zerocopy-0.8.26
 	zerocopy-derive-0.8.26
 "
