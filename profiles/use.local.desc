@@ -116,6 +116,7 @@ net-p2p/bitcoin-core:system-libsecp256k1 - Link with dev-libs/libsecp256k1 rathe
 net-p2p/bitcoin-core:systemtap - Enable SystemTap/DTrace tracing
 net-p2p/bitcoin-core:test-full - Run tests that take a long time
 net-p2p/bitcoin-core:upnp - Enable Universal Plug and Play
+net-p2p/bitcoin-core:wallet - Support creating and loading wallets
 net-p2p/bitcoin-core:zeromq - Report blocks and transactions via zeromq
 net-p2p/bitcoin-knots:berkdb - Support legacy wallets in Berkeley DB format
 net-p2p/bitcoin-knots:cli - Build and install bitcoin-cli command line interface
