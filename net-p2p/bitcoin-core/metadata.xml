@@ -18,6 +18,7 @@
 		<flag name="systemtap">Enable SystemTap/DTrace tracing</flag>
 		<flag name="test-full">Run tests that take a long time</flag>
 		<flag name="upnp">Enable Universal Plug and Play</flag>
+		<flag name="wallet">Support creating and loading wallets</flag>
 		<flag name="zeromq">Report blocks and transactions via zeromq</flag>
 	</use>
 	<upstream>
