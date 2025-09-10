@@ -227,7 +227,7 @@ src_install() {
 	cmake_src_install
 
 	find "${ED}" -type f -name '*.la' -delete || die
-	! use test || rm -f -- "${ED}"/usr/bin/test_bitcoin{,-qt} || die
+	! use test || rm -f -- "${ED}"/usr/libexec/test_bitcoin{,-qt} || die
 
 	newbashcomp contrib/completions/bash/bitcoin-tx.bash bitcoin-tx
 	use cli && newbashcomp contrib/completions/bash/bitcoin-cli.bash bitcoin-cli
