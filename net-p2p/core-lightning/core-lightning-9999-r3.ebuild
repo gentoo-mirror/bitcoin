@@ -383,11 +383,6 @@ EGIT_REPO_URI=( "https://github.com/ElementsProject/${MyPN}.git" )
 EGIT_SUBMODULES=( '-*' external/gheap )
 
 BACKPORTS=(
-	51b6be302976e7302a8760b64d4beb716d87a0ad	# pyln-client: don't leak dirfd after connecting Unix socket
-	af5caec88bb3549ec6ecfb9edf1b632cd81aa301	# pyln-testing: close 'config.vars' after reading
-	d045e4acf0ee4f725c73c206a0fa17f1f4419b95	# pyln-testing: close log files when tearing down node_factory
-	b29efab74a96c969a39af03d6b60827578546cde	# pyln-testing: don't leak file descriptor in GossipStore
-	24c9abb92c019d6178fa73edf8affd564ed8e52e	# tests: do not leak file descriptors
 	93ac98db224a05825d8d848390f919ecb7dbf70d	# tests: skip certain tests if RUST is not enabled
 	324302d27b2d818c65c89267104b8719bdf6b489	# tests: work around socket path name too long on Linux
 	eed6aa8059b56cf3d0cece7641f82fdeae8e24da	# pyln-testing: pass timeout to BitcoinProxy
