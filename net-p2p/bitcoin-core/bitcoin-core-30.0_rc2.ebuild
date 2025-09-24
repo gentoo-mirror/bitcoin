@@ -141,9 +141,12 @@ pkg_setup() {
 				which is no longer supported by this version of Bitcoin Core:
 				$(printf ' - %s\n' "${bdb_wallets[@]}")
 				You may need to remove these wallets from your auto-load configuration \
-				at ${EROOT}/var/lib/bitcoind/settings.json and convert them to descriptor wallets \
-				by executing \`bitcoin-cli migratewallet "<wallet_name>" ["<passphrase>"]\` \
-				after starting bitcoind.
+				at ${EROOT}/var/lib/bitcoind/settings.json$(use cli && cat <<-EOS
+					 and convert them to descriptor wallets by executing \
+					\`bitcoin-cli migratewallet "<wallet_name>" ["<passphrase>"]\` \
+					after starting bitcoind
+				EOS
+				).
 			EOF
 		fi
 	fi
