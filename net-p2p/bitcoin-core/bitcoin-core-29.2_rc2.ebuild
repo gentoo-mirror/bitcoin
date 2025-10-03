@@ -136,6 +136,32 @@ pkg_setup() {
 		CHECKREQS_DISK_BUILD="6G" check-reqs_pkg_setup
 		python-any-r1_pkg_setup
 	fi
+
+	# check for auto-loaded wallets in the obsolete (soon to be unsupported) format
+	if use daemon && use berkdb && [[ -r "${EROOT}/var/lib/bitcoind/settings.json" ]] ; then
+		local wallet bdb_wallets=()
+		while read -rd '' wallet ; do
+			# printf interprets any C-style escape sequences in ${wallet}
+			wallet="${EROOT}$(printf "/var/lib/bitcoind/wallets/${wallet:+${wallet//\%/%%}/}wallet.dat")"
+			[[ -r "${wallet}" && "$(file -b -- "${wallet}")" == *'Berkeley DB'* ]] && bdb_wallets+=( "${wallet}" )
+		done < <(
+			# parsing settings.json using jq would be far cleaner, but jq might not be installed
+			sed -Enze 'H;${x;s/^.*"wallet"\s*:\s*\[\s*("([^"\\]|\\.)*"(\s*,\s*"([^"\\]|\\.)*")*)\s*\].*$/\1/;T' \
+					-e 's/"(([^"\\]|\\.)*)"\s*(,\s*)?/\1\x0/gp}' -- "${EROOT}/var/lib/bitcoind/settings.json"
+		)
+		if (( ${#bdb_wallets[@]} )) ; then
+			efmt -su ewarn <<-EOF
+				The following auto-loaded wallets are in the legacy (Berkeley DB) format, \
+				which will no longer be supported by the next major version of Bitcoin Core:
+				$(printf ' - %s\n' "${bdb_wallets[@]}")
+			EOF
+			use cli && efmt ewarn <<-EOF
+				You may want to convert them to descriptor wallets by executing
+				\`bitcoin-cli migratewallet "<wallet_name>" ["<passphrase>"]\`
+				after starting bitcoind.
+			EOF
+		fi
+	fi
 }
 
 src_prepare() {
