@@ -393,8 +393,8 @@ BACKPORTS=(
 	93ac98db224a05825d8d848390f919ecb7dbf70d	# tests: skip certain tests if RUST is not enabled
 	324302d27b2d818c65c89267104b8719bdf6b489	# tests: work around socket path name too long on Linux
 	eed6aa8059b56cf3d0cece7641f82fdeae8e24da	# pyln-testing: pass timeout to BitcoinProxy
-	c27dd25d2e181ff166b1fd61461a6c908a636930	# test_coinmoves.py: use pytest.approx for change amount
 	cdd75f5742b1784761f019941a8c0e6eb08a55de	# test_renepay.py: use test-specific temp dir, not /tmp
+	702a88de0c0d3603158cd2c183389ba6bf79535e	# pytest: fix flake in test_coinmoves_unilateral_htlc_fulfill / test_coinmoves_unilateral_htlc_timeout
 )
 
 DESCRIPTION="An implementation of Bitcoin's Lightning Network in C"
