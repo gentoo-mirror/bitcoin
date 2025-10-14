@@ -24,7 +24,7 @@ SLOT="0"
 if [[ "${PV}" != *_rc* ]] ; then
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 fi
-IUSE="+asm +berkdb +cli +daemon dbus examples +external-signer gui +man nat-pmp +qrcode +sqlite +system-libsecp256k1 systemtap test upnp zeromq"
+IUSE="+asm +berkdb +cli +daemon dbus examples external-signer gui +man nat-pmp +qrcode +sqlite +system-libsecp256k1 systemtap test upnp zeromq"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -33,6 +33,7 @@ REQUIRED_USE="
 "
 RDEPEND="
 	>=dev-libs/boost-1.81.0:=
+	external-signer? ( !!>=dev-libs/boost-1.88 )
 	>=dev-libs/libevent-2.1.12:=
 	berkdb? ( >=sys-libs/db-4.8.30:$(db_ver_to_slot 4.8)=[cxx] )
 	daemon? (
