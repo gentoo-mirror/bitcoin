@@ -25,7 +25,7 @@ dev-python/mnemonic 0.21: Mnemonic code for generating deterministic keys, BIP39
 dev-python/pyside2 5.15.14 5.15.16: Python bindings for the Qt framework
 dev-python/pyside2-tools 5.15.14 5.15.16: PySide development tools (pyside2-lupdate with support for Python)
 dev-python/python-bitcointx 1.1.5-r1: A python3 library providing an easy interface to the Bitcoin data structures
-dev-python/python-socketio 5.14.1: Python implementation of the Socket.IO realtime server
+dev-python/python-socketio 5.14.2: Python implementation of the Socket.IO realtime server
 dev-python/qt5reactor 0.6.3: Twisted and PyQt5 eventloop integration
 dev-python/secp256k1 0.14.0-r1: Python FFI bindings for libsecp256k1
 dev-python/shiboken2 5.15.14 5.15.16: Python binding generator for C++ libraries
