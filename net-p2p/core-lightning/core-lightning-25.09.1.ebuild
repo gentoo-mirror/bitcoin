@@ -44,6 +44,7 @@ CRATES="
 	bitcoin-internals-0.2.0
 	bitcoin-internals-0.3.0
 	bitcoin-io-0.1.3
+	bitcoin-payment-instructions-0.5.0
 	bitcoin-units-0.1.2
 	bitcoin_hashes-0.13.0
 	bitcoin_hashes-0.14.0
@@ -374,9 +375,6 @@ CRATES="
 	zlib-rs-0.5.1
 	zopfli-0.8.2
 "
-declare -A GIT_CRATES=(
-	[bitcoin-payment-instructions]="https://github.com/rust-bitcoin/bitcoin-payment-instructions;d071ce27734ca13be2471f81abf8699d902c3a10"
-)
 
 inherit backports bash-completion-r1 cargo depends distutils-r1 edo postgres toolchain-funcs
 
