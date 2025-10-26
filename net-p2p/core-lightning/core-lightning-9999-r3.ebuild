@@ -304,10 +304,6 @@ CRATES="
 	utf-8-0.7.6
 	utf16_iter-1.0.5
 	utf8_iter-1.0.4
-	utoipa-5.4.0
-	utoipa-gen-5.4.0
-	utoipa-swagger-ui-9.0.2
-	utoipa-swagger-ui-vendored-0.1.2
 	valuable-0.1.1
 	version_check-0.9.5
 	walkdir-2.5.0
@@ -375,6 +371,12 @@ CRATES="
 	zlib-rs-0.5.1
 	zopfli-0.8.2
 "
+declare -A GIT_CRATES=(
+	[utoipa-gen]="https://github.com/rustyrussell/utoipa;26f4908b092a4a746cbec935e05165852ea01289"
+	[utoipa-swagger-ui-vendored]="https://github.com/rustyrussell/utoipa;26f4908b092a4a746cbec935e05165852ea01289"
+	[utoipa-swagger-ui]="https://github.com/rustyrussell/utoipa;26f4908b092a4a746cbec935e05165852ea01289"
+	[utoipa]="https://github.com/rustyrussell/utoipa;26f4908b092a4a746cbec935e05165852ea01289"
+)
 
 inherit backports bash-completion-r1 cargo depends distutils-r1 edo git-r3 postgres toolchain-funcs
 
